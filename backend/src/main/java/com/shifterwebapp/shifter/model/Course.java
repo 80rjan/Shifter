@@ -1,30 +1,55 @@
 package com.shifterwebapp.shifter.model;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
+@Entity
 public class Course {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "course_seq")
+    @SequenceGenerator(name = "course_seq", sequenceName = "course_sequence", allocationSize = 1)
+    private Integer id;
+    
     private String title;
+    
     private String topic;
+    
     private Difficulty difficulty;
+    
     private Float durationHours;
+    
     private Float price;
+    
     private Float rating;
+    
     private Integer ratingCount;
+    
     private String descriptionShort;
+    
     private String description;
+    
     private String descriptionLong;
-    private ArrayList<String> skillsGained;
-    private ArrayList<String> whatWillBeLearned;
-    private ArrayList<CourseContent> modules;
+    
+    @ElementCollection
+    private List<String> skillsGained;
+
+    @ElementCollection
+    private List<String> whatWillBeLearned;
+    
+    @OneToMany(mappedBy = "course")
+    private List<Enrollment> enrollments;
+
+    @OneToMany(mappedBy = "course")
+    private List<CourseContent> courseContents;
 }
 
 enum Difficulty {

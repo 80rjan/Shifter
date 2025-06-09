@@ -1,30 +1,57 @@
 package com.shifterwebapp.shifter.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
+@Entity
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+    @SequenceGenerator(name = "user_seq", sequenceName = "user_sequence", allocationSize = 1)
+    private Integer id;
+    
     private String email;
+    
     @JsonIgnore
     private String passwordHash;    // THIS SHOULD BE CHANGED
+
     private String name;
+    
     private Boolean isAdmin;
+    
     private CompanyType companyType;
+    
     private String workPosition;
-    private ArrayList<Interests> interests;
-    private ArrayList<Skills> skills;
-    private ArrayList<Skills> skillGap;
+    
+    @ElementCollection(targetClass = Interests.class)
+    @Enumerated(EnumType.STRING)
+    private List<Interests> interests;
+
+    @ElementCollection(targetClass = Skills.class)
+    @Enumerated(EnumType.STRING)
+    private List<Skills> skills;
+
+    @ElementCollection(targetClass = Skills.class)
+    @Enumerated(EnumType.STRING)
+    private List<Skills> skillGap;
+    
     private Integer points;
-    private ArrayList<Integer> favoriteCourses;
+
+    @ElementCollection
+    private List<Integer> favoriteCourses;
+
+    @OneToMany(mappedBy = "user")
+    private List<Payment> payments;
 }
 
 enum CompanyType {
