@@ -1,8 +1,7 @@
-package com.shifterwebapp.shifter.dto;
+package com.shifterwebapp.shifter.payment;
 
-import com.shifterwebapp.shifter.model.Enrollment;
-import com.shifterwebapp.shifter.model.User;
-import jakarta.persistence.*;
+import com.shifterwebapp.shifter.payment.enums.PaymentMethod;
+import com.shifterwebapp.shifter.payment.enums.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,14 +24,3 @@ public class PaymentDto {
     private Integer enrollmentId;
 }
 
-enum PaymentMethod {
-    CARD,
-    PAYPAL,
-    CASYS
-}
-
-enum PaymentStatus {
-    PENDING,
-    COMPLETED,
-    FAILED
-}

@@ -1,5 +1,8 @@
-package com.shifterwebapp.shifter.model;
+package com.shifterwebapp.shifter.course;
 
+import com.shifterwebapp.shifter.course.enums.Difficulty;
+import com.shifterwebapp.shifter.coursecontent.CourseContent;
+import com.shifterwebapp.shifter.enrollment.Enrollment;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,7 +18,7 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "course_seq")
     @SequenceGenerator(name = "course_seq", sequenceName = "course_sequence", allocationSize = 1)
-    private Integer id;
+    private Long id;
     
     private String title;
     
@@ -32,9 +35,11 @@ public class Course {
     private Integer ratingCount;
     
     private String descriptionShort;
-    
+
+    @Lob
     private String description;
-    
+
+    @Lob
     private String descriptionLong;
     
     @ElementCollection
@@ -43,16 +48,10 @@ public class Course {
     @ElementCollection
     private List<String> whatWillBeLearned;
     
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Enrollment> enrollments;
 
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CourseContent> courseContents;
 }
 
-enum Difficulty {
-    BEGINNER,
-    INTERMEDIATE,
-    ADVANCED,
-    EXPERT
-}

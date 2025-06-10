@@ -1,5 +1,9 @@
-package com.shifterwebapp.shifter.model;
+package com.shifterwebapp.shifter.payment;
 
+import com.shifterwebapp.shifter.enrollment.Enrollment;
+import com.shifterwebapp.shifter.payment.enums.PaymentMethod;
+import com.shifterwebapp.shifter.payment.enums.PaymentStatus;
+import com.shifterwebapp.shifter.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,7 +19,7 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payment_seq")
     @SequenceGenerator(name = "payment_seq", sequenceName = "payment_sequence", allocationSize = 1)
-    private Integer id;
+    private Long id;
 
     private Float amount;
 
@@ -29,18 +33,7 @@ public class Payment {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(mappedBy = "payment")
+    @OneToOne(mappedBy = "payment", cascade = CascadeType.ALL, orphanRemoval = true)
     private Enrollment enrollment;
 }
 
-enum PaymentMethod {
-    CARD,
-    PAYPAL,
-    CASYS
-}
-
-enum PaymentStatus {
-    PENDING,
-    COMPLETED,
-    FAILED
-}

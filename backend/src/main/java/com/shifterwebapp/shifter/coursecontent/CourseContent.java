@@ -1,6 +1,8 @@
-package com.shifterwebapp.shifter.model;
+package com.shifterwebapp.shifter.coursecontent;
 
+import com.shifterwebapp.shifter.course.Course;
 import jakarta.persistence.*;
+import com.shifterwebapp.shifter.coursecontent.enums.ContentType;
 import lombok.*;
 
 @Getter
@@ -14,7 +16,7 @@ public class CourseContent {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "course_seq")
     @SequenceGenerator(name = "course_seq", sequenceName = "course_sequence", allocationSize = 1)
-    private Integer id;
+    private Long id;
 
     private String title;
 
@@ -29,9 +31,3 @@ public class CourseContent {
     private Course course;
 }
 
-enum ContentType {
-    VIDEO,
-    TEXT,
-    FILE,
-    QUIZ
-}

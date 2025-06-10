@@ -1,8 +1,5 @@
-package com.shifterwebapp.shifter.dto;
+package com.shifterwebapp.shifter.review;
 
-import com.shifterwebapp.shifter.model.Enrollment;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +10,9 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReviewDto {
+
+    private Long id;
+
     private Integer rating;
 
     private String comment;

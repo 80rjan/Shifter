@@ -1,6 +1,10 @@
-package com.shifterwebapp.shifter.model;
+package com.shifterwebapp.shifter.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.shifterwebapp.shifter.payment.Payment;
+import com.shifterwebapp.shifter.user.enums.CompanyType;
+import com.shifterwebapp.shifter.user.enums.Interests;
+import com.shifterwebapp.shifter.user.enums.Skills;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,19 +16,20 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
+@Table(name = "\"user\"")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
     @SequenceGenerator(name = "user_seq", sequenceName = "user_sequence", allocationSize = 1)
-    private Integer id;
-    
+    private Long id;
+
+    private String name;
+
     private String email;
     
     @JsonIgnore
     private String passwordHash;    // THIS SHOULD BE CHANGED
 
-    private String name;
-    
     private Boolean isAdmin;
     
     private CompanyType companyType;
@@ -48,40 +53,7 @@ public class User {
     @ElementCollection
     private List<Integer> favoriteCourses;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user")       // Maybe CascadeType.PERSIST ????
     private List<Payment> payments;
 }
 
-enum CompanyType {
-    FREELANCE,
-    STARTUP,
-    SME,
-    MIDMARKET,
-    ENTERPRISE,
-    OTHER
-}
-
-enum Interests {
-    SALES_STRATEGIES,
-    MARKETING,
-    LEADERSHIP,
-    MANAGEMENT,
-    DIGITAL_TRANSFORMATION,
-    BUSINESS_TRANSFORMATION,
-    ENTREPRENEURSHIP,
-    STARTUP,
-    SALES,
-    NEGOTIATION,
-    FINANCE_FOR_BUSINESS
-}
-
-enum Skills {
-    COMMUNICATION,
-    STRATEGIC_PLANING,
-    LEADERSHIP,
-    SALES_TECHNIQUES,
-    SALES,
-    NEGOTIATION,
-    MARKETING,
-    PROBLEM_SOLVING,
-}

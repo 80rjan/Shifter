@@ -1,0 +1,15 @@
+package com.shifterwebapp.shifter.user.enums;
+
+public enum Interests {
+    SALES_STRATEGIES,
+    MARKETING,
+    LEADERSHIP,
+    MANAGEMENT,
+    DIGITAL_TRANSFORMATION,
+    BUSINESS_TRANSFORMATION,
+    ENTREPRENEURSHIP,
+    STARTUP,
+    SALES,
+    NEGOTIATION,
+    FINANCE_FOR_BUSINESS
+}

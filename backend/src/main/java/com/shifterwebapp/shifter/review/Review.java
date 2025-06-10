@@ -1,5 +1,6 @@
-package com.shifterwebapp.shifter.model;
+package com.shifterwebapp.shifter.review;
 
+import com.shifterwebapp.shifter.enrollment.Enrollment;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,7 +16,7 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "review_seq")
     @SequenceGenerator(name = "review_seq", sequenceName = "review_sequence", allocationSize = 1)
-    private Integer id;
+    private Long id;
 
     private Integer rating;
 

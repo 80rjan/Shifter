@@ -1,6 +1,9 @@
-package com.shifterwebapp.shifter.dto;
+package com.shifterwebapp.shifter.enrollment;
 
-import jakarta.persistence.*;
+import com.shifterwebapp.shifter.course.CourseDto;
+import com.shifterwebapp.shifter.enrollment.enums.EnrollmentStatus;
+import com.shifterwebapp.shifter.payment.PaymentDto;
+import com.shifterwebapp.shifter.review.ReviewDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,8 +28,3 @@ public class EnrollmentDto {
     private CourseDto course;
 }
 
-enum EnrollmentStatus {
-    PENDING,
-    ACTIVE,
-    COMPLETED
-}

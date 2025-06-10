@@ -1,8 +1,7 @@
-package com.shifterwebapp.shifter.dto;
+package com.shifterwebapp.shifter.course;
 
-import com.shifterwebapp.shifter.model.CourseContent;
-import com.shifterwebapp.shifter.model.Enrollment;
-import jakarta.persistence.*;
+import com.shifterwebapp.shifter.course.enums.Difficulty;
+import com.shifterwebapp.shifter.coursecontent.CourseContentDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CourseDto {
+
+    private Long id;
 
     private String title;
 
@@ -41,9 +42,3 @@ public class CourseDto {
     private List<CourseContentDto> courseContents;
 }
 
-enum Difficulty {
-    BEGINNER,
-    INTERMEDIATE,
-    ADVANCED,
-    EXPERT
-}

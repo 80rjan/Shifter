@@ -1,5 +1,6 @@
-package com.shifterwebapp.shifter.dto;
+package com.shifterwebapp.shifter.coursecontent;
 
+import com.shifterwebapp.shifter.coursecontent.enums.ContentType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,9 +21,3 @@ public class CourseContentDto {
     private Integer courseId;
 }
 
-enum ContentType {
-    VIDEO,
-    TEXT,
-    FILE,
-    QUIZ
-}

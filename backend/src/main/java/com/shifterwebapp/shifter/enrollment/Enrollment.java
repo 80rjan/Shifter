@@ -1,5 +1,9 @@
-package com.shifterwebapp.shifter.model;
+package com.shifterwebapp.shifter.enrollment;
 
+import com.shifterwebapp.shifter.course.Course;
+import com.shifterwebapp.shifter.enrollment.enums.EnrollmentStatus;
+import com.shifterwebapp.shifter.payment.Payment;
+import com.shifterwebapp.shifter.review.Review;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,7 +19,7 @@ public class Enrollment {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "enrollment_seq")
     @SequenceGenerator(name = "enrollment_seq", sequenceName = "enrollment_sequence", allocationSize = 1)
-    private Integer id;
+    private Long id;
 
     private EnrollmentStatus enrollmentStatus;
 
@@ -27,7 +31,7 @@ public class Enrollment {
     @JoinColumn(name = "payment_id")
     private Payment payment;
 
-    @OneToOne(mappedBy = "enrollment")
+    @OneToOne(mappedBy = "enrollment", cascade = CascadeType.ALL, orphanRemoval = true)
     private Review review;
 
     @ManyToOne
@@ -35,8 +39,3 @@ public class Enrollment {
     private Course course;
 }
 
-enum EnrollmentStatus {
-    PENDING,
-    ACTIVE,
-    COMPLETED
-}
