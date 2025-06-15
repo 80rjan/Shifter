@@ -1,7 +1,7 @@
 package com.shifterwebapp.shifter.enrollment;
 
 import com.shifterwebapp.shifter.course.Course;
-import com.shifterwebapp.shifter.enrollment.enums.EnrollmentStatus;
+import com.shifterwebapp.shifter.enums.EnrollmentStatus;
 import com.shifterwebapp.shifter.payment.Payment;
 import com.shifterwebapp.shifter.review.Review;
 import jakarta.persistence.*;
@@ -21,13 +21,14 @@ public class Enrollment {
     @SequenceGenerator(name = "enrollment_seq", sequenceName = "enrollment_sequence", allocationSize = 1)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private EnrollmentStatus enrollmentStatus;
 
     private Integer percentCompleted;
 
     private Date date;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST, orphanRemoval = true)  // Persist ???? Orphan removal ????
     @JoinColumn(name = "payment_id")
     private Payment payment;
 

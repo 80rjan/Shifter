@@ -1,7 +1,8 @@
 package com.shifterwebapp.shifter.course;
 
-import com.shifterwebapp.shifter.course.enums.Difficulty;
+import com.shifterwebapp.shifter.enums.Difficulty;
 import com.shifterwebapp.shifter.coursecontent.CourseContentDto;
+import com.shifterwebapp.shifter.enums.Skills;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,10 +36,11 @@ public class CourseDto {
 
     private String descriptionLong;
 
-    private List<String> skillsGained;
+    private List<Skills> skillsGained;
 
     private List<String> whatWillBeLearned;
 
+    // DO I NEED THIS ???
     private List<CourseContentDto> courseContents;
 }
 

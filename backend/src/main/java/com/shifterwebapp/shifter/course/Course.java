@@ -1,8 +1,9 @@
 package com.shifterwebapp.shifter.course;
 
-import com.shifterwebapp.shifter.course.enums.Difficulty;
+import com.shifterwebapp.shifter.enums.Difficulty;
 import com.shifterwebapp.shifter.coursecontent.CourseContent;
 import com.shifterwebapp.shifter.enrollment.Enrollment;
+import com.shifterwebapp.shifter.enums.Skills;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,7 +24,8 @@ public class Course {
     private String title;
     
     private String topic;
-    
+
+    @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
     
     private Float durationHours;
@@ -42,13 +44,14 @@ public class Course {
     @Lob
     private String descriptionLong;
     
-    @ElementCollection
-    private List<String> skillsGained;
+    @ElementCollection(targetClass = Skills.class)
+    @Enumerated(EnumType.STRING)
+    private List<Skills> skillsGained;
 
     @ElementCollection
     private List<String> whatWillBeLearned;
     
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "course", orphanRemoval = true)        // IS THIS GOOD BUSINESS LOGIC? SHOULD I HAVE CASCADES?
     private List<Enrollment> enrollments;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)

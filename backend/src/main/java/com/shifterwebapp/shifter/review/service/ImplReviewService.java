@@ -10,5 +10,7 @@ public interface ImplReviewService {
     List<ReviewDto> getReviewsByUser(Long userId);
     Float getAverageRatingByCourse(Long courseId);
 
-    Boolean hasBeenReviewedByUser(Long userId);
+    ReviewDto writeReview(Long enrollmentId, ReviewDto reviewDto);
+
+    Boolean hasBeenReviewedByUser(Long userId, Long courseId);
 }

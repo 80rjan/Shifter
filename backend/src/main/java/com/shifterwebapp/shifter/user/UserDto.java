@@ -1,9 +1,9 @@
 package com.shifterwebapp.shifter.user;
 
 import com.shifterwebapp.shifter.payment.PaymentDto;
-import com.shifterwebapp.shifter.user.enums.CompanyType;
-import com.shifterwebapp.shifter.user.enums.Interests;
-import com.shifterwebapp.shifter.user.enums.Skills;
+import com.shifterwebapp.shifter.enums.CompanyType;
+import com.shifterwebapp.shifter.enums.Interests;
+import com.shifterwebapp.shifter.enums.Skills;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
+
+    private Long id;
+
     private String email;
+
+    private String password;
 
     private String name;
 

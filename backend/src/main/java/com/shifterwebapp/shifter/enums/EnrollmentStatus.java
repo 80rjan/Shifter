@@ -1,4 +1,4 @@
-package com.shifterwebapp.shifter.enrollment.enums;
+package com.shifterwebapp.shifter.enums;
 
 public enum EnrollmentStatus {
     PENDING,

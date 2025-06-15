@@ -1,7 +1,7 @@
 package com.shifterwebapp.shifter.payment.service;
 
 import com.shifterwebapp.shifter.payment.PaymentDto;
-import com.shifterwebapp.shifter.payment.enums.PaymentMethod;
+import com.shifterwebapp.shifter.enums.PaymentMethod;
 
 import java.util.List;
 

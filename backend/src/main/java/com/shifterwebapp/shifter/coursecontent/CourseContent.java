@@ -2,7 +2,7 @@ package com.shifterwebapp.shifter.coursecontent;
 
 import com.shifterwebapp.shifter.course.Course;
 import jakarta.persistence.*;
-import com.shifterwebapp.shifter.coursecontent.enums.ContentType;
+import com.shifterwebapp.shifter.enums.ContentType;
 import lombok.*;
 
 @Getter
@@ -24,6 +24,7 @@ public class CourseContent {
 
     private String contentURL;
 
+    @Enumerated(EnumType.STRING)
     private ContentType contentType;
 
     @ManyToOne

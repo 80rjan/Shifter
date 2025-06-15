@@ -2,9 +2,9 @@ package com.shifterwebapp.shifter.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shifterwebapp.shifter.payment.Payment;
-import com.shifterwebapp.shifter.user.enums.CompanyType;
-import com.shifterwebapp.shifter.user.enums.Interests;
-import com.shifterwebapp.shifter.user.enums.Skills;
+import com.shifterwebapp.shifter.enums.CompanyType;
+import com.shifterwebapp.shifter.enums.Interests;
+import com.shifterwebapp.shifter.enums.Skills;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -53,7 +53,7 @@ public class User {
     @ElementCollection
     private List<Integer> favoriteCourses;
 
-    @OneToMany(mappedBy = "user")       // Maybe CascadeType.PERSIST ????
-    private List<Payment> payments;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<Payment> payments;             // WHEN DELETING USER SET PAYMENTS TO NULL, BECAUSE PAYMENTS DONT GET DELETED
 }
 

@@ -1,4 +1,4 @@
-package com.shifterwebapp.shifter.user.enums;
+package com.shifterwebapp.shifter.enums;
 
 public enum CompanyType {
     FREELANCE,

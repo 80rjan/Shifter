@@ -1,4 +1,4 @@
-package com.shifterwebapp.shifter.coursecontent.enums;
+package com.shifterwebapp.shifter.enums;
 
 public enum ContentType {
     VIDEO,

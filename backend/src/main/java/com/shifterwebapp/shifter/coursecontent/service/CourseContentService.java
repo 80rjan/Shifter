@@ -1,4 +1,9 @@
 package com.shifterwebapp.shifter.coursecontent.service;
 
-public class CourseContentService {
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class CourseContentService implements ImplCourseContentService {
 }

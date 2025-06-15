@@ -1,8 +1,8 @@
 package com.shifterwebapp.shifter.payment;
 
 import com.shifterwebapp.shifter.enrollment.Enrollment;
-import com.shifterwebapp.shifter.payment.enums.PaymentMethod;
-import com.shifterwebapp.shifter.payment.enums.PaymentStatus;
+import com.shifterwebapp.shifter.enums.PaymentMethod;
+import com.shifterwebapp.shifter.enums.PaymentStatus;
 import com.shifterwebapp.shifter.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,8 +25,10 @@ public class Payment {
 
     private Date date;
 
+    @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
 
+    @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
 
     @ManyToOne

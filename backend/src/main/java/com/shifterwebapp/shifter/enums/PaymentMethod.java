@@ -1,4 +1,4 @@
-package com.shifterwebapp.shifter.payment.enums;
+package com.shifterwebapp.shifter.enums;
 
 public enum PaymentMethod {
     CARD,

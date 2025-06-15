@@ -1,16 +1,20 @@
 package com.shifterwebapp.shifter.enrollment.service;
 
 import com.shifterwebapp.shifter.enrollment.EnrollmentDto;
-import com.shifterwebapp.shifter.enrollment.enums.EnrollmentStatus;
+import com.shifterwebapp.shifter.enums.EnrollmentStatus;
+
+import java.util.List;
 
 public interface ImplEnrollmentService {
-    EnrollmentDto getEnrollmentsByUser(Long userId);
-    EnrollmentDto getEnrollmentsByCourse(Long courseId);
+    EnrollmentDto getEnrollmentById(Long enrollmentId);
+    List<EnrollmentDto> getEnrollmentsByUser(Long userId);
+    List<EnrollmentDto> getEnrollmentsByCourse(Long courseId);
+    EnrollmentDto getEnrollmentByUserAndCourse(Long userId, Long courseId);
 
-    EnrollmentDto enrollUser(Long userId, Long courseId);
+    EnrollmentDto enrollUser(Long courseId, Long paymentId);
 
-    Boolean isUserEnrolled(Long userId, Long courseId);
+    Boolean isUserEnrolledInCourse(Long userId, Long courseId);
 
-    EnrollmentDto updateEnrollmentsStatus(Long userId, Long courseId, EnrollmentStatus newStatus);
-
+    EnrollmentDto updateEnrollmentStatusActive(Long enrollmentId);
+    EnrollmentDto updateEnrollmentStatusToCompleted(Long enrollmentId);
 }

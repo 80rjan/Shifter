@@ -1,4 +1,4 @@
-package com.shifterwebapp.shifter.course.enums;
+package com.shifterwebapp.shifter.enums;
 
 public enum Difficulty {
     BEGINNER,
