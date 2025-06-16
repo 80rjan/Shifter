@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@theme {
+    --color-white: #FF0000;
+
+    --color-shifter: #008CC2;
+    --color-shifter-50: rgba(0, 140, 194, 0.5);
+    --color-dark-blue: #002E5D;
+    --color-deep-green: #2C6B3D;
+    --color-teal: #1A8B8D;
+    --color-dark-gray: #404040;
+
+    --font-montserrat-regular: 'Montserrat', sans-serif;
+    --font-montserrat-medium: 'Montserrat', sans-serif;
+    --font-montserrat-semibold: 'Montserrat', sans-serif;
+    --font-montserrat-bold: 'Montserrat', sans-serif;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 400;
+    src: url("assets/fonts/Montserrat-Regular.ttf") format('woff2');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 500;
+    src: url("assets/fonts/Montserrat-Medium.ttf") format('woff2');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 600;
+    src: url("assets/fonts/Montserrat-SemiBold.ttf") format('woff2');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 700;
+    src: url("assets/fonts/Montserrat-Bold.ttf") format('woff2');
+}
+
+:root {
+    --color-white: #EEEEEE;
+    --color-black: #111111;
+
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+    width: 100%;
+    margin: 0 0;
+    padding: 0;
+    text-align: center;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: #EEE;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    /*width: 100vw;*/
+    place-items: center;
+    /*min-width: 320px;*/
+    min-height: 100vh;
+}
