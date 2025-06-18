@@ -1,12 +1,18 @@
 import Hero from "../components/Hero.tsx";
-import Roadmap from "../components/CollaborationSteps.tsx";
+import CollaborationSteps from "../components/CollaborationSteps.tsx";
+import RoadmapAI from "../components/RoadmapAI.tsx";
+import ShifterValues from "../components/ShifterValues.tsx";
+import CoursesCarousel from "../components/CoursesCarousel.tsx";
 
 function Home() {
 
     return (
         <>
             <Hero />
-            <Roadmap />
+            <CollaborationSteps />
+            <RoadmapAI />
+            <CoursesCarousel />
+            <ShifterValues />
         </>
     )
 }

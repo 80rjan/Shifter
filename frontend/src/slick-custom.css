@@ -1,0 +1,73 @@
+.slick-track {
+    display: flex;
+    align-items: stretch;
+}
+
+.slick-slide {
+    padding: 0 3rem;
+    opacity: 0.9;
+    transform: scale(0.8);
+    transition: all 0.4s ease-in-out;
+
+    > div {
+        display: flex;
+        flex-direction: column;
+        justify-content: stretch;
+        height: 100%;
+        overflow: hidden;
+    }
+}
+
+.slick-center {
+    height: auto;
+    display: flex;
+    align-items: stretch;
+    opacity: 1;
+    transform: scale(1);
+    transition: all 0.4s ease-in-out;
+
+    > div {
+        display: flex;
+        flex-direction: column;
+        justify-content: stretch;
+        height: 100%;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+}
+
+.slick-list {
+    margin: 0 -3rem;
+}
+
+.slick-prev, .slick-next {
+    width: 8rem;
+    height: 2rem;
+    z-index: 1;
+    &:before {
+        content: '';
+        width: 2rem;
+        height: 2rem;
+        border: solid white;
+        border-width: 0 4px 4px 0;
+        display: inline-block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+    }
+}
+
+.slick-prev {
+    left: calc(33.33% - 80px);
+    &:before {
+        transform: translate(-25%, -50%) rotate(135deg);
+    }
+}
+
+.slick-next {
+    right: calc(33.33% - 80px);
+
+    &:before {
+        transform: translate(-75%, -50%) rotate(-45deg);
+    }
+}

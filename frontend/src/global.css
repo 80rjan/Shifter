@@ -1,19 +1,35 @@
 @import "tailwindcss";
 
 @theme {
-    --color-white: #FF0000;
+    --spacing-horizontal: 7rem;
+    --spacing-vertical-lg: 3rem;
+    --spacing-vertical-md: 2rem;
+    --spacing-vertical-sm: 1rem;
+
+
+
 
     --color-shifter: #008CC2;
-    --color-shifter-50: rgba(0, 140, 194, 0.5);
+    --color-red: #FF6F61;
     --color-dark-blue: #002E5D;
     --color-deep-green: #2C6B3D;
-    --color-teal: #1A8B8D;
+    --color-gold: #FFB300;
+    --color-teal: #009688;
     --color-dark-gray: #404040;
+    --color-bright-gray: #DDDDDD;
+    --color-gray: #E5E7EBFF;
 
     --font-montserrat-regular: 'Montserrat', sans-serif;
     --font-montserrat-medium: 'Montserrat', sans-serif;
     --font-montserrat-semibold: 'Montserrat', sans-serif;
     --font-montserrat-bold: 'Montserrat', sans-serif;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 300;
+    src: url("assets/fonts/Montserrat-Light.ttf") format('woff2');
 }
 
 @font-face {

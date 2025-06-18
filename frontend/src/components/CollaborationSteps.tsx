@@ -28,50 +28,48 @@ export default function CollaborationSteps() {
 
 
     return (
-        <div className="bg-dark-blue text-white py-10 px-20 flex flex-col gap-20 items-center">
-            <h1 className="text-3xl font-regular">
+        <div className="bg-dark-blue text-white py-vertical-md px-horizontal flex flex-col gap-12 items-center">
+            <h2 className="text-4xl font-regular">
                 How to Start Your Journey to <strong>Success</strong>
-            </h1>
+            </h2>
 
-            <div className="flex flex-col gap-1 items-center w-full">
-                {/* NUMBERS */}
-                <div className="flex justify-between relative w-82/100 text-white/60">
-                    {steps.map((step) => (
-                        <strong className="text-4xl font-bold">{step.number}</strong>
-                    ))}
-                </div>
+            <div className="relative flex w-full mt-4">
+                {/* LINE AND DOTS */}
+                <div className="absolute w-[104%] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 -rotate-16">
+                    <hr className="border-t-4 border-white rounded-full w-full absolute top-2"
+                    />
 
-                {/* PROGRESS BAR AND DOTS */}
-                <div className="flex justify-between relative w-8/10">
-                    {steps.map(() => (
-                        <div className="w-5 h-5 bg-white rounded-full z-20 border-2 border-black/20"/>
-                    ))}
-                    <div
-                        className="absolute top-1/2 left-1/2 border-t-4 border-white rounded-full transform -translate-y-1/2 -translate-x-1/2 w-full"
-                    ></div>
-                </div>
-
-                {/*STEPS*/}
-                <div className="flex w-full gap-4 items-stretch mt-4">
-
-                    {steps.map((step, i) => (
+                    {[-0.2, 25, 50, 75, 99.8].map((percent, idx) => (
                         <div
-                            key={i}
-                            className="flex flex-col items-center gap-4 justify-between w-1/4"
-                        >
-                            {/* Title */}
-                            <div className="h-full flex items-center justify-center">
-                                <h3 className="text-xl font-semibold text-center">{step.title}</h3>
-                            </div>
-                            {/* Description */}
-                            <p className="text-sm text-white/70">{step.description}</p>
-                        </div>
+                            key={idx}
+                            className="absolute w-5 h-5 bg-white rounded-full z-20 border-2 border-black/20 top-0"
+                            style={{left: `${percent}%`, transform: 'translateX(-50%)'}}
+                        />
                     ))}
                 </div>
+
+
+                {steps.map((step, i) => (
+                    <div
+                        key={i}
+                        className={`flex flex-col items-center gap-4 justify-between w-1/4 px-4 
+                                border-l-3 ${i === 3 ? 'border-r-3' : ''} ${i < 2 ? 'pb-60' : 'pt-60'}
+                            `}
+                    >
+                        {/* Number */}
+                        <strong className="text-4xl font-bold text-white/60">{step.number}</strong>
+                        {/* Title and description */}
+                        <div className="flex flex-col justify-start h-full gap-2">
+                            <h3 className="text-xl font-semibold text-center">{step.title}</h3>
+                            <p className="text-md text-white/70">{step.description}</p>
+                        </div>
+                    </div>
+                ))}
             </div>
 
             {/* Button */}
-            <button className="px-20 py-2 bg-white text-xl text-dark-blue rounded-sm font-semibold shadow-md shadow-white/20">
+            <button className="hover:shadow-white/40 hover:shadow-lg hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer
+                w-3/10 whitespace-nowrap py-2 bg-white text-xl text-dark-blue rounded-sm font-semibold shadow-md shadow-white/20">
                 Start Now
             </button>
         </div>
