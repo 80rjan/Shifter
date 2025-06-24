@@ -28,7 +28,7 @@ export default function CollaborationSteps() {
 
 
     return (
-        <div className="bg-dark-blue text-white py-vertical-md px-horizontal flex flex-col gap-12 items-center">
+        <section className="bg-dark-blue text-white py-vertical-md px-horizontal flex flex-col gap-12 items-center">
             <h2 className="text-4xl font-regular">
                 How to Start Your Journey to <strong>Success</strong>
             </h2>
@@ -60,7 +60,9 @@ export default function CollaborationSteps() {
                         <strong className="text-4xl font-bold text-white/60">{step.number}</strong>
                         {/* Title and description */}
                         <div className="flex flex-col justify-start h-full gap-2">
-                            <h3 className="text-xl font-semibold text-center">{step.title}</h3>
+                            <div className="flex justify-center items-center min-h-[3.5rem]">
+                                <h3 className="text-xl font-semibold text-center line-clamp-2">{step.title}</h3>
+                            </div>
                             <p className="text-md text-white/70">{step.description}</p>
                         </div>
                     </div>
@@ -72,6 +74,6 @@ export default function CollaborationSteps() {
                 w-3/10 whitespace-nowrap py-2 bg-white text-xl text-dark-blue rounded-sm font-semibold shadow-md shadow-white/20">
                 Start Now
             </button>
-        </div>
+        </section>
     );
 }

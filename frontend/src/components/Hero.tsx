@@ -3,7 +3,7 @@ import ShifterArrow from "../assets/Shifter-Arrow.png";
 
 function Hero() {
     return (
-        <section className="bg-dark-blue w-full font-montserrat">
+        <section className="bg-dark-blue w-full px-4 font-montserrat">
             <div className="shadow-md shadow-black/80 flex flex-col gap-12
             items-center px-horizontal pt-30 w-full bg-white rounded-b-[60px]">
                 <h1 className="font-regular text-6xl">
