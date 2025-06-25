@@ -1,4 +1,4 @@
-package com.shifterwebapp.shifter.user;
+package com.shifterwebapp.shifter.account;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shifterwebapp.shifter.payment.Payment;
@@ -16,11 +16,10 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "\"user\"")
-public class User {
+public class Account {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
-    @SequenceGenerator(name = "user_seq", sequenceName = "user_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_seq")
+    @SequenceGenerator(name = "account_seq", sequenceName = "account_sequence", allocationSize = 1)
     private Long id;
 
     private String name;
@@ -28,7 +27,7 @@ public class User {
     private String email;
     
     @JsonIgnore
-    private String passwordHash;    // THIS SHOULD BE CHANGED
+    private String passwordHash;    // SHOULD I USE JSON IGNORE HERE? OR IS IT ENOUGH TO NOT EXPOSE IT IN DTO?
 
     private Boolean isAdmin;
     
@@ -53,7 +52,7 @@ public class User {
     @ElementCollection
     private List<Integer> favoriteCourses;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
-    private List<Payment> payments;             // WHEN DELETING USER SET PAYMENTS TO NULL, BECAUSE PAYMENTS DONT GET DELETED
+    @OneToMany(mappedBy = "account", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<Payment> payments;             // WHEN DELETING account SET PAYMENTS TO NULL, BECAUSE PAYMENTS DONT GET DELETED
 }
 

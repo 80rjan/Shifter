@@ -15,8 +15,8 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @GetMapping
-    public ResponseEntity<?> getPaymentsByUser(@RequestParam("userId") Long userId) {
-        List<PaymentDto> paymentDtos = paymentService.getPaymentsByUser(userId);
+    public ResponseEntity<?> getPaymentsByAccount(@RequestParam("accountId") Long accountId) {
+        List<PaymentDto> paymentDtos = paymentService.getPaymentsByAccount(accountId);
         return ResponseEntity.ok(paymentDtos);
     }
 }

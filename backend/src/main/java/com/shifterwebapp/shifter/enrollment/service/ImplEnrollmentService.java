@@ -7,14 +7,14 @@ import java.util.List;
 
 public interface ImplEnrollmentService {
     EnrollmentDto getEnrollmentById(Long enrollmentId);
-    List<EnrollmentDto> getEnrollmentsByUser(Long userId);
+    List<EnrollmentDto> getEnrollmentsByAccount(Long accountId);
     List<EnrollmentDto> getEnrollmentsByCourse(Long courseId);
-    EnrollmentDto getEnrollmentByUserAndCourse(Long userId, Long courseId);
+    EnrollmentDto getEnrollmentByAccountAndCourse(Long accountId, Long courseId);
 
-    EnrollmentDto enrollUser(Long courseId, Long paymentId);
+    EnrollmentDto enrollAccount(Long courseId, Long paymentId);
 
-    Boolean isUserEnrolledInCourse(Long userId, Long courseId);
+    Boolean isAccountEnrolledInCourse(Long accountId, Long courseId);
 
-    EnrollmentDto updateEnrollmentStatusActive(Long enrollmentId);
+    EnrollmentDto updateEnrollmentStatusToActive(Long enrollmentId);
     EnrollmentDto updateEnrollmentStatusToCompleted(Long enrollmentId);
 }

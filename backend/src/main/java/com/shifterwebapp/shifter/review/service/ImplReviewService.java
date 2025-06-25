@@ -7,10 +7,10 @@ import java.util.List;
 public interface ImplReviewService {
     ReviewDto getReviewById(Long id);
     List<ReviewDto> getReviewsByCourse(Long courseId);
-    List<ReviewDto> getReviewsByUser(Long userId);
+    List<ReviewDto> getReviewsByAccount(Long accountId);
     Float getAverageRatingByCourse(Long courseId);
 
     ReviewDto writeReview(Long enrollmentId, ReviewDto reviewDto);
 
-    Boolean hasBeenReviewedByUser(Long userId, Long courseId);
+    Boolean hasBeenReviewedByAccount(Long accountId, Long courseId);
 }

@@ -1,4 +1,4 @@
-package com.shifterwebapp.shifter.user;
+package com.shifterwebapp.shifter.account;
 
 import com.shifterwebapp.shifter.payment.PaymentDto;
 import com.shifterwebapp.shifter.enums.CompanyType;
@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class AccountDto {
 
     private Long id;
 

@@ -3,7 +3,7 @@ package com.shifterwebapp.shifter;
 import com.shifterwebapp.shifter.course.CourseRepository;
 import com.shifterwebapp.shifter.exception.ResourceNotFoundException;
 import com.shifterwebapp.shifter.payment.PaymentRepository;
-import com.shifterwebapp.shifter.user.UserRepository;
+import com.shifterwebapp.shifter.account.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class Validate {
 
-    private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
     private final CourseRepository courseRepository;
     private final PaymentRepository paymentRepository;
 
-    public void validateUserExists(Long userId) {
-        if (!userRepository.existsById(userId)) {
+    public void validateAccountExists(Long userId) {
+        if (!accountRepository.existsById(userId)) {
             throw new ResourceNotFoundException("User with ID " + userId + " not found!");
         }
     }

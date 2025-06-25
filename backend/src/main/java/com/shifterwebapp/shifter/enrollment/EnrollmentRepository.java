@@ -8,16 +8,16 @@ import java.util.List;
 
 public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
 
-    @Query("select e from Enrollment e where e.payment.user.id = :userId")
-    List<Enrollment> findEnrollmentsByUser(@Param("userId") Long userId);
+    @Query("select e from Enrollment e where e.payment.account.id = :accountId")
+    List<Enrollment> findEnrollmentsByAccount(@Param("accountId") Long accountId);
 
     @Query("select e from Enrollment e where e.course.id = :courseId")
     List<Enrollment> findEnrollmentsByCourse(@Param("courseId") Long courseId);
 
     @Query("select case when count(e) > 0 then true else false end" +
-            " from Enrollment e where e.payment.user.id = :userId and e.course.id = :courseId")
-    Boolean findIsUserEnrolledInCourse(@Param("userId") Long userId, @Param("courseId") Long courseId);
+            " from Enrollment e where e.payment.account.id = :accountId and e.course.id = :courseId")
+    Boolean findIsAccountEnrolledInCourse(@Param("accountId") Long accountId, @Param("courseId") Long courseId);
 
-    @Query("select e from Enrollment e where e.payment.user.id = :userId and e.course.id = :courseId")
-    Enrollment findEnrollmentByUserAndCourse(@Param("userId") Long userId, @Param("courseId") Long courseId);
+    @Query("select e from Enrollment e where e.payment.account.id = :accountId and e.course.id = :courseId")
+    Enrollment findEnrollmentByAccountAndCourse(@Param("accountId") Long accountId, @Param("courseId") Long courseId);
 }

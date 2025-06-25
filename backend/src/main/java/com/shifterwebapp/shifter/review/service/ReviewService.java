@@ -38,9 +38,9 @@ public class ReviewService implements ImplReviewService {
     }
 
     @Override
-    public List<ReviewDto> getReviewsByUser(Long userId) {
-        validate.validateUserExists(userId);
-        List<Review> reviews = reviewRepository.findReviewsByUser(userId);
+    public List<ReviewDto> getReviewsByAccount(Long accountId) {
+        validate.validateAccountExists(accountId);
+        List<Review> reviews = reviewRepository.findReviewsByAccount(accountId);
         return reviewMapper.toDto(reviews);
     }
 
@@ -60,7 +60,7 @@ public class ReviewService implements ImplReviewService {
             throw new RuntimeException("Review already submitted for enrollment with ID " + enrollmentId + "!");
         }
         if (enrollment.getEnrollmentStatus() != EnrollmentStatus.COMPLETED) {
-            throw new RuntimeException("Cannot review a course that has not been completed by user!");
+            throw new RuntimeException("Cannot review a course that has not been completed by account!");
         }
 
         Review review = Review.builder()
@@ -77,9 +77,9 @@ public class ReviewService implements ImplReviewService {
     }
 
     @Override
-    public Boolean hasBeenReviewedByUser(Long userId, Long courseId) {
-        validate.validateUserExists(userId);
+    public Boolean hasBeenReviewedByAccount(Long accountId, Long courseId) {
+        validate.validateAccountExists(accountId);
         validate.validateCourseExists(courseId);
-        return reviewRepository.findHasBeenReviewedByUser(userId, courseId);
+        return reviewRepository.findHasBeenReviewedByAccount(accountId, courseId);
     }
 }

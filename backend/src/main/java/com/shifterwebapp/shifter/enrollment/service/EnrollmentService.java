@@ -10,13 +10,10 @@ import com.shifterwebapp.shifter.enrollment.EnrollmentRepository;
 import com.shifterwebapp.shifter.enums.EnrollmentStatus;
 import com.shifterwebapp.shifter.enums.PointsConstants;
 import com.shifterwebapp.shifter.enums.Skills;
-import com.shifterwebapp.shifter.exception.ResourceNotFoundException;
 import com.shifterwebapp.shifter.payment.Payment;
 import com.shifterwebapp.shifter.payment.PaymentRepository;
 import com.shifterwebapp.shifter.enums.PaymentStatus;
-import com.shifterwebapp.shifter.user.User;
-import com.shifterwebapp.shifter.user.UserRepository;
-import com.shifterwebapp.shifter.user.service.UserService;
+import com.shifterwebapp.shifter.account.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +27,7 @@ public class EnrollmentService implements ImplEnrollmentService{
     private final EnrollmentRepository enrollmentRepository;
     private final CourseRepository courseRepository;
     private final PaymentRepository paymentRepository;
-    private final UserService userService;
+    private final AccountService accountService;
     private final EnrollmentMapper enrollmentMapper;
     private final Validate validate;
 
@@ -42,9 +39,9 @@ public class EnrollmentService implements ImplEnrollmentService{
     }
 
     @Override
-    public List<EnrollmentDto> getEnrollmentsByUser(Long userId) {
-        validate.validateUserExists(userId);
-        List<Enrollment> enrollment = enrollmentRepository.findEnrollmentsByUser(userId);
+    public List<EnrollmentDto> getEnrollmentsByAccount(Long accountId) {
+        validate.validateAccountExists(accountId);
+        List<Enrollment> enrollment = enrollmentRepository.findEnrollmentsByAccount(accountId);
         return enrollmentMapper.toDto(enrollment);
     }
 
@@ -56,17 +53,17 @@ public class EnrollmentService implements ImplEnrollmentService{
     }
 
     @Override
-    public EnrollmentDto getEnrollmentByUserAndCourse(Long userId, Long courseId) {
-        validate.validateUserExists(userId);
+    public EnrollmentDto getEnrollmentByAccountAndCourse(Long accountId, Long courseId) {
+        validate.validateAccountExists(accountId);
         validate.validateCourseExists(courseId);
 
-        Enrollment enrollment = enrollmentRepository.findEnrollmentByUserAndCourse(userId, courseId);
+        Enrollment enrollment = enrollmentRepository.findEnrollmentByAccountAndCourse(accountId, courseId);
         return enrollmentMapper.toDto(enrollment);
     }
 
 
     @Override
-    public EnrollmentDto enrollUser(Long courseId, Long paymentId) {
+    public EnrollmentDto enrollAccount(Long courseId, Long paymentId) {
         validate.validateCourseExists(courseId);
         validate.validatePaymentExists(paymentId);
 
@@ -76,11 +73,11 @@ public class EnrollmentService implements ImplEnrollmentService{
             throw new RuntimeException("Payment with ID " + paymentId + " is not completed successfully!");
         }
 
-        Long userId = payment.getUser().getId();
-        validate.validateUserExists(userId);
-        boolean isAlreadyEnrolled = enrollmentRepository.findIsUserEnrolledInCourse(userId, courseId);
+        Long accountId = payment.getAccount().getId();
+        validate.validateAccountExists(accountId);
+        boolean isAlreadyEnrolled = enrollmentRepository.findIsAccountEnrolledInCourse(accountId, courseId);
         if (isAlreadyEnrolled) {
-            throw new RuntimeException("User with ID " + userId + " is already enrolled in course with ID " + courseId + "!");
+            throw new RuntimeException("account with ID " + accountId + " is already enrolled in course with ID " + courseId + "!");
         }
 
         Course course = courseRepository.findById(courseId).orElseThrow();
@@ -94,20 +91,21 @@ public class EnrollmentService implements ImplEnrollmentService{
                 .course(course)
                 .build();
 
+        enrollmentRepository.save(enrollment);
 
         return enrollmentMapper.toDto(enrollment);
     }
 
     @Override
-    public Boolean isUserEnrolledInCourse(Long userId, Long courseId) {
-        validate.validateUserExists(userId);
+    public Boolean isAccountEnrolledInCourse(Long accountId, Long courseId) {
+        validate.validateAccountExists(accountId);
         validate.validateCourseExists(courseId);
 
-        return enrollmentRepository.findIsUserEnrolledInCourse(userId, courseId);
+        return enrollmentRepository.findIsAccountEnrolledInCourse(accountId, courseId);
     }
 
     @Override
-    public EnrollmentDto updateEnrollmentStatusActive(Long enrollmentId) {
+    public EnrollmentDto updateEnrollmentStatusToActive(Long enrollmentId) {
         validate.validateEnrollmentExists(enrollmentId);
 
         Enrollment enrollment = enrollmentRepository.findById(enrollmentId).orElseThrow();
@@ -117,7 +115,7 @@ public class EnrollmentService implements ImplEnrollmentService{
         return enrollmentMapper.toDto(enrollment);
     }
 
-    // CALLING USER SERVICE HERE. IS THERE A BETTER WAY FOR THIS ???
+    // CALLING ACCOUNT SERVICE HERE. IS THERE A BETTER WAY FOR THIS ???
     @Override
     public EnrollmentDto updateEnrollmentStatusToCompleted(Long enrollmentId) {
         validate.validateEnrollmentExists(enrollmentId);
@@ -125,11 +123,11 @@ public class EnrollmentService implements ImplEnrollmentService{
         Enrollment enrollment = enrollmentRepository.findById(enrollmentId).orElseThrow();
         enrollment.setEnrollmentStatus(EnrollmentStatus.COMPLETED);
 
-        Long userId = enrollment.getPayment().getUser().getId();
+        Long accountId = enrollment.getPayment().getAccount().getId();
         List<Skills> skillsGained = enrollment.getCourse().getSkillsGained();
-        userService.addPoints(userId, PointsConstants.BUY_COURSE);
-        userService.addSkills(userId, skillsGained);
-        userService.removeSkillGaps(userId, skillsGained);
+        accountService.addPoints(accountId, PointsConstants.BUY_COURSE);
+        accountService.addSkills(accountId, skillsGained);
+        accountService.removeSkillGaps(accountId, skillsGained);
 
         enrollmentRepository.save(enrollment);
 

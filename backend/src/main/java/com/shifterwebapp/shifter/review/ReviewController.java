@@ -1,7 +1,6 @@
 package com.shifterwebapp.shifter.review;
 
 import com.shifterwebapp.shifter.review.service.ReviewService;
-import com.shifterwebapp.shifter.user.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +26,9 @@ public class ReviewController {
         return ResponseEntity.ok(reviewDtos);
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<ReviewDto>> getReviewByUser(@PathVariable Long userId) {
-        List<ReviewDto> reviewDtos = reviewService.getReviewsByUser(userId);
+    @GetMapping("/{accountId}")
+    public ResponseEntity<List<ReviewDto>> getReviewByaccount(@PathVariable Long accountId) {
+        List<ReviewDto> reviewDtos = reviewService.getReviewsByAccount(accountId);
         return ResponseEntity.ok(reviewDtos);
     }
 

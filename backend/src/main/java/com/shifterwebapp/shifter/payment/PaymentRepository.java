@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
-    List<Payment> findPaymentByUser_Id(Long userId);
+    List<Payment> findPaymentByAccount_Id(Long accountId);
 
     @Query("select p from Payment p where p.enrollment.course.id = :courseId")
     List<Payment> findPaymentByCourse(@Param("courseId") Long courseId);
@@ -22,6 +22,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     @Query("select sum(p.amount) from Payment p where p.enrollment.course.id = :courseId and function('year', p.date) = :year")
     Double findTotalYearlyRevenueByCourse(@Param("courseId") Long courseId, @Param("year") Integer year);
 
-    @Query("select case when p.paymentStatus = 'COMPLETED' then true else false end from Payment p where p.user.id = :userId and p.enrollment.course.id = :courseId")
-    Boolean findHasUserPaidForCourse(@Param("userId") Long userId, @Param("courseId") Long courseId);
+    @Query("select case when p.paymentStatus = 'COMPLETED' then true else false end from Payment p where p.account.id = :accountId and p.enrollment.course.id = :courseId")
+    Boolean findHasAccountPaidForCourse(@Param("accountId") Long accountId, @Param("courseId") Long courseId);
 }
