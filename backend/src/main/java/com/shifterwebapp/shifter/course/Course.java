@@ -17,9 +17,14 @@ import java.util.List;
 @Entity
 public class Course {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "course_seq")
-    @SequenceGenerator(name = "course_seq", sequenceName = "course_sequence", allocationSize = 1)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "course_seq")
+//    @SequenceGenerator(name = "course_seq", sequenceName = "course_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String imageUrl;
+
+    private String color;
     
     private String title;
     
@@ -32,18 +37,19 @@ public class Course {
     
     private Float price;
     
-    private Float rating;
+    private Integer rating;
     
     private Integer ratingCount;
     
     private String descriptionShort;
 
-    @Lob
+    @Column(columnDefinition = "text")
     private String description;
 
-    @Lob
+    @Column(columnDefinition = "text")
     private String descriptionLong;
-    
+
+
     @ElementCollection(targetClass = Skills.class)
     @Enumerated(EnumType.STRING)
     private List<Skills> skillsGained;

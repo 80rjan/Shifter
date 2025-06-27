@@ -26,7 +26,7 @@ public class CourseDto {
 
     private Float price;
 
-    private Float rating;
+    private Integer rating;
 
     private Integer ratingCount;
 

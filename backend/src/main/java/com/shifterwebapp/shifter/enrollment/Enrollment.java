@@ -17,8 +17,9 @@ import java.util.Date;
 @Entity
 public class Enrollment {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "enrollment_seq")
-    @SequenceGenerator(name = "enrollment_seq", sequenceName = "enrollment_sequence", allocationSize = 1)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "enrollment_seq")
+//    @SequenceGenerator(name = "enrollment_seq", sequenceName = "enrollment_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)

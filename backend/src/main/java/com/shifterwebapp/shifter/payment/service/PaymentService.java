@@ -11,8 +11,8 @@ import com.shifterwebapp.shifter.payment.PaymentMapper;
 import com.shifterwebapp.shifter.payment.PaymentRepository;
 import com.shifterwebapp.shifter.enums.PaymentMethod;
 import com.shifterwebapp.shifter.enums.PaymentStatus;
-import com.shifterwebapp.shifter.account.Account;
-import com.shifterwebapp.shifter.account.AccountRepository;
+import com.shifterwebapp.shifter.user.User;
+import com.shifterwebapp.shifter.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,15 +25,15 @@ public class PaymentService implements ImplPaymentService {
 
     private final PaymentRepository paymentRepository;
     private final PaymentMapper paymentMapper;
-    private final AccountRepository accountRepository;
+    private final UserRepository userRepository;
     private final EnrollmentRepository enrollmentRepository;
     private final CourseRepository courseRepository;
     private final Validate validate;
 
     @Override
-    public List<PaymentDto> getPaymentsByAccount(Long accountId) {
-        validate.validateAccountExists(accountId);
-        List<Payment> payments = paymentRepository.findPaymentByAccount_Id(accountId);
+    public List<PaymentDto> getPaymentsByUser(Long userId) {
+        validate.validateUserExists(userId);
+        List<Payment> payments = paymentRepository.findPaymentByUser_Id(userId);
         return paymentMapper.toDto(payments);
     }
 
@@ -63,23 +63,23 @@ public class PaymentService implements ImplPaymentService {
     }
 
     @Override
-    public Boolean hasAccountPaidForCourse(Long accountId, Long courseId) {
+    public Boolean hasUserPaidForCourse(Long userId, Long courseId) {
         validate.validateCourseExists(courseId);
-        validate.validateAccountExists(accountId);
-        return paymentRepository.findHasAccountPaidForCourse(accountId, courseId);
+        validate.validateUserExists(userId);
+        return paymentRepository.findHasUserPaidForCourse(userId, courseId);
     }
 
     @Override
-    public PaymentDto initiatePayment(Long accountId, Long courseId, PaymentMethod paymentMethod) {
-        validate.validateAccountExists(accountId);
+    public PaymentDto initiatePayment(Long userId, Long courseId, PaymentMethod paymentMethod) {
+        validate.validateUserExists(userId);
         validate.validateCourseExists(courseId);
 
-        Account account = accountRepository.findById(accountId).orElseThrow();
+        User user = userRepository.findById(userId).orElseThrow();
         Course course = courseRepository.findById(courseId).orElseThrow();
 
-        boolean isAlreadyEnrolled = enrollmentRepository.findIsAccountEnrolledInCourse(accountId, courseId);
+        boolean isAlreadyEnrolled = enrollmentRepository.findIsUserEnrolledInCourse(userId, courseId);
         if (isAlreadyEnrolled) {
-            throw new RuntimeException("Account with ID " + accountId + " is already enrolled in course with ID " + courseId + " and cannot initiate payment!");
+            throw new RuntimeException("User with ID " + userId + " is already enrolled in course with ID " + courseId + " and cannot initiate payment!");
         }
 
         // PAYMENT CODE (CASYS) HERE !!!!!!!!!
@@ -87,7 +87,7 @@ public class PaymentService implements ImplPaymentService {
                 .paymentStatus(PaymentStatus.PENDING)
                 .paymentMethod(paymentMethod)
                 .date(new Date())
-                .account(account)
+                .user(user)
                 .enrollment(new Enrollment())
                 .amount(course.getPrice())
                 .build();

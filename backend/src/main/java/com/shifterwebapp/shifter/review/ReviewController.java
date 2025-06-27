@@ -26,9 +26,9 @@ public class ReviewController {
         return ResponseEntity.ok(reviewDtos);
     }
 
-    @GetMapping("/{accountId}")
-    public ResponseEntity<List<ReviewDto>> getReviewByaccount(@PathVariable Long accountId) {
-        List<ReviewDto> reviewDtos = reviewService.getReviewsByAccount(accountId);
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<ReviewDto>> getReviewByuser(@PathVariable Long userId) {
+        List<ReviewDto> reviewDtos = reviewService.getReviewsByUser(userId);
         return ResponseEntity.ok(reviewDtos);
     }
 

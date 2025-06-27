@@ -4,7 +4,7 @@ public enum CompanyType {
     FREELANCE,
     STARTUP,
     SME,
-    MIDMARKET,
+    MID_MARKET,
     ENTERPRISE,
     OTHER
 }

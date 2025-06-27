@@ -13,7 +13,7 @@ import com.shifterwebapp.shifter.enums.Skills;
 import com.shifterwebapp.shifter.payment.Payment;
 import com.shifterwebapp.shifter.payment.PaymentRepository;
 import com.shifterwebapp.shifter.enums.PaymentStatus;
-import com.shifterwebapp.shifter.account.service.AccountService;
+import com.shifterwebapp.shifter.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +27,7 @@ public class EnrollmentService implements ImplEnrollmentService{
     private final EnrollmentRepository enrollmentRepository;
     private final CourseRepository courseRepository;
     private final PaymentRepository paymentRepository;
-    private final AccountService accountService;
+    private final UserService userService;
     private final EnrollmentMapper enrollmentMapper;
     private final Validate validate;
 
@@ -39,9 +39,9 @@ public class EnrollmentService implements ImplEnrollmentService{
     }
 
     @Override
-    public List<EnrollmentDto> getEnrollmentsByAccount(Long accountId) {
-        validate.validateAccountExists(accountId);
-        List<Enrollment> enrollment = enrollmentRepository.findEnrollmentsByAccount(accountId);
+    public List<EnrollmentDto> getEnrollmentsByUser(Long userId) {
+        validate.validateUserExists(userId);
+        List<Enrollment> enrollment = enrollmentRepository.findEnrollmentsByUser(userId);
         return enrollmentMapper.toDto(enrollment);
     }
 
@@ -53,17 +53,17 @@ public class EnrollmentService implements ImplEnrollmentService{
     }
 
     @Override
-    public EnrollmentDto getEnrollmentByAccountAndCourse(Long accountId, Long courseId) {
-        validate.validateAccountExists(accountId);
+    public EnrollmentDto getEnrollmentByUserAndCourse(Long userId, Long courseId) {
+        validate.validateUserExists(userId);
         validate.validateCourseExists(courseId);
 
-        Enrollment enrollment = enrollmentRepository.findEnrollmentByAccountAndCourse(accountId, courseId);
+        Enrollment enrollment = enrollmentRepository.findEnrollmentByUserAndCourse(userId, courseId);
         return enrollmentMapper.toDto(enrollment);
     }
 
 
     @Override
-    public EnrollmentDto enrollAccount(Long courseId, Long paymentId) {
+    public EnrollmentDto enrollUser(Long courseId, Long paymentId) {
         validate.validateCourseExists(courseId);
         validate.validatePaymentExists(paymentId);
 
@@ -73,11 +73,11 @@ public class EnrollmentService implements ImplEnrollmentService{
             throw new RuntimeException("Payment with ID " + paymentId + " is not completed successfully!");
         }
 
-        Long accountId = payment.getAccount().getId();
-        validate.validateAccountExists(accountId);
-        boolean isAlreadyEnrolled = enrollmentRepository.findIsAccountEnrolledInCourse(accountId, courseId);
+        Long userId = payment.getUser().getId();
+        validate.validateUserExists(userId);
+        boolean isAlreadyEnrolled = enrollmentRepository.findIsUserEnrolledInCourse(userId, courseId);
         if (isAlreadyEnrolled) {
-            throw new RuntimeException("account with ID " + accountId + " is already enrolled in course with ID " + courseId + "!");
+            throw new RuntimeException("user with ID " + userId + " is already enrolled in course with ID " + courseId + "!");
         }
 
         Course course = courseRepository.findById(courseId).orElseThrow();
@@ -97,11 +97,11 @@ public class EnrollmentService implements ImplEnrollmentService{
     }
 
     @Override
-    public Boolean isAccountEnrolledInCourse(Long accountId, Long courseId) {
-        validate.validateAccountExists(accountId);
+    public Boolean isUserEnrolledInCourse(Long userId, Long courseId) {
+        validate.validateUserExists(userId);
         validate.validateCourseExists(courseId);
 
-        return enrollmentRepository.findIsAccountEnrolledInCourse(accountId, courseId);
+        return enrollmentRepository.findIsUserEnrolledInCourse(userId, courseId);
     }
 
     @Override
@@ -115,7 +115,7 @@ public class EnrollmentService implements ImplEnrollmentService{
         return enrollmentMapper.toDto(enrollment);
     }
 
-    // CALLING ACCOUNT SERVICE HERE. IS THERE A BETTER WAY FOR THIS ???
+    // CALLING user SERVICE HERE. IS THERE A BETTER WAY FOR THIS ???
     @Override
     public EnrollmentDto updateEnrollmentStatusToCompleted(Long enrollmentId) {
         validate.validateEnrollmentExists(enrollmentId);
@@ -123,11 +123,11 @@ public class EnrollmentService implements ImplEnrollmentService{
         Enrollment enrollment = enrollmentRepository.findById(enrollmentId).orElseThrow();
         enrollment.setEnrollmentStatus(EnrollmentStatus.COMPLETED);
 
-        Long accountId = enrollment.getPayment().getAccount().getId();
+        Long userId = enrollment.getPayment().getUser().getId();
         List<Skills> skillsGained = enrollment.getCourse().getSkillsGained();
-        accountService.addPoints(accountId, PointsConstants.BUY_COURSE);
-        accountService.addSkills(accountId, skillsGained);
-        accountService.removeSkillGaps(accountId, skillsGained);
+        userService.addPoints(userId, PointsConstants.BUY_COURSE);
+        userService.addSkills(userId, skillsGained);
+        userService.removeSkillGaps(userId, skillsGained);
 
         enrollmentRepository.save(enrollment);
 

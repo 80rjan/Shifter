@@ -76,15 +76,15 @@ public class TestReviewService {
     }
 
     @Test
-    public void test_hasBeenReviewedByAccount() {
+    public void test_hasBeenReviewedByUser() {
         Long courseId = 1L;
-        Long accountId = 1L;
+        Long userId = 1L;
 
-        Mockito.when(reviewRepository.findHasBeenReviewedByAccount(accountId, courseId)).thenReturn(true);
-        Mockito.doNothing().when(validate).validateAccountExists(accountId);
+        Mockito.when(reviewRepository.findHasBeenReviewedByUser(userId, courseId)).thenReturn(true);
+        Mockito.doNothing().when(validate).validateUserExists(userId);
         Mockito.doNothing().when(validate).validateCourseExists(courseId);
 
-        Boolean result = reviewService.hasBeenReviewedByAccount(accountId, courseId);
+        Boolean result = reviewService.hasBeenReviewedByUser(userId, courseId);
         Assertions.assertEquals(true, result);
     }
 }
