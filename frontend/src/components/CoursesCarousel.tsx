@@ -7,10 +7,10 @@ import Sales from "../assets/courseImg/sales.webp"
 import Onboarding from "../assets/courseImg/onboarding.png"
 import Leadership from "../assets/courseImg/leadership-2.webp"
 import BusinessFoundation from "../assets/courseImg/business-foundation.jpg"
-import Card from "./Card.tsx";
+import CourseCard from "./CourseCard.tsx";
 import "../slick-custom.css";
 
-import ShifterArrow from "../assets/Shifter-Arrow.png";
+import ShifterArrow from "../assets/shifterImg/Shifter-Arrow.png";
 
 function CoursesCarousel() {
     const courses = [
@@ -97,7 +97,7 @@ function CoursesCarousel() {
     };
 
     return (
-        <section className="relative flex flex-col gap-10 items-center bg-bright-gray py-vertical-md px-4 overflow-clip">
+        <section className="relative flex flex-col gap-10 items-center bg-dark-blue/10 py-vertical-md px-4 overflow-clip">
             <img src={ShifterArrow} alt="Shifter Arrow" className="absolute opacity-30 h-150 w-120 -rotate-130 -top-30 right-0" />
             <img src={ShifterArrow} alt="Shifter Arrow" className="absolute opacity-30 h-150 w-120 rotate-50 -bottom-30 left-0" />
 
@@ -114,7 +114,7 @@ function CoursesCarousel() {
                 <Slider {...settings}>
                     {courses.map((course, index) => (
                         <div className="h-full flex flex-col">
-                            <Card card={course} />
+                            {/*<CourseCard card={course} />*/}
                         </div>
                     ))}
                 </Slider>

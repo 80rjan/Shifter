@@ -9,7 +9,7 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     @Query("select AVG(r.rating) from Review r where r.enrollment.course.id = :courseId")
-    Float findAverageRatingByCourse(@Param("courseId") Long courseId);
+    Double findAverageRatingByCourse(@Param("courseId") Long courseId);
 
     @Query("select r from Review r where r.enrollment.course.id = :courseId")
     List<Review> findReviewsByCourse(@Param("courseId") Long courseId);

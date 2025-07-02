@@ -1,5 +1,5 @@
 import React from "react";
-import type {User} from "./User.tsx";
+import type {UserRegister} from "./UserRegister.tsx";
 
 type UserArrayFields = 'interests' | 'skills' | 'skillsGap';
 export interface SliderProps {
@@ -7,6 +7,6 @@ export interface SliderProps {
     name: UserArrayFields;
     id: string;
     options?: string[];
-    setUser: React.Dispatch<React.SetStateAction<User>>;
-    user: User;
+    setUser: React.Dispatch<React.SetStateAction<UserRegister>>;
+    user: UserRegister;
 }

@@ -1,6 +1,7 @@
 package com.shifterwebapp.shifter.course;
 
 import com.shifterwebapp.shifter.enums.Difficulty;
+import com.shifterwebapp.shifter.enums.Interests;
 import com.shifterwebapp.shifter.enums.Skills;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -25,4 +26,10 @@ public interface CourseRepository extends JpaRepository<Course, Long>, JpaSpecif
     List<Course> findCoursesBySkillsGainedIn(List<Skills> searchSkills);
 
     List<Course> findCoursesByDifficultyIn(List<Difficulty> searchDifficulties);
+
+    @Query("select distinct c.whatWillBeLearned from Course c")
+    List<Interests> getCourseTopics();
+
+    @Query("select distinct c.skillsGained from Course c")
+    List<Skills> getCourseSkills();
 }

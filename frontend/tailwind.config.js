@@ -8,9 +8,10 @@ export default {
     theme: {
         extend: {
             fontFamily: {
+                sans: ['"Source Sans 3"', 'sans-serif'],
                 montserrat: ['Montserrat', 'sans-serif'],
             },
         },
     },
-    plugins: [],
+    plugins: []
 }

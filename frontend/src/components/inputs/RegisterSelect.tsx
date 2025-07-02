@@ -1,6 +1,6 @@
-import type {User} from "../../types/User.tsx";
+import type {UserRegister} from "../../types/UserRegister.tsx";
 import type {SelectProps} from "../../types/SelectProps.tsx";
-import {toEnumFormat} from "../../utils/toEnumFormat.tsx";
+import {toEnumFormat} from "../../utils/toEnumFormat.ts";
 
 function RegisterSelect(selectProps: SelectProps) {
 
@@ -19,7 +19,7 @@ function RegisterSelect(selectProps: SelectProps) {
                     name={selectProps.name}
                     className="w-full focus:outline-none text-lg cursor-pointer"
                     onChange={e =>
-                        selectProps.setUser((prev: User) => ({
+                        selectProps.setUser((prev: UserRegister) => ({
                             ...prev,
                             [selectProps.name]: toEnumFormat(e.target.value)
                         }))

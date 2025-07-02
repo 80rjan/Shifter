@@ -1,27 +1,25 @@
 import React, {useEffect} from "react";
-import type {User} from "../../types/User.tsx";
+import type {UserRegister} from "../../types/UserRegister.tsx";
 import RegisterInput from "../inputs/RegisterInput.tsx";
 import RegisterSelect from "../inputs/RegisterSelect.tsx";
 
-function RegisterStepTwo({setUser, user, setCanContinue, setError}: {
-    setUser: React.Dispatch<React.SetStateAction<User>>,
-    user: User,
-    setCanContinue: React.Dispatch<React.SetStateAction<boolean>>,
-    setError: React.Dispatch<React.SetStateAction<string>>
+function RegisterStepTwo({setUser, user, setError}: {
+    setUser: React.Dispatch<React.SetStateAction<UserRegister>>,
+    user: UserRegister,
+    setError: React.Dispatch<React.SetStateAction<string>>,
 }) {
 
     useEffect(() => {
         if (!user.name || !user.workPosition || !user.companyType) {
             setError("Please ensure all inputs are completed.");
-            setCanContinue(false);
         } else {
             setError("");
-            setCanContinue(true);
         }
     }, [user.name, user.workPosition, user.companyType]);
 
     return (
-        <div className="flex flex-col gap-4 w-full items-center">
+        <section
+            className="flex flex-col gap-4 w-full items-center">
             <RegisterInput
                 placeholder={"John Doe"}
                 label={"Full Name"}
@@ -48,7 +46,7 @@ function RegisterStepTwo({setUser, user, setCanContinue, setError}: {
                 setUser={setUser}
                 user={user}
             />
-        </div>
+        </section>
     );
 }
 

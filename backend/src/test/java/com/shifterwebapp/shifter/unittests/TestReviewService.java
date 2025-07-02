@@ -71,7 +71,7 @@ public class TestReviewService {
         Mockito.when(reviewRepository.findAverageRatingByCourse(courseId)).thenReturn(5F);
         Mockito.doNothing().when(validate).validateCourseExists(courseId);
 
-        Float result = reviewService.getAverageRatingByCourse(courseId);
+        Double result = reviewService.getAverageRatingByCourse(courseId);
         Assertions.assertEquals(result, 5F);
     }
 

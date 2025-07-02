@@ -1,5 +1,5 @@
 import StarFilled from "../assets/icons/StarFilled.tsx";
-import ShifterArrow from "../assets/Shifter-Arrow.png";
+import ShifterArrow from "../assets/shifterImg/Shifter-Arrow.png";
 
 function Hero() {
     return (

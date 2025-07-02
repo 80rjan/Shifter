@@ -15,7 +15,7 @@ public class PaymentDto {
 
     private Long id;
 
-    private Float amount;
+    private Double amount;
 
     private Date date;
 

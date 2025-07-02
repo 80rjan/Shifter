@@ -3,6 +3,7 @@ package com.shifterwebapp.shifter.course;
 import com.shifterwebapp.shifter.enums.Difficulty;
 import com.shifterwebapp.shifter.coursecontent.CourseContent;
 import com.shifterwebapp.shifter.enrollment.Enrollment;
+import com.shifterwebapp.shifter.enums.Interests;
 import com.shifterwebapp.shifter.enums.Skills;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,20 +23,23 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(columnDefinition = "text")
     private String imageUrl;
 
     private String color;
     
+    private String titleShort;
+
     private String title;
-    
+
     private String topic;
 
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
     
-    private Float durationHours;
+    private Double durationHours;
     
-    private Float price;
+    private Double price;
     
     private Integer rating;
     
@@ -54,8 +58,9 @@ public class Course {
     @Enumerated(EnumType.STRING)
     private List<Skills> skillsGained;
 
-    @ElementCollection
-    private List<String> whatWillBeLearned;
+    @ElementCollection(targetClass = Interests.class)
+    @Enumerated(EnumType.STRING)
+    private List<Interests> whatWillBeLearned;
     
     @OneToMany(mappedBy = "course", orphanRemoval = true)        // IS THIS GOOD BUSINESS LOGIC? SHOULD I HAVE CASCADES?
     private List<Enrollment> enrollments;

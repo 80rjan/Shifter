@@ -14,6 +14,7 @@ public interface ImplUserService {
     List<UserDto> getAllUsers();
     UserDto getUserById(Long id);
     User getUserByEmail(String email);
+    Boolean existsUserByEmail(String email);
 
     User createUser(RegisterDto registerDto);
     void deleteUser(Long id);

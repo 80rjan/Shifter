@@ -8,7 +8,7 @@ public interface ImplReviewService {
     ReviewDto getReviewById(Long id);
     List<ReviewDto> getReviewsByCourse(Long courseId);
     List<ReviewDto> getReviewsByUser(Long userId);
-    Float getAverageRatingByCourse(Long courseId);
+    Double getAverageRatingByCourse(Long courseId);
 
     ReviewDto writeReview(Long enrollmentId, ReviewDto reviewDto);
 

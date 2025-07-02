@@ -45,9 +45,9 @@ public class ReviewService implements ImplReviewService {
     }
 
     @Override
-    public Float getAverageRatingByCourse(Long courseId) {
+    public Double getAverageRatingByCourse(Long courseId) {
         validate.validateCourseExists(courseId);
-        Float avgRating = reviewRepository.findAverageRatingByCourse(courseId);
+        Double avgRating = reviewRepository.findAverageRatingByCourse(courseId);
         return avgRating != null ? avgRating : 0f;
     }
 

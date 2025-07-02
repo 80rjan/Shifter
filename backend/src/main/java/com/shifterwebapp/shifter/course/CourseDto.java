@@ -2,6 +2,7 @@ package com.shifterwebapp.shifter.course;
 
 import com.shifterwebapp.shifter.enums.Difficulty;
 import com.shifterwebapp.shifter.coursecontent.CourseContentDto;
+import com.shifterwebapp.shifter.enums.Interests;
 import com.shifterwebapp.shifter.enums.Skills;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,15 +17,21 @@ public class CourseDto {
 
     private Long id;
 
+    private String imageUrl;
+
+    private String color;
+
+    private String titleShort;
+
     private String title;
 
     private String topic;
 
     private Difficulty difficulty;
 
-    private Float durationHours;
+    private Double durationHours;
 
-    private Float price;
+    private Double price;
 
     private Integer rating;
 
@@ -38,9 +45,9 @@ public class CourseDto {
 
     private List<Skills> skillsGained;
 
-    private List<String> whatWillBeLearned;
+    private List<Interests> whatWillBeLearned;
 
     // DO I NEED THIS ???
-    private List<CourseContentDto> courseContents;
+//    private List<CourseContentDto> courseContents;
 }
 

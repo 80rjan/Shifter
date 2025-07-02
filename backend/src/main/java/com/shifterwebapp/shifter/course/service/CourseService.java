@@ -1,12 +1,10 @@
 package com.shifterwebapp.shifter.course.service;
 
 import com.shifterwebapp.shifter.Validate;
-import com.shifterwebapp.shifter.course.Course;
-import com.shifterwebapp.shifter.course.CourseDto;
-import com.shifterwebapp.shifter.course.CourseMapper;
-import com.shifterwebapp.shifter.course.CourseRepository;
+import com.shifterwebapp.shifter.course.*;
 import com.shifterwebapp.shifter.coursecontent.CourseContentMapper;
 import com.shifterwebapp.shifter.enums.Difficulty;
+import com.shifterwebapp.shifter.enums.Interests;
 import com.shifterwebapp.shifter.enums.Skills;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
@@ -39,6 +37,16 @@ public class CourseService implements ImplCourseService {
     }
 
     @Override
+    public List<Interests> getAllTopics() {
+        return courseRepository.getCourseTopics();
+    }
+
+    @Override
+    public List<Skills> getAllSkills() {
+        return courseRepository.getCourseSkills();
+    }
+
+    @Override
     public CourseDto createCourse(CourseDto request) {
         Course course = Course.builder()
                 .title(request.getTitle())
@@ -53,7 +61,7 @@ public class CourseService implements ImplCourseService {
                 .descriptionLong(request.getDescriptionLong())
                 .skillsGained(request.getSkillsGained())
                 .whatWillBeLearned(request.getWhatWillBeLearned())
-                .courseContents(courseContentMapper.toEntity(request.getCourseContents()))      // ??????
+//                .courseContents(courseContentMapper.toEntity(request.getCourseContents()))      // ??????
                 .build();
 
         return courseMapper.toDto(course);
@@ -74,12 +82,6 @@ public class CourseService implements ImplCourseService {
     @Override
     public List<CourseDto> searchCoursesByDifficulties(List<Difficulty> searchDifficulties) {
         List<Course> courses = courseRepository.findCoursesByDifficultyIn(searchDifficulties);
-        return courseMapper.toDto(courses);
-    }
-
-    @Override
-    public List<CourseDto> searchCoursesByPrice(Float floorPrice, Float ceilPrice) {
-        List<Course> courses = courseRepository.findCoursesByPriceRange(floorPrice, ceilPrice);
         return courseMapper.toDto(courses);
     }
 

@@ -43,6 +43,11 @@ public class UserService implements ImplUserService {
     }
 
     @Override
+    public Boolean existsUserByEmail(String email) {
+        return userRepository.existsUserByEmail(email);
+    }
+
+    @Override
     public User createUser(RegisterDto registerDto) {
         if (userRepository.existsUserByEmail(registerDto.getEmail())) {
             throw new RuntimeException("Email already in use");

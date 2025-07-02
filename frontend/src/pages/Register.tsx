@@ -1,6 +1,6 @@
 import React from "react";
-import ShifterLogo from "../assets/Shifter-Logo-S2W-Transparent.png";
-import ShifterArrow from "../assets/Shifter-Arrow-White.png";
+import ShifterLogo from "../assets/shifterImg/Shifter-Logo-S2W-Transparent.png";
+import ShifterArrow from "../assets/shifterImg/Shifter-Arrow-White.png";
 import {
     Stepper,
     Step,
@@ -8,23 +8,26 @@ import {
     Box,
 } from "@mui/material";
 import {CustomStepperConnector, CustomStepperStepIcon} from "../components/CustomStepper";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {motion, AnimatePresence} from "framer-motion";
-import axios from "axios";
-import type { User } from "../types/User.tsx";
+import type {UserRegister} from "../types/UserRegister.tsx";
 import RegisterStepOne from "../components/steps/RegisterStepOne.tsx";
 import RegisterStepTwo from "../components/steps/RegisterStepTwo.tsx";
 import RegisterStepThree from "../components/steps/RegisterStepThree.tsx";
 import RegisterStepFour from "../components/steps/RegisterStepFour.tsx";
 import RegisterStepFive from "../components/steps/RegisterStepFive.tsx";
+import {useGlobalContext} from "../GlobalContext.tsx";
+import {isValidEmail} from "../utils/validation.ts";
+import {checkEmailExistsApi} from "../api/user.ts";
 
 function Register() {
+    const {register} = useGlobalContext();
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [activeStep, setActiveStep] = React.useState(0);
-    const [canContinue, setCanContinue] = React.useState(true);
     const [showError, setShowError] = React.useState(false);
     const [error, setError] = React.useState("");
     const [direction, setDirection] = React.useState(0); // 1 for next, -1 for back
-    const [user, setUser] = React.useState<User>({
+    const [user, setUser] = React.useState<UserRegister>({
         email: "",
         password: "",
         passwordConfirmation: "",
@@ -35,18 +38,26 @@ function Register() {
         skills: [],
         skillsGap: [],
     });
+    const navigate = useNavigate();
 
+    const handleNext = async () => {
+        if (activeStep === 0) {
+            const existsEmail: boolean = isValidEmail(user.email) ? await checkEmailExistsApi(user.email) : false;
+            if (existsEmail) {
+                setError("Email already exists");
+                setShowError(true)
+                return
+            }
+        }
 
-    const stepsContent = [
-        <RegisterStepOne setUser={setUser} user={user} setCanContinue={setCanContinue} setError={setError}/>,
-        <RegisterStepTwo setUser={setUser} user={user} setCanContinue={setCanContinue} setError={setError}/>,
-        <RegisterStepThree setUser={setUser} user={user} setCanContinue={setCanContinue} setError={setError}/>,
-        <RegisterStepFour setUser={setUser} user={user} setCanContinue={setCanContinue} setError={setError}/>,
-        <RegisterStepFive setUser={setUser} user={user} setCanContinue={setCanContinue} setError={setError}/>];
-
-    const handleNext = () => {
-        setDirection(1);
-        setActiveStep((prev) => prev + 1);
+        if (error.length > 0) {
+            setShowError(true)
+        } else {
+            setError("");
+            setShowError(false);
+            setDirection(1);
+            setActiveStep((prev) => prev + 1);
+        }
     };
     const handleBack = () => {
         setDirection(-1);
@@ -67,23 +78,33 @@ function Register() {
         }),
     };
 
-    const handleRegister = () => {
-        console.log("user", user);
-        console.log(import.meta.env.VITE_BACKEND_URL)
-        axios.post(`http://localhost:8080/api/auth/register`, user)
-            .then(() => {
-                console.log("User registered successfully");
-            })
-            .catch(err => {
-                console.log("Error registering user:", err);
-            })
+    const handleRegister = async () => {
+        setIsLoading(true);
+
+        try {
+            await register(user);
+            navigate("/");
+        } catch (err: any) {
+            setError("Registration failed. Please try again.");
+            console.log("Registration error: ", err);
+        } finally {
+            setIsLoading(false);
+        }
     }
 
+    const stepsContent = [
+        <RegisterStepOne setUser={setUser} user={user} setError={setError} />,
+        <RegisterStepTwo setUser={setUser} user={user} setError={setError} />,
+        <RegisterStepThree setUser={setUser} user={user} setError={setError} />,
+        <RegisterStepFour setUser={setUser} user={user} setError={setError} />,
+        <RegisterStepFive setUser={setUser} user={user} setError={setError} />
+    ];
+
     return (
-        <section className="flex font-montserrat h-screen">
+        <section className="flex font-montserrat h-screen bg-white">
 
             {/* LEFT HEADER AND BACKGROUND */}
-            <div className="relative bg-black w-[55%] overflow-hidden">
+            <section className="relative bg-black w-[55%] overflow-hidden">
                 <div
                     className="absolute w-full h-full bg-shifter/80 z-0 text-white px-16 flex flex-col gap-4 justify-center text-start">
                     {/*Arrows*/}
@@ -95,10 +116,10 @@ function Register() {
                     <p className="text-2xl font-light z-2">Start your journey toward smarter, scalable business
                         growth.</p>
                 </div>
-            </div>
+            </section>
 
             {/* RIGHT FORM CONTAINER */}
-            <div className="relative flex flex-col justify-center items-center flex-1 px-20 gap-6">
+            <section className="relative flex flex-col justify-center items-center flex-1 px-20 gap-6">
                 <img
                     src={ShifterLogo}
                     alt="Shifter Logo"
@@ -121,7 +142,7 @@ function Register() {
                         ))}
                     </Stepper>
 
-                    <Box className="flex flex-col overflow-hidden">
+                    <Box className="flex flex-col overflow-hidden gap-2">
 
                         {/*STEPPER CONTENT*/}
                         <AnimatePresence mode="wait" initial={false} custom={direction}>
@@ -142,44 +163,36 @@ function Register() {
                             </motion.div>
                         </AnimatePresence>
 
+                        {/* Error Message */}
+                        {showError && <p className="text-red-500 text-sm">{error}</p>}
+
 
                         {/*STEPPER BUTTONS*/}
                         <Box className="flex flex-col justify-center items-center gap-2">
-                            {
-                                showError && (
-                                    <p className="text-red-500 font-medium text-sm">
-                                        {error}
-                                    </p>
-                                )
-                            }
                             <div className="flex justify-center gap-4 ">
                                 <button
                                     disabled={activeStep === 0}
                                     onClick={handleBack}
                                     className="disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none
                                     hover:shadow-sm hover:shadow-black/20 transition-all duration-200 ease-in-out
-                                border-3 border-white/50 px-10 py-2 bg-black/10 text-black/60 cursor-pointer rounded-sm "
+                                border-3 border-white/50 px-10 py-1 bg-black/10 text-black/60 cursor-pointer rounded-sm "
                                 >
                                     Back
                                 </button>
                                 {activeStep === stepsContent.length - 1 ? (
                                     <button
                                         onClick={handleRegister}
-                                        className="hover:shadow-md hover:shadow-shifter/60 transition-all duration-200 ease-in-out
-                                    px-20 border-3 border-white/50 bg-shifter text-white cursor-pointer rounded-md"
+                                        className={`hover:shadow-md hover:shadow-shifter/60 transition-all duration-200 ease-in-out
+                                    px-20 border-3 border-white/50 bg-shifter text-white cursor-pointer rounded-md 
+                                    ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
                                     >
-                                        Start Your Journey
+                                        {
+                                            isLoading ? "Setting up..." : "Start Your Journey"
+                                        }
                                     </button>
                                 ) : (
                                     <button
-                                        onClick={() => {
-                                            if (canContinue) {
-                                                setShowError(false);
-                                                handleNext();
-                                            } else {
-                                                setShowError(true)
-                                            }
-                                        }}
+                                        onClick={handleNext}
                                         // disabled={!canContinue}
                                         className={`disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none
                                         hover:shadow-md hover:shadow-shifter/60 transition-all duration-200 ease-in-out
@@ -188,6 +201,14 @@ function Register() {
                                         Next
                                     </button>
                                 )}
+
+
+                                {/* Loading Animation */}
+                                {
+                                    isLoading && (
+                                        <div className="h-full loader"></div>
+                                    )
+                                }
                             </div>
                             <p
                                 className="text-black/40"
@@ -202,7 +223,7 @@ function Register() {
                         </Box>
                     </Box>
                 </Box>
-            </div>
+            </section>
         </section>
     );
 }

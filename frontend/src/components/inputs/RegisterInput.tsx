@@ -1,6 +1,6 @@
 import {Eye, EyeOff} from "lucide-react";
 import React from "react";
-import type { User } from "../../types/User.tsx";
+import type { UserRegister } from "../../types/UserRegister.tsx";
 
 type UserStrFields = 'email' | 'password' | 'passwordConfirmation' | 'name' | 'workPosition' | 'companyType';
 interface InputProps {
@@ -11,8 +11,8 @@ interface InputProps {
     id: string;
     showPassword?: boolean;
     setShowPassword?: React.Dispatch<React.SetStateAction<boolean>>;
-    setUser: React.Dispatch<React.SetStateAction<User>>;
-    user: User;
+    setUser: React.Dispatch<React.SetStateAction<UserRegister>>;
+    user: UserRegister;
 }
 
 function RegisterInput(inputProps: InputProps) {
@@ -36,7 +36,7 @@ function RegisterInput(inputProps: InputProps) {
                         className="w-full focus:outline-none text-lg"
                         value={inputProps.user[inputProps.name] || ""}
                         onChange={e =>
-                            inputProps.setUser((prev: User) => ({
+                            inputProps.setUser((prev: UserRegister) => ({
                                 ...prev,
                                 [inputProps.name]: e.target.value
                             }))

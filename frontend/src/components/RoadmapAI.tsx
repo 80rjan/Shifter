@@ -34,7 +34,7 @@ function RoadmapAI() {
 
 
     return (
-        <section className="px-horizontal py-vertical-md flex flex-col font-montserrat py-vertical-md text-black gap-12">
+        <section className="px-horizontal py-vertical-md flex flex-col py-vertical-md text-black gap-12">
             {/*HEADER*/}
             <div className="flex flex-col gap-2">
                 <h2 className="text-5xl">AI-Powered Roadmap</h2>
@@ -45,9 +45,10 @@ function RoadmapAI() {
             {/*INPUTS*/}
             <div className="flex flex-col">
                 {
-                    roadmapData.map(data => {
+                    roadmapData.map((data, i) => {
                         return (
                             <RoadmapInput
+                                key={i}
                                 title={data.title}
                                 description={data.description}
                                 textColor={data.textColor}

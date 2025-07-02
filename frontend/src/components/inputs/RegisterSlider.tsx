@@ -1,7 +1,7 @@
 import React from "react";
-import type {User} from "../../types/User.tsx";
+import type {UserRegister} from "../../types/UserRegister.tsx";
 import type {SliderProps} from "../../types/SliderProps.tsx";
-import {toEnumFormat} from "../../utils/toEnumFormat.tsx";
+import {toEnumFormat} from "../../utils/toEnumFormat.ts";
 
 function RegisterSlider(sliderProps: SliderProps) {
     const [allOptions] = React.useState<string[]>(sliderProps.options || []);
@@ -17,12 +17,11 @@ function RegisterSlider(sliderProps: SliderProps) {
     };
 
     const handleOptionClick = (option: string) => {
-        const newOption = toEnumFormat(option);
-        sliderProps.setUser((prev: User) => {
+        sliderProps.setUser((prev: UserRegister) => {
             const arr = prev[sliderProps.name] as string[] || [];
-            const newArr = arr.includes(newOption)
-                ? arr.filter(item => item !== newOption)
-                : [...arr, newOption];
+            const newArr = arr.includes(option)
+                ? arr.filter(item => item !== option)
+                : [...arr, option];
 
             return {
                 ...prev,
@@ -41,15 +40,12 @@ function RegisterSlider(sliderProps: SliderProps) {
                 <label htmlFor={sliderProps.id} className="text-shifter font-medium text-xl">
                     {sliderProps.label}
                 </label>
-                {
-                    sliderProps.name !== "interests" &&
-                    <input
-                        className="px-3 py-1 rounded-md border border-black/10 text-black text-sm focus:outline-none focus:ring-2 focus:ring-shifter/60 transition-all"
-                        placeholder="Search options..."
-                        value={filterText}
-                        onChange={handleFilterChange}
-                    />
-                }
+                <input
+                    className="px-3 py-1 rounded-md border border-black/10 text-black text-sm focus:outline-none focus:ring-2 focus:ring-shifter/60 transition-all"
+                    placeholder="Search options..."
+                    value={filterText}
+                    onChange={handleFilterChange}
+                />
             </div>
 
             <div className="relative custom-scrollbar flex gap-2 flex-wrap w-full max-h-[30vh] items-center overflow-y-auto">
@@ -66,7 +62,12 @@ function RegisterSlider(sliderProps: SliderProps) {
                             focus:outline-none cursor-pointer whitespace-nowrap`}
                             onClick={() => handleOptionClick(option)}
                         >
-                            {option}
+                            {
+                                option
+                                    .toLowerCase()
+                                    .replace(/_/g, " ")
+                                    .replace(/\b\w/g, (c) => c.toUpperCase())
+                            }
                         </button>
                     );
                 })}

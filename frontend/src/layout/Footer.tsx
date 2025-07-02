@@ -1,4 +1,4 @@
-import ShifterLogo from "../assets/Shifter-S2W-White-Transparent.png";
+import ShifterLogo from "../assets/shifterImg/Shifter-S2W-White-Transparent.png";
 import {Link} from "react-router-dom";
 
 function Footer() {

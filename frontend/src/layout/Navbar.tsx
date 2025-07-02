@@ -1,8 +1,9 @@
 import {Link} from "react-router-dom";
-import logo from "../assets/Shifter-S2W-White-Transparent.png"
-import {CircleUserRound} from "lucide-react";
+import logo from "../assets/shifterImg/Shifter-S2W-White-Transparent.png"
+import {useGlobalContext} from "../GlobalContext.tsx";
 
 function Navbar() {
+    const {user, logout} = useGlobalContext();
 
     return (
         <nav
@@ -51,17 +52,31 @@ function Navbar() {
                     <hr className="relative -left-30 group-hover:-left-4 border-t-2
                      rounded-full transition-all duration-300 ease-in-out"/>
                 </div>
-                <div className="flex flex-col gap-0 overflow-clip p-1 group">
-                    <Link to="/profile" className="hover:scale-110 transition-all
-                    duration-300 ease-in-out z-10">Profile</Link>
-                    <hr className="relative -left-30 group-hover:-left-4 border-t-2
+                {
+                    user ? (
+                        <>
+                            <div className="flex flex-col gap-0 overflow-clip p-1 group">
+                                <button onClick={logout} className="hover:scale-110 transition-all
+                    duration-300 ease-in-out z-10 cursor-pointer">Profile</button>
+                                {/*<Link to="/profile" className="hover:scale-110 transition-all*/}
+                    {/*duration-300 ease-in-out z-10">Profile</Link>*/}
+                                <hr className="relative -left-30 group-hover:-left-4 border-t-2
                      rounded-full transition-all duration-300 ease-in-out"/>
-                </div>
-                <Link to="/mentoring"
-                      className="hover:mr-0 hover:font-semibold transition-all duration-200 ease-in-out cursor-pointer
+                            </div>
+                            <Link to="/schedule-consulation"
+                                  className="hover:mr-0 hover:font-semibold transition-all duration-200 ease-in-out cursor-pointer
                       relative -mr-4 px-6 pr-9 py-2 bg-shifter rounded-l-lg font-medium
                       shadow-md shadow-shifter/30"
-                >Free Consultation</Link>
+                            >Free Consultation</Link>
+                        </>
+                    ) : (
+                        <Link to="/login"
+                              className="hover:mr-0 hover:font-semibold transition-all duration-200 ease-in-out cursor-pointer
+                      relative -mr-4 px-6 pr-9 py-2 bg-shifter rounded-l-lg font-medium
+                      shadow-md shadow-shifter/30"
+                        >Login / Register</Link>
+                    )
+                }
             </div>
         </nav>
 

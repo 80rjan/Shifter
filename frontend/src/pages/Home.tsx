@@ -7,13 +7,13 @@ import CoursesCarousel from "../components/CoursesCarousel.tsx";
 function Home() {
 
     return (
-        <>
+        <main>
             <Hero />
             <CollaborationSteps />
             <RoadmapAI />
             <CoursesCarousel />
             <ShifterValues />
-        </>
+        </main>
     )
 }
 
