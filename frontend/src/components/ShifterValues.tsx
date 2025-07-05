@@ -1,24 +1,24 @@
 function ShifterValues() {
     return (
         <section className="flex px-horizontal py-vertical-md gap-20">
-            <div className="flex flex-col gap-8 w-1/2">
-                <div className="flex flex-col gap-4 text-left">
-                    <h1 className="text-4xl font-regular">Our Core <span className="font-semibold text-shifter">Values</span></h1>
-                    <p className="text-lg">
+            <div className="flex flex-col gap-12 w-1/2">
+                <div className="flex flex-col gap-8 text-left">
+                    <h2 className="text-5xl">Our Core <strong className="text-shifter">Values</strong></h2>
+                    <p className="text-xl">
                         Our SHIFT Values define our approach to mentoring and consulting. We focus on Sustainable Results, a
                         Holistic Approach, In-depth Analysis, Fact-based Solutions, and Tailor-made Services—ensuring
                         impactful and lasting success.
                     </p>
                 </div>
                 <div className="flex gap-2">
-                    <div className="flex flex-col text-center gap-2 font-bold text-shifter text-4xl">
-                        <span>S</span>
-                        <span>H</span>
-                        <span>I</span>
-                        <span>F</span>
-                        <span>T</span>
+                    <div className="flex flex-col text-center gap-2 text-shifter text-5xl">
+                        <strong>S</strong>
+                        <strong>H</strong>
+                        <strong>I</strong>
+                        <strong>F</strong>
+                        <strong>T</strong>
                     </div>
-                    <div className="flex flex-col text-xl items-start">
+                    <div className="flex flex-col text-2xl items-start font-light">
                         <span className="h-1/5 flex items-end pb-1">ustainable Results</span>
                         <span className="h-1/5 flex items-end pb-1">olistic Approach</span>
                         <span className="h-1/5 flex items-end pb-1">n-depth Analysis</span>
@@ -26,8 +26,8 @@ function ShifterValues() {
                         <span className="h-1/5 flex items-end pb-1">ailor Made Services</span>
                     </div>
                 </div>
-                <button className="hover:shadow-shifter/40 hover:shadow-lg  hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer
-                    bg-shifter rounded-md border-3 border-black/20 py-2
+                <button className="hover:shadow-shifter/40 hover:shadow-lg transition-all duration-300 ease-in-out cursor-pointer
+                    bg-shifter rounded-md border-3 border-white/40 py-2
                     text-white text-xl shadow-md shadow-shifter/20 font-medium w-7/10"
                 >Read More</button>
             </div>

@@ -1,0 +1,124 @@
+import React, {
+    createContext,
+    useState,
+    useEffect,
+    type ReactNode,
+    type Dispatch,
+    type SetStateAction,
+} from "react";
+import type {User} from "../types/User.tsx";
+import type {UserRegister} from "../types/UserRegister.tsx";
+import {loginApi, logoutApi, refreshAccessTokenApi, registerApi} from "../api/auth.ts";
+
+interface GlobalContextType {
+    user: User | null;
+    setUser: Dispatch<SetStateAction<User | null>>;
+    accessToken: string | null;
+    setAccessToken: Dispatch<SetStateAction<string | null>>;
+    register: (user: UserRegister) => Promise<void>;
+    login: (email: string, password: string) => Promise<void>;
+    logout: () => void;
+    refreshAccessToken: () => Promise<void>;
+    loading: boolean;
+}
+
+export const GlobalContext = createContext<GlobalContextType | undefined>(
+    undefined
+);
+
+export const GlobalProvider = ({children}: { children: ReactNode }) => {
+    const [user, setUser] = useState<User | null>(null);
+    const [accessToken, setAccessToken] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    const register = async (user: UserRegister) => {
+        registerApi(user)
+            .then(data => {
+                setAccessToken(data.accessToken);
+                setUser(data.user);
+            })
+            .catch(error => {
+                setAccessToken(null);
+                setUser(null);
+                console.log("Registration failed:", error);
+                throw error;
+            });
+    }
+
+    const login = async (email: string, password: string) => {
+        loginApi(email, password)
+            .then(data => {
+                setAccessToken(data.accessToken);
+                setUser(data.user);
+            })
+            .catch(error => {
+                    setAccessToken(null);
+                    setUser(null);
+                    console.log("Login failed:", error);
+                    throw error;
+            });
+    };
+
+    const logout = async () => {
+        logoutApi()
+            .catch(err => {
+                console.warn("Logout failed:", err);
+                throw err;
+            })
+            .finally(() => {
+                setAccessToken(null);
+                setUser(null);
+            })
+    };
+
+
+    const refreshAccessToken = async () => {
+        setLoading(true);
+
+        refreshAccessTokenApi()
+            .then(data => {
+                setAccessToken(data.accessToken);
+                setUser(data.user);
+            })
+            .catch(error => {
+                setAccessToken(null);
+                setUser(null);
+                console.log("Refresh token failed: ", error);
+                throw error;
+            })
+            .finally(() => {
+                setLoading(false);
+            })
+    };
+
+    useEffect(() => {
+        refreshAccessToken();
+    }, []);
+
+    return (
+        <GlobalContext.Provider
+            value={{
+                user,
+                setUser,
+                accessToken,
+                setAccessToken,
+                register,
+                login,
+                logout,
+                refreshAccessToken,
+                loading,
+            }}
+        >
+            {children}
+        </GlobalContext.Provider>
+    );
+};
+
+// Custom hook for ease of use
+export const useGlobalContext = () => {
+    const context = React.useContext(GlobalContext);
+    if (!context) {
+        throw new Error("useGlobalContext must be used within a GlobalProvider");
+    }
+    return context;
+};

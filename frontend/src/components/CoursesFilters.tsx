@@ -3,11 +3,11 @@ import Checkbox from "@mui/material/Checkbox";
 import type {FilterParams} from "../types/FilterParams.tsx";
 import {durationToQueryMapper, priceToQueryMapper} from "../utils/mapper.ts";
 
-function CoursesFilters({setParams, params, topics, skills}: {
-    setParams: React.Dispatch<React.SetStateAction<FilterParams>>,
-    params: FilterParams,
-    topics: string[],
-    skills: string[]
+function CoursesFilters({setFilters, filters, topics, skills}: {
+    setFilters: React.Dispatch<React.SetStateAction<FilterParams>>,
+    filters: FilterParams,
+    topics: string[] | null,
+    skills: string[] | null
 }) {
     const duration = [
         "< 3 hours",
@@ -28,86 +28,86 @@ function CoursesFilters({setParams, params, topics, skills}: {
         "$50+",
     ]
 
-    const handleDifficultyChange = (param: string) => {
-        setParams(prevParams => ({
-            ...prevParams,
-            difficulty: prevParams.difficulty?.includes(param) ?
-                prevParams.difficulty.filter((v: string) => v !== param) :
-                [...(prevParams.difficulty || []), param]
+    const handleDifficultyChange = (filter: string) => {
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            difficulty: prevFilters.difficulty?.includes(filter) ?
+                prevFilters.difficulty.filter((v: string) => v !== filter) :
+                [...(prevFilters.difficulty || []), filter]
         }))
     }
 
-    const handleTopicChange = (param: string) => {
-        setParams(prevParams => ({
-            ...prevParams,
-            topic: prevParams.topic?.includes(param) ?
-                prevParams.topic.filter((v: string) => v !== param) :
-                [...(prevParams.topic || []), param]
+    const handleTopicChange = (filter: string) => {
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            topic: prevFilters.topic?.includes(filter) ?
+                prevFilters.topic.filter((v: string) => v !== filter) :
+                [...(prevFilters.topic || []), filter]
         }))
     }
 
-    const handleSkillChange = (param: string) => {
-        setParams(prevParams => ({
-            ...prevParams,
-            skill: prevParams.skill?.includes(param) ?
-                prevParams.skill.filter((v: string) => v !== param) :
-                [...(prevParams.skill || []), param]
+    const handleSkillChange = (filter: string) => {
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            skill: prevFilters.skill?.includes(filter) ?
+                prevFilters.skill.filter((v: string) => v !== filter) :
+                [...(prevFilters.skill || []), filter]
         }))
     }
 
-    const handlePriceChange = (param: string) => {
-        setParams(prevParams => ({
-            ...prevParams,
-            price: prevParams.price?.includes(param) ?
-                prevParams.price.filter((v: string) => v !== param) :
-                [...(prevParams.price || []), param]
+    const handlePriceChange = (filter: string) => {
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            price: prevFilters.price?.includes(filter) ?
+                prevFilters.price.filter((v: string) => v !== filter) :
+                [...(prevFilters.price || []), filter]
         }))
     }
 
-    const handleDurationChange = (param: string) => {
-        setParams(prevParams => ({
-            ...prevParams,
-            duration: prevParams.duration?.includes(param) ?
-                prevParams.duration.filter((v: string) => v !== param) :
-                [...(prevParams.duration || []), param]
+    const handleDurationChange = (filter: string) => {
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            duration: prevFilters.duration?.includes(filter) ?
+                prevFilters.duration.filter((v: string) => v !== filter) :
+                [...(prevFilters.duration || []), filter]
         }))
     }
 
     return (
         <aside
-            className="flex flex-col gap-8 pl-8 pt-8 text-left sticky top-0 h-screen bg-white border-r-2 border-black/10">
+            className="flex flex-col gap-8 pl-8 pt-12 text-left sticky top-0 h-screen border-r-2 border-black/10">
             <h2 className="text-2xl font-medium">Filter by</h2>
-            <div className="relative flex flex-col gap-6 pl-4 pr-2 pb-20 overflow-y-auto scrollable">
+            <div className="relative flex flex-col gap-12 pl-4 pr-2 pb-20 overflow-y-auto scrollable">
                 <FilterSelect
                     header={"Level"}
                     options={difficulty}
                     handleFilter={handleDifficultyChange}
-                    selectedOptions={params.difficulty || []}
+                    selectedOptions={filters.difficulty || []}
                 />
                 <FilterSelect
-                    header={"Topic"}
+                    header={"Topics"}
                     options={topics}
                     handleFilter={handleTopicChange}
-                    selectedOptions={params.topic || []}
+                    selectedOptions={filters.topic || []}
                 />
                 <FilterSelect
-                    header={"Skill"}
+                    header={"Skills"}
                     options={skills}
                     handleFilter={handleSkillChange}
-                    selectedOptions={params.skill || []}
+                    selectedOptions={filters.skill || []}
                 />
                 <FilterSelect
                     header={"Duration"}
                     options={duration}
                     handleFilter={handleDurationChange}
-                    selectedOptions={params.duration || []}
+                    selectedOptions={filters.duration || []}
                     mapper={durationToQueryMapper}
                 />
                 <FilterSelect
                     header={"Price"}
                     options={price}
                     handleFilter={handlePriceChange}
-                    selectedOptions={params.price || []}
+                    selectedOptions={filters.price || []}
                     mapper={priceToQueryMapper}
                 />
 
@@ -126,7 +126,7 @@ function FilterSelect({
                           mapper,
                       }: {
     header: string;
-    options: string[];
+    options: string[] | null;
     handleFilter: (value: string) => void;
     selectedOptions: string[];
     mapper?: (option: string) => string;
@@ -136,18 +136,18 @@ function FilterSelect({
 
 
     // Filter options based on search term
-    const filteredOptions = options.filter((option) =>
+    const filteredOptions = options?.filter((option) =>
         option.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     // Show only first 4 unless showAll is true
-    const visibleOptions = showAll ? filteredOptions : filteredOptions.slice(0, 4);
+    const visibleOptions = showAll ? filteredOptions : filteredOptions?.slice(0, 4);
 
     return (
-        <section className="flex flex-col gap-2">
-            <h3 className="text-lg font-medium">{header}</h3>
+        <section className="flex flex-col gap-2 text-md">
+            <h3 className="font-medium">{header}</h3>
             <form className="flex flex-col gap-0">
-                {options.length > 4 && (
+                {options && options.length > 4 && (
                     <input
                         type="search"
                         value={searchTerm}
@@ -156,11 +156,12 @@ function FilterSelect({
                             .toLowerCase()
                             .replace(/_/g, " ")
                             .replace(/\b\w/g, (c) => c.toUpperCase())}`}
-                        className="px-4 py-1 border-2 border-black/20 rounded-sm focus:outline-none focus:border-shifter w-3/4 mb-2"
-                    />
+                        className="hover:bg-shifter/5 hover:border-shifter hover:placeholder-black
+                        px-4 py-2 border-1 border-black/20 rounded-sm focus:outline-none focus:border-shifter mb-2
+                        "/>
                 )}
-                {visibleOptions.map((option, index) => (
-                    <label key={index} className="text-lg text-black whitespace-nowrap">
+                {visibleOptions?.map((option, index) => (
+                    <label key={index} className="text-black whitespace-nowrap cursor-pointer w-fit">
                         <Checkbox
                             checked={selectedOptions.includes(mapper ? mapper(option) : option)}
                             onChange={() => handleFilter(mapper ? mapper(option) : option)}
@@ -180,7 +181,7 @@ function FilterSelect({
                     </label>
                 ))}
             </form>
-            {filteredOptions.length > 4 && (
+            {filteredOptions && filteredOptions.length > 4 && (
                 <button
                     type="button"
                     onClick={() => setShowAll(!showAll)}

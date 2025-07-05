@@ -5,7 +5,7 @@ import qs from 'qs';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-export const fetchCoursesApi = async (params: FilterParams, signal?: AbortSignal): Promise<Course[]> => {
+export const fetchFilteredCoursesApi = async (params: FilterParams, signal?: AbortSignal): Promise<Course[]> => {
     const res = await axios.get(
         `${backendUrl}/api/courses`,
         {
@@ -14,6 +14,29 @@ export const fetchCoursesApi = async (params: FilterParams, signal?: AbortSignal
             signal
         }
     )
+
+    return res.data;
+}
+
+export const fetchAllCoursesApi = async (signal?: AbortSignal): Promise<Course[]> => {
+    const res = await axios.get(
+        `${backendUrl}/api/courses`,
+        {
+            params: {},
+            paramsSerializer: params => qs.stringify(params, {arrayFormat: 'repeat'}),
+            signal
+        }
+    )
+
+    return res.data;
+}
+
+export const fetchRecommendedCoursesApi = async (accessToken: string): Promise<Course[]> => {
+    const res = await axios.get(`${backendUrl}/api/courses/recommended`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    });
 
     return res.data;
 }

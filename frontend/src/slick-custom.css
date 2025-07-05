@@ -5,7 +5,7 @@
 
 .slick-slide {
     padding: 0 3rem;
-    opacity: 0.9;
+    opacity: 0.6;
     transform: scale(0.8);
     transition: all 0.4s ease-in-out;
 
@@ -16,7 +16,16 @@
         height: 100%;
         overflow: hidden;
     }
+
+    button {
+        cursor: initial;
+    }
+
+    button:hover {
+        box-shadow: none !important;
+    }
 }
+
 
 .slick-center {
     height: auto;
@@ -29,7 +38,7 @@
     > div {
         display: flex;
         flex-direction: column;
-        justify-content: stretch;
+        justify-content: center;
         height: 100%;
         border-radius: 12px;
         overflow: hidden;

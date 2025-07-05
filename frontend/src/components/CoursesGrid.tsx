@@ -8,19 +8,21 @@ import {X} from 'lucide-react';
 import {queryToDurationMapper, queryToPriceMapper} from "../utils/mapper.ts";
 
 
-function CoursesGrid({courses, loading, setParams, params}: {
-    courses: Course[],
+function CoursesGrid({courses, loading, setFilters, filters}: {
+    courses: Course[] | null,
     loading: boolean,
-    setParams: React.Dispatch<React.SetStateAction<FilterParams>>,
-    params: FilterParams
+    setFilters: React.Dispatch<React.SetStateAction<FilterParams>>,
+    filters: FilterParams
 }) {
-    const [searchText, setSearchText] = React.useState<string>(params.search || "");
-    const filterClassName = "border-1 border-black/40 rounded-full px-4 text-black/80 "
+    const [searchText, setSearchText] = React.useState<string>(filters.search || "");
+    const filterPillClassName = "group hover:border-shifter hover:bg-shifter/10 hover:text-shifter " +
+        "flex items-center gap-1 border-1 border-black/40 rounded-full px-4 py-1 text-black/80 font-medium cursor-pointer"
+    const filterXClassName = "group-hover:text-shifter text-black/60"
 
     const handleSearchFilter = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        setParams(prevParams => ({
+        setFilters(prevParams => ({
             ...prevParams,
             search: searchText.trim()
         }));
@@ -28,48 +30,57 @@ function CoursesGrid({courses, loading, setParams, params}: {
         setSearchText("");
     }
 
-    console.log(params)
 
     return (
-        <section className="flex flex-col gap-8 px-12 py-6 w-full">
+        <section className="flex flex-col gap-8 py-6 pb-12 w-full">
 
             {/*SEARCH AND SORT BY*/}
-            <div className="flex justify-between items-center w-full">
+            <div className="flex justify-between items-center w-full px-12">
                 <div className="flex gap-2 flex-wrap items-center justify-start">
                     {
-                        Object.entries(params).map(([key, values]) => {
+                        Object.entries(filters).map(([key, values]) => {
                             if (key === "search") {
                                 const searchValue = values as string;
                                 return (
-                                    <div
+                                    <button
                                         key={`${key}-${searchValue}`}
-                                        className={filterClassName + " flex items-center gap-1"}
+                                        onClick={() => {
+                                            setFilters(prev => {
+                                                const typedKey = key as keyof FilterParams;
+                                                const updatedParams = {...prev};
+                                                delete updatedParams[typedKey];
+                                                return updatedParams;
+                                            });
+                                        }}
+                                        className={filterPillClassName}
                                     >
                                         {searchValue
                                             .toLowerCase()
                                             .replace(/\b\w/g, c => c.toUpperCase())}
-                                        <button
-                                            onClick={() => {
-                                                setParams(prev => {
-                                                    const typedKey = key as keyof FilterParams;
-                                                    const updatedParams = {...prev};
-                                                    delete updatedParams[typedKey];
-                                                    return updatedParams;
-                                                });
-                                            }}
-                                            className="ml-1 text-black/60 hover:text-black cursor-pointer"
-                                        >
-                                            <X size={16}/>
-                                        </button>
-                                    </div>
+                                        <X size={20} className={filterXClassName}/>
+                                    </button>
                                 )
                             }
 
                             // Array-type filters (topics, skills, difficulties, etc.)
                             return values.map((element: string, idx: number) => (
-                                <div
+                                <button
                                     key={`${key}-${idx}`}
-                                    className={filterClassName + " flex items-center gap-1"}
+                                    onClick={() => {
+                                        const updatedArray = values.filter((_: string, i: number) => i !== idx);
+                                        const typedKey = key as Exclude<keyof FilterParams, "search">;
+
+                                        setFilters(prev => {
+                                            const newParams = { ...prev };
+                                            if (updatedArray.length === 0) {
+                                                delete newParams[typedKey]; // remove key if empty array
+                                            } else {
+                                                newParams[typedKey] = updatedArray; // otherwise set updated array
+                                            }
+                                            return newParams;
+                                        });
+                                    }}
+                                    className={filterPillClassName}
                                 >
                                     {
                                         key === "price" ?
@@ -87,26 +98,8 @@ function CoursesGrid({courses, loading, setParams, params}: {
                                                     .toLowerCase()
                                                     .replace(/\b\w/g, c => c.toUpperCase())
                                     }
-                                    <button
-                                        onClick={() => {
-                                            const updatedArray = values.filter((_: string, i: number) => i !== idx);
-                                            const typedKey = key as keyof FilterParams;
-                                            setParams(prev => {
-                                                const newParams = { ...prev };
-                                                if (updatedArray.length === 0) {
-                                                    delete newParams[typedKey]; // remove key if empty array
-                                                } else {
-                                                    newParams[typedKey] = updatedArray; // otherwise set updated array
-                                                }
-                                                return newParams;
-                                            });
-                                        }}
-
-                                        className="ml-1 text-black/60 hover:text-black cursor-pointer"
-                                    >
-                                        <X size={16}/>
-                                    </button>
-                                </div>
+                                    <X size={20} className={filterXClassName}/>
+                                </button>
                             ));
                         })
                     }
@@ -154,22 +147,24 @@ function CoursesGrid({courses, loading, setParams, params}: {
             </div>
 
             {/*COURSES GRID*/}
-            <div className="relative grid grid-cols-3 gap-x-4 gap-y-4 w-full h-fit">
+            <div className="relative grid grid-cols-3 gap-x-4 gap-y-4 w-full h-fit px-12">
                 {
-                    loading && (
+                    (!courses || loading) && (
                         <div className="absolute inset-0 bg-white/60 backdrop-blur-sm
-                        flex flex-col gap-2 items-center justify-start z-10 py-40">
+                        flex flex-col gap-2 items-center justify-start z-10 py-40 w-full">
                             <div className="w-12 loader"></div>
                             <span className="text-xl font-semibold text-black/40">Loading...</span>
                         </div>
                     )
                 }
                 {
-                    courses.map((course, index) => {
+                    courses && courses?.length > 0 ?
+                        courses?.map((course, index) => {
                         return (
                             <CourseCard card={course} key={index}/>
                         )
-                    })
+                    }) :
+                        <span className="text-3xl font-normal text-black/60 pl-20 py-8 text-left col-span-full">No results found</span>
                 }
             </div>
         </section>

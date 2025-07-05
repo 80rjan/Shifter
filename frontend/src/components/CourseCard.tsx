@@ -26,7 +26,7 @@ function CourseCard({ card }: {card: Course}) {
         <article
             style={{"--card-color": card.color} as React.CSSProperties}
             className="border-1 border-black/10 shadow-md shadow-black/10
-                flex flex-col w-full rounded-xl gap-4 py-4 px-4 bg-[#FFFFFF] h-full">
+                flex flex-col w-full rounded-xl gap-4 py-4 px-4 bg-[#FFFFFF]">
 
             {/*IMAGE*/}
             <div className="overflow-clip rounded-md rounded-br-4xl rounded-tl-4xl">
@@ -36,9 +36,9 @@ function CourseCard({ card }: {card: Course}) {
 
 
             {/*TITLE AND TOPICS LEARNED*/}
-            <div className="flex flex-col justify-between items-start text-left h-full">
+            <div className="flex flex-col gap-2 items-start text-left h-full">
                 {/*Title*/}
-                <h3 className="font-semibold text-lg">{card.titleShort}</h3>
+                <h3 className="font-semibold text-xl">{card.titleShort}</h3>
 
                 {/*What will be learned*/}
                 <p className="text-black/60">{
@@ -72,7 +72,7 @@ function CourseCard({ card }: {card: Course}) {
             </div>
 
             {/*BUTTON AND PRICE*/}
-            <div className="flex justify-between mt-0">
+            <div className="flex justify-between items-center mt-0">
                 <p className={`font-bold text-black/80 text-lg ${card.price == 0 && "font-normal"}`}>{card.price > 0 ? "$"+card.price : "Free"}</p>
                 <button
                     style={isHovered ?

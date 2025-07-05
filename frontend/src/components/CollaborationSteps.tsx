@@ -29,8 +29,8 @@ export default function CollaborationSteps() {
 
     return (
         <section className="bg-dark-blue text-white py-vertical-md px-horizontal flex flex-col gap-12 items-center">
-            <h2 className="text-4xl font-regular">
-                How to Start Your Journey to <strong>Success</strong>
+            <h2 className="text-5xl font-light">
+                How to Start Your Journey to <strong className="font-bold">Success</strong>
             </h2>
 
             <div className="relative flex w-full mt-4">
@@ -50,10 +50,10 @@ export default function CollaborationSteps() {
 
 
                 {steps.map((step, i) => (
-                    <div
+                    <section
                         key={i}
-                        className={`flex flex-col items-center gap-4 justify-between w-1/4 px-4 
-                                border-l-3 ${i === 3 ? 'border-r-3' : ''} ${i < 2 ? 'pb-60' : 'pt-60'}
+                        className={`flex flex-col items-center gap-2 justify-between w-1/4 px-4 
+                                border-l-2 ${i === 3 ? 'border-r-2' : ''} ${i < 2 ? 'pb-60' : 'pt-60'} border-white/60
                             `}
                     >
                         {/* Number */}
@@ -61,16 +61,16 @@ export default function CollaborationSteps() {
                         {/* Title and description */}
                         <div className="flex flex-col justify-start h-full gap-2">
                             <div className="flex justify-center items-center min-h-[3.5rem]">
-                                <h3 className="text-xl font-semibold text-center line-clamp-2">{step.title}</h3>
+                                <h3 className="text-2xl font-semibold text-center line-clamp-2">{step.title}</h3>
                             </div>
-                            <p className="text-md text-white/70">{step.description}</p>
+                            <p className="font-light text-white/70">{step.description}</p>
                         </div>
-                    </div>
+                    </section>
                 ))}
             </div>
 
             {/* Button */}
-            <button className="hover:shadow-white/40 hover:shadow-lg hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer
+            <button className="hover:shadow-white/40 hover:shadow-lg transition-all duration-300 ease-in-out cursor-pointer
                 w-3/10 whitespace-nowrap py-2 bg-white text-xl text-dark-blue rounded-sm font-semibold shadow-md shadow-white/20">
                 Start Now
             </button>

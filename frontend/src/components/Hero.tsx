@@ -1,15 +1,17 @@
 import StarFilled from "../assets/icons/StarFilled.tsx";
 import ShifterArrow from "../assets/shifterImg/Shifter-Arrow.png";
+import { Link } from 'react-router-dom';
 
 function Hero() {
+
     return (
-        <section className="bg-dark-blue w-full px-4 font-montserrat">
+        <section className="bg-dark-blue w-full">
             <div className="shadow-md shadow-black/80 flex flex-col gap-12
             items-center px-horizontal pt-30 w-full bg-white rounded-b-[60px]">
-                <h1 className="font-regular text-6xl">
-                    Business <strong className="font-semibold text-shifter">Excellence</strong>
+                <h1 className="text-6xl">
+                    Business <strong className="text-shifter">Excellence</strong>
                     <br/>
-                    Powered by <strong className="font-semibold text-shifter">Expertise</strong>
+                    Powered by <strong className="text-shifter">Expertise</strong>
                 </h1>
 
                 {/*<img src={ShifterRocket} alt="Shifter Rocket Image"*/}
@@ -18,13 +20,13 @@ function Hero() {
                 <div className="relative flex justify-between items-center w-full">
 
                     {/*LEFT TEXT*/}
-                    <div className="relative max-w-sm text-medium text-left">
+                    <div className="relative max-w-sm text-left">
                         <img src={ShifterArrow} alt="Shifter Arrow"
                              className="absolute left-5 -top-30 h-35 w-30 rotate-40 opacity-20"/>
                         <img src={ShifterArrow} alt="Shifter Arrow"
                              className="absolute -left-25 top-5 h-35 w-30 -rotate-140 opacity-20"/>
 
-                        <p className="font-regular leading-relaxed">
+                        <p className="text-lg text-black leading-relaxed">
                             We guide businesses from the basics of planning to complete transformations, offering
                             expert
                             mentoring, consulting, and e-learning. Whether you're starting small or aiming for major
@@ -40,18 +42,20 @@ function Hero() {
                         {/*CTA BUTTONS*/}
                         <div
                             className="absolute bottom-5 flex gap-2 bg-gray/20 backdrop-blur-lg p-1 rounded-full border-3 border-black/5 text-md">
-                            <button
-                                className="hover:scale-105 hover:shadow-lg hover:shadow-shifter/50 transition-all duration-200 ease-in-out cursor-pointer
-                            rounded-full text-white px-8 py-2 bg-shifter border-3 border-white/50 font-medium
+                            <Link
+                                to="/"
+                                className="hover:shadow-lg hover:shadow-shifter/50 transition-all duration-200 ease-in-out cursor-pointer
+                            rounded-full text-white px-8 py-3 bg-shifter border-3 border-white/50 font-semibold
                             shadow-md shadow-shifter/30">
                                 Book a Free Consultation
-                            </button>
-                            <button
-                                className="hover:scale-105 hover:shadow-lg hover:shadow-shifter/50 transition-all duration-200 ease-in-out cursor-pointer
-                            rounded-full text-shifter px-8 py-2 bg-white border-3 border-shifter/50 font-semibold
+                            </Link>
+                            <Link
+                                to="/courses"
+                                className="hover:shadow-lg hover:shadow-shifter/50 transition-all duration-200 ease-in-out cursor-pointer
+                            rounded-full text-shifter px-8 py-3 bg-white border-3 border-shifter/50 font-bold
                             shadow-md shadow-shifter/30">Explore
                                 Our Courses
-                            </button>
+                            </Link>
                         </div>
                     </div>
 
@@ -76,11 +80,11 @@ function Hero() {
                             </p>
                         </div>
                         <div className="flex gap-1 text-gold">
-                            <StarFilled className="w-10 h-10"/>
-                            <StarFilled className="w-10 h-10"/>
-                            <StarFilled className="w-10 h-10"/>
-                            <StarFilled className="w-10 h-10"/>
-                            <StarFilled className="w-10 h-10"/>
+                            <StarFilled className="w-10 h-10 opacity-80"/>
+                            <StarFilled className="w-10 h-10 opacity-80"/>
+                            <StarFilled className="w-10 h-10 opacity-80"/>
+                            <StarFilled className="w-10 h-10 opacity-80"/>
+                            <StarFilled className="w-10 h-10 opacity-80"/>
                         </div>
                     </div>
                 </div>

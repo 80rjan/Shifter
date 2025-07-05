@@ -16,7 +16,7 @@ import RegisterStepTwo from "../components/steps/RegisterStepTwo.tsx";
 import RegisterStepThree from "../components/steps/RegisterStepThree.tsx";
 import RegisterStepFour from "../components/steps/RegisterStepFour.tsx";
 import RegisterStepFive from "../components/steps/RegisterStepFive.tsx";
-import {useGlobalContext} from "../GlobalContext.tsx";
+import {useGlobalContext} from "../context/GlobalContext.tsx";
 import {isValidEmail} from "../utils/validation.ts";
 import {checkEmailExistsApi} from "../api/user.ts";
 

@@ -5,8 +5,7 @@ import Footer from "./layout/Footer.tsx";
 import Login from "./pages/Login.tsx";
 import Register from "./pages/Register.tsx";
 import Courses from "./pages/Courses.tsx";
-import {useGlobalContext} from "./GlobalContext.tsx";
-import React from "react";
+import {useGlobalContext} from "./context/GlobalContext.tsx";
 
 function LayoutWrapper() {
     const location = useLocation();
