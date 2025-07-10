@@ -7,6 +7,7 @@ import com.shifterwebapp.shifter.user.UserDto;
 import com.shifterwebapp.shifter.enums.CompanyType;
 import com.shifterwebapp.shifter.enums.Interests;
 import com.shifterwebapp.shifter.enums.Skills;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public interface ImplUserService {
     UserDto addSkill(Long id, Skills newSkill);
     UserDto addSkills(Long id, List<Skills> newSkills);
     UserDto addSkillGap(Long id, Skills newSkillGap);
-    UserDto addFavoriteCourse(Long id, Integer newFavoriteCourseId);
+    UserDto toggleFavoriteCourse(Authentication authentication, Integer newFavoriteCourseId);
     UserDto addPoints(Long id, Integer newPointsAchieved);
     UserDto addPayment(Long id, Payment newPayment);
 

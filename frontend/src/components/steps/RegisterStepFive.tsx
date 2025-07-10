@@ -25,7 +25,7 @@ function RegisterStepFive({setUser, user, setError}: {
 
     useEffect(() => {
         if (user.skillsGap.length === 0) {
-            setError("Please ensure all inputs are completed.");
+            setError("We’d love to support your growth — select at least one skill you'd like to improve");
         } else {
             setError("");
         }

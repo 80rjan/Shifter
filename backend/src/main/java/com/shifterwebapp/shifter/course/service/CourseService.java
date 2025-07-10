@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,23 +18,73 @@ import java.util.List;
 public class CourseService implements ImplCourseService {
 
     private final CourseRepository courseRepository;
-    private final CourseMapper courseMapper;
-    private final CourseContentMapper courseContentMapper;
+    private final CourseMapperPreview courseMapperPreview;
+    private final CourseMapperDetail courseMapperDetail;
     private final Validate validate;
 
     @Override
-    public List<CourseDto> getAllCourses(Specification<Course> specification) {
+    public List<CourseDtoPreview> getAllCourses(Specification<Course> specification) {
         List<Course> courses = specification == null ?
                 courseRepository.findAll() :
                 courseRepository.findAll(specification);
-        return courseMapper.toDto(courses);
+        return courseMapperPreview.toDto(courses);
     }
 
     @Override
-    public CourseDto getCourseById(Long courseId) {
+    public List<CourseDtoPreview> getRecommendedCourses(List<Skills> skills, List<Interests> interests) {
+        List<Course> courses = courseRepository.findAll();
+
+        List<ScoredCourse> scoredCourses = new ArrayList<>();
+        for (Course course : courses) {
+            boolean matchesSkills = course.getSkillsGained().stream().anyMatch(skills::contains);
+            boolean matchesInterests = course.getWhatWillBeLearned().stream().anyMatch(interests::contains);
+
+            int score = 0;
+            if (matchesSkills && matchesInterests) {
+                score += 2;
+            } else if (matchesSkills || matchesInterests) {
+                score += 1;
+            }
+
+            if (score > 0)
+                scoredCourses.add(new ScoredCourse(course, score));
+        }
+
+        scoredCourses.sort((a, b) -> Integer.compare(b.getScore(), a.getScore()));
+
+        if (scoredCourses.size() < 5) {
+            courses.sort((a, b) -> Integer.compare(b.getRating()/b.getRatingCount(), a.getRating()/a.getRatingCount()));
+
+            while (scoredCourses.size() < 5)
+                scoredCourses.add(new ScoredCourse(courses.remove(0), 0));
+        }
+
+        return scoredCourses
+                .subList(0, 5)
+                .stream()
+                .map(ScoredCourse::getCourse)
+                .map(courseMapperPreview::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<CourseDtoPreview> getTopRatedCourses() {
+        List<Course> courses = courseRepository.findCoursesOrderedByRating();
+        return courseMapperPreview.toDto(courses);
+    }
+
+    @Override
+    public List<CourseDtoPreview> getMostPopularCourses() {
+        List<Course> courses = courseRepository.findCoursesOrderedByPopularity();
+        return courseMapperPreview.toDto(courses);
+    }
+
+
+    @Override
+    public CourseDtoDetail getCourseById(Long courseId) {
         validate.validateCourseExists(courseId);
         Course course = courseRepository.findById(courseId).orElseThrow();
-        return courseMapper.toDto(course);
+        return courseMapperDetail.toDto(course);
     }
 
     @Override
@@ -44,56 +95,5 @@ public class CourseService implements ImplCourseService {
     @Override
     public List<Skills> getAllSkills() {
         return courseRepository.getCourseSkills();
-    }
-
-    @Override
-    public CourseDto createCourse(CourseDto request) {
-        Course course = Course.builder()
-                .title(request.getTitle())
-                .topic(request.getTopic())
-                .difficulty(request.getDifficulty())
-                .durationHours(request.getDurationHours())
-                .price(request.getPrice())
-                .rating(request.getRating())
-                .ratingCount(request.getRatingCount())
-                .descriptionShort(request.getDescriptionShort())
-                .description(request.getDescription())
-                .descriptionLong(request.getDescriptionLong())
-                .skillsGained(request.getSkillsGained())
-                .whatWillBeLearned(request.getWhatWillBeLearned())
-//                .courseContents(courseContentMapper.toEntity(request.getCourseContents()))      // ??????
-                .build();
-
-        return courseMapper.toDto(course);
-    }
-
-    @Override
-    public List<CourseDto> searchCoursesByTitle(String searchTitle) {
-        List<Course> courses = courseRepository.findCoursesByTitle(searchTitle);
-        return courseMapper.toDto(courses);
-    }
-
-    @Override
-    public List<CourseDto> searchCoursesByTopic(String searchTopic) {
-        List<Course> courses = courseRepository.findCoursesByTopic(searchTopic);
-        return courseMapper.toDto(courses);
-    }
-
-    @Override
-    public List<CourseDto> searchCoursesByDifficulties(List<Difficulty> searchDifficulties) {
-        List<Course> courses = courseRepository.findCoursesByDifficultyIn(searchDifficulties);
-        return courseMapper.toDto(courses);
-    }
-
-    @Override
-    public List<CourseDto> searchCoursesByDurationHours(Float floorHours, Float ceilHours) {
-        List<Course> courses = courseRepository.findCoursesByDurationHoursRange(floorHours, ceilHours);
-        return courseMapper.toDto(courses);
-    }
-
-    @Override
-    public List<CourseDto> searchCoursesBySkillsGained(List<Skills> searchSkills) {
-        List<Course> courses = courseRepository.findCoursesBySkillsGainedIn(searchSkills);
-        return courseMapper.toDto(courses);
     }
 }

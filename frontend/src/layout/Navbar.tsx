@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import logo from "../assets/shifterImg/Shifter-S2W-White-Transparent.png"
+import logo from "../../public/Shifter-S2W-White-Transparent.png"
 import {useGlobalContext} from "../context/GlobalContext.tsx";
 
 function Navbar() {
@@ -8,7 +8,7 @@ function Navbar() {
     return (
         <nav
             className="-mt-20 sticky top-2 border-3 border-white/30 bg-black/50 backdrop-blur-md
-            z-50 w-80/100 mx-auto flex items-center justify-between py-3 px-10 pr-0 rounded-full
+            z-50 w-85/100 mx-auto flex items-center justify-between py-3 px-10 pr-0 rounded-full
             text-white font-light overflow-clip ">
 
             {/* Left nav links */}
@@ -38,7 +38,7 @@ function Navbar() {
                 to="/"
                 className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
             >
-                <img src={logo} alt="Shifter Logo" width={150}/>
+                <img src={logo} alt="Shifter Logo" width={160}/>
             </Link>
 
             {/* Right side icons and button */}
@@ -64,14 +64,14 @@ function Navbar() {
                      rounded-full transition-all duration-300 ease-in-out"/>
                             </div>
                             <Link to="/schedule-consulation"
-                                  className="hover:mr-0 hover:font-semibold transition-all duration-200 ease-in-out cursor-pointer
+                                  className="hover:-translate-x-4 transition-all duration-200 ease-in-out cursor-pointer
                       relative -mr-4 px-6 pr-9 py-2 bg-shifter rounded-l-lg font-medium
                       shadow-md shadow-shifter/30"
                             >Free Consultation</Link>
                         </>
                     ) : (
                         <Link to="/login"
-                              className="hover:mr-0 hover:font-semibold transition-all duration-200 ease-in-out cursor-pointer
+                              className="hover:-translate-x-4 transition-all duration-200 ease-in-out cursor-pointer
                       relative -mr-4 px-6 pr-9 py-2 bg-shifter rounded-l-lg font-medium
                       shadow-md shadow-shifter/30"
                         >Login / Register</Link>

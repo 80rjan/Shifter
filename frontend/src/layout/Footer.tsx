@@ -1,7 +1,7 @@
-import ShifterLogo from "../assets/shifterImg/Shifter-S2W-White-Transparent.png";
+import ShifterLogo from "../../public/Shifter-S2W-White-Transparent.png";
 import {Link} from "react-router-dom";
 import {useGlobalContext} from "../context/GlobalContext.tsx";
-import ShifterRocket from "../assets/shifterImg/Rocket-Blue.png"
+import ShifterRocket from "../../public/Rocket-Blue.png"
 import LinkedIn from "../assets/icons/LinkedIn.tsx";
 import Instagram from "../assets/icons/Instagram.tsx";
 

@@ -2,12 +2,15 @@ import axios from "axios";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-export const checkEmailExistsApi = async (email: string): Promise<boolean> => {
-    const res = await axios.get(`${backendUrl}/api/auth/check-email`, {
-        params: {
-            email: email,
-        },
-    });
-
-    return res.data;
+export const toggleFavoriteCourseApi = async (courseId: number, accessToken: string): Promise<void> => {
+    await axios.put(
+        `${backendUrl}/api/user/favorite-course/${courseId}`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+            withCredentials: true
+        }
+    )
 }

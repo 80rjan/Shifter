@@ -2,16 +2,11 @@ import React, {useEffect, useRef} from "react";
 import CoursesFilters from "../components/CoursesFilters.tsx";
 import CoursesGrid from "../components/CoursesGrid.tsx";
 import type {FilterParams} from "../types/FilterParams.tsx";
-import { useNavigate, useLocation } from "react-router-dom";
-import {
-    fetchAllCoursesApi,
-    fetchCoursesSkillsApi,
-    fetchCoursesTopicsApi,
-    fetchFilteredCoursesApi,
-} from "../api/courses.ts";
-import axios from "axios";
-import ShifterRocket from "../assets/shifterImg/Rocket-Blue-Fire.png"
-import type {Course} from "../types/Course.tsx";
+import {useLocation, useNavigate} from "react-router-dom";
+import {fetchCoursesApi, fetchCoursesSkillsApi, fetchCoursesTopicsApi,} from "../api/courses.ts";
+import ShifterRocket from "../../public/Rocket-Blue-Fire.png"
+import {useCourseStorage} from "../context/CourseStorage.ts";
+import type {CoursePreview} from "../types/CoursePreview.tsx";
 
 function getInitialFiltersFromSearch(): FilterParams {
     const searchParams = new URLSearchParams(location.search);
@@ -41,9 +36,10 @@ function getInitialFiltersFromSearch(): FilterParams {
 function Courses() {
     const navigate = useNavigate();
     const location = useLocation();
+    const {allCourses, setAllCourses} = useCourseStorage();
 
-    const sessionCourses = sessionStorage.getItem("allCourses");
-    const [courses, setCourses] = React.useState<Course[] | null>(sessionCourses ? JSON.parse(sessionCourses) : null);
+    const [showOnlyFavorites, setShowOnlyFavorites] = React.useState<boolean>(false);
+    const [filteredCourses, setFilteredCourses] = React.useState<CoursePreview[] | null>(null);
     const sessionTopics = sessionStorage.getItem("courseTopics");
     const [topics, setTopics] = React.useState<string[] | null>(sessionTopics ? JSON.parse(sessionTopics) : null);
     const sessionsSkills = sessionStorage.getItem("courseSkills");
@@ -55,161 +51,112 @@ function Courses() {
     const abortControllerRef = useRef<AbortController | null>(null);
     const debounceTimeoutRef = useRef<number | null>(null);
 
-    // INITIAL FETCHES IF NOTHING IN SESSION STORAGE (e.g. user visits /courses directly instead of from Home)
+    // Initial fetch of all courses, topics, skills if not loaded
     useEffect(() => {
-
-        if (!topics)
-            fetchCoursesTopicsApi()
-                .then(data => {
-                    setTopics(data);
-                    sessionStorage.setItem("courseTopics", JSON.stringify(data));
-                })
-                .catch(err => {
-                    console.error("Error fetching course topics: ", err);
-                    throw err;
-                })
-
-        if (!skills)
-            fetchCoursesSkillsApi()
-                .then(data => {
-                    setSkills(data);
-                    sessionStorage.setItem("courseSkills", JSON.stringify(data));
-                })
-                .catch(err => {
-                    console.error("Error fetching course skills: ", err);
-                    throw err;
-                })
-
-        if (!courses)
-            fetchAllCoursesApi()
-                .then(data => {
-                    setCourses(data);
-                    sessionStorage.setItem("allCourses", JSON.stringify(data));
-                })
-                .catch(err => {
-                    console.error("Error fetching all courses: ", err);
-                    throw err;
-                })
-    }, [])
-
-    const fetchFilteredCourses = () => {
-        if (abortControllerRef.current) {
-            abortControllerRef.current.abort();
+        if (!topics) {
+            fetchCoursesTopicsApi().then(data => {
+                setTopics(data);
+                sessionStorage.setItem("courseTopics", JSON.stringify(data));
+            }).catch(console.error);
         }
 
-        const controller = new AbortController();
-        abortControllerRef.current = controller;
+        if (!skills) {
+            fetchCoursesSkillsApi().then(data => {
+                setSkills(data);
+                sessionStorage.setItem("courseSkills", JSON.stringify(data));
+            }).catch(console.error);
+        }
 
-        setLoading(true);
+        if (!allCourses || allCourses.length === 0) {
+            fetchCoursesApi()
+                .then(data => {
+                    setAllCourses(data);
+                    sessionStorage.setItem("allCourses", JSON.stringify(data));
+                })
+                .catch(console.error);
+        }
+    }, []);
 
-        fetchFilteredCoursesApi(filters, controller.signal)
-            .then(data => {
-                setCourses(data)
-            })
-            .catch(err => {
-                if (axios.isCancel(err)) {
-                    // request canceled, no need to do anything
-                    console.log("Request canceled");
-                } else if (err.name === "CanceledError") {
-                    // axios 1.x abort signals throw CanceledError
-                    console.log("Request aborted");
-                } else {
-                    console.error("Error fetching courses:", err);
-                }
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-    }
-
-    // UPDATE URL WHEN PARAMS CHANGE
+    // Effect to fetch filtered courses on filters change
     useEffect(() => {
-        console.log(filters);
-
         if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
 
         const noFiltersApplied = Object.keys(filters).length === 0;
 
         if (noFiltersApplied) {
-            // No filters → immediately show all courses from sessionStorage (no debounce!)
-            const sessionCourses = sessionStorage.getItem("allCourses");
-            if (!sessionCourses) {
-                setLoading(true)
-                fetchAllCoursesApi()
-                    .then(data => {
-                        setCourses(data);
-                        sessionStorage.setItem("allCourses", JSON.stringify(data));
-                    })
-                    .catch(err => {
-                        console.error("Error fetching all courses: ", err);
-                        throw err;
-                    })
-                    .finally(() => {
-                        setLoading(false);
-                    });
-            } else {
-                setCourses(JSON.parse(sessionCourses) || []);
+
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort();
+                abortControllerRef.current = null;
             }
 
-            // Update URL without debounce (if needed)
-            const paramsToUrl = new URLSearchParams();
-            const newSearch = paramsToUrl.toString();
-            if (newSearch !== location.search.replace(/^\?/, "")) {
-                navigate({ pathname: location.pathname, search: newSearch }, { replace: true });
-            }
+            setFilteredCourses(null);
 
-            return () => {
-                if (abortControllerRef.current) abortControllerRef.current.abort();
-            };
+            // Clear URL query params
+            navigate({pathname: location.pathname, search: ""}, {replace: true});
+            setLoading(false);
+            return;
         }
 
-        // Filters are applied → debounce API call
-        debounceTimeoutRef.current = setTimeout(() => {
-            const paramsToUrl = new URLSearchParams();
-
-            Object.entries(filters).forEach(([key, value]) => {
-                if (
-                    value !== undefined &&
-                    value !== null &&
-                    !(typeof value === "string" && value.trim() === "") &&
-                    !(Array.isArray(value) && value.length === 0)
-                ) {
-                    if (Array.isArray(value) && value.length > 0) {
-                        value.forEach(v => paramsToUrl.append(key, v));
-                    } else {
-                        paramsToUrl.set(key, value.toString());
-                    }
-                }
-            });
-
-            const newSearch = paramsToUrl.toString();
-            if (newSearch !== location.search.replace(/^\?/, "")) {
-                navigate({ pathname: location.pathname, search: newSearch }, { replace: true });
+        debounceTimeoutRef.current = window.setTimeout(() => {
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort();
             }
 
-            fetchFilteredCourses();
+            abortControllerRef.current = new AbortController();
+
+            setLoading(true);
+
+            fetchCoursesApi(filters, abortControllerRef.current?.signal)
+                .then(data => {
+                    setFilteredCourses(data);
+                })
+                .catch(error => {
+                    if (error.name === "CanceledError" || error.message === "canceled") {
+                        // request was aborted, do nothing
+                        console.log("Previous request aborted");
+                    } else {
+                        console.error(error);
+                    }
+                })
+                .finally(() => {
+                    setLoading(false);
+                    abortControllerRef.current = null;
+                });
+
+            // Update URL with filters
+            const paramsToUrl = new URLSearchParams();
+            Object.entries(filters).forEach(([key, value]) => {
+                if (Array.isArray(value)) {
+                    value.forEach(v => paramsToUrl.append(key, v));
+                } else if (value) {
+                    paramsToUrl.set(key, value.toString());
+                }
+            });
+            navigate({pathname: location.pathname, search: paramsToUrl.toString()}, {replace: true});
         }, 500);
 
         return () => {
             if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
-            if (abortControllerRef.current) abortControllerRef.current.abort();
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort();
+                abortControllerRef.current = null;
+            }
         };
     }, [filters]);
 
-
-
     return (
         <main className="font-montserrat bg-white">
-            <section className="relative flex flex-col items-center justify-center py-vertical-lg pt-30 gap-4 px-40 shadow-sm">
+            <section
+                className="relative flex flex-col items-center justify-center py-vertical-lg pt-30 gap-4 px-horizontal-lg shadow-sm">
                 <img
                     src={ShifterRocket}
                     alt="Shifter Rocket"
                     className="absolute top-30 left-20 rotate-45 w-16 h-auto"
                 />
-
                 <h1 className="text-6xl">
                     Ready to Take the
-                    <br />
+                    <br/>
                     <strong className="text-shifter">Next Step?</strong>
                 </h1>
                 <p>
@@ -219,11 +166,23 @@ function Courses() {
                 </p>
             </section>
             <section className="flex gap-0 w-full">
-                <CoursesFilters setFilters={setFilters} filters={filters} topics={topics} skills={skills}/>
-                <CoursesGrid setFilters={setFilters} filters={filters} courses={courses} loading={loading}/>
+                <CoursesFilters
+                    setFilters={setFilters}
+                    filters={filters}
+                    topics={topics}
+                    skills={skills}
+                    showOnlyFavoriteCourses={showOnlyFavorites}
+                    setShowOnlyFavorites={setShowOnlyFavorites}/>
+                <CoursesGrid
+                    setFilters={setFilters}
+                    filters={filters}
+                    courses={filteredCourses ?? allCourses}
+                    loading={loading}
+                    showOnlyFavoriteCourses={showOnlyFavorites}
+                />
             </section>
         </main>
-    )
+    );
 }
 
 export default Courses;

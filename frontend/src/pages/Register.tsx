@@ -1,6 +1,6 @@
 import React from "react";
-import ShifterLogo from "../assets/shifterImg/Shifter-Logo-S2W-Transparent.png";
-import ShifterArrow from "../assets/shifterImg/Shifter-Arrow-White.png";
+import ShifterLogo from "../../public/Shifter-S2W-Transparent.png";
+import ShifterArrow from "../../public/Shifter-Arrow-White.png";
 import {
     Stepper,
     Step,
@@ -18,11 +18,12 @@ import RegisterStepFour from "../components/steps/RegisterStepFour.tsx";
 import RegisterStepFive from "../components/steps/RegisterStepFive.tsx";
 import {useGlobalContext} from "../context/GlobalContext.tsx";
 import {isValidEmail} from "../utils/validation.ts";
-import {checkEmailExistsApi} from "../api/user.ts";
+import {checkEmailExistsApi} from "../api/auth.ts";
 
 function Register() {
     const {register} = useGlobalContext();
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
+    const [isCheckingEmail, setIsCheckingEmail] = React.useState<boolean>(false);
     const [activeStep, setActiveStep] = React.useState(0);
     const [showError, setShowError] = React.useState(false);
     const [error, setError] = React.useState("");
@@ -41,23 +42,43 @@ function Register() {
     const navigate = useNavigate();
 
     const handleNext = async () => {
-        if (activeStep === 0) {
-            const existsEmail: boolean = isValidEmail(user.email) ? await checkEmailExistsApi(user.email) : false;
-            if (existsEmail) {
-                setError("Email already exists");
-                setShowError(true)
-                return
-            }
+        if (error.length > 0) {
+            setShowError(true);
+            return;
         }
 
-        if (error.length > 0) {
-            setShowError(true)
-        } else {
-            setError("");
-            setShowError(false);
-            setDirection(1);
-            setActiveStep((prev) => prev + 1);
+        if (activeStep === 0) {
+            if (!isValidEmail(user.email)) {
+                setError("Please enter a valid email.");
+                setShowError(true);
+                return;
+            }
+
+            setIsCheckingEmail(true);
+            await checkEmailExistsApi(user.email)
+                .then(exists => {
+                    if (exists) {
+                        setError("Email already exists");
+                        setShowError(true);
+                        return;
+                    }
+                })
+                .catch(err => {
+                    setError("Error checking email. Theres a problem with the server.");
+                    setShowError(true);
+                    console.error("Error checking email: ", err);
+                    return;
+                })
+                .finally(() => {
+                    setIsCheckingEmail(false);
+                });
         }
+
+        // IF THE FUNCTION REACHES HERE, IT MEANS THAT THERE ARE NO ERRORS
+        setError("");
+        setShowError(false);
+        setDirection(1);
+        setActiveStep((prev) => prev + 1);
     };
     const handleBack = () => {
         setDirection(-1);
@@ -79,12 +100,17 @@ function Register() {
     };
 
     const handleRegister = async () => {
+        if (error.length > 0) {
+            setShowError(true);
+            return;
+        }
+
         setIsLoading(true);
 
         try {
             await register(user);
             navigate("/");
-        } catch (err: any) {
+        } catch (err) {
             setError("Registration failed. Please try again.");
             console.log("Registration error: ", err);
         } finally {
@@ -101,7 +127,7 @@ function Register() {
     ];
 
     return (
-        <section className="flex font-montserrat h-screen bg-white">
+        <main className="flex font-montserrat h-screen bg-white">
 
             {/* LEFT HEADER AND BACKGROUND */}
             <section className="relative bg-black w-[55%] overflow-hidden">
@@ -120,11 +146,22 @@ function Register() {
 
             {/* RIGHT FORM CONTAINER */}
             <section className="relative flex flex-col justify-center items-center flex-1 px-20 gap-6">
-                <img
-                    src={ShifterLogo}
-                    alt="Shifter Logo"
-                    className="absolute top-4 left-4 w-40 h-auto object-contain"
-                />
+                <div className="absolute top-0 px-4 py-4 flex w-full justify-between items-center">
+                    <Link to={"/"} >
+                        <img
+                            src={ShifterLogo}
+                            alt="Shifter Logo"
+                            className="w-40 h-auto object-contain"
+                        />
+                    </Link>
+                    <Link
+                        to={"/"}
+                        className="hover:bg-shifter/20 hover:text-shifter underline decoration-current
+                             font-semibold text-black/80 rounded-sm px-4 py-2"
+                    >
+                        Back to Main Page
+                    </Link>
+                </div>
 
                 {/* STEPPER */}
                 <Box className="w-full flex flex-col">
@@ -198,7 +235,9 @@ function Register() {
                                         hover:shadow-md hover:shadow-shifter/60 transition-all duration-200 ease-in-out
                                     px-20 border-3 border-white/50 bg-shifter text-white cursor-pointer rounded-md`}
                                     >
-                                        Next
+                                        {
+                                            isCheckingEmail ? "Checking if email exists..." : "Next"
+                                        }
                                     </button>
                                 )}
 
@@ -224,7 +263,7 @@ function Register() {
                     </Box>
                 </Box>
             </section>
-        </section>
+        </main>
     );
 }
 

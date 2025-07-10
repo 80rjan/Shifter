@@ -1,7 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-    --spacing-horizontal: 7rem;
+    --spacing-horizontal-sm: 4rem;
+    --spacing-horizontal-md: 7rem;
+    /*--spacing-horizontal: 7rem;*/
     --spacing-horizontal-lg: 10rem;
     --spacing-vertical-lg: 3rem;
     --spacing-vertical-md: 2rem;
@@ -16,7 +18,7 @@
     --color-deep-green: #2C6B3D;
     --color-gold: #FFB300;
     --color-teal: #009688;
-    --color-dark-gray: #404040;
+    --color-dark-gray: #666;
     --color-bright-gray: #DDDDDD;
     --color-gray: #E5E7EBFF;
 

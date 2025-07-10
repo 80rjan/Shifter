@@ -37,3 +37,13 @@ export const logoutApi = async (): Promise<void> => {
         {withCredentials: true}
     );
 }
+
+export const checkEmailExistsApi = async (email: string): Promise<boolean> => {
+    const res = await axios.get(`${backendUrl}/api/auth/check-email`, {
+        params: {
+            email: email,
+        },
+    });
+
+    return res.data;
+}

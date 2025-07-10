@@ -3,7 +3,7 @@ import type {UserRegister} from "./UserRegister.tsx";
 
 export interface SelectProps {
     label: string;
-    name: string;
+    name: keyof UserRegister;
     id: string;
     options?: string[];
     setUser: React.Dispatch<React.SetStateAction<UserRegister>>;

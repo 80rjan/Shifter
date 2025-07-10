@@ -1,6 +1,6 @@
 function ShifterValues() {
     return (
-        <section className="flex px-horizontal py-vertical-md gap-20">
+        <section className="flex px-horizontal-md py-vertical-md gap-20">
             <div className="flex flex-col gap-12 w-1/2">
                 <div className="flex flex-col gap-8 text-left">
                     <h2 className="text-5xl">Our Core <strong className="text-shifter">Values</strong></h2>

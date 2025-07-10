@@ -6,6 +6,10 @@ import Login from "./pages/Login.tsx";
 import Register from "./pages/Register.tsx";
 import Courses from "./pages/Courses.tsx";
 import {useGlobalContext} from "./context/GlobalContext.tsx";
+import {useEffect} from "react";
+import CourseDetails from "./pages/CourseDetails.tsx";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function LayoutWrapper() {
     const location = useLocation();
@@ -20,10 +24,21 @@ function LayoutWrapper() {
 
                 <Route path="/" element={<Home />} />
                 <Route path="/courses" element={<Courses />} />
+                <Route path="/courses/:courseId/:courseTitle" element={<CourseDetails />} />
             </Routes>
             {!hideLayout && <Footer />}
         </>
     );
+}
+
+function ScrollToTop() {
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
+
+    return null;
 }
 
 function App() {
@@ -39,6 +54,15 @@ function App() {
 
     return (
         <Router>
+            <ScrollToTop />
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                pauseOnHover
+            />
             <LayoutWrapper/>
         </Router>
     );

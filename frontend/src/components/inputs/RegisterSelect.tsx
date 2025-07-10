@@ -1,12 +1,17 @@
 import type {UserRegister} from "../../types/UserRegister.tsx";
 import type {SelectProps} from "../../types/SelectProps.tsx";
 import {toEnumFormat} from "../../utils/toEnumFormat.ts";
+import {useEffect} from "react";
 
 function RegisterSelect(selectProps: SelectProps) {
 
+    useEffect(() => {
+        console.log(selectProps.user)
+    }, [selectProps.user]);
+
     return (
         <div
-            className="w-8/10 relative flex flex-col gap-1 px-6 py-1 border-2 border-shifter group transition-all ease-in-out duration-300 items-start rounded-sm">
+            className="w-8/10 relative flex flex-col gap-1 px-6 py-1 border-2 border-shifter group focus-within:border-l-20 transition-all ease-in-out duration-300 items-start rounded-sm">
             <label
                 htmlFor={selectProps.id}
                 className="text-shifter font-medium"
@@ -18,10 +23,11 @@ function RegisterSelect(selectProps: SelectProps) {
                     id={selectProps.id}
                     name={selectProps.name}
                     className="w-full focus:outline-none text-lg cursor-pointer"
+                    value={selectProps.user[selectProps.name] || ""}
                     onChange={e =>
                         selectProps.setUser((prev: UserRegister) => ({
                             ...prev,
-                            [selectProps.name]: toEnumFormat(e.target.value)
+                            [selectProps.name]: e.target.value
                         }))
                     }
                 >
@@ -30,7 +36,7 @@ function RegisterSelect(selectProps: SelectProps) {
                     </option>
                     {
                         selectProps.options?.map((option, index) => (
-                            <option key={index} value={option}>
+                            <option key={index} value={toEnumFormat(option)}>
                                 {option}
                             </option>
                         ))

@@ -3,11 +3,13 @@ import Checkbox from "@mui/material/Checkbox";
 import type {FilterParams} from "../types/FilterParams.tsx";
 import {durationToQueryMapper, priceToQueryMapper} from "../utils/mapper.ts";
 
-function CoursesFilters({setFilters, filters, topics, skills}: {
+function CoursesFilters({setFilters, filters, topics, skills, showOnlyFavoriteCourses, setShowOnlyFavorites}: {
     setFilters: React.Dispatch<React.SetStateAction<FilterParams>>,
     filters: FilterParams,
     topics: string[] | null,
-    skills: string[] | null
+    skills: string[] | null,
+    showOnlyFavoriteCourses: boolean
+    setShowOnlyFavorites: React.Dispatch<React.SetStateAction<boolean>>,
 }) {
     const duration = [
         "< 3 hours",
@@ -78,6 +80,12 @@ function CoursesFilters({setFilters, filters, topics, skills}: {
             className="flex flex-col gap-8 pl-8 pt-12 text-left sticky top-0 h-screen border-r-2 border-black/10">
             <h2 className="text-2xl font-medium">Filter by</h2>
             <div className="relative flex flex-col gap-12 pl-4 pr-2 pb-20 overflow-y-auto scrollable">
+                <FilterSelect
+                    header={"Favorite Courses"}
+                    options={["My favorites"]}
+                    handleFilter={() => {setShowOnlyFavorites(prev => !prev)}}
+                    selectedOptions={showOnlyFavoriteCourses ? ["My favorites"] : []}
+                />
                 <FilterSelect
                     header={"Level"}
                     options={difficulty}
@@ -161,7 +169,7 @@ function FilterSelect({
                         "/>
                 )}
                 {visibleOptions?.map((option, index) => (
-                    <label key={index} className="text-black whitespace-nowrap cursor-pointer w-fit">
+                    <label key={index} className="flex items-center text-black whitespace-nowrap cursor-pointer w-fit">
                         <Checkbox
                             checked={selectedOptions.includes(mapper ? mapper(option) : option)}
                             onChange={() => handleFilter(mapper ? mapper(option) : option)}

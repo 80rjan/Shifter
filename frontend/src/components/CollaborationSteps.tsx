@@ -28,7 +28,7 @@ export default function CollaborationSteps() {
 
 
     return (
-        <section className="bg-dark-blue text-white py-vertical-md px-horizontal flex flex-col gap-12 items-center">
+        <section className="text-white py-vertical-md px-horizontal-md flex flex-col gap-12 items-center">
             <h2 className="text-5xl font-light">
                 How to Start Your Journey to <strong className="font-bold">Success</strong>
             </h2>

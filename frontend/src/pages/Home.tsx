@@ -1,12 +1,12 @@
-import Hero from "../components/Hero.tsx";
+import HeroHome from "../components/HeroHome.tsx";
 import CollaborationSteps from "../components/CollaborationSteps.tsx";
 import RoadmapAI from "../components/RoadmapAI.tsx";
 import ShifterValues from "../components/ShifterValues.tsx";
-import CoursesCarousel from "../components/CoursesCarousel.tsx";
+import CoursesCarouselHome from "../components/CoursesCarouselHome.tsx";
 import {useCourseStorage} from "../context/CourseStorage.ts";
 import {useEffect} from "react";
 import {
-    fetchAllCoursesApi,
+    fetchCoursesApi,
     fetchCoursesSkillsApi,
     fetchCoursesTopicsApi,
     fetchRecommendedCoursesApi
@@ -51,7 +51,7 @@ function Home() {
             return;
         }
 
-        fetchAllCoursesApi()
+        fetchCoursesApi()
             .then(data => {
                 setAllCourses(data);
                 sessionStorage.setItem("allCourses", JSON.stringify(data));
@@ -114,10 +114,12 @@ function Home() {
 
     return (
         <main className="bg-white">
-            <Hero/>
-            <CollaborationSteps/>
+            <div className="bg-dark-blue">
+                <HeroHome/>
+                <CollaborationSteps/>
+            </div>
             <RoadmapAI/>
-            <CoursesCarousel/>
+            <CoursesCarouselHome/>
             <ShifterValues/>
         </main>
     )

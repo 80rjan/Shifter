@@ -32,7 +32,7 @@ export const GlobalProvider = ({children}: { children: ReactNode }) => {
     const [loading, setLoading] = useState(true);
 
     const register = async (user: UserRegister) => {
-        registerApi(user)
+        return registerApi(user)
             .then(data => {
                 setAccessToken(data.accessToken);
                 setUser(data.user);
@@ -46,7 +46,7 @@ export const GlobalProvider = ({children}: { children: ReactNode }) => {
     }
 
     const login = async (email: string, password: string) => {
-        loginApi(email, password)
+        return loginApi(email, password)
             .then(data => {
                 setAccessToken(data.accessToken);
                 setUser(data.user);
@@ -60,7 +60,7 @@ export const GlobalProvider = ({children}: { children: ReactNode }) => {
     };
 
     const logout = async () => {
-        logoutApi()
+        return logoutApi()
             .catch(err => {
                 console.warn("Logout failed:", err);
                 throw err;
@@ -75,7 +75,7 @@ export const GlobalProvider = ({children}: { children: ReactNode }) => {
     const refreshAccessToken = async () => {
         setLoading(true);
 
-        refreshAccessTokenApi()
+        return refreshAccessTokenApi()
             .then(data => {
                 setAccessToken(data.accessToken);
                 setUser(data.user);

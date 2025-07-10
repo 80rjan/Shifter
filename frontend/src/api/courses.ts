@@ -1,11 +1,12 @@
 import type {FilterParams} from "../types/FilterParams.tsx";
-import type {Course} from "../types/Course.tsx";
 import axios from "axios";
 import qs from 'qs';
+import type {CoursePreview} from "../types/CoursePreview.tsx";
+import type {CourseDetail} from "../types/CourseDetail.tsx";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-export const fetchFilteredCoursesApi = async (params: FilterParams, signal?: AbortSignal): Promise<Course[]> => {
+export const fetchCoursesApi = async (params?: FilterParams, signal?: AbortSignal): Promise<CoursePreview[]> => {
     const res = await axios.get(
         `${backendUrl}/api/courses`,
         {
@@ -18,25 +19,21 @@ export const fetchFilteredCoursesApi = async (params: FilterParams, signal?: Abo
     return res.data;
 }
 
-export const fetchAllCoursesApi = async (signal?: AbortSignal): Promise<Course[]> => {
-    const res = await axios.get(
-        `${backendUrl}/api/courses`,
-        {
-            params: {},
-            paramsSerializer: params => qs.stringify(params, {arrayFormat: 'repeat'}),
-            signal
-        }
-    )
-
-    return res.data;
-}
-
-export const fetchRecommendedCoursesApi = async (accessToken: string): Promise<Course[]> => {
+export const fetchRecommendedCoursesApi = async (accessToken: string): Promise<CoursePreview[]> => {
     const res = await axios.get(`${backendUrl}/api/courses/recommended`, {
         headers: {
             Authorization: `Bearer ${accessToken}`
         }
     });
+
+    return res.data;
+}
+
+export const fetchCourseDetailsApi = async (courseId: number, signal?: AbortSignal): Promise<CourseDetail> => {
+    const res = await axios.get(
+        `${backendUrl}/api/courses/${courseId}`,
+        { signal }
+    );
 
     return res.data;
 }

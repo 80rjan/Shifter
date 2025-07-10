@@ -1,4 +1,4 @@
-import type {Course} from "../types/Course.tsx";
+import type {CoursePreview} from "../types/CoursePreview.tsx";
 import CourseCard from "./CourseCard.tsx";
 import {InputAdornment, TextField} from '@mui/material';
 import {Search} from 'lucide-react';
@@ -6,14 +6,17 @@ import type {FilterParams} from "../types/FilterParams.tsx";
 import React from "react";
 import {X} from 'lucide-react';
 import {queryToDurationMapper, queryToPriceMapper} from "../utils/mapper.ts";
+import {useGlobalContext} from "../context/GlobalContext.tsx";
 
 
-function CoursesGrid({courses, loading, setFilters, filters}: {
-    courses: Course[] | null,
+function CoursesGrid({courses, loading, setFilters, filters, showOnlyFavoriteCourses}: {
+    courses: CoursePreview[] | null,
     loading: boolean,
     setFilters: React.Dispatch<React.SetStateAction<FilterParams>>,
-    filters: FilterParams
+    filters: FilterParams,
+    showOnlyFavoriteCourses: boolean
 }) {
+    const { user } = useGlobalContext()
     const [searchText, setSearchText] = React.useState<string>(filters.search || "");
     const filterPillClassName = "group hover:border-shifter hover:bg-shifter/10 hover:text-shifter " +
         "flex items-center gap-1 border-1 border-black/40 rounded-full px-4 py-1 text-black/80 font-medium cursor-pointer"
@@ -159,7 +162,11 @@ function CoursesGrid({courses, loading, setFilters, filters}: {
                 }
                 {
                     courses && courses?.length > 0 ?
-                        courses?.map((course, index) => {
+                        (
+                            showOnlyFavoriteCourses ?
+                                courses.filter(course => user?.favoriteCourses.includes(course.id)) :
+                                courses
+                        )?.map((course, index) => {
                         return (
                             <CourseCard card={course} key={index}/>
                         )

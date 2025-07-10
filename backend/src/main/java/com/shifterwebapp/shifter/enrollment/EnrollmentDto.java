@@ -1,9 +1,6 @@
 package com.shifterwebapp.shifter.enrollment;
 
-import com.shifterwebapp.shifter.course.CourseDto;
 import com.shifterwebapp.shifter.enums.EnrollmentStatus;
-import com.shifterwebapp.shifter.payment.PaymentDto;
-import com.shifterwebapp.shifter.review.ReviewDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -30,8 +30,8 @@ function RegisterSlider(sliderProps: SliderProps) {
         });
 
         // Reset filter input
-        setFilterText("");
-        setOptions(allOptions); // Show all options again
+        // setFilterText("");
+        // setOptions(allOptions);
     };
 
     return (
@@ -41,6 +41,7 @@ function RegisterSlider(sliderProps: SliderProps) {
                     {sliderProps.label}
                 </label>
                 <input
+                    type={"search"}
                     className="px-3 py-1 rounded-md border border-black/10 text-black text-sm focus:outline-none focus:ring-2 focus:ring-shifter/60 transition-all"
                     placeholder="Search options..."
                     value={filterText}

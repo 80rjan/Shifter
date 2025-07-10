@@ -13,21 +13,22 @@ import java.util.List;
 public interface CourseRepository extends JpaRepository<Course, Long>, JpaSpecificationExecutor<Course> {
     List<Course> findCoursesByTitle(String searchTitle);
 
-    List<Course> findCoursesByTopic(String searchTopic);
+    @Query("select c from Course c order by c.rating/c.ratingCount desc")
+    List<Course> findCoursesOrderedByRating();
+
+    @Query("select c from Course c order by size(c.enrollments) desc")
+    List<Course> findCoursesOrderedByPopularity();
 
     List<Course> findCoursesByDifficulty(Difficulty searchDifficulty);
 
     @Query("select c from Course c where c.price >= :floorPrice and c.price <= :ceilPrice")
     List<Course> findCoursesByPriceRange(@Param("floorPrice") Float floorPrice,@Param("ceilPrice") Float ceilPrice);
 
-    @Query("select c from Course c where c.durationHours >= :floorDuration and c.durationHours <= :ceilDuration")
-    List<Course> findCoursesByDurationHoursRange(@Param("floorDuration") Float floorDuration, @Param("ceilDuration") Float ceilDuration);
-
     List<Course> findCoursesBySkillsGainedIn(List<Skills> searchSkills);
 
     List<Course> findCoursesByDifficultyIn(List<Difficulty> searchDifficulties);
 
-    @Query("select distinct c.whatWillBeLearned from Course c")
+    @Query("select distinct c.topicsCovered from Course c")
     List<Interests> getCourseTopics();
 
     @Query("select distinct c.skillsGained from Course c")

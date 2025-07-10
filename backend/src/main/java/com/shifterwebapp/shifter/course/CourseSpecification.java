@@ -14,20 +14,14 @@ import java.util.Objects;
 
 public class CourseSpecification {
 
-    public static Specification<Course> hasTitleLike(String title) {
-        return (root, query, cb) ->
-                cb.like(cb.lower(root.get("title")), "%" + title.toLowerCase() + "%");
-    }
-
     public static Specification<Course> hasSearchLike(String search) {
         return (root, query, cb) -> {
             query.distinct(true);
             Join<Course, Skills> skillsJoin = root.join("skillsGained", JoinType.LEFT);
-            Join<Course, Interests> topicsJoin = root.join("whatWillBeLearned", JoinType.LEFT);
+            Join<Course, Interests> topicsJoin = root.join("topicsCovered", JoinType.LEFT);
 
             return cb.or(
                     cb.like(cb.lower(root.get("title")), "%" + search.toLowerCase() + "%"),
-                    cb.like(cb.lower(root.get("topic")), "%" + search.toLowerCase() + "%"),
                     cb.like(cb.lower(root.get("descriptionShort")), "%" + search.toLowerCase() + "%"),
                     cb.like(cb.lower(root.get("description")), "%" + search.toLowerCase() + "%"),
                     cb.like(cb.lower(root.get("descriptionLong")), "%" + search.toLowerCase() + "%"),
@@ -35,11 +29,6 @@ public class CourseSpecification {
                     cb.like(cb.lower(topicsJoin.as(String.class)), "%" + search.toLowerCase().replaceAll("\\s", "_") + "%")
             );
         };
-    }
-
-    public static Specification<Course> hasTopicLike(String topic) {
-        return (root, query, cb) ->
-                cb.like(cb.lower(root.get("topic")), "%" + topic.toLowerCase() + "%");
     }
 
     public static Specification<Course> hasDifficulties(List<Difficulty> difficulties) {
@@ -51,7 +40,7 @@ public class CourseSpecification {
     }
 
     public static Specification<Course> hasTopics(List<Interests> topics) {
-        return (root, query, cb) -> root.join("whatWillBeLearned").in(topics);
+        return (root, query, cb) -> root.join("topicsCovered").in(topics);
     }
 
     public static Specification<Course> hasPricesBetween(List<String> prices) {
@@ -92,16 +81,16 @@ public class CourseSpecification {
             for (String duration : durations) {
                 switch (duration) {
                     case "extraShort":
-                        predicates.add(cb.lessThanOrEqualTo(root.get("durationHours"), 3.0));
+                        predicates.add(cb.lessThanOrEqualTo(root.get("durationMinutes"), 3.0 * 60.0));
                         break;
                     case "short":
-                        predicates.add(cb.between(root.get("durationHours"), 3.0, 6.0));
+                        predicates.add(cb.between(root.get("durationMinutes"), 3.0 * 60.0, 6.0 * 60.0));
                         break;
                     case "medium":
-                        predicates.add(cb.between(root.get("durationHours"), 6.0, 10.0));
+                        predicates.add(cb.between(root.get("durationMinutes"), 6.0 * 60.0, 10.0 * 60.0));
                         break;
                     case "long":
-                        predicates.add(cb.greaterThanOrEqualTo(root.get("durationHours"), 10.0));
+                        predicates.add(cb.greaterThanOrEqualTo(root.get("durationMinutes"), 10.0 * 60.0));
                         break;
                 }
             }

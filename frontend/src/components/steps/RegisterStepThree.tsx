@@ -25,7 +25,7 @@ function RegisterStepThree({setUser, user, setError}: {
 
     useEffect(() => {
         if (user.interests.length === 0) {
-            setError("Please ensure all inputs are completed.");
+            setError("Help us understand you better — pick at least one preference");
         } else {
             setError("");
         }

@@ -8,6 +8,7 @@ import com.shifterwebapp.shifter.enums.Skills;
 import com.shifterwebapp.shifter.payment.Payment;
 import com.shifterwebapp.shifter.user.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -168,10 +169,14 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public UserDto addFavoriteCourse(Long accountId, Integer newFavoriteCourseId) {
-        validate.validateUserExists(accountId);
-        User user = userRepository.findById(accountId).orElseThrow();
-        if (!user.getFavoriteCourses().contains(newFavoriteCourseId)) {
+    public UserDto toggleFavoriteCourse(Authentication authentication, Integer newFavoriteCourseId) {
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (user.getFavoriteCourses().contains(newFavoriteCourseId)) {
+            user.getFavoriteCourses().remove(newFavoriteCourseId);
+        } else {
             user.getFavoriteCourses().add(newFavoriteCourseId);
         }
         userRepository.save(user);

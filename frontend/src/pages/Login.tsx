@@ -1,5 +1,5 @@
-import ShifterLogo from "../assets/shifterImg/Shifter-Logo-S2W-Transparent.png";
-import ShifterArrow from "../assets/shifterImg/Shifter-Arrow-White.png";
+import ShifterLogo from "../../public/Shifter-S2W-Transparent.png";
+import ShifterArrow from "../../public/Shifter-Arrow-White.png";
 import React from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -24,26 +24,34 @@ function Login() {
     const navigate = useNavigate();
 
     const handleLogin = async (e: React.FormEvent) => {
-        setIsLoading(true);
         e.preventDefault();
+
+        if (!email || !password) {
+            setError("Please fill in all fields.");
+            return;
+        }
+
+        setIsLoading(true);
         setError("");
 
-        try {
-            await login(email, password);
-            navigate("/");
-        } catch (err: any) {
-            if (err.response?.status === 401) {
-                setError("Invalid email or password.");
-            } else {
-                setError("Something went wrong. Please try again.");
-            }
-        } finally {
-            setIsLoading(false);
-        }
+        login(email, password)
+            .then(() => {
+                navigate("/");
+            })
+            .catch((err: any) => {
+                if (err.response?.status === 401) {
+                    setError("Invalid email or password.");
+                } else {
+                    setError("Something went wrong. Please try again.");
+                }
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     };
 
     return (
-        <section className="flex font-montserrat h-screen bg-white">
+        <main className="flex font-montserrat h-screen bg-white">
             {/* LEFT HEADER AND BACKGROUND */}
             <section className="relative bg-black w-[55%] overflow-hidden">
                 <div className="absolute w-full h-full bg-shifter/80 z-0 text-white px-20 flex flex-col gap-4 justify-center text-start">
@@ -67,11 +75,22 @@ function Login() {
 
             {/* RIGHT FORM CONTAINER */}
             <section className="relative flex flex-col justify-center items-center flex-1 px-30">
-                <img
-                    src={ShifterLogo}
-                    alt="Shifter Logo"
-                    className="absolute top-4 left-4 w-40 h-auto object-contain"
-                />
+                <div className="absolute top-0 px-4 py-4 flex w-full justify-between items-center">
+                    <Link to={"/"} >
+                        <img
+                            src={ShifterLogo}
+                            alt="Shifter Logo"
+                            className="w-40 h-auto object-contain"
+                        />
+                    </Link>
+                    <Link
+                        to={"/"}
+                        className="hover:bg-shifter/20 hover:text-shifter underline decoration-current
+                             font-semibold text-black/80 rounded-sm px-4 py-2"
+                    >
+                        Back to Main Page
+                    </Link>
+                </div>
 
                 <form
                     onSubmit={handleLogin}
@@ -131,7 +150,7 @@ function Login() {
                     </div>
                 </form>
             </section>
-        </section>
+        </main>
     );
 }
 
@@ -139,7 +158,8 @@ function Input(inputProps: InputProps) {
     const [showPassword, setShowPassword] = React.useState(false);
 
     return (
-        <div className="relative flex flex-col gap-1 px-6 py-1.5 border-2 border-shifter group focus-within:border-l-20 transition-all ease-in-out duration-300 items-start rounded-sm w-full">
+        <div
+            className="relative flex flex-col gap-1 px-6 py-1.5 border-2 border-shifter group focus-within:border-l-20 transition-all ease-in-out duration-300 items-start rounded-sm w-full">
             <label htmlFor={inputProps.id} className="text-shifter text-light">
                 {inputProps.label}
             </label>

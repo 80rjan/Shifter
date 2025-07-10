@@ -1,9 +1,12 @@
 package com.shifterwebapp.shifter.coursecontent;
 
 import com.shifterwebapp.shifter.course.Course;
+import com.shifterwebapp.shifter.courselecture.CourseLecture;
 import jakarta.persistence.*;
 import com.shifterwebapp.shifter.enums.ContentType;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,8 +17,6 @@ import lombok.*;
 public class CourseContent {
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "course_seq")
-//    @SequenceGenerator(name = "course_seq", sequenceName = "course_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -23,10 +24,8 @@ public class CourseContent {
 
     private Integer position;
 
-    private String contentURL;
-
-    @Enumerated(EnumType.STRING)
-    private ContentType contentType;
+    @OneToMany(mappedBy = "courseContent", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CourseLecture> courseLectures;
 
     @ManyToOne
     @JoinColumn(name = "course_id")

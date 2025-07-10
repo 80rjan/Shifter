@@ -1,7 +1,6 @@
 package com.shifterwebapp.shifter.course;
 
 import com.shifterwebapp.shifter.enums.Difficulty;
-import com.shifterwebapp.shifter.coursecontent.CourseContentDto;
 import com.shifterwebapp.shifter.enums.Interests;
 import com.shifterwebapp.shifter.enums.Skills;
 import lombok.AllArgsConstructor;
@@ -13,7 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CourseDto {
+public class CourseDtoPreview {
 
     private Long id;
 
@@ -25,11 +24,9 @@ public class CourseDto {
 
     private String title;
 
-    private String topic;
-
     private Difficulty difficulty;
 
-    private Double durationHours;
+    private Integer durationMinutes;
 
     private Double price;
 
@@ -37,17 +34,8 @@ public class CourseDto {
 
     private Integer ratingCount;
 
-    private String descriptionShort;
-
-    private String description;
-
-    private String descriptionLong;
-
     private List<Skills> skillsGained;
 
-    private List<Interests> whatWillBeLearned;
-
-    // DO I NEED THIS ???
-//    private List<CourseContentDto> courseContents;
+    private List<Interests> topicsCovered;
 }
 

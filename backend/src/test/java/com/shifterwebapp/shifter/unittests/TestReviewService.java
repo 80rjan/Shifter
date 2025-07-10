@@ -68,7 +68,7 @@ public class TestReviewService {
     public void test_getAverageRatingByCourse() {
         Long courseId = 1L;
 
-        Mockito.when(reviewRepository.findAverageRatingByCourse(courseId)).thenReturn(5F);
+        Mockito.when(reviewRepository.findAverageRatingByCourse(courseId)).thenReturn(5.0);
         Mockito.doNothing().when(validate).validateCourseExists(courseId);
 
         Double result = reviewService.getAverageRatingByCourse(courseId);

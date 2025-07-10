@@ -7,9 +7,12 @@ import com.shifterwebapp.shifter.course.service.CourseService;
 import com.shifterwebapp.shifter.enums.Difficulty;
 import com.shifterwebapp.shifter.enums.Interests;
 import com.shifterwebapp.shifter.enums.Skills;
+import com.shifterwebapp.shifter.user.User;
+import com.shifterwebapp.shifter.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +24,7 @@ import java.util.List;
 public class CourseController {
 
     private final CourseService courseService;
+    private final UserService userService;
 
     @GetMapping
     public ResponseEntity<?> getCourses(
@@ -58,14 +62,31 @@ public class CourseController {
             spec = (spec == null) ? CourseSpecification.hasTopics(topics) : spec.and(CourseSpecification.hasTopics(topics));
         }
 
-        List<CourseDto> courseDtos = courseService.getAllCourses(spec);
-
+        List<CourseDtoPreview> courseDtos = courseService.getAllCourses(spec);
         return ResponseEntity.ok(courseDtos);
+    }
+
+    @GetMapping("/recommended")
+    public ResponseEntity<?> getRecommendedCourses(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            List<CourseDtoPreview> topRatedCourses = courseService.getTopRatedCourses();
+//            List<CourseDto> mostPopularCourses = courseService.getMostPopularCourses();
+            return ResponseEntity.ok(topRatedCourses.subList(0, 5));
+        }
+
+        String userEmail = authentication.getName();
+        User user = userService.getUserByEmail(userEmail);
+
+        List<Skills> userSkills = user.getSkills();
+        List<Interests> userInterests = user.getInterests();
+
+        List<CourseDtoPreview> recommendedCourses = courseService.getRecommendedCourses(userSkills, userInterests);
+        return ResponseEntity.ok(recommendedCourses);
     }
 
     @GetMapping("/{courseId}")
     public ResponseEntity<?> getCourseById(@PathVariable("courseId") Long courseId) {
-        CourseDto courseDto = courseService.getCourseById(courseId);
+        CourseDtoDetail courseDto = courseService.getCourseById(courseId);
         return ResponseEntity.ok(courseDto);
     }
 

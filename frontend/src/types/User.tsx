@@ -8,5 +8,5 @@ export interface User {
     skills: string[];
     skillsGap: string[];
     points: number;
-    favoriteCourses: string[];
+    favoriteCourses: number[];
 }

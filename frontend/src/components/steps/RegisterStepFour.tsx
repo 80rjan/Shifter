@@ -25,7 +25,7 @@ function RegisterStepFour({setUser, user, setError}: {
 
     useEffect(() => {
         if (user.skills.length === 0) {
-            setError("Please ensure all inputs are completed.");
+            setError("Tell us what you're great at — choose at least one strength");
         } else {
             setError("");
         }

@@ -1,34 +1,42 @@
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import CourseCard from "./CourseCard.tsx";
-import "../slick-custom.css";
-
-import ShifterArrow from "../assets/shifterImg/Shifter-Arrow.png";
 import {useCourseStorage} from "../context/CourseStorage.ts";
+import Slider from "react-slick";
+import CourseCard from "./CourseCard.tsx";
+import {useGlobalContext} from "../context/GlobalContext.tsx";
+import {useEffect} from "react";
+import {fetchRecommendedCoursesApi} from "../api/courses.ts";
 
-function CoursesCarousel() {
-    const {recommendedCourses} = useCourseStorage();
+function CoursesCarouselCourseDetails() {
+    const {recommendedCourses, setRecommendedCourses} = useCourseStorage();
+    const {accessToken} = useGlobalContext();
+
+    useEffect(() => {
+        const fetchRecommendedCourses = async () => {
+            const stored = sessionStorage.getItem("recommendedCourses");
+            if (stored) {
+                setRecommendedCourses(JSON.parse(stored));
+                return;
+            }
+
+            fetchRecommendedCoursesApi(accessToken || "")
+                .then(data => {
+                    setRecommendedCourses(data);
+                    sessionStorage.setItem("recommendedCourses", JSON.stringify(data));
+                })
+                .catch(err => {
+                    console.error("Error fetching recommended courses:", err);
+                });
+        }
+
+        if (!recommendedCourses) {
+            fetchRecommendedCourses();
+        }
+    }, []);
 
     return (
-        <section
-            className="relative flex flex-col gap-10 items-center bg-dark-blue/10 py-vertical-md px-4 overflow-clip">
-            <img src={ShifterArrow} alt="Shifter Arrow"
-                 className="absolute opacity-30 h-150 w-120 -rotate-130 -top-30 right-0"/>
-            <img src={ShifterArrow} alt="Shifter Arrow"
-                 className="absolute opacity-30 h-150 w-120 rotate-50 -bottom-30 left-0"/>
+        <section className="flex flex-col gap-12 text-left px-horizontal-lg py-vertical-md">
+            <h2 className="text-5xl">People also bought</h2>
 
-            <div className="text-center flex flex-col gap-4">
-                <h2 className="text-5xl whitespace-nowrap">
-                    Unlock Your Growth With <strong className="text-shifter">E-Learning</strong>
-                </h2>
-                <p className="text-2xl font-light text-black/80">
-                    Access expert-led courses designed to help you master business, strategy, and success - anytime,
-                    anywhere.
-                </p>
-            </div>
-
-            <div className="relative max-w-[80%] mx-0 my-auto w-full p-0">
+            <div className="relative mx-0 my-auto w-full p-0">
                 {
                     recommendedCourses ?
                         <Slider {...settings}>
@@ -42,15 +50,16 @@ function CoursesCarousel() {
                             }
                         </Slider>
                         :
-                        <div className="flex flex-col gap-12 justify-center items-center" >
+                        <div className="flex flex-col gap-12 justify-center items-center">
                             <div className="w-20 loader"></div>
                             <span className="text-xl font-semibold text-black/40">Loading...</span>
                         </div>
                 }
             </div>
         </section>
-    );
+    )
 }
+
 
 const settings = {
     dots: false,
@@ -82,5 +91,4 @@ const settings = {
     ]
 };
 
-
-export default CoursesCarousel;
+export default CoursesCarouselCourseDetails;

@@ -32,12 +32,10 @@ public class Course {
 
     private String title;
 
-    private String topic;
-
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
-    
-    private Double durationHours;
+
+    private Integer durationMinutes;
     
     private Double price;
     
@@ -53,6 +51,9 @@ public class Course {
     @Column(columnDefinition = "text")
     private String descriptionLong;
 
+    @ElementCollection
+    @Column(columnDefinition = "text")
+    private List<String> whatWillBeLearned;
 
     @ElementCollection(targetClass = Skills.class)
     @Enumerated(EnumType.STRING)
@@ -60,7 +61,7 @@ public class Course {
 
     @ElementCollection(targetClass = Interests.class)
     @Enumerated(EnumType.STRING)
-    private List<Interests> whatWillBeLearned;
+    private List<Interests> topicsCovered;
     
     @OneToMany(mappedBy = "course", orphanRemoval = true)        // IS THIS GOOD BUSINESS LOGIC? SHOULD I HAVE CASCADES?
     private List<Enrollment> enrollments;

@@ -6,102 +6,104 @@ import com.shifterwebapp.shifter.enums.Skills;
 import com.shifterwebapp.shifter.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("${api.base.path}/account")
+@RequestMapping("${api.base.path}/user")
 public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/{accountId}")
-    public ResponseEntity<UserDto> getUser(@PathVariable Long accountId) {
-        UserDto userDto = userService.getUserById(accountId);
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserDto> getUser(@PathVariable Long userId) {
+        UserDto userDto = userService.getUserById(userId);
         return ResponseEntity.ok(userDto);
     }
 
-    @DeleteMapping("/{accountId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long accountId) {
-        userService.deleteUser(accountId);
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
+        userService.deleteUser(userId);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{accountId}/name")
-    public ResponseEntity<?> updateName(@PathVariable Long accountId, @RequestParam String newName) {
-        UserDto userDto = userService.updateName(accountId, newName);
+    @PutMapping("/{userId}/name")
+    public ResponseEntity<?> updateName(@PathVariable Long userId, @RequestParam String newName) {
+        UserDto userDto = userService.updateName(userId, newName);
         return ResponseEntity.ok(userDto);
     }
 
-    @PutMapping("/{accountId}/mail")
-    public ResponseEntity<?> updateMail(@PathVariable Long accountId, @RequestParam String newMail) {
-        UserDto userDto = userService.updateMail(accountId, newMail);
+    @PutMapping("/{userId}/mail")
+    public ResponseEntity<?> updateMail(@PathVariable Long userId, @RequestParam String newMail) {
+        UserDto userDto = userService.updateMail(userId, newMail);
         return ResponseEntity.ok(userDto);
     }
 
-    @PutMapping("/{accountId}/password")
-    public ResponseEntity<?> updatePassword(@PathVariable Long accountId, @RequestParam String newPassword) {
-        UserDto userDto = userService.updatePassword(accountId, newPassword);
+    @PutMapping("/{userId}/password")
+    public ResponseEntity<?> updatePassword(@PathVariable Long userId, @RequestParam String newPassword) {
+        UserDto userDto = userService.updatePassword(userId, newPassword);
         return ResponseEntity.ok(userDto);
     }
 
-    @PutMapping("/{accountId}/work-position")
-    public ResponseEntity<?> updateWorkPosition(@PathVariable Long accountId, @RequestParam String newWorkPosition) {
-        UserDto userDto = userService.updateWorkPosition(accountId, newWorkPosition);
+    @PutMapping("/{userId}/work-position")
+    public ResponseEntity<?> updateWorkPosition(@PathVariable Long userId, @RequestParam String newWorkPosition) {
+        UserDto userDto = userService.updateWorkPosition(userId, newWorkPosition);
         return ResponseEntity.ok(userDto);
     }
 
-    @PutMapping("/{accountId}/company-type")
-    public ResponseEntity<?> updateCompanyType(@PathVariable Long accountId, @RequestParam CompanyType newCompanyType) {
-        UserDto userDto = userService.updateCompanyType(accountId, newCompanyType);
+    @PutMapping("/{userId}/company-type")
+    public ResponseEntity<?> updateCompanyType(@PathVariable Long userId, @RequestParam CompanyType newCompanyType) {
+        UserDto userDto = userService.updateCompanyType(userId, newCompanyType);
         return ResponseEntity.ok(userDto);
     }
 
-    @PutMapping("/{accountId}/add/interest")
-    public ResponseEntity<?> addInterest(@PathVariable Long accountId, @RequestParam Interests newInterest) {
-        UserDto userDto = userService.addInterest(accountId, newInterest);
+    @PutMapping("/{userId}/add/interest")
+    public ResponseEntity<?> addInterest(@PathVariable Long userId, @RequestParam Interests newInterest) {
+        UserDto userDto = userService.addInterest(userId, newInterest);
         return ResponseEntity.ok(userDto);
     }
 
-    @PutMapping("/{accountId}/add/skill")
-    public ResponseEntity<?> addSkill(@PathVariable Long accountId, @RequestParam Skills newSkill) {
-        UserDto userDto = userService.addSkill(accountId, newSkill);
+    @PutMapping("/{userId}/add/skill")
+    public ResponseEntity<?> addSkill(@PathVariable Long userId, @RequestParam Skills newSkill) {
+        UserDto userDto = userService.addSkill(userId, newSkill);
         return ResponseEntity.ok(userDto);
     }
 
-    @PutMapping("/{accountId}/add/skill-gap")
-    public ResponseEntity<?> addSkillGap(@PathVariable Long accountId, @RequestParam Skills newSkillGap) {
-        UserDto userDto = userService.addSkillGap(accountId, newSkillGap);
+    @PutMapping("/{userId}/add/skill-gap")
+    public ResponseEntity<?> addSkillGap(@PathVariable Long userId, @RequestParam Skills newSkillGap) {
+        UserDto userDto = userService.addSkillGap(userId, newSkillGap);
         return ResponseEntity.ok(userDto);
     }
 
-    @PutMapping("/{accountId}/add/favorite-course")
-    public ResponseEntity<?> addFavoriteCourse(@PathVariable Long accountId, @RequestParam Integer newFavoriteCourse) {
-        UserDto userDto = userService.addFavoriteCourse(accountId, newFavoriteCourse);
+    @PutMapping("/favorite-course/{courseId}")
+    public ResponseEntity<?> toggleFavoriteCourse(@PathVariable Integer courseId, Authentication authentication) {
+        System.out.println("im here");
+        UserDto userDto = userService.toggleFavoriteCourse(authentication, courseId);
         return ResponseEntity.ok(userDto);
     }
 
-    @PutMapping("/{accountId}/remove/interest")
-    public ResponseEntity<?> removeInterest(@PathVariable Long accountId, @RequestParam Interests oldInterest) {
-        UserDto userDto = userService.removeInterest(accountId, oldInterest);
+    @PutMapping("/{userId}/remove/interest")
+    public ResponseEntity<?> removeInterest(@PathVariable Long userId, @RequestParam Interests oldInterest) {
+        UserDto userDto = userService.removeInterest(userId, oldInterest);
         return ResponseEntity.ok(userDto);
     }
 
-    @PutMapping("/{accountId}/remove/skill")
-    public ResponseEntity<?> removeSkill(@PathVariable Long accountId, @RequestParam Skills oldSkill) {
-        UserDto userDto = userService.removeSkill(accountId, oldSkill);
+    @PutMapping("/{userId}/remove/skill")
+    public ResponseEntity<?> removeSkill(@PathVariable Long userId, @RequestParam Skills oldSkill) {
+        UserDto userDto = userService.removeSkill(userId, oldSkill);
         return ResponseEntity.ok(userDto);
     }
 
-    @PutMapping("/{accountId}/remove/skill-gap")
-    public ResponseEntity<?> removeSkillGap(@PathVariable Long accountId, @RequestParam Skills oldSkillGap) {
-        UserDto userDto = userService.removeSkillGap(accountId, oldSkillGap);
+    @PutMapping("/{userId}/remove/skill-gap")
+    public ResponseEntity<?> removeSkillGap(@PathVariable Long userId, @RequestParam Skills oldSkillGap) {
+        UserDto userDto = userService.removeSkillGap(userId, oldSkillGap);
         return ResponseEntity.ok(userDto);
     }
 
-    @PutMapping("/{accountId}/remove/favorite-course")
-    public ResponseEntity<?> removeFavoriteCourse(@PathVariable Long accountId, @RequestParam Integer oldFavoriteCourse) {
-        UserDto userDto = userService.removeFavoriteCourse(accountId, oldFavoriteCourse);
+    @PutMapping("/{userId}/remove/favorite-course")
+    public ResponseEntity<?> removeFavoriteCourse(@PathVariable Long userId, @RequestParam Integer oldFavoriteCourse) {
+        UserDto userDto = userService.removeFavoriteCourse(userId, oldFavoriteCourse);
         return ResponseEntity.ok(userDto);
     }
 }
