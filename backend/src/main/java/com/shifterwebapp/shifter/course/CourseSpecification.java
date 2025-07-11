@@ -102,4 +102,8 @@ public class CourseSpecification {
             return cb.or(predicates.toArray(new Predicate[0]));
         };
     }
+
+    public static Specification<Course> idNotIn(List<Long> enrolledCourseIds) {
+        return (root, query, cb) -> root.get("id").in(enrolledCourseIds).not();
+    }
 }

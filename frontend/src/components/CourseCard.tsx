@@ -7,12 +7,9 @@ import type {CoursePreview} from "../types/CoursePreview.tsx";
 import HeartOutline from "../assets/icons/HeartOutline.tsx";
 import HeartFill from "../assets/icons/HeartFill.tsx";
 import {useGlobalContext} from "../context/GlobalContext.tsx";
-import {toggleFavoriteCourseApi} from "../api/user.ts";
-import { toast } from "react-toastify";
+import {toggleFavoriteCourseApi} from "../api/userApi.ts";
+import {showInfoToast} from "../utils/showInfoToast.ts";
 
-const showLoginTooltip = () => {
-    toast.info("Please log in to save favorite courses.");
-};
 
 
 function CourseCard({ card }: {card: CoursePreview}) {
@@ -25,8 +22,7 @@ function CourseCard({ card }: {card: CoursePreview}) {
     const handleToggleFavoriteCourse = () => {
         setUser(prevUser => {
             if (!prevUser) {
-                // Show a tooltip or toast here
-                showLoginTooltip();
+                showInfoToast("Please log in to save favorite courses.");
                 return prevUser; // Exit early
             }
 
@@ -61,7 +57,6 @@ function CourseCard({ card }: {card: CoursePreview}) {
                 });
         }
     };
-
 
     return (
         <article

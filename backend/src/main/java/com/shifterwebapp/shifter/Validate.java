@@ -2,9 +2,11 @@ package com.shifterwebapp.shifter;
 
 import com.shifterwebapp.shifter.course.CourseRepository;
 import com.shifterwebapp.shifter.exception.ResourceNotFoundException;
+import com.shifterwebapp.shifter.exception.UnauthorizedException;
 import com.shifterwebapp.shifter.payment.PaymentRepository;
 import com.shifterwebapp.shifter.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,6 +28,13 @@ public class Validate {
             throw new ResourceNotFoundException("User with email " + email + " not found!");
         }
     }
+
+    public void validateUserIsAuthenticated(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getName() == null) {
+            throw new UnauthorizedException("User is not authenticated");
+        }
+    }
+
 
     public void validateCourseExists(Long courseId) {
         if (!courseRepository.existsById(courseId)) {

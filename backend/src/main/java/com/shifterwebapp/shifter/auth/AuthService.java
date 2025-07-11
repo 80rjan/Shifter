@@ -65,7 +65,7 @@ public class AuthService {
                         request.getPassword()
                 )
         );
-        User user = userService.getUserByEmail(request.getEmail());
+        User user = userService.getUserEntityByEmail(request.getEmail());
         sendTokens(response, user);
     }
 
@@ -85,7 +85,7 @@ public class AuthService {
         }
 
         String userEmail = jwtService.extractUsername(refreshToken);
-        User user = userService.getUserByEmail(userEmail);
+        User user = userService.getUserEntityByEmail(userEmail);
 
         if (!jwtService.isTokenValid(refreshToken, user)) {
             throw new RuntimeException("Invalid refresh token");

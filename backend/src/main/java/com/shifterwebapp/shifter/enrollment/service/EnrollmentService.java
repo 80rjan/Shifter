@@ -3,16 +3,17 @@ package com.shifterwebapp.shifter.enrollment.service;
 import com.shifterwebapp.shifter.Validate;
 import com.shifterwebapp.shifter.course.Course;
 import com.shifterwebapp.shifter.course.CourseRepository;
+import com.shifterwebapp.shifter.course.service.CourseService;
 import com.shifterwebapp.shifter.enrollment.Enrollment;
 import com.shifterwebapp.shifter.enrollment.EnrollmentDto;
 import com.shifterwebapp.shifter.enrollment.EnrollmentMapper;
 import com.shifterwebapp.shifter.enrollment.EnrollmentRepository;
-import com.shifterwebapp.shifter.enums.EnrollmentStatus;
-import com.shifterwebapp.shifter.enums.PointsConstants;
-import com.shifterwebapp.shifter.enums.Skills;
+import com.shifterwebapp.shifter.enums.*;
+import com.shifterwebapp.shifter.exception.AlreadyEnrolledException;
+import com.shifterwebapp.shifter.exception.PaymentNotCompleteException;
 import com.shifterwebapp.shifter.payment.Payment;
 import com.shifterwebapp.shifter.payment.PaymentRepository;
-import com.shifterwebapp.shifter.enums.PaymentStatus;
+import com.shifterwebapp.shifter.payment.service.PaymentService;
 import com.shifterwebapp.shifter.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,8 +27,8 @@ public class EnrollmentService implements ImplEnrollmentService{
 
     private final EnrollmentRepository enrollmentRepository;
     private final CourseRepository courseRepository;
-    private final PaymentRepository paymentRepository;
     private final UserService userService;
+    private final PaymentService paymentService;
     private final EnrollmentMapper enrollmentMapper;
     private final Validate validate;
 
@@ -43,6 +44,12 @@ public class EnrollmentService implements ImplEnrollmentService{
         validate.validateUserExists(userId);
         List<Enrollment> enrollment = enrollmentRepository.findEnrollmentsByUser(userId);
         return enrollmentMapper.toDto(enrollment);
+    }
+
+    @Override
+    public List<Long> getCourseIdsByUserEnrollments(Long userId) {
+        validate.validateCourseExists(userId);
+        return enrollmentRepository.getCourseIdsByUserEnrollments(userId);
     }
 
     @Override
@@ -63,21 +70,19 @@ public class EnrollmentService implements ImplEnrollmentService{
 
 
     @Override
-    public EnrollmentDto enrollUser(Long courseId, Long paymentId) {
+    public EnrollmentDto enrollUser(Long courseId, Long userId) {
         validate.validateCourseExists(courseId);
-        validate.validatePaymentExists(paymentId);
-
-        Payment payment = paymentRepository.findById(paymentId).orElseThrow();
-
-        if (payment.getPaymentStatus() != PaymentStatus.COMPLETED) {
-            throw new RuntimeException("Payment with ID " + paymentId + " is not completed successfully!");
-        }
-
-        Long userId = payment.getUser().getId();
         validate.validateUserExists(userId);
+
         boolean isAlreadyEnrolled = enrollmentRepository.findIsUserEnrolledInCourse(userId, courseId);
         if (isAlreadyEnrolled) {
-            throw new RuntimeException("user with ID " + userId + " is already enrolled in course with ID " + courseId + "!");
+            throw new AlreadyEnrolledException("User with ID " + userId + " is already enrolled in course with ID " + courseId + "!");
+        }
+
+        Payment payment = paymentService.initiatePayment(userId, courseId, PaymentMethod.CASYS);
+
+        if (payment.getPaymentStatus() != PaymentStatus.COMPLETED) {
+            throw new PaymentNotCompleteException("Payment with ID " + payment.getId() + " is not completed successfully!");
         }
 
         Course course = courseRepository.findById(courseId).orElseThrow();

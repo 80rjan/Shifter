@@ -1,10 +1,13 @@
 package com.shifterwebapp.shifter.config;
 
+import com.shifterwebapp.shifter.user.User;
+import com.shifterwebapp.shifter.user.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -19,9 +22,11 @@ import java.util.function.Function;
 public class JwtService {
 
     private final String SECRET_KEY;
+    private final UserRepository userRepository;
 
-    public JwtService(@Value("${jwt.secret}") String secretKey) {
+    public JwtService(@Value("${jwt.secret}") String secretKey, UserRepository userRepository) {
         this.SECRET_KEY = secretKey;
+        this.userRepository = userRepository;
     }
 
     // Helper to get SecretKey instance
@@ -31,7 +36,13 @@ public class JwtService {
 
     // Generate Access Token
     public String generateToken(UserDetails userDetails) {
-        return createToken(new HashMap<>(), userDetails.getUsername());
+        User user = userRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", user.getId());
+
+        return createToken(claims, userDetails.getUsername());
     }
 
     // Generate Refresh Token (30 days)
@@ -74,6 +85,11 @@ public class JwtService {
     // Extract username from token
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    public Long extractUserId(String token) {
+        Claims claims = extractAllClaims(token);
+        return claims.get("userId", Long.class);
     }
 
     // Extract single claim

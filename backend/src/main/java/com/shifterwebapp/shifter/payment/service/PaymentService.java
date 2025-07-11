@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -70,31 +71,21 @@ public class PaymentService implements ImplPaymentService {
     }
 
     @Override
-    public PaymentDto initiatePayment(Long userId, Long courseId, PaymentMethod paymentMethod) {
-        validate.validateUserExists(userId);
-        validate.validateCourseExists(courseId);
-
+    public Payment initiatePayment(Long userId, Long courseId, PaymentMethod paymentMethod) {
         User user = userRepository.findById(userId).orElseThrow();
         Course course = courseRepository.findById(courseId).orElseThrow();
 
-        boolean isAlreadyEnrolled = enrollmentRepository.findIsUserEnrolledInCourse(userId, courseId);
-        if (isAlreadyEnrolled) {
-            throw new RuntimeException("User with ID " + userId + " is already enrolled in course with ID " + courseId + " and cannot initiate payment!");
-        }
-
         // PAYMENT CODE (CASYS) HERE !!!!!!!!!
+
         Payment payment = Payment.builder()
-                .paymentStatus(PaymentStatus.PENDING)
-                .paymentMethod(paymentMethod)
-                .date(new Date())
-                .user(user)
-                .enrollment(new Enrollment())
                 .amount(course.getPrice())
+                .date(new Date())
+                .paymentMethod(paymentMethod)
+                .paymentStatus(PaymentStatus.COMPLETED)
+                .user(user)
                 .build();
 
-        paymentRepository.save(payment);
-
-        return paymentMapper.toDto(payment);
+        return paymentRepository.save(payment);
     }
 
     @Override

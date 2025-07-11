@@ -3,10 +3,11 @@ import CoursesFilters from "../components/CoursesFilters.tsx";
 import CoursesGrid from "../components/CoursesGrid.tsx";
 import type {FilterParams} from "../types/FilterParams.tsx";
 import {useLocation, useNavigate} from "react-router-dom";
-import {fetchCoursesApi, fetchCoursesSkillsApi, fetchCoursesTopicsApi,} from "../api/courses.ts";
+import {fetchCoursesApi} from "../api/courseApi.ts";
 import ShifterRocket from "../../public/Rocket-Blue-Fire.png"
 import {useCourseStorage} from "../context/CourseStorage.ts";
 import type {CoursePreview} from "../types/CoursePreview.tsx";
+import {useGlobalContext} from "../context/GlobalContext.tsx";
 
 function getInitialFiltersFromSearch(): FilterParams {
     const searchParams = new URLSearchParams(location.search);
@@ -36,46 +37,17 @@ function getInitialFiltersFromSearch(): FilterParams {
 function Courses() {
     const navigate = useNavigate();
     const location = useLocation();
-    const {allCourses, setAllCourses} = useCourseStorage();
+    const { accessToken } = useGlobalContext();
+    const {allCourses, topics, skills} = useCourseStorage();
 
     const [showOnlyFavorites, setShowOnlyFavorites] = React.useState<boolean>(false);
     const [filteredCourses, setFilteredCourses] = React.useState<CoursePreview[] | null>(null);
-    const sessionTopics = sessionStorage.getItem("courseTopics");
-    const [topics, setTopics] = React.useState<string[] | null>(sessionTopics ? JSON.parse(sessionTopics) : null);
-    const sessionsSkills = sessionStorage.getItem("courseSkills");
-    const [skills, setSkills] = React.useState<string[] | null>(sessionsSkills ? JSON.parse(sessionsSkills) : null);
 
     const [filters, setFilters] = React.useState<FilterParams>(getInitialFiltersFromSearch());
     const [loading, setLoading] = React.useState<boolean>(false);
 
     const abortControllerRef = useRef<AbortController | null>(null);
     const debounceTimeoutRef = useRef<number | null>(null);
-
-    // Initial fetch of all courses, topics, skills if not loaded
-    useEffect(() => {
-        if (!topics) {
-            fetchCoursesTopicsApi().then(data => {
-                setTopics(data);
-                sessionStorage.setItem("courseTopics", JSON.stringify(data));
-            }).catch(console.error);
-        }
-
-        if (!skills) {
-            fetchCoursesSkillsApi().then(data => {
-                setSkills(data);
-                sessionStorage.setItem("courseSkills", JSON.stringify(data));
-            }).catch(console.error);
-        }
-
-        if (!allCourses || allCourses.length === 0) {
-            fetchCoursesApi()
-                .then(data => {
-                    setAllCourses(data);
-                    sessionStorage.setItem("allCourses", JSON.stringify(data));
-                })
-                .catch(console.error);
-        }
-    }, []);
 
     // Effect to fetch filtered courses on filters change
     useEffect(() => {
@@ -107,7 +79,7 @@ function Courses() {
 
             setLoading(true);
 
-            fetchCoursesApi(filters, abortControllerRef.current?.signal)
+            fetchCoursesApi(accessToken || "", filters, abortControllerRef.current?.signal)
                 .then(data => {
                     setFilteredCourses(data);
                 })

@@ -3,7 +3,7 @@ import Slider from "react-slick";
 import CourseCard from "./CourseCard.tsx";
 import {useGlobalContext} from "../context/GlobalContext.tsx";
 import {useEffect} from "react";
-import {fetchRecommendedCoursesApi} from "../api/courses.ts";
+import {fetchRecommendedCoursesApi} from "../api/courseApi.ts";
 
 function CoursesCarouselCourseDetails() {
     const {recommendedCourses, setRecommendedCourses} = useCourseStorage();

@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import type {UserRegister} from "../../types/UserRegister.tsx";
 import RegisterSlider from "../inputs/RegisterSlider.tsx";
-import {fetchCoursesTopicsApi} from "../../api/courses.ts";
+import {fetchCoursesTopicsApi} from "../../api/courseApi.ts";
 
 function RegisterStepThree({setUser, user, setError}: {
     setUser: React.Dispatch<React.SetStateAction<UserRegister>>,

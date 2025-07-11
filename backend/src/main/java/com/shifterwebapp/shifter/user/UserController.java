@@ -1,8 +1,11 @@
 package com.shifterwebapp.shifter.user;
 
+import com.shifterwebapp.shifter.Validate;
+import com.shifterwebapp.shifter.auth.CustomAuthDetails;
 import com.shifterwebapp.shifter.enums.CompanyType;
 import com.shifterwebapp.shifter.enums.Interests;
 import com.shifterwebapp.shifter.enums.Skills;
+import com.shifterwebapp.shifter.exception.ErrorResponse;
 import com.shifterwebapp.shifter.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +14,24 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("${api.base.path}/user")
+@RequestMapping("${api.base.path}/users")
 public class UserController {
 
     private final UserService userService;
+    private final Validate validate;
+
+    @PutMapping("/favorite-course/{courseId}")
+    public ResponseEntity<?> toggleFavoriteCourse(@PathVariable Integer courseId, Authentication authentication) {
+        validate.validateUserIsAuthenticated(authentication);
+        Object detailsObj = authentication.getDetails();
+        if (!(detailsObj instanceof CustomAuthDetails details)) {
+            return ResponseEntity.badRequest().body(new ErrorResponse("Invalid authentication details"));
+        }
+        Long userId = details.getUserId();
+
+        UserDto userDto = userService.toggleFavoriteCourse(userId, courseId);
+        return ResponseEntity.ok(userDto);
+    }
 
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUser(@PathVariable Long userId) {
@@ -73,13 +90,6 @@ public class UserController {
     @PutMapping("/{userId}/add/skill-gap")
     public ResponseEntity<?> addSkillGap(@PathVariable Long userId, @RequestParam Skills newSkillGap) {
         UserDto userDto = userService.addSkillGap(userId, newSkillGap);
-        return ResponseEntity.ok(userDto);
-    }
-
-    @PutMapping("/favorite-course/{courseId}")
-    public ResponseEntity<?> toggleFavoriteCourse(@PathVariable Integer courseId, Authentication authentication) {
-        System.out.println("im here");
-        UserDto userDto = userService.toggleFavoriteCourse(authentication, courseId);
         return ResponseEntity.ok(userDto);
     }
 

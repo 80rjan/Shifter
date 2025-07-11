@@ -10,6 +10,7 @@ import {useEffect} from "react";
 import CourseDetails from "./pages/CourseDetails.tsx";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AppLoader from "./AppLoader.tsx";
 
 function LayoutWrapper() {
     const location = useLocation();
@@ -54,6 +55,7 @@ function App() {
 
     return (
         <Router>
+            <AppLoader />
             <ScrollToTop />
             <ToastContainer
                 position="top-right"

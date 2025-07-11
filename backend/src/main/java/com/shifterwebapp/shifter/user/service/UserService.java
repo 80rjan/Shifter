@@ -30,17 +30,22 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public UserDto getUserById(Long accountId) {
-        validate.validateUserExists(accountId);
-        User user = userRepository.findById(accountId).orElseThrow();
+    public UserDto getUserById(Long userId) {
+        validate.validateUserExists(userId);
+        User user = userRepository.findById(userId).orElseThrow();
         return userMapper.toDto(user);
     }
 
     @Override
-    public User getUserByEmail(String email) {
+    public User getUserEntityById(Long userId) {
+        validate.validateUserExists(userId);
+        return userRepository.findById(userId).orElseThrow();
+    }
+
+    @Override
+    public User getUserEntityByEmail(String email) {
         validate.validateUserExists(email);
-        User user = userRepository.findByEmail(email).orElseThrow();
-        return user;
+        return userRepository.findByEmail(email).orElseThrow();
     }
 
     @Override
@@ -72,60 +77,60 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public void deleteUser(Long accountId) {
-        validate.validateUserExists(accountId);
-        userRepository.deleteById(accountId);
+    public void deleteUser(Long userId) {
+        validate.validateUserExists(userId);
+        userRepository.deleteById(userId);
     }
 
     @Override
-    public UserDto updateName(Long accountId, String newName) {
-        validate.validateUserExists(accountId);
-        User user = userRepository.findById(accountId).orElseThrow();
+    public UserDto updateName(Long userId, String newName) {
+        validate.validateUserExists(userId);
+        User user = userRepository.findById(userId).orElseThrow();
         user.setName(newName);
         userRepository.save(user);
         return userMapper.toDto(user);
     }
 
     @Override
-    public UserDto updateMail(Long accountId, String newMail) {
-        validate.validateUserExists(accountId);
-        User user = userRepository.findById(accountId).orElseThrow();
+    public UserDto updateMail(Long userId, String newMail) {
+        validate.validateUserExists(userId);
+        User user = userRepository.findById(userId).orElseThrow();
         user.setEmail(newMail);
         userRepository.save(user);
         return userMapper.toDto(user);
     }
 
     @Override
-    public UserDto updatePassword(Long accountId, String newPass) {
-        validate.validateUserExists(accountId);
-        User user = userRepository.findById(accountId).orElseThrow();
+    public UserDto updatePassword(Long userId, String newPass) {
+        validate.validateUserExists(userId);
+        User user = userRepository.findById(userId).orElseThrow();
         user.setPasswordHash(passwordEncoder.encode(newPass));
         userRepository.save(user);
         return userMapper.toDto(user);
     }
 
     @Override
-    public UserDto updateWorkPosition(Long accountId, String newWorkPosition) {
-        validate.validateUserExists(accountId);
-        User user = userRepository.findById(accountId).orElseThrow();
+    public UserDto updateWorkPosition(Long userId, String newWorkPosition) {
+        validate.validateUserExists(userId);
+        User user = userRepository.findById(userId).orElseThrow();
         user.setWorkPosition(newWorkPosition);
         userRepository.save(user);
         return userMapper.toDto(user);
     }
 
     @Override
-    public UserDto updateCompanyType(Long accountId, CompanyType newCompanyType) {
-        validate.validateUserExists(accountId);
-        User user = userRepository.findById(accountId).orElseThrow();
+    public UserDto updateCompanyType(Long userId, CompanyType newCompanyType) {
+        validate.validateUserExists(userId);
+        User user = userRepository.findById(userId).orElseThrow();
         user.setCompanyType(newCompanyType);
         userRepository.save(user);
         return userMapper.toDto(user);
     }
 
     @Override
-    public UserDto addInterest(Long accountId, Interests newInterest) {
-        validate.validateUserExists(accountId);
-        User user = userRepository.findById(accountId).orElseThrow();
+    public UserDto addInterest(Long userId, Interests newInterest) {
+        validate.validateUserExists(userId);
+        User user = userRepository.findById(userId).orElseThrow();
         if (!user.getInterests().contains(newInterest)) {
             user.getInterests().add(newInterest);
         }
@@ -134,9 +139,9 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public UserDto addSkill(Long accountId, Skills newSkill) {
-        validate.validateUserExists(accountId);
-        User user = userRepository.findById(accountId).orElseThrow();
+    public UserDto addSkill(Long userId, Skills newSkill) {
+        validate.validateUserExists(userId);
+        User user = userRepository.findById(userId).orElseThrow();
         if (!user.getSkills().contains(newSkill)) {
             user.getSkills().add(newSkill);
         }
@@ -145,9 +150,9 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public UserDto addSkills(Long accountId, List<Skills> newSkills) {
-        validate.validateUserExists(accountId);
-        User user = userRepository.findById(accountId).orElseThrow();
+    public UserDto addSkills(Long userId, List<Skills> newSkills) {
+        validate.validateUserExists(userId);
+        User user = userRepository.findById(userId).orElseThrow();
         for (Skills skill : newSkills) {
             if (!user.getSkills().contains(skill)) {
                 user.getSkills().add(skill);
@@ -158,9 +163,9 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public UserDto addSkillGap(Long accountId, Skills newSkillGap) {
-        validate.validateUserExists(accountId);
-        User user = userRepository.findById(accountId).orElseThrow();
+    public UserDto addSkillGap(Long userId, Skills newSkillGap) {
+        validate.validateUserExists(userId);
+        User user = userRepository.findById(userId).orElseThrow();
         if (!user.getSkillGap().contains(newSkillGap)) {
             user.getSkillGap().add(newSkillGap);
         }
@@ -169,10 +174,8 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public UserDto toggleFavoriteCourse(Authentication authentication, Integer newFavoriteCourseId) {
-        String email = authentication.getName();
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public UserDto toggleFavoriteCourse(Long userId, Integer newFavoriteCourseId) {
+        User user = getUserEntityById(userId);
 
         if (user.getFavoriteCourses().contains(newFavoriteCourseId)) {
             user.getFavoriteCourses().remove(newFavoriteCourseId);
@@ -184,9 +187,9 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public UserDto addPoints(Long accountId, Integer newPointsAchieved) {
-        validate.validateUserExists(accountId);
-        User user = userRepository.findById(accountId).orElseThrow();
+    public UserDto addPoints(Long userId, Integer newPointsAchieved) {
+        validate.validateUserExists(userId);
+        User user = userRepository.findById(userId).orElseThrow();
         Integer newPoints = user.getPoints() + newPointsAchieved;
         user.setPoints(newPoints);
         userRepository.save(user);
@@ -194,9 +197,9 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public UserDto addPayment(Long accountId, Payment newPayment) {
-        validate.validateUserExists(accountId);
-        User user = userRepository.findById(accountId).orElseThrow();
+    public UserDto addPayment(Long userId, Payment newPayment) {
+        validate.validateUserExists(userId);
+        User user = userRepository.findById(userId).orElseThrow();
         if (!user.getPayments().contains(newPayment)) {
             user.getPayments().add(newPayment);
         }
@@ -205,9 +208,9 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public UserDto removeInterest(Long accountId, Interests removeInterest) {
-        validate.validateUserExists(accountId);
-        User user = userRepository.findById(accountId).orElseThrow();
+    public UserDto removeInterest(Long userId, Interests removeInterest) {
+        validate.validateUserExists(userId);
+        User user = userRepository.findById(userId).orElseThrow();
         if (!user.getInterests().contains(removeInterest)) {
             user.getInterests().remove(removeInterest);
         }
@@ -216,9 +219,9 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public UserDto removeSkill(Long accountId, Skills removeSkill) {
-        validate.validateUserExists(accountId);
-        User user = userRepository.findById(accountId).orElseThrow();
+    public UserDto removeSkill(Long userId, Skills removeSkill) {
+        validate.validateUserExists(userId);
+        User user = userRepository.findById(userId).orElseThrow();
         if (!user.getSkills().contains(removeSkill)) {
             user.getSkills().remove(removeSkill);
         }
@@ -227,9 +230,9 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public UserDto removeSkillGap(Long accountId, Skills removeSkillGap) {
-        validate.validateUserExists(accountId);
-        User user = userRepository.findById(accountId).orElseThrow();
+    public UserDto removeSkillGap(Long userId, Skills removeSkillGap) {
+        validate.validateUserExists(userId);
+        User user = userRepository.findById(userId).orElseThrow();
         if (!user.getSkillGap().contains(removeSkillGap)) {
             user.getSkillGap().remove(removeSkillGap);
         }
@@ -238,9 +241,9 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public UserDto removeSkillGaps(Long accountId, List<Skills> removeSkillGaps) {
-        validate.validateUserExists(accountId);
-        User user = userRepository.findById(accountId).orElseThrow();
+    public UserDto removeSkillGaps(Long userId, List<Skills> removeSkillGaps) {
+        validate.validateUserExists(userId);
+        User user = userRepository.findById(userId).orElseThrow();
         for (Skills skill : removeSkillGaps) {
             if (!user.getSkillGap().contains(skill)) {
                 user.getSkillGap().remove(skill);
@@ -251,9 +254,9 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public UserDto removeFavoriteCourse(Long accountId, Integer removeFavoriteCourseId) {
-        validate.validateUserExists(accountId);
-        User user = userRepository.findById(accountId).orElseThrow();
+    public UserDto removeFavoriteCourse(Long userId, Integer removeFavoriteCourseId) {
+        validate.validateUserExists(userId);
+        User user = userRepository.findById(userId).orElseThrow();
         if (!user.getFavoriteCourses().contains(removeFavoriteCourseId)) {
             user.getFavoriteCourses().remove(removeFavoriteCourseId);
         }
@@ -262,9 +265,9 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public UserDto removePoints(Long accountId, Integer removePointsAchieved) {
-        validate.validateUserExists(accountId);
-        User user = userRepository.findById(accountId).orElseThrow();
+    public UserDto removePoints(Long userId, Integer removePointsAchieved) {
+        validate.validateUserExists(userId);
+        User user = userRepository.findById(userId).orElseThrow();
         Integer newPoints = user.getPoints() - removePointsAchieved;
         user.setPoints(newPoints);
         userRepository.save(user);
@@ -272,9 +275,9 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public UserDto removePayment(Long accountId, Payment removePayment) {
-        validate.validateUserExists(accountId);
-        User user = userRepository.findById(accountId).orElseThrow();
+    public UserDto removePayment(Long userId, Payment removePayment) {
+        validate.validateUserExists(userId);
+        User user = userRepository.findById(userId).orElseThrow();
         if (!user.getPayments().contains(removePayment)) {
             user.getPayments().remove(removePayment);
         }

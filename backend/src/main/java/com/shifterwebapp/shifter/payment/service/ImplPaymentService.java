@@ -1,5 +1,6 @@
 package com.shifterwebapp.shifter.payment.service;
 
+import com.shifterwebapp.shifter.payment.Payment;
 import com.shifterwebapp.shifter.payment.PaymentDto;
 import com.shifterwebapp.shifter.enums.PaymentMethod;
 
@@ -15,7 +16,7 @@ public interface ImplPaymentService {
 
     Boolean hasUserPaidForCourse(Long userId, Long courseId);
 
-    PaymentDto initiatePayment(Long userId, Long courseId, PaymentMethod paymentMethod);
+    Payment initiatePayment(Long userId, Long courseId, PaymentMethod paymentMethod);
     PaymentDto completePayment(Long paymentId);
     PaymentDto failPayment(Long paymentId);
 }

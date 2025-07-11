@@ -14,7 +14,8 @@ import java.util.List;
 public interface ImplUserService {
     List<UserDto> getAllUsers();
     UserDto getUserById(Long id);
-    User getUserByEmail(String email);
+    User getUserEntityById(Long userId);
+    User getUserEntityByEmail(String email);
     Boolean existsUserByEmail(String email);
 
     User createUser(RegisterDto registerDto);
@@ -30,7 +31,7 @@ public interface ImplUserService {
     UserDto addSkill(Long id, Skills newSkill);
     UserDto addSkills(Long id, List<Skills> newSkills);
     UserDto addSkillGap(Long id, Skills newSkillGap);
-    UserDto toggleFavoriteCourse(Authentication authentication, Integer newFavoriteCourseId);
+    UserDto toggleFavoriteCourse(Long userId, Integer newFavoriteCourseId);
     UserDto addPoints(Long id, Integer newPointsAchieved);
     UserDto addPayment(Long id, Payment newPayment);
 

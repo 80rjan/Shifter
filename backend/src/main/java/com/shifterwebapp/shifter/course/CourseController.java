@@ -3,10 +3,14 @@ package com.shifterwebapp.shifter.course;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shifterwebapp.shifter.Validate;
+import com.shifterwebapp.shifter.auth.CustomAuthDetails;
 import com.shifterwebapp.shifter.course.service.CourseService;
+import com.shifterwebapp.shifter.enrollment.service.EnrollmentService;
 import com.shifterwebapp.shifter.enums.Difficulty;
 import com.shifterwebapp.shifter.enums.Interests;
 import com.shifterwebapp.shifter.enums.Skills;
+import com.shifterwebapp.shifter.exception.ErrorResponse;
 import com.shifterwebapp.shifter.user.User;
 import com.shifterwebapp.shifter.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +28,7 @@ import java.util.List;
 public class CourseController {
 
     private final CourseService courseService;
-    private final UserService userService;
+    private final EnrollmentService enrollmentService;
 
     @GetMapping
     public ResponseEntity<?> getCourses(
@@ -33,10 +37,10 @@ public class CourseController {
             @RequestParam(required = false, name = "price") List<String> prices,
             @RequestParam(required = false, name = "duration") List<String> durations,
             @RequestParam(required = false, name = "skill") List<Skills> skills,
-            @RequestParam(required = false, name = "topic") List<Interests> topics
+            @RequestParam(required = false, name = "topic") List<Interests> topics,
+            Authentication authentication
             ) throws JsonProcessingException {
         Specification<Course> spec = null;
-
 
         if (search != null && !search.isEmpty()) {
             spec = CourseSpecification.hasSearchLike(search);
@@ -62,6 +66,18 @@ public class CourseController {
             spec = (spec == null) ? CourseSpecification.hasTopics(topics) : spec.and(CourseSpecification.hasTopics(topics));
         }
 
+        Object detailsObj = authentication.getDetails();
+        if (!(detailsObj instanceof CustomAuthDetails details)) {
+            return ResponseEntity.badRequest().body(new ErrorResponse("Invalid authentication details"));
+        }
+        Long userId = details.getUserId();
+
+        List<Long> enrolledCourseIds = enrollmentService.getCourseIdsByUserEnrollments(userId);
+
+        if (enrolledCourseIds != null && !enrolledCourseIds.isEmpty()) {
+            spec = (spec == null) ? CourseSpecification.idNotIn(enrolledCourseIds) : spec.and(CourseSpecification.idNotIn(enrolledCourseIds));
+        }
+
         List<CourseDtoPreview> courseDtos = courseService.getAllCourses(spec);
         return ResponseEntity.ok(courseDtos);
     }
@@ -74,13 +90,13 @@ public class CourseController {
             return ResponseEntity.ok(topRatedCourses.subList(0, 5));
         }
 
-        String userEmail = authentication.getName();
-        User user = userService.getUserByEmail(userEmail);
+        Object detailsObj = authentication.getDetails();
+        if (!(detailsObj instanceof CustomAuthDetails details)) {
+            return ResponseEntity.badRequest().body(new ErrorResponse("Invalid authentication details"));
+        }
+        Long userId = details.getUserId();
 
-        List<Skills> userSkills = user.getSkills();
-        List<Interests> userInterests = user.getInterests();
-
-        List<CourseDtoPreview> recommendedCourses = courseService.getRecommendedCourses(userSkills, userInterests);
+        List<CourseDtoPreview> recommendedCourses = courseService.getRecommendedCourses(userId);
         return ResponseEntity.ok(recommendedCourses);
     }
 

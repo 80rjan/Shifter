@@ -12,10 +12,11 @@ import java.util.List;
 
 public interface ImplCourseService {
     List<CourseDtoPreview> getAllCourses(Specification<Course> specification);
-    List<CourseDtoPreview> getRecommendedCourses(List<Skills> skills, List<Interests> topics);
+    List<CourseDtoPreview> getRecommendedCourses(Long userId);
     List<CourseDtoPreview> getTopRatedCourses();
     List<CourseDtoPreview> getMostPopularCourses();
     CourseDtoDetail getCourseById(Long id);
+    Course getCourseEntityById(Long courseId);
 
     List<Interests> getAllTopics();
     List<Skills> getAllSkills();

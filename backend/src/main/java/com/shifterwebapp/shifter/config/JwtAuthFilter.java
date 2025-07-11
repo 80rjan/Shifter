@@ -1,6 +1,7 @@
 package com.shifterwebapp.shifter.config;
 
 
+import com.shifterwebapp.shifter.auth.CustomAuthDetails;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,10 +43,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
             if (jwtService.isTokenValid(jwt, userDetails)) {
+                Long userId = jwtService.extractUserId(jwt);
+
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
+
+                Object webDetails = new WebAuthenticationDetailsSource().buildDetails(request);
+
+                CustomAuthDetails customDetails = new CustomAuthDetails(userId, webDetails);
+                authToken.setDetails(customDetails);
+
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }

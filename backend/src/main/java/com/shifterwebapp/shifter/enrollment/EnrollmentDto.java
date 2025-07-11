@@ -12,12 +12,12 @@ import java.util.Date;
 @NoArgsConstructor
 public class EnrollmentDto {
 
-    private Long id;
-
     private EnrollmentStatus enrollmentStatus;
 
     private Integer percentCompleted;
 
     private Date date;
+
+    private Long courseId;
 }
 
