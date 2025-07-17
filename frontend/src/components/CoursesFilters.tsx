@@ -1,15 +1,13 @@
 import React from "react";
 import Checkbox from "@mui/material/Checkbox";
-import type {FilterParams} from "../types/FilterParams.tsx";
 import {durationToQueryMapper, priceToQueryMapper} from "../utils/mapper.ts";
+import type {FilterParams} from "../types/FilterParams.tsx";
 
-function CoursesFilters({setFilters, filters, topics, skills, showOnlyFavoriteCourses, setShowOnlyFavorites}: {
-    setFilters: React.Dispatch<React.SetStateAction<FilterParams>>,
+function CoursesFilters({filters, setFilters, topics, skills}: {
     filters: FilterParams,
+    setFilters: React.Dispatch<React.SetStateAction<FilterParams>>,
     topics: string[] | null,
     skills: string[] | null,
-    showOnlyFavoriteCourses: boolean
-    setShowOnlyFavorites: React.Dispatch<React.SetStateAction<boolean>>,
 }) {
     const duration = [
         "< 3 hours",
@@ -75,6 +73,13 @@ function CoursesFilters({setFilters, filters, topics, skills, showOnlyFavoriteCo
         }))
     }
 
+    const handleShowOnlyFavoritesChange = () => {
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            showOnlyFavoriteCourses: !prevFilters.showOnlyFavoriteCourses
+        }));
+    }
+
     return (
         <aside
             className="flex flex-col gap-8 pl-8 pt-12 text-left sticky top-0 h-screen border-r-2 border-black/10">
@@ -83,8 +88,8 @@ function CoursesFilters({setFilters, filters, topics, skills, showOnlyFavoriteCo
                 <FilterSelect
                     header={"Favorite Courses"}
                     options={["My favorites"]}
-                    handleFilter={() => {setShowOnlyFavorites(prev => !prev)}}
-                    selectedOptions={showOnlyFavoriteCourses ? ["My favorites"] : []}
+                    handleFilter={() => {handleShowOnlyFavoritesChange()}}
+                    selectedOptions={filters.showOnlyFavoriteCourses ? ["My favorites"] : []}
                 />
                 <FilterSelect
                     header={"Level"}

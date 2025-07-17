@@ -8,9 +8,13 @@ import type {CourseDetail} from "../types/CourseDetail.tsx";
 import {enrollUserApi} from "../api/enrollmentApi.ts";
 import {useGlobalContext} from "../context/GlobalContext.tsx";
 import {showInfoToast} from "../utils/showInfoToast.ts";
+import {useCourseStorage} from "../context/CourseStorage.ts";
+import HeroCourseDetailsSkeleton from "../components/skeletons/HeroCourseDetailsSkeleton.tsx";
+import CourseDetailsInfoSkeleton from "../components/skeletons/CourseDetailsInfoSkeleton.tsx";
 
 function CourseDetails() {
-    const { user, accessToken } = useGlobalContext();
+    const { user, accessToken, loading: authLoading } = useGlobalContext();
+    const { enrollments, setEnrollments } = useCourseStorage();
     const [loading, setLoading] = useState<boolean>(true);
     const { courseId } = useParams<{ courseId: string; courseTitle: string }>();
     const [course, setCourse] = useState<CourseDetail | null>(null);
@@ -23,6 +27,9 @@ function CourseDetails() {
 
         return enrollUserApi(Number(courseId), accessToken || "")
             .then(() => {
+                if (enrollments) {
+                    setEnrollments(enrollments.filter((enrollment) => enrollment.courseId !== Number(courseId)));
+                }
                 console.log("User enrolled in course successfully");
             })
             .catch((error) => {
@@ -49,11 +56,12 @@ function CourseDetails() {
     return (
         <main className="bg-white">
             {
-                loading ?
-                    <div className="flex flex-col gap-12 justify-center items-center h-screen">
-                        <div className="w-20 loader"></div>
-                        <span className="text-xl font-semibold text-black/40">Loading...</span>
-                    </div> :
+                (authLoading || loading) ?
+                    <>
+                        <HeroCourseDetailsSkeleton />
+                        <CourseDetailsInfoSkeleton />
+                        <CoursesCarouselCourseDetails />
+                    </> :
                     <>
                         <HeroCourseDetails course={course} enrollUser={handleBuyCourse}/>
                         <CourseDetailsInfo course={course}/>

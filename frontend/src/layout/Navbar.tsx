@@ -56,18 +56,16 @@ function Navbar() {
                     user ? (
                         <>
                             <div className="flex flex-col gap-0 overflow-clip p-1 group">
-                                <button onClick={logout} className=" transition-all
-                    duration-300 ease-in-out z-10 cursor-pointer">Profile</button>
-                                {/*<Link to="/profile" className=" transition-all*/}
-                    {/*duration-300 ease-in-out z-10">Profile</Link>*/}
+                                <Link to="/profile" className=" transition-all
+                    duration-300 ease-in-out z-10 cursor-pointer">Profile</Link>
                                 <hr className="relative -left-30 group-hover:-left-4 border-t-2
                      rounded-full transition-all duration-300 ease-in-out"/>
                             </div>
-                            <Link to="/schedule-consulation"
+                            <div onClick={logout}
                                   className="hover:-translate-x-4 transition-all duration-200 ease-in-out cursor-pointer
                       relative -mr-4 px-6 pr-9 py-2 bg-shifter rounded-l-lg font-medium
                       shadow-md shadow-shifter/30"
-                            >Free Consultation</Link>
+                            >Free Consultation</div>
                         </>
                     ) : (
                         <Link to="/login"

@@ -61,14 +61,14 @@ export const GlobalProvider = ({children}: { children: ReactNode }) => {
 
     const logout = async () => {
         return logoutApi()
-            .catch(err => {
-                console.warn("Logout failed:", err);
-                throw err;
-            })
-            .finally(() => {
+            .then(() => {
                 setAccessToken(null);
                 setUser(null);
             })
+            .catch(err => {
+                console.warn("Logout failed:", err);
+                throw err;
+            });
     };
 
 

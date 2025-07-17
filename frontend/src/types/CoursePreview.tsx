@@ -13,5 +13,6 @@ export interface CoursePreview {
     ratingCount: number;
     skillsGained: string[];
     topicsCovered: string[];
+    courseContentCount: number;
 }
 

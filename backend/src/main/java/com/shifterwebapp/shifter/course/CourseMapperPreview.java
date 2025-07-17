@@ -9,6 +9,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface CourseMapperPreview {
 
+    @Mapping(target = "courseContentCount", expression = "java(course.getCourseContents() != null ? course.getCourseContents().size() : 0)")
     CourseDtoPreview toDto(Course course);
     List<CourseDtoPreview> toDto(List<Course> courses);
 

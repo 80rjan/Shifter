@@ -100,7 +100,7 @@ function CourseCard({ card }: {card: CoursePreview}) {
                     {(card.durationMinutes / 60).toFixed(1)} hours
                 </div>
                 <div className="flex items-center gap-1 px-2 border-1 border-black/20 rounded-sm text-black/60">
-                    {0} modules
+                    {card.courseContentCount} modules
                 </div>
                 <div className="flex items-center gap-1 px-2 border-1 border-black/20 rounded-sm text-black/60">
                     {card.difficulty.charAt(0) + card.difficulty.slice(1).toLowerCase()}

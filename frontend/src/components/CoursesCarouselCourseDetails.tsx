@@ -4,6 +4,7 @@ import CourseCard from "./CourseCard.tsx";
 import {useGlobalContext} from "../context/GlobalContext.tsx";
 import {useEffect} from "react";
 import {fetchRecommendedCoursesApi} from "../api/courseApi.ts";
+import CourseCardSkeleton from "./skeletons/CourseCardSkeleton.tsx";
 
 function CoursesCarouselCourseDetails() {
     const {recommendedCourses, setRecommendedCourses} = useCourseStorage();
@@ -37,24 +38,20 @@ function CoursesCarouselCourseDetails() {
             <h2 className="text-5xl">People also bought</h2>
 
             <div className="relative mx-0 my-auto w-full p-0">
-                {
-                    recommendedCourses ?
-                        <Slider {...settings}>
-                            {
-                                recommendedCourses.map((course, index) => (
-                                    <CourseCard card={course} key={index}/>
-                                    // <div className="h-full flex flex-col justify-center bg-red-500" key={index}>
-                                    //     <CourseCard card={course}/>
-                                    // </div>
-                                ))
-                            }
-                        </Slider>
-                        :
-                        <div className="flex flex-col gap-12 justify-center items-center">
-                            <div className="w-20 loader"></div>
-                            <span className="text-xl font-semibold text-black/40">Loading...</span>
-                        </div>
-                }
+                <Slider {...settings}>
+                    {
+                        recommendedCourses ?
+                            recommendedCourses.map((course, index) => (
+                                <CourseCard card={course} key={index}/>
+                                // <div className="h-full flex flex-col justify-center bg-red-500" key={index}>
+                                //     <CourseCard card={course}/>
+                                // </div>
+                            )) :
+                            [...Array(4)].map((_, index) => (
+                                <CourseCardSkeleton key={index} />
+                            ))
+                    }
+                </Slider>
             </div>
         </section>
     )

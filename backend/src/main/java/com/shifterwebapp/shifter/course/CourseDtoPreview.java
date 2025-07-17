@@ -1,5 +1,6 @@
 package com.shifterwebapp.shifter.course;
 
+import com.shifterwebapp.shifter.coursecontent.CourseContentDto;
 import com.shifterwebapp.shifter.enums.Difficulty;
 import com.shifterwebapp.shifter.enums.Interests;
 import com.shifterwebapp.shifter.enums.Skills;
@@ -37,5 +38,7 @@ public class CourseDtoPreview {
     private List<Skills> skillsGained;
 
     private List<Interests> topicsCovered;
+
+    private Integer courseContentCount;
 }
 

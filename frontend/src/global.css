@@ -1,10 +1,11 @@
 @import "tailwindcss";
 
 @theme {
-    --spacing-horizontal-sm: 4rem;
-    --spacing-horizontal-md: 7rem;
-    /*--spacing-horizontal: 7rem;*/
     --spacing-horizontal-lg: 10rem;
+    --spacing-horizontal-md: 7rem;
+    --spacing-horizontal-sm: 4rem;
+    /*--spacing-horizontal: 7rem;*/
+
     --spacing-vertical-lg: 3rem;
     --spacing-vertical-md: 2rem;
     --spacing-vertical-sm: 1rem;

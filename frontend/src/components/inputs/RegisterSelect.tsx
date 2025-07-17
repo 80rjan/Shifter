@@ -1,13 +1,8 @@
 import type {UserRegister} from "../../types/UserRegister.tsx";
 import type {SelectProps} from "../../types/SelectProps.tsx";
 import {toEnumFormat} from "../../utils/toEnumFormat.ts";
-import {useEffect} from "react";
 
 function RegisterSelect(selectProps: SelectProps) {
-
-    useEffect(() => {
-        console.log(selectProps.user)
-    }, [selectProps.user]);
 
     return (
         <div

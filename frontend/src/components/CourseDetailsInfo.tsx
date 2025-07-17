@@ -66,7 +66,7 @@ function CourseDetailsInfo({ course }: { course: CourseDetail | null}) {
                                             <h3 className="text-2xl font-semibold">{content.title}</h3>
                                         </div>
 
-                                        <div className="flex gap-2 items-start text-black/80">
+                                        <div className="flex gap-2 items-center text-black/80">
                                             <span>{content.courseLectures.length} lectures</span>
                                             <span>•</span>
                                             <span>{Math.round(content.courseLectures.reduce((sum, lecture) => sum + lecture.durationMinutes, 0))}min</span>

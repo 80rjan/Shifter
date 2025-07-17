@@ -1,6 +1,7 @@
 
 export interface FilterParams {
-    search?: string;
+    showOnlyFavoriteCourses?: boolean;
+    search?: string[];
     difficulty?: string[];
     price?: string[];
     duration?: string[];
