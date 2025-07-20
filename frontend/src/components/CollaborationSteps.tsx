@@ -16,7 +16,7 @@ export default function CollaborationSteps() {
             number: '03',
             title: 'Review Your Personalized Plan',
             description:
-                'Receive a tailored roadmap with clear, actionable steps to help you achieve business success.',
+                'Receive a tailored roadmap with clear, actionable registerSteps to help you achieve business success.',
         },
         {
             number: '04',

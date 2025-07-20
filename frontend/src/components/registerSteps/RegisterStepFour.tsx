@@ -7,7 +7,7 @@ function RegisterStepFour({setUser, user, setError}: {
     setUser: React.Dispatch<React.SetStateAction<UserRegister>>,
     user: UserRegister,
     setError: React.Dispatch<React.SetStateAction<string>>,
-}) {
+}){
     const [skills, setSkills] = React.useState<string[]>([]);
 
     useEffect(() => {
@@ -24,13 +24,12 @@ function RegisterStepFour({setUser, user, setError}: {
     }, []);
 
     useEffect(() => {
-        if (user.skills.length === 0) {
-            setError("Tell us what you're great at — choose at least one strength");
+        if (user.skillGap.length === 0) {
+            setError("We’d love to support your growth — select at least one skill you'd like to improve");
         } else {
             setError("");
         }
-    }, [user.skills]);
-
+    }, [user.skillGap]);
 
     return (
         <section
@@ -38,9 +37,9 @@ function RegisterStepFour({setUser, user, setError}: {
             {
                 skills.length > 0 &&
                 <RegisterSlider
-                    label={"Identify Strengths"}
-                    name={"skills"}
-                    id={"skills"}
+                    label={"Identify Skills Gap"}
+                    name={"skillGap"}
+                    id={"skills-gap"}
                     options={skills}
                     setUser={setUser}
                     user={user}

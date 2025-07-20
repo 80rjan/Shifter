@@ -38,7 +38,8 @@ public class User implements UserDetails {
     private String passwordHash;    // SHOULD I USE JSON IGNORE HERE? OR IS IT ENOUGH TO NOT EXPOSE IT IN DTO?
 
     private Boolean isAdmin;
-    
+
+    @Enumerated(EnumType.STRING)
     private CompanyType companyType;
     
     private String workPosition;

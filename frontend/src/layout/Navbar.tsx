@@ -42,9 +42,7 @@ function Navbar() {
             </Link>
 
             {/* Right side icons and button */}
-            <div className="flex gap-20 text-lg items-center">
-                {/*<UserCircle className="w-10 h-auto "/>*/}
-                {/*<CircleUserRound size={40} strokeWidth={1.5}/>*/}
+            <div className="flex gap-12 text-lg items-center">
 
                 <div className="flex flex-col gap-0 overflow-clip p-1 group">
                     <Link to="/about" className=" transition-all
@@ -56,22 +54,31 @@ function Navbar() {
                     user ? (
                         <>
                             <div className="flex flex-col gap-0 overflow-clip p-1 group">
-                                <Link to="/profile" className=" transition-all
-                    duration-300 ease-in-out z-10 cursor-pointer">Profile</Link>
+                                <Link to="/dashboard" className=" transition-all
+                                    duration-300 ease-in-out z-10 cursor-pointer">Dashboard</Link>
                                 <hr className="relative -left-30 group-hover:-left-4 border-t-2
-                     rounded-full transition-all duration-300 ease-in-out"/>
+                                    rounded-full transition-all duration-300 ease-in-out"/>
                             </div>
-                            <div onClick={logout}
-                                  className="hover:-translate-x-4 transition-all duration-200 ease-in-out cursor-pointer
-                      relative -mr-4 px-6 pr-9 py-2 bg-shifter rounded-l-lg font-medium
-                      shadow-md shadow-shifter/30"
-                            >Free Consultation</div>
+                            <div className="flex gap-6 items-center">
+                                <Link
+                                    to="/profile"
+                                    className="hover:bg-shifter transition-all duration-200 ease-in-out cursor-pointer
+                                    h-full aspect-square rounded-full border-2 border-white/20 p-3 bg-shifter/40 text-white font-bold flex items-center justify-center">
+                                    {user.name.split(" ")[0].charAt(0).toUpperCase()}
+                                </Link>
+                                <div onClick={logout}
+                                     className="hover:-translate-x-4 transition-all duration-200 ease-in-out cursor-pointer
+                                      relative -mr-4 px-6 pr-9 py-2 bg-shifter rounded-l-lg font-medium
+                                      shadow-md shadow-shifter/30"
+                                >Free Consultation
+                                </div>
+                            </div>
                         </>
                     ) : (
                         <Link to="/login"
                               className="hover:-translate-x-4 transition-all duration-200 ease-in-out cursor-pointer
-                      relative -mr-4 px-6 pr-9 py-2 bg-shifter rounded-l-lg font-medium
-                      shadow-md shadow-shifter/30"
+                              relative -mr-4 px-6 pr-9 py-2 bg-shifter rounded-l-lg font-medium
+                              shadow-md shadow-shifter/30"
                         >Login / Register</Link>
                     )
                 }

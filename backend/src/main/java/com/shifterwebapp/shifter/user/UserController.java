@@ -2,7 +2,6 @@ package com.shifterwebapp.shifter.user;
 
 import com.shifterwebapp.shifter.Validate;
 import com.shifterwebapp.shifter.auth.CustomAuthDetails;
-import com.shifterwebapp.shifter.enums.CompanyType;
 import com.shifterwebapp.shifter.enums.Interests;
 import com.shifterwebapp.shifter.enums.Skills;
 import com.shifterwebapp.shifter.exception.ErrorResponse;
@@ -33,6 +32,19 @@ public class UserController {
         return ResponseEntity.ok(userDto);
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<?> updateUser(Authentication authentication, @RequestBody UserInfoDto userInfoDto) {
+        validate.validateUserIsAuthenticated(authentication);
+        Object detailsObj = authentication.getDetails();
+        if (!(detailsObj instanceof CustomAuthDetails details)) {
+            return ResponseEntity.badRequest().body(new ErrorResponse("Invalid authentication details"));
+        }
+        Long userId = details.getUserId();
+
+        UserDto userDto = userService.updateUser(userId, userInfoDto);
+        return ResponseEntity.ok(userDto);
+    }
+
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUser(@PathVariable Long userId) {
         UserDto userDto = userService.getUserById(userId);
@@ -45,12 +57,6 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{userId}/name")
-    public ResponseEntity<?> updateName(@PathVariable Long userId, @RequestParam String newName) {
-        UserDto userDto = userService.updateName(userId, newName);
-        return ResponseEntity.ok(userDto);
-    }
-
     @PutMapping("/{userId}/mail")
     public ResponseEntity<?> updateMail(@PathVariable Long userId, @RequestParam String newMail) {
         UserDto userDto = userService.updateMail(userId, newMail);
@@ -60,18 +66,6 @@ public class UserController {
     @PutMapping("/{userId}/password")
     public ResponseEntity<?> updatePassword(@PathVariable Long userId, @RequestParam String newPassword) {
         UserDto userDto = userService.updatePassword(userId, newPassword);
-        return ResponseEntity.ok(userDto);
-    }
-
-    @PutMapping("/{userId}/work-position")
-    public ResponseEntity<?> updateWorkPosition(@PathVariable Long userId, @RequestParam String newWorkPosition) {
-        UserDto userDto = userService.updateWorkPosition(userId, newWorkPosition);
-        return ResponseEntity.ok(userDto);
-    }
-
-    @PutMapping("/{userId}/company-type")
-    public ResponseEntity<?> updateCompanyType(@PathVariable Long userId, @RequestParam CompanyType newCompanyType) {
-        UserDto userDto = userService.updateCompanyType(userId, newCompanyType);
         return ResponseEntity.ok(userDto);
     }
 

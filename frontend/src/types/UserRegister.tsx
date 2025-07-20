@@ -6,6 +6,5 @@ export interface UserRegister {
     workPosition: string;
     companyType: string;
     interests: string[];
-    skills: string[];
-    skillsGap: string[];
+    skillGap: string[];
 }

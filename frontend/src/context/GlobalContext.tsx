@@ -9,6 +9,7 @@ import React, {
 import type {User} from "../types/User.tsx";
 import type {UserRegister} from "../types/UserRegister.tsx";
 import {loginApi, logoutApi, refreshAccessTokenApi, registerApi} from "../api/auth.ts";
+import {useNavigate} from "react-router-dom";
 
 interface GlobalContextType {
     user: User | null;
@@ -30,6 +31,7 @@ export const GlobalProvider = ({children}: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
     const [accessToken, setAccessToken] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     const register = async (user: UserRegister) => {
         return registerApi(user)
@@ -64,6 +66,7 @@ export const GlobalProvider = ({children}: { children: ReactNode }) => {
             .then(() => {
                 setAccessToken(null);
                 setUser(null);
+                navigate("/");
             })
             .catch(err => {
                 console.warn("Logout failed:", err);

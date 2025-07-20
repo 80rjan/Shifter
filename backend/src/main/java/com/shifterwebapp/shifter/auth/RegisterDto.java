@@ -28,7 +28,5 @@ public class RegisterDto {
 
     private List<Interests> interests;
 
-    private List<Skills> skills;
-
     private List<Skills> skillGap;
 }

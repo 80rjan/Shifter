@@ -1,13 +1,12 @@
 package com.shifterwebapp.shifter.user.service;
 
 import com.shifterwebapp.shifter.auth.RegisterDto;
+import com.shifterwebapp.shifter.user.UserInfoDto;
 import com.shifterwebapp.shifter.payment.Payment;
 import com.shifterwebapp.shifter.user.User;
 import com.shifterwebapp.shifter.user.UserDto;
-import com.shifterwebapp.shifter.enums.CompanyType;
 import com.shifterwebapp.shifter.enums.Interests;
 import com.shifterwebapp.shifter.enums.Skills;
-import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
@@ -21,11 +20,10 @@ public interface ImplUserService {
     User createUser(RegisterDto registerDto);
     void deleteUser(Long id);
 
-    UserDto updateName(Long id, String newName);
+    UserDto updateUser(Long id, UserInfoDto userInfoDto);
+
     UserDto updateMail(Long id, String newMail);
     UserDto updatePassword(Long id, String newPassHash);
-    UserDto updateWorkPosition(Long id, String newWorkPosition);
-    UserDto updateCompanyType(Long id, CompanyType newCompanyType);
 
     UserDto addInterest(Long id, Interests newInterest);
     UserDto addSkill(Long id, Skills newSkill);

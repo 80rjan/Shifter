@@ -2,6 +2,7 @@ import React from "react";
 import Checkbox from "@mui/material/Checkbox";
 import {durationToQueryMapper, priceToQueryMapper} from "../utils/mapper.ts";
 import type {FilterParams} from "../types/FilterParams.tsx";
+import {useGlobalContext} from "../context/GlobalContext.tsx";
 
 function CoursesFilters({filters, setFilters, topics, skills}: {
     filters: FilterParams,
@@ -9,6 +10,7 @@ function CoursesFilters({filters, setFilters, topics, skills}: {
     topics: string[] | null,
     skills: string[] | null,
 }) {
+    const {user} = useGlobalContext();
     const duration = [
         "< 3 hours",
         "3-6 hours",
@@ -85,12 +87,16 @@ function CoursesFilters({filters, setFilters, topics, skills}: {
             className="flex flex-col gap-8 pl-8 pt-12 text-left sticky top-0 h-screen border-r-2 border-black/10">
             <h2 className="text-2xl font-medium">Filter by</h2>
             <div className="relative flex flex-col gap-12 pl-4 pr-2 pb-20 overflow-y-auto scrollable">
-                <FilterSelect
-                    header={"Favorite Courses"}
-                    options={["My favorites"]}
-                    handleFilter={() => {handleShowOnlyFavoritesChange()}}
-                    selectedOptions={filters.showOnlyFavoriteCourses ? ["My favorites"] : []}
-                />
+                {
+                    user && (
+                        <FilterSelect
+                            header={"Favorite Courses"}
+                            options={["My favorites"]}
+                            handleFilter={() => {handleShowOnlyFavoritesChange()}}
+                            selectedOptions={filters.showOnlyFavoriteCourses ? ["My favorites"] : []}
+                        />
+                    )
+                }
                 <FilterSelect
                     header={"Level"}
                     options={difficulty}
@@ -198,7 +204,7 @@ function FilterSelect({
                 <button
                     type="button"
                     onClick={() => setShowAll(!showAll)}
-                    className="w-fit underline cursor-pointer hover:bg-dark-blue/10 hover:text-shifter"
+                    className="p-2 rounded-sm w-fit underline cursor-pointer hover:bg-shifter/10 hover:text-shifter"
                 >
                     {showAll ? "Show less" : `Show ${filteredOptions.length - 4} more`}
                 </button>

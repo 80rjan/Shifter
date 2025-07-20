@@ -6,7 +6,7 @@ export interface User {
     workPosition: string;
     interests: string[];
     skills: string[];
-    skillsGap: string[];
+    skillGap: string[];
     points: number;
     favoriteCourses: number[];
 }

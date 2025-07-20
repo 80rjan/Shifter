@@ -112,7 +112,6 @@ public class AuthService {
     }
 
     public boolean checkEmail(String email) {
-        System.out.println("Checking if email exists: " + email);
         return userService.existsUserByEmail(email);
     }
 

@@ -2,13 +2,12 @@ package com.shifterwebapp.shifter.user.service;
 
 import com.shifterwebapp.shifter.Validate;
 import com.shifterwebapp.shifter.auth.RegisterDto;
-import com.shifterwebapp.shifter.enums.CompanyType;
 import com.shifterwebapp.shifter.enums.Interests;
 import com.shifterwebapp.shifter.enums.Skills;
+import com.shifterwebapp.shifter.user.UserInfoDto;
 import com.shifterwebapp.shifter.payment.Payment;
 import com.shifterwebapp.shifter.user.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -67,7 +66,7 @@ public class UserService implements ImplUserService {
                 .companyType(registerDto.getCompanyType())
                 .workPosition(registerDto.getWorkPosition())
                 .interests(registerDto.getInterests())
-                .skills(registerDto.getSkills())
+                .skills(List.of())
                 .skillGap(registerDto.getSkillGap())
                 .points(0)
                 .favoriteCourses(List.of())
@@ -83,13 +82,24 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public UserDto updateName(Long userId, String newName) {
-        validate.validateUserExists(userId);
-        User user = userRepository.findById(userId).orElseThrow();
-        user.setName(newName);
+    public UserDto updateUser(Long id, UserInfoDto userInfoDto) {
+        validate.validateUserExists(id);
+        User user = userRepository.findById(id).orElseThrow();
+
+        if (userInfoDto.getName() != null) {
+            user.setName(userInfoDto.getName());
+        }
+        if (userInfoDto.getCompanyType() != null) {
+            user.setCompanyType(userInfoDto.getCompanyType());
+        }
+        if (userInfoDto.getWorkPosition() != null) {
+            user.setWorkPosition(userInfoDto.getWorkPosition());
+        }
+
         userRepository.save(user);
         return userMapper.toDto(user);
     }
+
 
     @Override
     public UserDto updateMail(Long userId, String newMail) {
@@ -105,24 +115,6 @@ public class UserService implements ImplUserService {
         validate.validateUserExists(userId);
         User user = userRepository.findById(userId).orElseThrow();
         user.setPasswordHash(passwordEncoder.encode(newPass));
-        userRepository.save(user);
-        return userMapper.toDto(user);
-    }
-
-    @Override
-    public UserDto updateWorkPosition(Long userId, String newWorkPosition) {
-        validate.validateUserExists(userId);
-        User user = userRepository.findById(userId).orElseThrow();
-        user.setWorkPosition(newWorkPosition);
-        userRepository.save(user);
-        return userMapper.toDto(user);
-    }
-
-    @Override
-    public UserDto updateCompanyType(Long userId, CompanyType newCompanyType) {
-        validate.validateUserExists(userId);
-        User user = userRepository.findById(userId).orElseThrow();
-        user.setCompanyType(newCompanyType);
         userRepository.save(user);
         return userMapper.toDto(user);
     }

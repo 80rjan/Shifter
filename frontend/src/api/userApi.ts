@@ -13,3 +13,15 @@ export const toggleFavoriteCourseApi = async (courseId: number, accessToken: str
         }
     )
 }
+
+export const updateUserApi = async (userInfo: {name: string, workPosition: string, companyType: string}, accessToken: string): Promise<void> => {
+    await axios.put(
+        `${backendUrl}/api/users/update`,
+        userInfo,
+        {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            }
+        }
+    )
+}

@@ -66,16 +66,17 @@ public class CourseController {
             spec = (spec == null) ? CourseSpecification.hasTopics(topics) : spec.and(CourseSpecification.hasTopics(topics));
         }
 
-        Object detailsObj = authentication.getDetails();
-        if (!(detailsObj instanceof CustomAuthDetails details)) {
-            return ResponseEntity.badRequest().body(new ErrorResponse("Invalid authentication details"));
-        }
-        Long userId = details.getUserId();
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object detailsObj = authentication.getDetails();
+            if (detailsObj instanceof CustomAuthDetails details) {
+                Long userId = details.getUserId();
+                List<Long> enrolledCourseIds = enrollmentService.getCourseIdsByUserEnrollments(userId);
 
-        List<Long> enrolledCourseIds = enrollmentService.getCourseIdsByUserEnrollments(userId);
-
-        if (enrolledCourseIds != null && !enrolledCourseIds.isEmpty()) {
-            spec = (spec == null) ? CourseSpecification.idNotIn(enrolledCourseIds) : spec.and(CourseSpecification.idNotIn(enrolledCourseIds));
+                if (enrolledCourseIds != null && !enrolledCourseIds.isEmpty()) {
+                    spec = (spec == null) ? CourseSpecification.idNotIn(enrolledCourseIds)
+                            : spec.and(CourseSpecification.idNotIn(enrolledCourseIds));
+                }
+            }
         }
 
         List<CourseDtoPreview> courseDtos = courseService.getAllCourses(spec);

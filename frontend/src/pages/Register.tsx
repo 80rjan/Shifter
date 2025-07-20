@@ -11,11 +11,10 @@ import {CustomStepperConnector, CustomStepperStepIcon} from "../components/Custo
 import {Link, useNavigate} from "react-router-dom";
 import {motion, AnimatePresence} from "framer-motion";
 import type {UserRegister} from "../types/UserRegister.tsx";
-import RegisterStepOne from "../components/steps/RegisterStepOne.tsx";
-import RegisterStepTwo from "../components/steps/RegisterStepTwo.tsx";
-import RegisterStepThree from "../components/steps/RegisterStepThree.tsx";
-import RegisterStepFour from "../components/steps/RegisterStepFour.tsx";
-import RegisterStepFive from "../components/steps/RegisterStepFive.tsx";
+import RegisterStepOne from "../components/registerSteps/RegisterStepOne.tsx";
+import RegisterStepTwo from "../components/registerSteps/RegisterStepTwo.tsx";
+import RegisterStepThree from "../components/registerSteps/RegisterStepThree.tsx";
+import RegisterStepFour from "../components/registerSteps/RegisterStepFour.tsx";
 import {useGlobalContext} from "../context/GlobalContext.tsx";
 import {isValidEmail} from "../utils/validation.ts";
 import {checkEmailExistsApi} from "../api/auth.ts";
@@ -36,8 +35,7 @@ function Register() {
         workPosition: "",
         companyType: "",
         interests: [],
-        skills: [],
-        skillsGap: [],
+        skillGap: [],
     });
     const navigate = useNavigate();
 
@@ -122,8 +120,7 @@ function Register() {
         <RegisterStepOne setUser={setUser} user={user} setError={setError} />,
         <RegisterStepTwo setUser={setUser} user={user} setError={setError} />,
         <RegisterStepThree setUser={setUser} user={user} setError={setError} />,
-        <RegisterStepFour setUser={setUser} user={user} setError={setError} />,
-        <RegisterStepFive setUser={setUser} user={user} setError={setError} />
+        <RegisterStepFour setUser={setUser} user={user} setError={setError} />
     ];
 
     return (
