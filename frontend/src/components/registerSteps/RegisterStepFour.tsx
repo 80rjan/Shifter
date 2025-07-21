@@ -24,12 +24,12 @@ function RegisterStepFour({setUser, user, setError}: {
     }, []);
 
     useEffect(() => {
-        if (user.skillGap.length === 0) {
+        if (user.desiredSkills.length === 0) {
             setError("We’d love to support your growth — select at least one skill you'd like to improve");
         } else {
             setError("");
         }
-    }, [user.skillGap]);
+    }, [user.desiredSkills]);
 
     return (
         <section
@@ -37,9 +37,9 @@ function RegisterStepFour({setUser, user, setError}: {
             {
                 skills.length > 0 &&
                 <RegisterSlider
-                    label={"Identify Skills Gap"}
-                    name={"skillGap"}
-                    id={"skills-gap"}
+                    label={"Outline Your Learning Goals"}
+                    name={"desiredSkills"}
+                    id={"desired-skills"}
                     options={skills}
                     setUser={setUser}
                     user={user}

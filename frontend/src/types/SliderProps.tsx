@@ -1,7 +1,7 @@
 import React from "react";
 import type {UserRegister} from "./UserRegister.tsx";
 
-type UserArrayFields = 'interests' | 'skills' | 'skillGap';
+type UserArrayFields = 'interests' | 'desiredSkills';
 export interface SliderProps {
     label: string;
     name: UserArrayFields;

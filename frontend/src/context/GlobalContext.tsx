@@ -16,6 +16,8 @@ interface GlobalContextType {
     setUser: Dispatch<SetStateAction<User | null>>;
     accessToken: string | null;
     setAccessToken: Dispatch<SetStateAction<string | null>>;
+    authChecked: boolean;
+    setAuthChecked: Dispatch<SetStateAction<boolean>>;
     register: (user: UserRegister) => Promise<void>;
     login: (email: string, password: string) => Promise<void>;
     logout: () => void;
@@ -30,6 +32,7 @@ export const GlobalContext = createContext<GlobalContextType | undefined>(
 export const GlobalProvider = ({children}: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
     const [accessToken, setAccessToken] = useState<string | null>(null);
+    const [authChecked, setAuthChecked] = useState<boolean>(false);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
@@ -82,6 +85,7 @@ export const GlobalProvider = ({children}: { children: ReactNode }) => {
             .then(data => {
                 setAccessToken(data.accessToken);
                 setUser(data.user);
+                setAuthChecked(true);
             })
             .catch(error => {
                 setAccessToken(null);
@@ -105,6 +109,8 @@ export const GlobalProvider = ({children}: { children: ReactNode }) => {
                 setUser,
                 accessToken,
                 setAccessToken,
+                authChecked,
+                setAuthChecked,
                 register,
                 login,
                 logout,

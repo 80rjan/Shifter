@@ -76,7 +76,7 @@ function CourseCard({ card }: {card: CoursePreview}) {
                 {/*Title*/}
                 <h3 className="font-semibold text-xl">{card.titleShort}</h3>
 
-                {/*What will be learned*/}
+                {/*Topics covered*/}
                 <p className="text-black/60">{
                     card.topicsCovered.map(item =>
                         item

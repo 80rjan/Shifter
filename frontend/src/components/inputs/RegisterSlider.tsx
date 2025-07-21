@@ -28,10 +28,6 @@ function RegisterSlider(sliderProps: SliderProps) {
                 [sliderProps.name]: newArr,
             };
         });
-
-        // Reset filter input
-        // setFilterText("");
-        // setOptions(allOptions);
     };
 
     return (

@@ -11,6 +11,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AppLoader from "./AppLoader.tsx";
 import Profile from "./pages/Profile.tsx";
+import Dashboard from "./pages/Dashboard.tsx";
+import FreeConsultation from "./pages/FreeConsultation.tsx";
 
 function LayoutWrapper() {
     const location = useLocation();
@@ -24,9 +26,13 @@ function LayoutWrapper() {
                 <Route path="/register" element={<Register />} />
 
                 <Route path="/" element={<Home />} />
-                <Route path="/profile" element={<Profile />} />
                 <Route path="/courses" element={<Courses />} />
                 <Route path="/courses/:courseId/:courseTitle" element={<CourseDetails />} />
+
+                <Route path="/free-consultation" element={<FreeConsultation />} />
+
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/dashboard" element={<Dashboard />} />
             </Routes>
             {!hideLayout && <Footer />}
         </>

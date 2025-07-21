@@ -2,7 +2,6 @@ import {useGlobalContext} from "../context/GlobalContext.tsx";
 
 function ProfileInfo() {
     const {user} = useGlobalContext();
-    console.log(user)
 
     return (
         <section className="border-1 border-dark-blue/10 flex flex-col gap-6 items-center justify-center bg-white w-full rounded-xl p-8 ">

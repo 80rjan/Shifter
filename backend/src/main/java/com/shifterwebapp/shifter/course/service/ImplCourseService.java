@@ -13,6 +13,7 @@ import java.util.List;
 public interface ImplCourseService {
     List<CourseDtoPreview> getAllCourses(Specification<Course> specification);
     List<CourseDtoPreview> getRecommendedCourses(Long userId);
+    List<CourseDtoPreview> getEnrolledCourses(Long userId);
     List<CourseDtoPreview> getTopRatedCourses();
     List<CourseDtoPreview> getMostPopularCourses();
     CourseDtoDetail getCourseById(Long id);

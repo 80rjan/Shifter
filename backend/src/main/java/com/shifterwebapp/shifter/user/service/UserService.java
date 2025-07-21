@@ -63,11 +63,12 @@ public class UserService implements ImplUserService {
                 .email(registerDto.getEmail())
                 .passwordHash(passwordEncoder.encode(registerDto.getPassword()))
                 .isAdmin(false)
+                .hasUsedFreeConsultation(false)
                 .companyType(registerDto.getCompanyType())
                 .workPosition(registerDto.getWorkPosition())
                 .interests(registerDto.getInterests())
                 .skills(List.of())
-                .skillGap(registerDto.getSkillGap())
+                .desiredSkills(registerDto.getDesiredSkills())
                 .points(0)
                 .favoriteCourses(List.of())
                 .build();
@@ -100,6 +101,28 @@ public class UserService implements ImplUserService {
         return userMapper.toDto(user);
     }
 
+    @Override
+    public UserDto updateInterests(Long id, List<Interests> interests) {
+        validate.validateUserExists(id);
+        User user = userRepository.findById(id).orElseThrow();
+
+        user.setInterests(interests);
+
+        userRepository.save(user);
+        return userMapper.toDto(user);
+    }
+
+    @Override
+    public UserDto updateDesiredSkills(Long id, List<Skills> desiredSkills) {
+        validate.validateUserExists(id);
+        User user = userRepository.findById(id).orElseThrow();
+
+        user.setDesiredSkills(desiredSkills);
+
+        userRepository.save(user);
+        return userMapper.toDto(user);
+    }
+
 
     @Override
     public UserDto updateMail(Long userId, String newMail) {
@@ -115,17 +138,6 @@ public class UserService implements ImplUserService {
         validate.validateUserExists(userId);
         User user = userRepository.findById(userId).orElseThrow();
         user.setPasswordHash(passwordEncoder.encode(newPass));
-        userRepository.save(user);
-        return userMapper.toDto(user);
-    }
-
-    @Override
-    public UserDto addInterest(Long userId, Interests newInterest) {
-        validate.validateUserExists(userId);
-        User user = userRepository.findById(userId).orElseThrow();
-        if (!user.getInterests().contains(newInterest)) {
-            user.getInterests().add(newInterest);
-        }
         userRepository.save(user);
         return userMapper.toDto(user);
     }
@@ -149,17 +161,6 @@ public class UserService implements ImplUserService {
             if (!user.getSkills().contains(skill)) {
                 user.getSkills().add(skill);
             }
-        }
-        userRepository.save(user);
-        return userMapper.toDto(user);
-    }
-
-    @Override
-    public UserDto addSkillGap(Long userId, Skills newSkillGap) {
-        validate.validateUserExists(userId);
-        User user = userRepository.findById(userId).orElseThrow();
-        if (!user.getSkillGap().contains(newSkillGap)) {
-            user.getSkillGap().add(newSkillGap);
         }
         userRepository.save(user);
         return userMapper.toDto(user);
@@ -200,57 +201,24 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public UserDto removeInterest(Long userId, Interests removeInterest) {
+    public UserDto removeDesiredSkill(Long userId, Skills removeDesiredSkill) {
         validate.validateUserExists(userId);
         User user = userRepository.findById(userId).orElseThrow();
-        if (!user.getInterests().contains(removeInterest)) {
-            user.getInterests().remove(removeInterest);
+        if (!user.getDesiredSkills().contains(removeDesiredSkill)) {
+            user.getDesiredSkills().remove(removeDesiredSkill);
         }
         userRepository.save(user);
         return userMapper.toDto(user);
     }
 
     @Override
-    public UserDto removeSkill(Long userId, Skills removeSkill) {
+    public UserDto removeDesiredSkills(Long userId, List<Skills> removeDesiredSkills) {
         validate.validateUserExists(userId);
         User user = userRepository.findById(userId).orElseThrow();
-        if (!user.getSkills().contains(removeSkill)) {
-            user.getSkills().remove(removeSkill);
-        }
-        userRepository.save(user);
-        return userMapper.toDto(user);
-    }
-
-    @Override
-    public UserDto removeSkillGap(Long userId, Skills removeSkillGap) {
-        validate.validateUserExists(userId);
-        User user = userRepository.findById(userId).orElseThrow();
-        if (!user.getSkillGap().contains(removeSkillGap)) {
-            user.getSkillGap().remove(removeSkillGap);
-        }
-        userRepository.save(user);
-        return userMapper.toDto(user);
-    }
-
-    @Override
-    public UserDto removeSkillGaps(Long userId, List<Skills> removeSkillGaps) {
-        validate.validateUserExists(userId);
-        User user = userRepository.findById(userId).orElseThrow();
-        for (Skills skill : removeSkillGaps) {
-            if (!user.getSkillGap().contains(skill)) {
-                user.getSkillGap().remove(skill);
+        for (Skills skill : removeDesiredSkills) {
+            if (!user.getDesiredSkills().contains(skill)) {
+                user.getDesiredSkills().remove(skill);
             }
-        }
-        userRepository.save(user);
-        return userMapper.toDto(user);
-    }
-
-    @Override
-    public UserDto removeFavoriteCourse(Long userId, Integer removeFavoriteCourseId) {
-        validate.validateUserExists(userId);
-        User user = userRepository.findById(userId).orElseThrow();
-        if (!user.getFavoriteCourses().contains(removeFavoriteCourseId)) {
-            user.getFavoriteCourses().remove(removeFavoriteCourseId);
         }
         userRepository.save(user);
         return userMapper.toDto(user);

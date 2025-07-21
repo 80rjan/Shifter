@@ -4,10 +4,12 @@ import com.shifterwebapp.shifter.course.Course;
 import com.shifterwebapp.shifter.enums.EnrollmentStatus;
 import com.shifterwebapp.shifter.payment.Payment;
 import com.shifterwebapp.shifter.review.Review;
+import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgress;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -39,5 +41,8 @@ public class Enrollment {
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
+
+    @OneToMany(mappedBy = "enrollment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserCourseProgress> userCourseProgressList;
 }
 

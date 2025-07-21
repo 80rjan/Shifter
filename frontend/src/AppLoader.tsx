@@ -7,16 +7,32 @@ import {useEffect} from "react";
 import {fetchUserEnrollmentsApi} from "./api/enrollmentApi.ts";
 
 function AppLoader() {
-    const {accessToken} = useGlobalContext();
+    const {accessToken, authChecked} = useGlobalContext();
     const {
         setEnrollments,
+        recommendedCourses,
         setRecommendedCourses,
     } = useCourseStorage();
 
     useEffect(() => {
+        if (!authChecked) return;
+
         const load = async () => {
+            // Recommended Courses
             try {
-                // Enrollments
+                const recommendedStored = JSON.parse(sessionStorage.getItem("recommendedCourses") || "null");
+                if (recommendedStored) {
+                    setRecommendedCourses(JSON.parse(recommendedStored));
+                } else {
+                    const recommended = await fetchRecommendedCoursesApi(accessToken || "");
+                    setRecommendedCourses(recommended);
+                }
+            } catch (err) {
+                console.error("Failed to fetch recommended courses:", err);
+            }
+
+            // Enrollments
+            try {
                 try {
                     if (accessToken) {
                         const enrollments = await fetchUserEnrollmentsApi(accessToken);
@@ -26,20 +42,6 @@ function AppLoader() {
                     console.error("Failed to fetch enrollments:", err);
                 }
 
-                // Recommended Courses
-                try {
-                    const recommendedStored = sessionStorage.getItem("recommendedCourses");
-                    if (recommendedStored) {
-                        setRecommendedCourses(JSON.parse(recommendedStored));
-                    } else {
-                        const recommended = await fetchRecommendedCoursesApi(accessToken || "");
-                        setRecommendedCourses(recommended);
-                        sessionStorage.setItem("recommendedCourses", JSON.stringify(recommended));
-                    }
-                } catch (err) {
-                    console.error("Failed to fetch recommended courses:", err);
-                }
-
             } catch (err) {
                 console.error("Unexpected error in AppLoader:", err);
             }
@@ -47,7 +49,11 @@ function AppLoader() {
 
 
         load();
-    }, [accessToken]);
+    }, [authChecked, accessToken]);
+
+    useEffect(() => {
+        sessionStorage.setItem("recommendedCourses", JSON.stringify(recommendedCourses));
+    }, [recommendedCourses]);
 
 
     return null

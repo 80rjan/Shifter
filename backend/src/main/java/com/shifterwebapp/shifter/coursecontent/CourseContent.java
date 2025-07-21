@@ -2,6 +2,7 @@ package com.shifterwebapp.shifter.coursecontent;
 
 import com.shifterwebapp.shifter.course.Course;
 import com.shifterwebapp.shifter.courselecture.CourseLecture;
+import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgress;
 import jakarta.persistence.*;
 import com.shifterwebapp.shifter.enums.ContentType;
 import lombok.*;
@@ -30,5 +31,8 @@ public class CourseContent {
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
+
+    @OneToMany(mappedBy = "courseContent", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserCourseProgress> userCourseProgressList;
 }
 

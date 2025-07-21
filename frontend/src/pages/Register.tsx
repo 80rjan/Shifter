@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import ShifterLogo from "../../public/Shifter-S2W-Transparent.png";
 import ShifterArrow from "../../public/Shifter-Arrow-White.png";
 import {
@@ -35,9 +35,13 @@ function Register() {
         workPosition: "",
         companyType: "",
         interests: [],
-        skillGap: [],
+        desiredSkills: [],
     });
     const navigate = useNavigate();
+
+    useEffect(() => {
+        console.log(user)
+    }, [user]);
 
     const handleNext = async () => {
         if (error.length > 0) {

@@ -101,6 +101,22 @@ public class CourseController {
         return ResponseEntity.ok(recommendedCourses);
     }
 
+    @GetMapping("/enrolled")
+    public ResponseEntity<?> getEnrolledCourses(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.badRequest().body(new ErrorResponse("User not authenticated"));
+        }
+
+        Object detailsObj = authentication.getDetails();
+        if (!(detailsObj instanceof CustomAuthDetails details)) {
+            return ResponseEntity.badRequest().body(new ErrorResponse("Invalid authentication details"));
+        }
+        Long userId = details.getUserId();
+
+        List<CourseDtoPreview> recommendedCourses = courseService.getEnrolledCourses(userId);
+        return ResponseEntity.ok(recommendedCourses);
+    }
+
     @GetMapping("/{courseId}")
     public ResponseEntity<?> getCourseById(@PathVariable("courseId") Long courseId) {
         CourseDtoDetail courseDto = courseService.getCourseById(courseId);

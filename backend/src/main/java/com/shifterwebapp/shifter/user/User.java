@@ -39,6 +39,8 @@ public class User implements UserDetails {
 
     private Boolean isAdmin;
 
+    private Boolean hasUsedFreeConsultation;
+
     @Enumerated(EnumType.STRING)
     private CompanyType companyType;
     
@@ -54,14 +56,14 @@ public class User implements UserDetails {
 
     @ElementCollection(targetClass = Skills.class)
     @Enumerated(EnumType.STRING)
-    private List<Skills> skillGap;
+    private List<Skills> desiredSkills;
     
     private Integer points;
 
     @ElementCollection
     private List<Integer> favoriteCourses;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "user")
     private List<Payment> payments;             // WHEN DELETING USER SET PAYMENTS TO NULL, BECAUSE PAYMENTS DONT GET DELETED
 
 

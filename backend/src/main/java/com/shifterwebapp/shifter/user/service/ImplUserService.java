@@ -21,23 +21,19 @@ public interface ImplUserService {
     void deleteUser(Long id);
 
     UserDto updateUser(Long id, UserInfoDto userInfoDto);
-
+    UserDto updateInterests(Long id, List<Interests> interests);
+    UserDto updateDesiredSkills(Long id, List<Skills> desiredSkills);
     UserDto updateMail(Long id, String newMail);
     UserDto updatePassword(Long id, String newPassHash);
 
-    UserDto addInterest(Long id, Interests newInterest);
     UserDto addSkill(Long id, Skills newSkill);
     UserDto addSkills(Long id, List<Skills> newSkills);
-    UserDto addSkillGap(Long id, Skills newSkillGap);
     UserDto toggleFavoriteCourse(Long userId, Integer newFavoriteCourseId);
     UserDto addPoints(Long id, Integer newPointsAchieved);
     UserDto addPayment(Long id, Payment newPayment);
 
-    UserDto removeInterest(Long id, Interests removeInterest);
-    UserDto removeSkill(Long id, Skills removeSkill);
-    UserDto removeSkillGap(Long id, Skills removeSkillGap);
-    UserDto removeSkillGaps(Long id, List<Skills> removeSkillGaps);
-    UserDto removeFavoriteCourse(Long id, Integer removeFavoriteCourseId);
+    UserDto removeDesiredSkill(Long id, Skills removeDesiredSkill);
+    UserDto removeDesiredSkills(Long id, List<Skills> removeDesiredSkills);
     UserDto removePoints(Long id, Integer removePointsAchieved);
     UserDto removePayment(Long id, Payment removePayment);
 

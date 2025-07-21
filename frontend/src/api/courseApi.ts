@@ -31,6 +31,16 @@ export const fetchRecommendedCoursesApi = async (accessToken: string): Promise<C
     return res.data;
 }
 
+export const fetchEnrolledCoursesApi = async (accessToken: string): Promise<CoursePreview[]> => {
+    const res = await axios.get(`${backendUrl}/api/courses/enrolled`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    });
+
+    return res.data;
+}
+
 export const fetchCourseDetailsApi = async (courseId: number, signal?: AbortSignal): Promise<CourseDetail> => {
     const res = await axios.get(
         `${backendUrl}/api/courses/${courseId}`,

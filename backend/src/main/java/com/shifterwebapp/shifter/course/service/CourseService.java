@@ -85,6 +85,14 @@ public class CourseService implements ImplCourseService {
     }
 
     @Override
+    public List<CourseDtoPreview> getEnrolledCourses(Long userId) {
+        List<Long> enrolledCourseIds = enrollmentService.getCourseIdsByUserEnrollments(userId);
+        List<Course> courses = courseRepository.findAllById(enrolledCourseIds);
+        return courseMapperPreview.toDto(courses);
+    }
+
+
+    @Override
     public List<CourseDtoPreview> getTopRatedCourses() {
         List<Course> courses = courseRepository.findCoursesOrderedByRating();
         return courseMapperPreview.toDto(courses);

@@ -25,7 +25,7 @@ function RegisterStepThree({setUser, user, setError}: {
 
     useEffect(() => {
         if (user.interests.length === 0) {
-            setError("Help us understand you better — pick at least one preference");
+            setError("Help us understand you better — select at least one topic you like");
         } else {
             setError("");
         }
@@ -38,7 +38,7 @@ function RegisterStepThree({setUser, user, setError}: {
             {
                 interests.length > 0 &&
                 <RegisterSlider
-                    label={"Pick Your Preferences"}
+                    label={"Select Topics You Like"}
                     name={"interests"}
                     id={"interests"}
                     options={interests}

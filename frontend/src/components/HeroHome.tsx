@@ -5,8 +5,9 @@ import {Link} from 'react-router-dom';
 function HeroHome() {
 
     return (
-        <section className="shadow-md shadow-black/80 flex flex-col gap-0
-        items-center px-horizontal-md pt-30 w-full bg-white rounded-b-[60px]">
+        <section
+            className="relative flex flex-col gap-0
+        items-center pt-top-nav-md bg-white w-full rounded-b-[60px]">
             <h1 className="text-6xl">
                 Business <strong className="text-shifter">Excellence</strong>
                 <br/>
@@ -16,7 +17,7 @@ function HeroHome() {
             {/*<img src={ShifterRocket} alt="Shifter Rocket Image"*/}
             {/*     className="absolute left-30 rotate-50 w-20 h-auto"/>*/}
 
-            <div className="relative flex justify-between items-center w-full">
+            <div className="relative z-1 px-horizontal-md bg-white rounded-b-[60px] flex justify-between items-center w-full">
 
                 {/*LEFT TEXT*/}
                 <div className="relative max-w-sm text-left">
@@ -74,9 +75,13 @@ function HeroHome() {
                             <span className="whitespace-nowrap font-light">Courses Available</span>
                         </p>
                         <p className="text-right">
-                            <span className="text-3xl font-bold">2</span> <br/>
-                            <span className="whitespace-nowrap font-light">Expert Mentors</span>
+                            <span className="text-3xl font-bold">5000+</span> <br/>
+                            <span className="whitespace-nowrap font-light">Mentoring Hours</span>
                         </p>
+                        {/*<p className="text-right">*/}
+                        {/*    <span className="text-3xl font-bold">2</span> <br/>*/}
+                        {/*    <span className="whitespace-nowrap font-light">Expert Mentors</span>*/}
+                        {/*</p>*/}
                     </div>
                     <div className="flex gap-1 text-gold">
                         <StarFilled className="w-10 h-10 opacity-80"/>
@@ -88,7 +93,10 @@ function HeroHome() {
                 </div>
             </div>
 
-
+            <div
+                className="shadow-md shadow-black/80
+                absolute bottom-0 w-full h-40 z-0 rounded-b-[60px]"
+            />
         </section>
     )
 }

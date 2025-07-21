@@ -132,7 +132,7 @@ public class EnrollmentService implements ImplEnrollmentService{
         List<Skills> skillsGained = enrollment.getCourse().getSkillsGained();
         userService.addPoints(userId, PointsConstants.BUY_COURSE);
         userService.addSkills(userId, skillsGained);
-        userService.removeSkillGaps(userId, skillsGained);
+        userService.removeDesiredSkills(userId, skillsGained);
 
         enrollmentRepository.save(enrollment);
 

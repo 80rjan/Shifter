@@ -21,6 +21,8 @@ public class UserDto {
 
     private String name;
 
+    private Boolean hasUsedFreeConsultation;
+
     private CompanyType companyType;
 
     private String workPosition;
@@ -29,7 +31,7 @@ public class UserDto {
 
     private List<Skills> skills;
 
-    private List<Skills> skillGap;
+    private List<Skills> desiredSkills;
 
     private Integer points;
 
