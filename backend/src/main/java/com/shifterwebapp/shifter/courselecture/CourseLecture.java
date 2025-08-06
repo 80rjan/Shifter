@@ -29,7 +29,7 @@ public class CourseLecture {
     @Column(columnDefinition = "text")
     private String contentText;
 
-    private String contentUrl;
+    private String contentStoragePath;
 
     @Enumerated(EnumType.STRING)
     private ContentType contentType;

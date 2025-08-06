@@ -17,7 +17,7 @@ public class CourseContentController {
 
     @GetMapping("/{courseId}")
     public ResponseEntity<?> getCourseContent(@PathVariable Long courseId) {
-        List<CourseContentDto> courseContents = courseContentService.getCourseContentByCourseId(courseId);
+        List<CourseContentDtoPreview> courseContents = courseContentService.getCourseContentByCourseId(courseId);
         return ResponseEntity.ok(courseContents);
     }
 }

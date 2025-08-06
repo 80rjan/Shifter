@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from "react";
 import {fetchCoursesApi, fetchEnrolledCoursesApi} from "../api/courseApi.ts";
 import type {CoursePreview} from "../types/CoursePreview.tsx";
-import {useGlobalContext} from "../context/GlobalContext.tsx";
+import {useAuthContext} from "../context/AuthContext.tsx";
 import {useCourseStorage} from "../context/CourseStorage.ts";
 import StarFilled from "../assets/icons/StarFilled.tsx";
 
 function DashboardCourses() {
     const {allCourses: allCoursesStorage, setAllCourses: setAllCoursesStorage} = useCourseStorage();
-    const {user, loading, accessToken} = useGlobalContext();
+    const {user, loading, accessToken} = useAuthContext();
 
     const [selectedTab, setSelectedTab] = useState("all");
     const [enrolledCourses, setEnrolledCourses] = useState<CoursePreview[]>([]);

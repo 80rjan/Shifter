@@ -1,10 +1,10 @@
 package com.shifterwebapp.shifter.coursecontent.service;
 
-import com.shifterwebapp.shifter.coursecontent.CourseContentDto;
+import com.shifterwebapp.shifter.coursecontent.CourseContentDtoPreview;
 
 import java.util.List;
 
 public interface ImplCourseContentService {
-    List<CourseContentDto> getCourseContentByCourseId(Long courseId);
+    List<CourseContentDtoPreview> getCourseContentByCourseId(Long courseId);
 
 }

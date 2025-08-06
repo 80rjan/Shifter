@@ -8,11 +8,11 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface CourseLectureMapperPreview {
 
-    CourseLecturePreviewDto toDto(CourseLecture courseContent);
-    List<CourseLecturePreviewDto> toDto(List<CourseLecture> courseContents);
+    CourseLectureDtoPreview toDto(CourseLecture courseContent);
+    List<CourseLectureDtoPreview> toDto(List<CourseLecture> courseContents);
 
     @InheritInverseConfiguration
-    CourseLecture toEntity(CourseLecturePreviewDto courseContentDto);
+    CourseLecture toEntity(CourseLectureDtoPreview courseContentDto);
     @InheritInverseConfiguration
-    List<CourseLecture> toEntity(List<CourseLecturePreviewDto> courseContentDtos);
+    List<CourseLecture> toEntity(List<CourseLectureDtoPreview> courseContentDtos);
 }

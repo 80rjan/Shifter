@@ -2,7 +2,7 @@ import ReactDom from "react-dom";
 import {toEnumFormat} from "../utils/toEnumFormat.ts";
 import React, {useEffect} from "react";
 import {fetchCoursesSkillsApi, fetchCoursesTopicsApi, fetchRecommendedCoursesApi} from "../api/courseApi.ts";
-import {useGlobalContext} from "../context/GlobalContext.tsx";
+import {useAuthContext} from "../context/AuthContext.tsx";
 import {X} from "lucide-react";
 import ProfileModalAddSkillsInterestsSkeleton from "./skeletons/ProfileModalAddSkills&InterestsSkeleton.tsx";
 import {updateUserDesiredSkillsApi, updateUserInterestsApi} from "../api/userApi.ts";
@@ -13,7 +13,7 @@ function ProfileModalAddSkillsInterests({type, label, closeModal}: {
     label: string;
     closeModal: () => void;
 }) {
-    const {user, setUser, accessToken} = useGlobalContext();
+    const {user, setUser, accessToken} = useAuthContext();
     const {setRecommendedCourses} = useCourseStorage();
     const [allOptions, setAllOptions] = React.useState<string[]>([]);
     const [options, setOptions] = React.useState<string[]>([]);

@@ -1,7 +1,6 @@
 package com.shifterwebapp.shifter.coursecontent;
 
-import com.shifterwebapp.shifter.courselecture.CourseLecturePreviewDto;
-import com.shifterwebapp.shifter.enums.ContentType;
+import com.shifterwebapp.shifter.courselecture.CourseLectureDtoFull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,12 +10,11 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseContentDto {
+public class CourseContentDtoFull {
 
     private String title;
 
     private Integer position;
 
-    private List<CourseLecturePreviewDto> courseLectures;
+    private List<CourseLectureDtoFull> courseLectures;
 }
-

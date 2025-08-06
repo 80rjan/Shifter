@@ -11,7 +11,7 @@ import type {UserRegister} from "../types/UserRegister.tsx";
 import {loginApi, logoutApi, refreshAccessTokenApi, registerApi} from "../api/auth.ts";
 import {useNavigate} from "react-router-dom";
 
-interface GlobalContextType {
+interface AuthContextType {
     user: User | null;
     setUser: Dispatch<SetStateAction<User | null>>;
     accessToken: string | null;
@@ -25,11 +25,11 @@ interface GlobalContextType {
     loading: boolean;
 }
 
-export const GlobalContext = createContext<GlobalContextType | undefined>(
+export const AuthContext = createContext<AuthContextType | undefined>(
     undefined
 );
 
-export const GlobalProvider = ({children}: { children: ReactNode }) => {
+export const AuthProvider = ({children}: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
     const [accessToken, setAccessToken] = useState<string | null>(null);
     const [authChecked, setAuthChecked] = useState<boolean>(false);
@@ -85,7 +85,6 @@ export const GlobalProvider = ({children}: { children: ReactNode }) => {
             .then(data => {
                 setAccessToken(data.accessToken);
                 setUser(data.user);
-                setAuthChecked(true);
             })
             .catch(error => {
                 setAccessToken(null);
@@ -95,6 +94,7 @@ export const GlobalProvider = ({children}: { children: ReactNode }) => {
             })
             .finally(() => {
                 setLoading(false);
+                setAuthChecked(true);
             })
     };
 
@@ -103,7 +103,7 @@ export const GlobalProvider = ({children}: { children: ReactNode }) => {
     }, []);
 
     return (
-        <GlobalContext.Provider
+        <AuthContext.Provider
             value={{
                 user,
                 setUser,
@@ -119,13 +119,13 @@ export const GlobalProvider = ({children}: { children: ReactNode }) => {
             }}
         >
             {children}
-        </GlobalContext.Provider>
+        </AuthContext.Provider>
     );
 };
 
 // Custom hook for ease of use
-export const useGlobalContext = () => {
-    const context = React.useContext(GlobalContext);
+export const useAuthContext = () => {
+    const context = React.useContext(AuthContext);
     if (!context) {
         throw new Error("useGlobalContext must be used within a GlobalProvider");
     }

@@ -9,4 +9,5 @@ export interface User {
     desiredSkills: string[];
     points: number;
     favoriteCourses: number[];
+    isAdmin: boolean;
 }

@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import ShifterLogo from "../../public/Shifter-S2W-Transparent.png";
 import ShifterArrow from "../../public/Shifter-Arrow-White.png";
 import {
@@ -15,12 +15,12 @@ import RegisterStepOne from "../components/registerSteps/RegisterStepOne.tsx";
 import RegisterStepTwo from "../components/registerSteps/RegisterStepTwo.tsx";
 import RegisterStepThree from "../components/registerSteps/RegisterStepThree.tsx";
 import RegisterStepFour from "../components/registerSteps/RegisterStepFour.tsx";
-import {useGlobalContext} from "../context/GlobalContext.tsx";
+import {useAuthContext} from "../context/AuthContext.tsx";
 import {isValidEmail} from "../utils/validation.ts";
 import {checkEmailExistsApi} from "../api/auth.ts";
 
 function Register() {
-    const {register} = useGlobalContext();
+    const {register} = useAuthContext();
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [isCheckingEmail, setIsCheckingEmail] = React.useState<boolean>(false);
     const [activeStep, setActiveStep] = React.useState(0);
@@ -39,10 +39,6 @@ function Register() {
     });
     const navigate = useNavigate();
 
-    useEffect(() => {
-        console.log(user)
-    }, [user]);
-
     const handleNext = async () => {
         if (error.length > 0) {
             setShowError(true);
@@ -57,31 +53,32 @@ function Register() {
             }
 
             setIsCheckingEmail(true);
-            await checkEmailExistsApi(user.email)
-                .then(exists => {
-                    if (exists) {
-                        setError("Email already exists");
-                        setShowError(true);
-                        return;
-                    }
-                })
-                .catch(err => {
-                    setError("Error checking email. Theres a problem with the server.");
+            try {
+                const exists = await checkEmailExistsApi(user.email);
+                if (exists) {
+                    setError("Email already exists");
                     setShowError(true);
-                    console.error("Error checking email: ", err);
-                    return;
-                })
-                .finally(() => {
                     setIsCheckingEmail(false);
-                });
+                    return;
+                }
+            } catch (err) {
+                setError("Error checking email. There's a problem with the server.");
+                setShowError(true);
+                setIsCheckingEmail(false);
+                console.error("Error checking email: ", err);
+                return;
+            }
+            setIsCheckingEmail(false);
         }
 
-        // IF THE FUNCTION REACHES HERE, IT MEANS THAT THERE ARE NO ERRORS
+        // If we get here, no errors => proceed to next step
         setError("");
         setShowError(false);
         setDirection(1);
         setActiveStep((prev) => prev + 1);
     };
+
+
     const handleBack = () => {
         setDirection(-1);
         setActiveStep((prev) => prev - 1);
@@ -114,7 +111,7 @@ function Register() {
             navigate("/");
         } catch (err) {
             setError("Registration failed. Please try again.");
-            console.log("Registration error: ", err);
+            console.error("Registration error: ", err);
         } finally {
             setIsLoading(false);
         }

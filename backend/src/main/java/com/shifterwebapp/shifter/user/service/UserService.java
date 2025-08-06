@@ -2,8 +2,6 @@ package com.shifterwebapp.shifter.user.service;
 
 import com.shifterwebapp.shifter.Validate;
 import com.shifterwebapp.shifter.auth.RegisterDto;
-import com.shifterwebapp.shifter.enums.Interests;
-import com.shifterwebapp.shifter.enums.Skills;
 import com.shifterwebapp.shifter.user.UserInfoDto;
 import com.shifterwebapp.shifter.payment.Payment;
 import com.shifterwebapp.shifter.user.*;
@@ -102,7 +100,7 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public UserDto updateInterests(Long id, List<Interests> interests) {
+    public UserDto updateInterests(Long id, List<String> interests) {
         validate.validateUserExists(id);
         User user = userRepository.findById(id).orElseThrow();
 
@@ -113,7 +111,7 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public UserDto updateDesiredSkills(Long id, List<Skills> desiredSkills) {
+    public UserDto updateDesiredSkills(Long id, List<String> desiredSkills) {
         validate.validateUserExists(id);
         User user = userRepository.findById(id).orElseThrow();
 
@@ -143,7 +141,7 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public UserDto addSkill(Long userId, Skills newSkill) {
+    public UserDto addSkill(Long userId, String newSkill) {
         validate.validateUserExists(userId);
         User user = userRepository.findById(userId).orElseThrow();
         if (!user.getSkills().contains(newSkill)) {
@@ -154,10 +152,10 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public UserDto addSkills(Long userId, List<Skills> newSkills) {
+    public UserDto addSkills(Long userId, List<String> newSkills) {
         validate.validateUserExists(userId);
         User user = userRepository.findById(userId).orElseThrow();
-        for (Skills skill : newSkills) {
+        for (String skill : newSkills) {
             if (!user.getSkills().contains(skill)) {
                 user.getSkills().add(skill);
             }
@@ -201,7 +199,7 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public UserDto removeDesiredSkill(Long userId, Skills removeDesiredSkill) {
+    public UserDto removeDesiredSkill(Long userId, String removeDesiredSkill) {
         validate.validateUserExists(userId);
         User user = userRepository.findById(userId).orElseThrow();
         if (!user.getDesiredSkills().contains(removeDesiredSkill)) {
@@ -212,10 +210,10 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public UserDto removeDesiredSkills(Long userId, List<Skills> removeDesiredSkills) {
+    public UserDto removeDesiredSkills(Long userId, List<String> removeDesiredSkills) {
         validate.validateUserExists(userId);
         User user = userRepository.findById(userId).orElseThrow();
-        for (Skills skill : removeDesiredSkills) {
+        for (String skill : removeDesiredSkills) {
             if (!user.getDesiredSkills().contains(skill)) {
                 user.getDesiredSkills().remove(skill);
             }

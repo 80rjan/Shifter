@@ -1,9 +1,6 @@
-package com.shifterwebapp.shifter.course;
+package com.shifterwebapp.shifter.course.dto;
 
-import com.shifterwebapp.shifter.coursecontent.CourseContentDto;
 import com.shifterwebapp.shifter.enums.Difficulty;
-import com.shifterwebapp.shifter.enums.Interests;
-import com.shifterwebapp.shifter.enums.Skills;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,9 +32,9 @@ public class CourseDtoPreview {
 
     private Integer ratingCount;
 
-    private List<Skills> skillsGained;
+    private List<String> skillsGained;
 
-    private List<Interests> topicsCovered;
+    private List<String> topicsCovered;
 
     private Integer courseContentCount;
 }

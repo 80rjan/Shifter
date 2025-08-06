@@ -2,8 +2,6 @@ package com.shifterwebapp.shifter.user;
 
 import com.shifterwebapp.shifter.Validate;
 import com.shifterwebapp.shifter.auth.CustomAuthDetails;
-import com.shifterwebapp.shifter.enums.Interests;
-import com.shifterwebapp.shifter.enums.Skills;
 import com.shifterwebapp.shifter.exception.ErrorResponse;
 import com.shifterwebapp.shifter.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +46,7 @@ public class UserController {
     }
 
     @PutMapping("/update/interests")
-    public ResponseEntity<?> updateInterests(Authentication authentication, @RequestBody List<Interests> interests) {
+    public ResponseEntity<?> updateInterests(Authentication authentication, @RequestBody List<String> interests) {
         validate.validateUserIsAuthenticated(authentication);
         Object detailsObj = authentication.getDetails();
         if (!(detailsObj instanceof CustomAuthDetails details)) {
@@ -61,7 +59,7 @@ public class UserController {
     }
 
     @PutMapping("/update/desired-skills")
-    public ResponseEntity<?> updateDesiredSkills(Authentication authentication, @RequestBody List<Skills> desiredSkills) {
+    public ResponseEntity<?> updateDesiredSkills(Authentication authentication, @RequestBody List<String> desiredSkills) {
         validate.validateUserIsAuthenticated(authentication);
         Object detailsObj = authentication.getDetails();
         if (!(detailsObj instanceof CustomAuthDetails details)) {

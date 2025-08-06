@@ -12,12 +12,17 @@ function HeroCourseDetails({course, enrollUser}: { course: CourseDetail | null, 
         },
         {
             header: `${course?.durationMinutes && (course.durationMinutes / 60).toFixed(1)} Hours Duration`,
-            description: 'Self-paced course with flexible learning and optional exercises and templates.'
+            description: 'Learn at your own pace with flexible timing, plus optional exercises and helpful templates.'
         },
         {
-            header: `${(course?.rating || 0) / (course?.ratingCount || 1)} Rating`,
-            description: 'Rated highly by learners for its practical insights and actionable strategies.'
-        },
+            header: course?.ratingCount && course.ratingCount > 10
+                ? `${(course.rating || 0) / course.ratingCount} Rating`
+                : `New & Trending`,
+            description: course?.ratingCount && course.ratingCount > 10
+                ? 'Rated highly by learners for its practical insights and actionable strategies.'
+                : 'New to the platform, this course is growing quickly. Be among the first learners to benefit from its insights.'
+        }
+        ,
     ]
 
     const bgColor = "bg-[var(--card-color)]";
@@ -87,7 +92,7 @@ function HeroCourseDetails({course, enrollUser}: { course: CourseDetail | null, 
                     tripleInfo.map((info, index) => (
                         <div
                             key={index}
-                            className="flex flex-col gap-4 text-left px-20 py-8 border-r-2 border-white/40 last:border-r-0"
+                            className="w-1/3 flex flex-col gap-4 text-left px-20 py-8 border-r-2 border-white/40 last:border-r-0"
                         >
                             <h2 className="text-3xl font-bold">{info.header}</h2>
                             <p className="text-md font-light opacity-90">{info.description}</p>

@@ -136,37 +136,41 @@ body {
 }
 
 
-/* Hide scrollbar - works on most browsers */
-.scrollable {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none;  /* IE and Edge */
-}
 
-.scrollable::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
-}
-
-/* Show scrollbar on hover */
-.scrollable:hover {
+.scrollable-show {
     scrollbar-width: thin;
+    scrollbar-color: rgba(100, 100, 100, 0.5) transparent;
     -ms-overflow-style: auto;
-    scrollbar-color: rgba(0,0,0,0.4) transparent;
 }
-
-.scrollable:hover::-webkit-scrollbar {
+.scrollable-show::-webkit-scrollbar {
     display: block;
     width: 6px;
 }
+.scrollable-show::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.4);
+    border-radius: 4px;
+}
+.scrollable-show::-webkit-scrollbar-track {
+    background: transparent;
+}
 
+.scrollable {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+}
+.scrollable::-webkit-scrollbar {
+    background: transparent;
+}
+.scrollable::-webkit-scrollbar-thumb {
+    background-color: transparent;
+}
+.scrollable:hover {
+    scrollbar-color: rgba(0, 0, 0, 0.4) transparent;
+}
 .scrollable:hover::-webkit-scrollbar-thumb {
     background-color: rgba(0,0,0,0.4);
     border-radius: 4px;
 }
-
-.scrollable:hover::-webkit-scrollbar-track {
-    background: transparent;
-}
-
 
 
 input:-webkit-autofill,
@@ -183,7 +187,7 @@ select:-webkit-autofill {
 
 /* HTML: <div class="loader"></div> */
 .loader {
-    margin-left: 20px;
+    /*margin-left: 20px;*/
     /*width: 40px;*/
     aspect-ratio: 1;
     display: grid;

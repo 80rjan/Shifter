@@ -6,7 +6,7 @@ import {fetchCoursesApi} from "../api/courseApi.ts";
 import ShifterRocket from "../../public/Rocket-Blue-Fire.png"
 import {useCourseStorage} from "../context/CourseStorage.ts";
 import type {CoursePreview} from "../types/CoursePreview.tsx";
-import {useGlobalContext} from "../context/GlobalContext.tsx";
+import {useAuthContext} from "../context/AuthContext.tsx";
 import {useLocation, useNavigate} from "react-router-dom";
 import CoursesFiltersSkeleton from "../components/skeletons/CoursesFiltersSkeleton.tsx";
 import CoursesGridSkeleton from "../components/skeletons/CoursesGridSkeleton.tsx";
@@ -39,7 +39,7 @@ function getInitialFiltersFromSearch(locationSearch: string): FilterParams {
 function Courses() {
     const navigate = useNavigate();
     const location = useLocation();
-    const {accessToken, user, loading: authLoading} = useGlobalContext();
+    const {accessToken, user, loading: authLoading} = useAuthContext();
     const {allCourses, setAllCourses} = useCourseStorage();
 
     const [courses, setCourses] = React.useState<CoursePreview[] | null>(null);

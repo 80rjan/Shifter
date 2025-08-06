@@ -3,7 +3,7 @@ import ShifterArrow from "../../public/Shifter-Arrow-White.png";
 import React from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { useGlobalContext } from "../context/GlobalContext.tsx";
+import { useAuthContext } from "../context/AuthContext.tsx";
 
 interface InputProps {
     placeholder: string;
@@ -16,7 +16,7 @@ interface InputProps {
 }
 
 function Login() {
-    const { login } = useGlobalContext();
+    const { login } = useAuthContext();
     const [email, setEmail] = React.useState<string>("");
     const [password, setPassword] = React.useState<string>("");
     const [error, setError] = React.useState<string>("");

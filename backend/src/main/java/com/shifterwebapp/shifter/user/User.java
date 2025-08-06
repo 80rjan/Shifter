@@ -3,8 +3,6 @@ package com.shifterwebapp.shifter.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shifterwebapp.shifter.payment.Payment;
 import com.shifterwebapp.shifter.enums.CompanyType;
-import com.shifterwebapp.shifter.enums.Interests;
-import com.shifterwebapp.shifter.enums.Skills;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,8 +22,6 @@ import java.util.List;
 @Table(name = "_user") // Using _user to avoid conflict with reserved keyword in SQL
 public class User implements UserDetails {
     @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
-//    @SequenceGenerator(name = "user_seq", sequenceName = "user_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -46,17 +42,17 @@ public class User implements UserDetails {
     
     private String workPosition;
     
-    @ElementCollection(targetClass = Interests.class)
-    @Enumerated(EnumType.STRING)
-    private List<Interests> interests;
+    @ElementCollection
+    @Column(columnDefinition = "text")
+    private List<String> interests;
 
-    @ElementCollection(targetClass = Skills.class)
-    @Enumerated(EnumType.STRING)
-    private List<Skills> skills;
+    @ElementCollection
+    @Column(columnDefinition = "text")
+    private List<String> skills;
 
-    @ElementCollection(targetClass = Skills.class)
-    @Enumerated(EnumType.STRING)
-    private List<Skills> desiredSkills;
+    @ElementCollection
+    @Column(columnDefinition = "text")
+    private List<String> desiredSkills;
     
     private Integer points;
 

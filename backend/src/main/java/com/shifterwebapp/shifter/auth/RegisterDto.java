@@ -1,8 +1,6 @@
 package com.shifterwebapp.shifter.auth;
 
 import com.shifterwebapp.shifter.enums.CompanyType;
-import com.shifterwebapp.shifter.enums.Interests;
-import com.shifterwebapp.shifter.enums.Skills;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -26,7 +24,7 @@ public class RegisterDto {
 
     private String workPosition;
 
-    private List<Interests> interests;
+    private List<String> interests;
 
-    private List<Skills> desiredSkills;
+    private List<String> desiredSkills;
 }

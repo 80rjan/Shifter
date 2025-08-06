@@ -1,7 +1,7 @@
-import {useGlobalContext} from "../context/GlobalContext.tsx";
+import {useAuthContext} from "../context/AuthContext.tsx";
 
 function FreeConsultation() {
-    const {user} = useGlobalContext();
+    const {user} = useAuthContext();
 
     return (
         <main className="">

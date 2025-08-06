@@ -48,7 +48,7 @@ public class EnrollmentService implements ImplEnrollmentService{
 
     @Override
     public List<Long> getCourseIdsByUserEnrollments(Long userId) {
-        validate.validateCourseExists(userId);
+        validate.validateUserExists(userId);
         return enrollmentRepository.getCourseIdsByUserEnrollments(userId);
     }
 
@@ -129,7 +129,7 @@ public class EnrollmentService implements ImplEnrollmentService{
         enrollment.setEnrollmentStatus(EnrollmentStatus.COMPLETED);
 
         Long userId = enrollment.getPayment().getUser().getId();
-        List<Skills> skillsGained = enrollment.getCourse().getSkillsGained();
+        List<String> skillsGained = enrollment.getCourse().getSkillsGained();
         userService.addPoints(userId, PointsConstants.BUY_COURSE);
         userService.addSkills(userId, skillsGained);
         userService.removeDesiredSkills(userId, skillsGained);

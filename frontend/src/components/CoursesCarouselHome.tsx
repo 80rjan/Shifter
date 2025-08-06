@@ -10,10 +10,11 @@ import CourseCardSkeleton from "./skeletons/CourseCardSkeleton.tsx";
 
 function CoursesCarouselHome() {
     const {recommendedCourses} = useCourseStorage();
+    console.log(recommendedCourses)
 
     return (
         <section
-            className="relative flex flex-col gap-10 items-center bg-dark-blue/10 py-vertical-md px-4 overflow-clip">
+            className="relative flex flex-col gap-10 items-center bg-dark-blue/10 py-vertical-md px-horizontal-lg overflow-clip">
             <img src={ShifterArrow} alt="Shifter Arrow"
                  className="absolute opacity-30 h-150 w-120 -rotate-130 -top-30 right-0"/>
             <img src={ShifterArrow} alt="Shifter Arrow"
@@ -29,22 +30,36 @@ function CoursesCarouselHome() {
                 </p>
             </div>
 
-            <div className="relative max-w-[85%] mx-0 my-auto w-full p-0">
-                <Slider {...settings}>
-                    {
-                        recommendedCourses ?
-                            recommendedCourses.map((course, index) => (
-                                <CourseCard card={course} key={index}/>
-                                // <div className="h-full flex flex-col justify-center bg-red-500" key={index}>
-                                //     <CourseCard card={course}/>
-                                // </div>
-                            )) :
-                            [...Array(4)].map((_, index) => (
-                                <CourseCardSkeleton key={index} />
-                            ))
-                    }
-                </Slider>
+            <div className="relative mx-0 my-auto w-full p-0">
+                {recommendedCourses && recommendedCourses.length > 0 ? (
+                    recommendedCourses.length <= 3 ? (
+                        <div className="flex gap-4 justify-center items-center">
+                            {recommendedCourses.map((course, index) => (
+                                <div key={index} className="max-w-1/3">
+                                    <CourseCard card={course} key={index}/>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <Slider {...settings}>
+                            {recommendedCourses.map((course, index) => (
+                                <div key={index}>
+                                    <CourseCard card={course}/>
+                                </div>
+                            ))}
+                        </Slider>
+                    )
+                ) : (
+                    <Slider {...settings}>
+                        {[...Array(4)].map((_, index) => (
+                            <div key={index}>
+                                <CourseCardSkeleton/>
+                            </div>
+                        ))}
+                    </Slider>
+                )}
             </div>
+
         </section>
     );
 }

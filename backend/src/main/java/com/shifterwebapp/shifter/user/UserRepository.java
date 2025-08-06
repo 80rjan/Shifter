@@ -12,6 +12,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
 
+    @Query("select case when count(u) > 0 then true else false end from User u where u.id = :userId and u.isAdmin = true")
+    boolean isAdmin(@Param("userId") Long userId);
+
     @Query("select u.id from User u where u.email = :email")
     Optional<Long> findUserIdByEmail(@Param("email") String email);
 }

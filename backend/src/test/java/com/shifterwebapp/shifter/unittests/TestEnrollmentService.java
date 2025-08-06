@@ -9,9 +9,11 @@ import com.shifterwebapp.shifter.enrollment.EnrollmentMapper;
 import com.shifterwebapp.shifter.enrollment.EnrollmentRepository;
 import com.shifterwebapp.shifter.enums.EnrollmentStatus;
 import com.shifterwebapp.shifter.enrollment.service.EnrollmentService;
+import com.shifterwebapp.shifter.enums.PaymentMethod;
 import com.shifterwebapp.shifter.payment.Payment;
 import com.shifterwebapp.shifter.payment.PaymentRepository;
 import com.shifterwebapp.shifter.enums.PaymentStatus;
+import com.shifterwebapp.shifter.payment.service.PaymentService;
 import com.shifterwebapp.shifter.user.User;
 import com.shifterwebapp.shifter.user.service.UserService;
 import org.junit.jupiter.api.Assertions;
@@ -35,6 +37,8 @@ public class TestEnrollmentService {
     CourseRepository courseRepository;
     @Mock
     PaymentRepository paymentRepository;
+    @Mock
+    PaymentService paymentService;
     @Mock
     EnrollmentMapper enrollmentMapper;
     @Mock
@@ -133,17 +137,14 @@ public class TestEnrollmentService {
         dto.setEnrollmentStatus(EnrollmentStatus.ACTIVE);
 
         User mockUser = Mockito.mock(User.class);
-        Mockito.when(mockUser.getId()).thenReturn(userId);
 
         Payment mockPayment = Mockito.mock(Payment.class);
-        Mockito.when(mockPayment.getUser()).thenReturn(mockUser);
         Mockito.when(mockPayment.getPaymentStatus()).thenReturn(PaymentStatus.COMPLETED);
 
-        Mockito.when(paymentRepository.findById(paymentId)).thenReturn(Optional.of(mockPayment));
         Mockito.doNothing().when(validate).validateCourseExists(courseId);
-        Mockito.doNothing().when(validate).validatePaymentExists(paymentId);
         Mockito.doNothing().when(validate).validateUserExists(userId);
         Mockito.when(enrollmentRepository.findIsUserEnrolledInCourse(userId, courseId)).thenReturn(false);
+        Mockito.when(paymentService.initiatePayment(userId, courseId, PaymentMethod.CASYS)).thenReturn(mockPayment);
         Mockito.when(courseRepository.findById(courseId)).thenReturn(Optional.of(new Course()));
         Mockito.when(enrollmentRepository.save(Mockito.any(Enrollment.class))).thenAnswer(arguments -> arguments.getArgument(0));
         Mockito.when(enrollmentMapper.toDto(Mockito.any(Enrollment.class))).thenReturn(dto);

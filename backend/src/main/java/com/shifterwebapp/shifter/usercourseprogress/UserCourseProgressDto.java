@@ -1,6 +1,6 @@
 package com.shifterwebapp.shifter.usercourseprogress;
 
-import com.shifterwebapp.shifter.coursecontent.CourseContentDto;
+import com.shifterwebapp.shifter.coursecontent.CourseContentDtoPreview;
 import lombok.*;
 
 @Data
@@ -10,7 +10,7 @@ public class UserCourseProgressDto {
 
     private Long id;
 
-    private CourseContentDto courseContent;
+    private CourseContentDtoPreview courseContent;
 
     private boolean completed;
 

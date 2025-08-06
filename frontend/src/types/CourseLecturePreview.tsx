@@ -1,8 +1,9 @@
+import type {ContentType} from "./ContentType.tsx";
 
 export interface CourseLecturePreview {
     title: string;
     description: string;
     durationMinutes: number;
     position: number;
-    contentType: "VIDEO" | "TEXT" | "FILE" | "QUIZ";
+    contentType: ContentType;
 }

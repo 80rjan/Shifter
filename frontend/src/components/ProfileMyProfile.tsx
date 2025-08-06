@@ -1,10 +1,10 @@
-import {useGlobalContext} from "../context/GlobalContext.tsx";
+import {useAuthContext} from "../context/AuthContext.tsx";
 import React, {useState} from "react";
 import {updateUserApi} from "../api/userApi.ts";
 
 function ProfileMyProfile() {
     const [loading, setLoading] = useState(false);
-    const {user, setUser, accessToken} = useGlobalContext();
+    const {user, setUser, accessToken} = useAuthContext();
 
     const [formData, setFormData] = useState({
         name: user?.name || "",
@@ -62,7 +62,7 @@ function ProfileMyProfile() {
                 <div className="flex gap-4 items-center">
                     <button
                         className="shadow-md shadow-shifter/30 hover:shadow-lg hover:shadow-shifter/50 transition-all duration-200 ease-in-out cursor-pointer
-                    bg-shifter px-12 py-2 w-fit text-white rounded-sm font-semibold border-2 border-white/40"
+                        bg-shifter px-12 py-2 w-fit text-white rounded-sm font-semibold border-2 border-white/40"
                         type="submit">
                         {loading ? "Saving..." : "Save Changes"}
                     </button>

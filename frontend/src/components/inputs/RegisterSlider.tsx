@@ -1,7 +1,6 @@
 import React from "react";
 import type {UserRegister} from "../../types/UserRegister.tsx";
 import type {SliderProps} from "../../types/SliderProps.tsx";
-import {toEnumFormat} from "../../utils/toEnumFormat.ts";
 
 function RegisterSlider(sliderProps: SliderProps) {
     const [allOptions] = React.useState<string[]>(sliderProps.options || []);
@@ -47,7 +46,7 @@ function RegisterSlider(sliderProps: SliderProps) {
 
             <div className="relative custom-scrollbar flex gap-2 flex-wrap w-full max-h-[30vh] items-center overflow-y-auto">
                 {options.map((option, index) => {
-                    const isSelected = sliderProps.user[sliderProps.name]?.includes(toEnumFormat(option)) || false;
+                    const isSelected = sliderProps.user[sliderProps.name]?.includes(option) || false;
 
                     return (
                         <button

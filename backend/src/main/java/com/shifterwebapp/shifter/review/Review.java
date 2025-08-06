@@ -14,8 +14,6 @@ import java.util.Date;
 @Entity
 public class Review {
     @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "review_seq")
-//    @SequenceGenerator(name = "review_seq", sequenceName = "review_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

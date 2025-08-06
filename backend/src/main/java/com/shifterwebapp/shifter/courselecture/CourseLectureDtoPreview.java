@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseLecturePreviewDto {
+public class CourseLectureDtoPreview {
 
     private String title;
 

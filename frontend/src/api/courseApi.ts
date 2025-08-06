@@ -1,17 +1,27 @@
-import type {FilterParams} from "../types/FilterParams.tsx";
 import axios from "axios";
-import qs from 'qs';
 import type {CoursePreview} from "../types/CoursePreview.tsx";
 import type {CourseDetail} from "../types/CourseDetail.tsx";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-export const fetchCoursesApi = async (accessToken?: string, params?: FilterParams, signal?: AbortSignal): Promise<CoursePreview[]> => {
+// export const fetchCoursesApi = async (accessToken?: string, params?: FilterParams, signal?: AbortSignal): Promise<CoursePreview[]> => {
+//     const res = await axios.get(
+//         `${backendUrl}/api/courses`,
+//         {
+//             params,
+//             paramsSerializer: params => qs.stringify(params, {arrayFormat: 'repeat'}),
+//             signal,
+//             headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined
+//
+//         }
+//     )
+//
+//     return res.data;
+// }
+export const fetchCoursesApi = async (accessToken?: string, signal?: AbortSignal): Promise<CoursePreview[]> => {
     const res = await axios.get(
         `${backendUrl}/api/courses`,
         {
-            params,
-            paramsSerializer: params => qs.stringify(params, {arrayFormat: 'repeat'}),
             signal,
             headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined
 

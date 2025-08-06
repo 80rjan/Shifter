@@ -2,20 +2,14 @@ package com.shifterwebapp.shifter.enrollment;
 
 import com.shifterwebapp.shifter.Validate;
 import com.shifterwebapp.shifter.auth.CustomAuthDetails;
-import com.shifterwebapp.shifter.course.CourseDtoPreview;
 import com.shifterwebapp.shifter.enrollment.service.EnrollmentService;
 import com.shifterwebapp.shifter.exception.ErrorResponse;
-import com.shifterwebapp.shifter.payment.service.PaymentService;
-import com.shifterwebapp.shifter.user.User;
-import com.shifterwebapp.shifter.user.UserRepository;
-import com.shifterwebapp.shifter.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController

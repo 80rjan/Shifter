@@ -2,8 +2,6 @@ package com.shifterwebapp.shifter.user;
 
 import com.shifterwebapp.shifter.payment.PaymentDto;
 import com.shifterwebapp.shifter.enums.CompanyType;
-import com.shifterwebapp.shifter.enums.Interests;
-import com.shifterwebapp.shifter.enums.Skills;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,15 +25,17 @@ public class UserDto {
 
     private String workPosition;
 
-    private List<Interests> interests;
+    private List<String> interests;
 
-    private List<Skills> skills;
+    private List<String> skills;
 
-    private List<Skills> desiredSkills;
+    private List<String> desiredSkills;
 
     private Integer points;
 
     private List<Integer> favoriteCourses;
+
+    private Boolean isAdmin;
 }
 
 

@@ -2,7 +2,7 @@ import React from "react";
 import Checkbox from "@mui/material/Checkbox";
 import {durationToQueryMapper, priceToQueryMapper} from "../utils/mapper.ts";
 import type {FilterParams} from "../types/FilterParams.tsx";
-import {useGlobalContext} from "../context/GlobalContext.tsx";
+import {useAuthContext} from "../context/AuthContext.tsx";
 
 function CoursesFilters({filters, setFilters, topics, skills}: {
     filters: FilterParams,
@@ -10,7 +10,7 @@ function CoursesFilters({filters, setFilters, topics, skills}: {
     topics: string[] | null,
     skills: string[] | null,
 }) {
-    const {user} = useGlobalContext();
+    const {user} = useAuthContext();
     const duration = [
         "< 3 hours",
         "3-6 hours",
@@ -86,7 +86,7 @@ function CoursesFilters({filters, setFilters, topics, skills}: {
         <aside
             className="flex flex-col gap-8 pl-8 pt-12 text-left sticky top-0 h-screen border-r-2 border-black/10">
             <h2 className="text-2xl font-medium">Filter by</h2>
-            <div className="relative flex flex-col gap-12 pl-4 pr-2 pb-20 overflow-y-auto scrollable">
+            <div className="relative flex flex-col gap-12 pl-4 pr-2 pb-20 overflow-y-scroll scrollable">
                 {
                     user && (
                         <FilterSelect

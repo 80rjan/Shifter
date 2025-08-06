@@ -1,5 +1,6 @@
 package com.shifterwebapp.shifter;
 
+import com.shifterwebapp.shifter.auth.CustomAuthDetails;
 import com.shifterwebapp.shifter.course.CourseRepository;
 import com.shifterwebapp.shifter.exception.ResourceNotFoundException;
 import com.shifterwebapp.shifter.exception.UnauthorizedException;
@@ -32,6 +33,20 @@ public class Validate {
     public void validateUserIsAuthenticated(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated() || authentication.getName() == null) {
             throw new UnauthorizedException("User is not authenticated");
+        }
+    }
+
+    public void validateUserIsAdmin(Authentication authentication) {
+        validateUserIsAuthenticated(authentication);
+        Object detailsObj = authentication.getDetails();
+        if (detailsObj instanceof CustomAuthDetails details) {
+            Long userId = details.getUserId();
+            boolean isAdmin = userRepository.isAdmin(userId);
+            if (!isAdmin) {
+                throw new UnauthorizedException("User is not an admin");
+            }
+        } else {
+            throw new UnauthorizedException("User is not an admin");
         }
     }
 

@@ -5,8 +5,6 @@ import com.shifterwebapp.shifter.user.UserInfoDto;
 import com.shifterwebapp.shifter.payment.Payment;
 import com.shifterwebapp.shifter.user.User;
 import com.shifterwebapp.shifter.user.UserDto;
-import com.shifterwebapp.shifter.enums.Interests;
-import com.shifterwebapp.shifter.enums.Skills;
 
 import java.util.List;
 
@@ -21,19 +19,19 @@ public interface ImplUserService {
     void deleteUser(Long id);
 
     UserDto updateUser(Long id, UserInfoDto userInfoDto);
-    UserDto updateInterests(Long id, List<Interests> interests);
-    UserDto updateDesiredSkills(Long id, List<Skills> desiredSkills);
+    UserDto updateInterests(Long id, List<String> interests);
+    UserDto updateDesiredSkills(Long id, List<String> desiredSkills);
     UserDto updateMail(Long id, String newMail);
     UserDto updatePassword(Long id, String newPassHash);
 
-    UserDto addSkill(Long id, Skills newSkill);
-    UserDto addSkills(Long id, List<Skills> newSkills);
+    UserDto addSkill(Long id, String newSkill);
+    UserDto addSkills(Long id, List<String> newSkills);
     UserDto toggleFavoriteCourse(Long userId, Integer newFavoriteCourseId);
     UserDto addPoints(Long id, Integer newPointsAchieved);
     UserDto addPayment(Long id, Payment newPayment);
 
-    UserDto removeDesiredSkill(Long id, Skills removeDesiredSkill);
-    UserDto removeDesiredSkills(Long id, List<Skills> removeDesiredSkills);
+    UserDto removeDesiredSkill(Long id, String removeDesiredSkill);
+    UserDto removeDesiredSkills(Long id, List<String> removeDesiredSkills);
     UserDto removePoints(Long id, Integer removePointsAchieved);
     UserDto removePayment(Long id, Payment removePayment);
 

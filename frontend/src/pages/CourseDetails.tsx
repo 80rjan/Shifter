@@ -6,14 +6,14 @@ import CourseDetailsInfo from "../components/CourseDetailsInfo.tsx";
 import CoursesCarouselCourseDetails from "../components/CoursesCarouselCourseDetails.tsx";
 import type {CourseDetail} from "../types/CourseDetail.tsx";
 import {enrollUserApi} from "../api/enrollmentApi.ts";
-import {useGlobalContext} from "../context/GlobalContext.tsx";
+import {useAuthContext} from "../context/AuthContext.tsx";
 import {showInfoToast} from "../utils/showInfoToast.ts";
 import {useCourseStorage} from "../context/CourseStorage.ts";
 import HeroCourseDetailsSkeleton from "../components/skeletons/HeroCourseDetailsSkeleton.tsx";
 import CourseDetailsInfoSkeleton from "../components/skeletons/CourseDetailsInfoSkeleton.tsx";
 
 function CourseDetails() {
-    const { user, accessToken, loading: authLoading } = useGlobalContext();
+    const { user, accessToken, loading: authLoading } = useAuthContext();
     const { enrollments, setEnrollments } = useCourseStorage();
     const [loading, setLoading] = useState<boolean>(true);
     const { courseId } = useParams<{ courseId: string; courseTitle: string }>();

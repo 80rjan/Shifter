@@ -1,9 +1,10 @@
 import {Link} from "react-router-dom";
 import logo from "../../public/Shifter-S2W-White-Transparent.png"
-import {useGlobalContext} from "../context/GlobalContext.tsx";
+import {useAuthContext} from "../context/AuthContext.tsx";
+import NavbarLink from "../components/NavbarLink.tsx";
 
 function Navbar() {
-    const {user} = useGlobalContext();
+    const {user} = useAuthContext();
 
     return (
         <nav
@@ -13,9 +14,9 @@ function Navbar() {
             {/* Left nav links */}
             <div className="flex w-36/100 justify-between text-lg items-center">
                 {/* Link group */}
-                <LinkGroup to="/courses" label="Courses"/>
-                <LinkGroup to="/mentoring" label="Mentoring"/>
-                <LinkGroup to="/academies" label="Academies"/>
+                <NavbarLink to="/courses" label="Courses"/>
+                <NavbarLink to="/mentoring" label="Mentoring"/>
+                <NavbarLink to="/academies" label="Academies"/>
             </div>
 
             {/* Centered Logo (NO ABSOLUTE!) */}
@@ -27,10 +28,10 @@ function Navbar() {
 
             {/* Right nav links + profile */}
             <div className="flex w-36/100 justify-between text-lg items-center gap-6">
-                <LinkGroup to="/about" label="About"/>
+                <NavbarLink to="/about" label="About"/>
                 {user ? (
                     <>
-                        <LinkGroup to="/dashboard" label="Dashboard"/>
+                        <NavbarLink to="/dashboard" label="Dashboard"/>
                         <div className="flex gap-4 items-center">
                             <Link
                                 to="/profile"
@@ -60,15 +61,6 @@ function Navbar() {
 
     )
 }
-
-const LinkGroup = ({to, label}: { to: string; label: string }) => (
-    <div className="flex flex-col gap-0 overflow-clip p-1 group">
-        <Link to={to} className="transition-all duration-300 ease-in-out z-10">
-            {label}
-        </Link>
-        <hr className="relative -left-30 group-hover:-left-6 border-t-2 rounded-full transition-all duration-300 ease-in-out"/>
-    </div>
-);
 
 
 export default Navbar

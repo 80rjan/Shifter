@@ -6,14 +6,15 @@ import { Link } from "react-router-dom";
 import type {CoursePreview} from "../types/CoursePreview.tsx";
 import HeartOutline from "../assets/icons/HeartOutline.tsx";
 import HeartFill from "../assets/icons/HeartFill.tsx";
-import {useGlobalContext} from "../context/GlobalContext.tsx";
+import {useAuthContext} from "../context/AuthContext.tsx";
 import {toggleFavoriteCourseApi} from "../api/userApi.ts";
 import {showInfoToast} from "../utils/showInfoToast.ts";
+import {Sparkle} from "lucide-react";
 
 
 
 function CourseCard({ card }: {card: CoursePreview}) {
-    const { accessToken, user, setUser } = useGlobalContext()
+    const { accessToken, user, setUser } = useAuthContext()
     const [isHoveredButton, setisHoveredButton] = React.useState<boolean>(false);
     const [isHoveredHeart, setIsHoveredHeart] = React.useState<boolean>(false);
     const bgColor = "bg-[var(--card-color)]";
@@ -90,12 +91,22 @@ function CourseCard({ card }: {card: CoursePreview}) {
 
             {/*INFO*/}
             <div className="flex flex-wrap gap-2 whitespace-nowrap">
-                <div className="flex items-center gap-1 px-2 border-1 border-black/20 rounded-sm text-black/60">
-                    <StarFilled className="w-4 h-4 text-gold"/> {card.rating / card.ratingCount}
-                </div>
-                <div className="flex items-center gap-1 px-2 border-1 border-black/20 rounded-sm text-black/60">
-                    {card.ratingCount} reviews
-                </div>
+                {
+                    card.ratingCount > 10 ? (
+                        <>
+                            <div className="flex items-center gap-1 px-2 border-1 border-black/20 rounded-sm text-black/60">
+                                <StarFilled className="w-4 h-4 text-gold"/> {card.rating / card.ratingCount}
+                            </div>
+                            <div className="flex items-center gap-1 px-2 border-1 border-black/20 rounded-sm text-black/60">
+                                {card.ratingCount} reviews
+                            </div>
+                        </>
+                    ) : (
+                        <div className="flex items-center gap-1 px-2 border-1 border-black/20 rounded-sm text-black/60">
+                            <Sparkle className="w-4 h-4 text-gold"/> New
+                        </div>
+                    )
+                }
                 <div className="flex items-center gap-1 px-2 border-1 border-black/20 rounded-sm text-black/60">
                     {(card.durationMinutes / 60).toFixed(1)} hours
                 </div>

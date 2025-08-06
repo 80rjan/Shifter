@@ -1,15 +1,13 @@
-import {useGlobalContext} from "./context/GlobalContext.tsx";
+import {useAuthContext} from "./context/AuthContext.tsx";
 import {useCourseStorage} from "./context/CourseStorage.ts";
 import {
     fetchRecommendedCoursesApi
 } from "./api/courseApi.ts";
 import {useEffect} from "react";
-import {fetchUserEnrollmentsApi} from "./api/enrollmentApi.ts";
 
 function AppLoader() {
-    const {accessToken, authChecked} = useGlobalContext();
+    const {accessToken, authChecked} = useAuthContext();
     const {
-        setEnrollments,
         recommendedCourses,
         setRecommendedCourses,
     } = useCourseStorage();
@@ -29,21 +27,6 @@ function AppLoader() {
                 }
             } catch (err) {
                 console.error("Failed to fetch recommended courses:", err);
-            }
-
-            // Enrollments
-            try {
-                try {
-                    if (accessToken) {
-                        const enrollments = await fetchUserEnrollmentsApi(accessToken);
-                        setEnrollments(enrollments);
-                    }
-                } catch (err) {
-                    console.error("Failed to fetch enrollments:", err);
-                }
-
-            } catch (err) {
-                console.error("Unexpected error in AppLoader:", err);
             }
         };
 

@@ -1,11 +1,11 @@
 import ShifterLogo from "../../public/Shifter-S2W-White-Transparent.png";
 import {Link} from "react-router-dom";
-import {useGlobalContext} from "../context/GlobalContext.tsx";
+import {useAuthContext} from "../context/AuthContext.tsx";
 import LinkedIn from "../assets/icons/LinkedIn.tsx";
 import Instagram from "../assets/icons/Instagram.tsx";
 
 function Footer() {
-    const {user, logout} = useGlobalContext();
+    const {user, logout} = useAuthContext();
 
     return (
         <footer className="bg-dark-blue border-t-4 border-white/20">

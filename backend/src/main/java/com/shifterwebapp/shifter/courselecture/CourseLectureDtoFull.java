@@ -1,6 +1,5 @@
 package com.shifterwebapp.shifter.courselecture;
 
-import com.shifterwebapp.shifter.coursecontent.CourseContent;
 import com.shifterwebapp.shifter.enums.ContentType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseLectureFullDto {
+public class CourseLectureDtoFull {
 
     private Long id;
 
@@ -23,7 +22,7 @@ public class CourseLectureFullDto {
 
     private String contentText;
 
-    private String contentUrl;
+    private String contentStoragePath;
 
     private ContentType contentType;
 }

@@ -1,8 +1,6 @@
 package com.shifterwebapp.shifter.course;
 
 import com.shifterwebapp.shifter.enums.Difficulty;
-import com.shifterwebapp.shifter.enums.Interests;
-import com.shifterwebapp.shifter.enums.Skills;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
@@ -17,8 +15,8 @@ public class CourseSpecification {
     public static Specification<Course> hasSearchLike(String search) {
         return (root, query, cb) -> {
             query.distinct(true);
-            Join<Course, Skills> skillsJoin = root.join("skillsGained", JoinType.LEFT);
-            Join<Course, Interests> topicsJoin = root.join("topicsCovered", JoinType.LEFT);
+            Join<Course, String> skillsJoin = root.join("skillsGained", JoinType.LEFT);
+            Join<Course, String> topicsJoin = root.join("topicsCovered", JoinType.LEFT);
 
             return cb.or(
                     cb.like(cb.lower(root.get("title")), "%" + search.toLowerCase() + "%"),
@@ -35,11 +33,11 @@ public class CourseSpecification {
         return (root, query, cb) -> root.get("difficulty").in(difficulties);
     }
 
-    public static Specification<Course> hasSkills(List<Skills> skills) {
+    public static Specification<Course> hasSkills(List<String> skills) {
         return (root, query, cb) -> root.join("skillsGained").in(skills);
     }
 
-    public static Specification<Course> hasTopics(List<Interests> topics) {
+    public static Specification<Course> hasTopics(List<String> topics) {
         return (root, query, cb) -> root.join("topicsCovered").in(topics);
     }
 

@@ -1,0 +1,1 @@
+export type ContentType = "VIDEO" | "TEXT" | "FILE" | "QUIZ" | "TOOL";
