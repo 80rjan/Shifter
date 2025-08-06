@@ -1,8 +1,7 @@
 import {StepConnector, stepConnectorClasses, type StepIconProps, styled} from "@mui/material";
 import Check from "@mui/icons-material/Check";
-import React from "react";
 
-const CustomStepperConnector = styled(StepConnector)(({ theme }) => ({
+const CustomStepperConnector = styled(StepConnector)(() => ({
     [`&.${stepConnectorClasses.alternativeLabel}`]: {
         top: 10,
         left: 'calc(-50% + 16px)',

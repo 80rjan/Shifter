@@ -69,7 +69,7 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
             .then(() => {
                 setAccessToken(null);
                 setUser(null);
-                navigate("/");
+                navigate("/courses");
             })
             .catch(err => {
                 console.warn("Logout failed:", err);

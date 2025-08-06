@@ -7,7 +7,7 @@ import StarFilled from "../assets/icons/StarFilled.tsx";
 
 function DashboardCourses() {
     const {allCourses: allCoursesStorage, setAllCourses: setAllCoursesStorage} = useCourseStorage();
-    const {user, loading, accessToken} = useAuthContext();
+    const {user, accessToken} = useAuthContext();
 
     const [selectedTab, setSelectedTab] = useState("all");
     const [enrolledCourses, setEnrolledCourses] = useState<CoursePreview[]>([]);

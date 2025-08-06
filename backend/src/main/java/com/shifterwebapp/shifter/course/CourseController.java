@@ -108,7 +108,7 @@ public class CourseController {
         if (authentication == null || !authentication.isAuthenticated()) {
             List<CourseDtoPreview> topRatedCourses = courseService.getTopRatedCourses();
 //            List<CourseDto> mostPopularCourses = courseService.getMostPopularCourses();
-            return ResponseEntity.ok(topRatedCourses.subList(0, 5));
+            return ResponseEntity.ok(topRatedCourses);
         }
 
         Object detailsObj = authentication.getDetails();

@@ -13,7 +13,7 @@ public interface CourseRepository extends JpaRepository<Course, Long>, JpaSpecif
 
     List<Course> findCoursesByIdNotIn(List<Long> courseIds);
 
-    @Query("select c from Course c order by c.rating/c.ratingCount desc")
+    @Query("select c from Course c order by case when c.ratingCount = 0 then 0 else c.rating/c.ratingCount end desc")
     List<Course> findCoursesOrderedByRating();
 
     @Query("select c from Course c order by size(c.enrollments) desc")

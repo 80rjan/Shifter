@@ -167,13 +167,21 @@ public class CourseService implements ImplCourseService {
     @Override
     public List<CourseDtoPreview> getTopRatedCourses() {
         List<Course> courses = courseRepository.findCoursesOrderedByRating();
-        return courseMapperPreview.toDto(courses);
+        int limit = Math.min(5, courses.size());
+        return courseMapperPreview.toDto(
+                courses
+                        .subList(0, limit)
+        );
     }
 
     @Override
     public List<CourseDtoPreview> getMostPopularCourses() {
         List<Course> courses = courseRepository.findCoursesOrderedByPopularity();
-        return courseMapperPreview.toDto(courses);
+        int limit = Math.min(5, courses.size());
+        return courseMapperPreview.toDto(
+                courses
+                        .subList(0, limit)
+        );
     }
 
 

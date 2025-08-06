@@ -127,7 +127,7 @@
 			<scope>test</scope>
 		</dependency>
 
-<!--		Amazon web services-->
+		<!-- Amazon web services-->
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>s3</artifactId>
@@ -135,6 +135,13 @@
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>auth</artifactId>
+		</dependency>
+
+		<!-- Dotenv Java-->
+		<dependency>
+			<groupId>io.github.cdimascio</groupId>
+			<artifactId>dotenv-java</artifactId>
+			<version>3.2.0</version>
 		</dependency>
 	</dependencies>
 
