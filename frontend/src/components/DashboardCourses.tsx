@@ -1,9 +1,12 @@
 import React, {useEffect, useState} from "react";
 import {fetchCoursesApi, fetchEnrolledCoursesApi} from "../api/courseApi.ts";
-import type {CoursePreview} from "../types/CoursePreview.tsx";
+import type {CoursePreview} from "../models/javaObjects/CoursePreview.tsx";
 import {useAuthContext} from "../context/AuthContext.tsx";
 import {useCourseStorage} from "../context/CourseStorage.ts";
 import StarFilled from "../assets/icons/StarFilled.tsx";
+import {Sparkle} from "lucide-react";
+import {Link} from "react-router-dom";
+import {toUrlFormat} from "../utils/toUrlFormat.ts";
 
 function DashboardCourses() {
     const {allCourses: allCoursesStorage, setAllCourses: setAllCoursesStorage} = useCourseStorage();
@@ -54,7 +57,8 @@ function DashboardCourses() {
         }
 
         switch (selectedTab) {
-            case "all": return (
+            case "all":
+                return (
                     <>
                         {
                             enrolledCourses.map((course, index) => (
@@ -63,7 +67,8 @@ function DashboardCourses() {
                         }
                     </>
                 );
-            case "active": return (
+            case "active":
+                return (
                     <>
                         {
                             enrolledCourses.map((course, index) => (
@@ -72,7 +77,8 @@ function DashboardCourses() {
                         }
                     </>
                 );
-            case "completed": return (
+            case "completed":
+                return (
                     <>
                         {
                             enrolledCourses.map((course, index) => (
@@ -81,7 +87,8 @@ function DashboardCourses() {
                         }
                     </>
                 );
-            case "favorites": return (
+            case "favorites":
+                return (
                     <>
                         {
                             allCourses.filter(course => user?.favoriteCourses.includes(course.id)).map((course, index) => (
@@ -116,52 +123,68 @@ function DashboardCourses() {
 function CourseList({course}: { course: CoursePreview }) {
 
     return (
-        <aside
-            style={{"--card-color": course.color} as React.CSSProperties}
-            className="flex gap-8 items-center p-4 border-1 border-black/40 rounded-xl"
-        >
-            {/*IMAGE*/}
-            <div className="overflow-clip rounded-lg w-1/3">
-                <img src={course.imageUrl} alt={course.title}
-                     className="aspect-video object-cover"/>
-            </div>
-
-            {/*INFO*/}
-            <div className="flex flex-col gap-4 w-2/3">
-                {/*TITLE AND TOPICS COVERED*/}
-                <div className="flex flex-col gap-0">
-                    <h3 className="text-xl font-bold">{course.titleShort}</h3>
-
-                    <p className="text-black/60">{
-                        course.topicsCovered.map(item =>
-                            item
-                                .toLowerCase()
-                                .replace(/_/g, " ")
-                                .replace(/\b\w/g, c => c.toUpperCase())
-                        )
-                            .join(" • ")
-                    }</p>
+        <aside>
+            <Link
+                style={{"--card-color": course.color} as React.CSSProperties}
+                className="hover:shadow-md transition-all duration-300 ease-in-out
+                flex gap-8 items-center p-4 border-1 border-black/40 rounded-xl"
+                to={`/learn/${course.id}/${toUrlFormat(course.titleShort)}`}>
+                {/*IMAGE*/}
+                <div className="overflow-clip rounded-lg w-1/3">
+                    <img src={course.imageUrl} alt={course.title}
+                         className="aspect-video object-cover"/>
                 </div>
 
-                {/*Info*/}
-                <div className="flex flex-wrap gap-2 whitespace-nowrap">
-                    <div className="flex items-center gap-1 px-2 border-1 border-black/20 rounded-sm text-black/60">
-                        <StarFilled className="w-4 h-4 text-gold"/> {course.rating / course.ratingCount}
+                {/*INFO*/}
+                <div className="flex flex-col gap-4 w-2/3">
+                    {/*TITLE AND TOPICS COVERED*/}
+                    <div className="flex flex-col gap-0">
+                        <h3 className="text-xl font-bold">{course.titleShort}</h3>
+
+                        <p className="text-black/60">{
+                            course.topicsCovered.map(item =>
+                                item
+                                    .toLowerCase()
+                                    .replace(/_/g, " ")
+                                    .replace(/\b\w/g, c => c.toUpperCase())
+                            )
+                                .join(" • ")
+                        }</p>
                     </div>
-                    <div className="flex items-center gap-1 px-2 border-1 border-black/20 rounded-sm text-black/60">
-                        {course.ratingCount} reviews
-                    </div>
-                    <div className="flex items-center gap-1 px-2 border-1 border-black/20 rounded-sm text-black/60">
-                        {(course.durationMinutes / 60).toFixed(1)} hours
-                    </div>
-                    <div className="flex items-center gap-1 px-2 border-1 border-black/20 rounded-sm text-black/60">
-                        {course.courseContentCount} modules
-                    </div>
-                    <div className="flex items-center gap-1 px-2 border-1 border-black/20 rounded-sm text-black/60">
-                        {course.difficulty.charAt(0) + course.difficulty.slice(1).toLowerCase()}
+
+                    {/*Info*/}
+                    <div className="flex flex-wrap gap-2 whitespace-nowrap">
+                        {
+                            course.ratingCount > 10 ? (
+                                <>
+                                    <div
+                                        className="flex items-center gap-1 px-2 border-1 border-black/20 rounded-sm text-black/60">
+                                        <StarFilled className="w-4 h-4 text-gold"/> {course.rating / course.ratingCount}
+                                    </div>
+                                    <div
+                                        className="flex items-center gap-1 px-2 border-1 border-black/20 rounded-sm text-black/60">
+                                        {course.ratingCount} reviews
+                                    </div>
+                                </>
+                            ) : (
+                                <div
+                                    className="flex items-center gap-1 px-2 border-1 border-black/20 rounded-sm text-black/60">
+                                    <Sparkle className="w-4 h-4 text-gold"/> New
+                                </div>
+                            )
+                        }
+                        <div className="flex items-center gap-1 px-2 border-1 border-black/20 rounded-sm text-black/60">
+                            {(course.durationMinutes / 60).toFixed(1)} hours
+                        </div>
+                        <div className="flex items-center gap-1 px-2 border-1 border-black/20 rounded-sm text-black/60">
+                            {course.courseContentCount} modules
+                        </div>
+                        <div className="flex items-center gap-1 px-2 border-1 border-black/20 rounded-sm text-black/60">
+                            {course.difficulty.charAt(0) + course.difficulty.slice(1).toLowerCase()}
+                        </div>
                     </div>
                 </div>
-            </div>
+            </Link>
         </aside>
     )
 }

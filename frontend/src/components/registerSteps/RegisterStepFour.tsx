@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import type {UserRegister} from "../../types/UserRegister.tsx";
+import type {UserRegister} from "../../models/javaObjects/UserRegister.tsx";
 import RegisterSlider from "../inputs/RegisterSlider.tsx";
 import {fetchCoursesSkillsApi} from "../../api/courseApi.ts";
 

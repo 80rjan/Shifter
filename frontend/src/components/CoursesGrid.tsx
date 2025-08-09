@@ -1,8 +1,8 @@
-import type {CoursePreview} from "../types/CoursePreview.tsx";
+import type {CoursePreview} from "../models/javaObjects/CoursePreview.tsx";
 import CourseCard from "./CourseCard.tsx";
 import {InputAdornment, TextField} from '@mui/material';
 import {Search} from 'lucide-react';
-import type {FilterParams} from "../types/FilterParams.tsx";
+import type {FilterParams} from "../models/FilterParams.tsx";
 import React from "react";
 import {X} from 'lucide-react';
 import {queryToDurationMapper, queryToPriceMapper} from "../utils/mapper.ts";

@@ -1,5 +1,5 @@
 import React from "react";
-import type {UserRegister} from "./UserRegister.tsx";
+import type {UserRegister} from "./javaObjects/UserRegister.tsx";
 
 type UserArrayFields = 'interests' | 'desiredSkills';
 export interface SliderProps {

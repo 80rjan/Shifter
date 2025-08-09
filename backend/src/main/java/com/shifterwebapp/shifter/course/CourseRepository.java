@@ -22,11 +22,23 @@ public interface CourseRepository extends JpaRepository<Course, Long>, JpaSpecif
     List<Course> findCoursesByDifficulty(Difficulty searchDifficulty);
 
     @Query("select c from Course c where c.price >= :floorPrice and c.price <= :ceilPrice")
-    List<Course> findCoursesByPriceRange(@Param("floorPrice") Float floorPrice,@Param("ceilPrice") Float ceilPrice);
+    List<Course> findCoursesByPriceRange(@Param("floorPrice") Float floorPrice, @Param("ceilPrice") Float ceilPrice);
 
     List<Course> findCoursesBySkillsGainedIn(List<String> searchSkills);
 
     List<Course> findCoursesByDifficultyIn(List<Difficulty> searchDifficulties);
+
+    @Query("""
+                SELECT CASE WHEN COUNT(cl) > 0 THEN TRUE ELSE FALSE END
+                FROM Course c
+                JOIN c.courseContents cc
+                JOIN cc.courseLectures cl
+                WHERE c.id = :courseId
+                  AND cl.contentFileName = :fileName
+            """)
+    Boolean lectureFileExistsInCourse(@Param("courseId") Long courseId,
+                                      @Param("fileName") String fileName);
+
 
     @Query("select distinct c.topicsCovered from Course c")
     List<String> getCourseTopics();

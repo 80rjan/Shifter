@@ -1,6 +1,6 @@
 import {Eye, EyeOff} from "lucide-react";
 import React from "react";
-import type { UserRegister } from "../../types/UserRegister.tsx";
+import type { UserRegister } from "../../models/javaObjects/UserRegister.tsx";
 
 type UserStrFields = 'email' | 'password' | 'passwordConfirmation' | 'name' | 'workPosition' | 'companyType';
 interface InputProps {

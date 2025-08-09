@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import type {CoursePreview} from "../types/CoursePreview.tsx";
-import type {Enrollment} from "../types/Enrollment.tsx";
+import type {CoursePreview} from "../models/javaObjects/CoursePreview.tsx";
+import type {Enrollment} from "../models/javaObjects/Enrollment.tsx";
 
 
 interface CourseStorage {

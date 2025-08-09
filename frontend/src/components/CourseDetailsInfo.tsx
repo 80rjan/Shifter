@@ -1,7 +1,18 @@
-import {Check, ChevronDown, ChevronUp, ClipboardList, File, Text, TvMinimalPlay} from "lucide-react"
+import {
+    Check,
+    ChevronDown,
+    ChevronUp,
+    ClipboardList,
+    File,
+    ListChecks,
+    Text,
+    TvMinimalPlay
+} from "lucide-react"
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 import ShifterArrow from "../../public/Shifter-Arrow.png";
 import {useState} from "react";
-import type {CourseDetail} from "../types/CourseDetail.tsx";
+import type {CourseDetail} from "../models/javaObjects/CourseDetail.tsx";
 
 function CourseDetailsInfo({ course }: { course: CourseDetail | null}) {
     const [showMore, setShowMore] = useState(false);
@@ -75,18 +86,23 @@ function CourseDetailsInfo({ course }: { course: CourseDetail | null}) {
 
                                     { isOpen &&
                                         (
-                                            <div className="border-t-1 border-black/20 py-4 text-black/80">
+                                            <div className="border-t-1 border-black/20 py-4 text-black">
                                                 {content.courseLectures.map((lecture, lectureIndex) => {
                                                     return (
                                                         <div
                                                             key={lectureIndex}
                                                             className="flex justify-between px-6 py-2">
-                                                            <div className="flex gap-4">
-                                                                {lecture.contentType === "VIDEO" && <TvMinimalPlay size={20} strokeWidth={1.5} />}
-                                                                {lecture.contentType === "TEXT" && <Text size={20} strokeWidth={1.5} />}
-                                                                {lecture.contentType === "FILE" && <File size={20} strokeWidth={1.5} />}
-                                                                {lecture.contentType === "QUIZ" && <ClipboardList size={20} strokeWidth={1.5} />}
-                                                                <h4>{lecture.title}</h4>
+                                                            <div className="flex items-start gap-2">
+                                                                {lecture.contentType === "VIDEO" && <TvMinimalPlay size={20} strokeWidth={1.5} className="shrink-0"/>}
+                                                                {lecture.contentType === "TEXT" && <Text size={20} strokeWidth={1.5} className="shrink-0"/>}
+                                                                {lecture.contentType === "FILE" && <File size={20} strokeWidth={1.5} className="shrink-0" />}
+                                                                {lecture.contentType === "QUIZ" && <ListChecks size={20} strokeWidth={1.5} className="shrink-0"/>}
+                                                                {lecture.contentType === "TOOL" && <ClipboardList size={20} strokeWidth={1.5} className="shrink-0"/>}
+
+                                                                <div className="flex flex-col gap-2">
+                                                                    <h4 className="font-medium">{lecture.title}</h4>
+                                                                    <p className="opacity-80">{lecture.description}</p>
+                                                                </div>
                                                             </div>
                                                             <span>{lecture.durationMinutes}min</span>
                                                         </div>

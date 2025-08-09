@@ -1,4 +1,4 @@
-import type {Difficulty} from "./Difficulty.tsx";
+import type {Difficulty} from "../types/Difficulty.tsx";
 
 export interface CoursePreview {
     id: number,

@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import type {UserRegister} from "../../types/UserRegister.tsx";
+import type {UserRegister} from "../../models/javaObjects/UserRegister.tsx";
 import RegisterInput from "../inputs/RegisterInput.tsx";
 import RegisterSelect from "../inputs/RegisterSelect.tsx";
 

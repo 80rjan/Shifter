@@ -6,9 +6,9 @@ import React, {
     type Dispatch,
     type SetStateAction,
 } from "react";
-import type {User} from "../types/User.tsx";
-import type {UserRegister} from "../types/UserRegister.tsx";
-import {loginApi, logoutApi, refreshAccessTokenApi, registerApi} from "../api/auth.ts";
+import type {User} from "../models/javaObjects/User.tsx";
+import type {UserRegister} from "../models/javaObjects/UserRegister.tsx";
+import {loginApi, logoutApi, refreshAccessTokenApi, registerApi} from "../api/authApi.ts";
 import {useNavigate} from "react-router-dom";
 
 interface AuthContextType {
@@ -69,7 +69,7 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
             .then(() => {
                 setAccessToken(null);
                 setUser(null);
-                navigate("/courses");
+                navigate("/");
             })
             .catch(err => {
                 console.warn("Logout failed:", err);

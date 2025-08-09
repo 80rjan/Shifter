@@ -1,7 +1,10 @@
 import axios from "axios";
-import type {CoursePreview} from "../types/CoursePreview.tsx";
-import type {CourseDetail} from "../types/CourseDetail.tsx";
+import type {CoursePreview} from "../models/javaObjects/CoursePreview.tsx";
+import type {CourseDetail} from "../models/javaObjects/CourseDetail.tsx";
+import type {CourseFull} from "../models/javaObjects/CourseFull.tsx";
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 // export const fetchCoursesApi = async (accessToken?: string, params?: FilterParams, signal?: AbortSignal): Promise<CoursePreview[]> => {
@@ -23,7 +26,7 @@ export const fetchCoursesApi = async (accessToken?: string, signal?: AbortSignal
         `${backendUrl}/api/courses`,
         {
             signal,
-            headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined
+            headers: accessToken ? {Authorization: `Bearer ${accessToken}`} : undefined
 
         }
     )
@@ -54,8 +57,19 @@ export const fetchEnrolledCoursesApi = async (accessToken: string): Promise<Cour
 export const fetchCourseDetailsApi = async (courseId: number, signal?: AbortSignal): Promise<CourseDetail> => {
     const res = await axios.get(
         `${backendUrl}/api/courses/${courseId}`,
-        { signal }
+        {signal}
     );
+
+    return res.data;
+}
+
+export const fetchCourseFullApi = async (courseId: number, accessToken: string): Promise<CourseFull> => {
+    const res = await axios.get(
+        `${backendUrl}/api/courses/${courseId}/enrolled`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
 
     return res.data;
 }

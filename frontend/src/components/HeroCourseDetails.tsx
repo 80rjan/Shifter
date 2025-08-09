@@ -1,6 +1,8 @@
-import type {CourseDetail} from "../types/CourseDetail.tsx";
+import type {CourseDetail} from "../models/javaObjects/CourseDetail.tsx";
 import React from "react";
 import {useCourseStorage} from "../context/CourseStorage.ts";
+import { Link } from "react-router-dom";
+import {toUrlFormat} from "../utils/toUrlFormat.ts";
 
 function HeroCourseDetails({course, enrollUser}: { course: CourseDetail | null, enrollUser: () => Promise<void> }) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -20,13 +22,12 @@ function HeroCourseDetails({course, enrollUser}: { course: CourseDetail | null, 
                 : `New & Trending`,
             description: course?.ratingCount && course.ratingCount > 10
                 ? 'Rated highly by learners for its practical insights and actionable strategies.'
-                : 'New to the platform, this course is growing quickly. Be among the first learners to benefit from its insights.'
+                : 'New to the platform, this javaObjects is growing quickly. Be among the first learners to benefit from its insights.'
         }
         ,
     ]
 
     const bgColor = "bg-[var(--card-color)]";
-
 
     return (
         <div
@@ -46,34 +47,37 @@ function HeroCourseDetails({course, enrollUser}: { course: CourseDetail | null, 
                                 isLoading ? (
                                     <div className="w-8 loader"></div>
                                 ) : (
-                                    <button className={`
-                                ${bgColor}
-                                hover:shadow-lg hover:shadow-deep-green/50 transition-all duration-300 ease-in-out cursor-pointer
-                                shadow-md shadow-deep-green/30 text-white font-medium text-xl border-3 border-white/50 rounded-full px-14 py-2
-                            `}
-                                    >Start Learning Now</button>
+                                    <Link
+                                        to={`/learn/${course?.id}/${toUrlFormat(course?.titleShort || "")}`}
+                                        className={`
+                                            ${bgColor}
+                                            hover:shadow-lg hover:shadow-deep-green/50 transition-all duration-300 ease-in-out cursor-pointer
+                                            shadow-md shadow-deep-green/30 text-white font-medium text-xl border-3 border-white/50 rounded-full px-14 py-2
+                                        `}
+                                    >Go To Course</Link>
                                 )
                             }
                         </div>
                         :
-                        <div className="flex mt-12 gap-4 items-center bg-gray/60 backdrop-blur-lg border-3 border-black/5 px-2 py-1 w-fit rounded-full">
-                    <span className="font-semibold text-xl px-8">{
-                        course?.price && course.price > 0 ? `$${course?.price}` : 'Free'
-                    }</span>
+                        <div
+                            className="flex mt-12 gap-4 items-center bg-gray/60 backdrop-blur-lg border-3 border-black/5 px-2 py-1 w-fit rounded-full">
+                            <span className="font-semibold text-xl px-8">
+                                {course?.price && course.price > 0 ? `$${course?.price}` : 'Free'}
+                            </span>
                             {
                                 isLoading ? (
                                     <div className="w-8 loader"></div>
                                 ) : (
                                     <button className={`
-                                ${bgColor}
-                                hover:shadow-lg hover:shadow-deep-green/50 transition-all duration-300 ease-in-out cursor-pointer
-                                shadow-md shadow-deep-green/30 text-white font-medium text-xl border-3 border-white/50 rounded-full px-14 py-2
-                            `}
+                                                ${bgColor}
+                                                hover:shadow-lg hover:shadow-deep-green/50 transition-all duration-300 ease-in-out cursor-pointer
+                                                shadow-md shadow-deep-green/30 text-white font-medium text-xl border-3 border-white/50 rounded-full px-14 py-2
+                                            `}
                                             onClick={() => {
                                                 setIsLoading(true)
                                                 enrollUser()
                                                     .catch((error) => {
-                                                        console.error("Error enrolling user in course:", error);
+                                                        console.error("Error enrolling user in javaObjects:", error);
                                                     })
                                                     .finally(() => {
                                                         setIsLoading(false)

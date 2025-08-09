@@ -7,17 +7,17 @@ import {
     StepLabel,
     Box,
 } from "@mui/material";
-import {CustomStepperConnector, CustomStepperStepIcon} from "../components/CustomStepper";
+import {CustomStepperConnector, CustomStepperStepIcon} from "../components/registerSteps/CustomStepper.tsx";
 import {Link, useNavigate} from "react-router-dom";
 import {motion, AnimatePresence} from "framer-motion";
-import type {UserRegister} from "../types/UserRegister.tsx";
+import type {UserRegister} from "../models/javaObjects/UserRegister.tsx";
 import RegisterStepOne from "../components/registerSteps/RegisterStepOne.tsx";
 import RegisterStepTwo from "../components/registerSteps/RegisterStepTwo.tsx";
 import RegisterStepThree from "../components/registerSteps/RegisterStepThree.tsx";
 import RegisterStepFour from "../components/registerSteps/RegisterStepFour.tsx";
 import {useAuthContext} from "../context/AuthContext.tsx";
 import {isValidEmail} from "../utils/validation.ts";
-import {checkEmailExistsApi} from "../api/auth.ts";
+import {checkEmailExistsApi} from "../api/authApi.ts";
 
 function Register() {
     const {register} = useAuthContext();

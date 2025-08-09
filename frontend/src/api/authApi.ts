@@ -1,7 +1,9 @@
 import axios from "axios";
-import type {UserRegister} from "../types/UserRegister.tsx";
-import type {User} from "../types/User.tsx";
+import type {UserRegister} from "../models/javaObjects/UserRegister.tsx";
+import type {User} from "../models/javaObjects/User.tsx";
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export const refreshAccessTokenApi = async (): Promise<{user: User, accessToken: string}> => {

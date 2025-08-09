@@ -5,26 +5,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shifterwebapp.shifter.Validate;
 import com.shifterwebapp.shifter.course.*;
 import com.shifterwebapp.shifter.course.dto.CourseDtoDetail;
+import com.shifterwebapp.shifter.course.dto.CourseDtoFull;
 import com.shifterwebapp.shifter.course.dto.CourseDtoPreview;
 import com.shifterwebapp.shifter.course.mapper.CourseMapperDetail;
+import com.shifterwebapp.shifter.course.mapper.CourseMapperFull;
 import com.shifterwebapp.shifter.course.mapper.CourseMapperPreview;
 import com.shifterwebapp.shifter.coursecontent.CourseContent;
-import com.shifterwebapp.shifter.coursecontent.CourseContentRepository;
 import com.shifterwebapp.shifter.courselecture.CourseLecture;
-import com.shifterwebapp.shifter.courselecture.CourseLectureRepository;
 import com.shifterwebapp.shifter.enrollment.service.EnrollmentService;
+import com.shifterwebapp.shifter.exception.AccessDeniedException;
 import com.shifterwebapp.shifter.upload.MetaInfo;
 import com.shifterwebapp.shifter.upload.S3UploadResponse;
 import com.shifterwebapp.shifter.user.UserDto;
 import com.shifterwebapp.shifter.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +31,7 @@ public class CourseService implements ImplCourseService {
     private final CourseRepository courseRepository;
     private final CourseMapperPreview courseMapperPreview;
     private final CourseMapperDetail courseMapperDetail;
+    private final CourseMapperFull courseMapperFull;
     private final UserService userService;
     private final Validate validate;
     private final EnrollmentService enrollmentService;
@@ -68,7 +67,7 @@ public class CourseService implements ImplCourseService {
 
         for (S3UploadResponse s3UploadResponse : s3UploadResponses) {
             if ("COURSE_IMAGE".equals(s3UploadResponse.getType())) {
-                course.setImageUrl(s3UploadResponse.getUrl());
+                course.setImageUrl(s3UploadResponse.getFileName());
                 continue;
             }
 
@@ -85,7 +84,7 @@ public class CourseService implements ImplCourseService {
                     if (lectureIndex >= 0 && lectureIndex < courseContent.getCourseLectures().size()) {
                         CourseLecture courseLecture = courseContent.getCourseLectures().get(lectureIndex);
 
-                        courseLecture.setContentStoragePath(s3UploadResponse.getUrl());
+                        courseLecture.setContentFileName(s3UploadResponse.getFileName());
                     } else {
                         // handle invalid lecture index
                         System.err.println("Invalid lecture index: " + lectureIndex);
@@ -97,6 +96,24 @@ public class CourseService implements ImplCourseService {
             }
         }
         return courseRepository.save(course);
+    }
+
+    @Override
+    public Boolean lectureFileExistsInCourse(Long courseId, String fileName) {
+        return courseRepository.lectureFileExistsInCourse(courseId, fileName);
+    }
+
+    @Override
+    public CourseDtoFull getEnrolledCourseById(Long courseId, Long userId) {
+        validate.validateCourseExists(courseId);
+
+        boolean isUserEnrolled = enrollmentService.isUserEnrolledInCourse(userId, courseId);
+        if (!isUserEnrolled) {
+            throw new AccessDeniedException("User with ID " + userId + " is not enrolled in course with ID " + courseId + " and is therefore not authorized to access the full course with its content!");
+        }
+
+        Course course = courseRepository.findById(courseId).orElseThrow();
+        return courseMapperFull.toDto(course);
     }
 
     @Override

@@ -1,6 +1,7 @@
-import type {ContentType} from "../../models/types/ContentType.tsx";
+import type {ContentType} from "../types/ContentType.tsx";
 
-export interface CourseLectureEntity {
+export interface CourseLectureFull {
+    id: number;
     title: string;
     description: string;
     durationMinutes: number;

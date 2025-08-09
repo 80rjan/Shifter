@@ -1,5 +1,5 @@
-import type {UserRegister} from "../../types/UserRegister.tsx";
-import type {SelectProps} from "../../types/SelectProps.tsx";
+import type {UserRegister} from "../../models/javaObjects/UserRegister.tsx";
+import type {SelectProps} from "../../models/SelectProps.tsx";
 import {toEnumFormat} from "../../utils/toEnumFormat.ts";
 
 function RegisterSelect(selectProps: SelectProps) {

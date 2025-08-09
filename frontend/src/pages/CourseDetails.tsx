@@ -4,38 +4,38 @@ import {useEffect, useState} from "react";
 import HeroCourseDetails from "../components/HeroCourseDetails.tsx";
 import CourseDetailsInfo from "../components/CourseDetailsInfo.tsx";
 import CoursesCarouselCourseDetails from "../components/CoursesCarouselCourseDetails.tsx";
-import type {CourseDetail} from "../types/CourseDetail.tsx";
-import {enrollUserApi} from "../api/enrollmentApi.ts";
+import type {CourseDetail} from "../models/javaObjects/CourseDetail.tsx";
 import {useAuthContext} from "../context/AuthContext.tsx";
-import {showInfoToast} from "../utils/showInfoToast.ts";
-import {useCourseStorage} from "../context/CourseStorage.ts";
 import HeroCourseDetailsSkeleton from "../components/skeletons/HeroCourseDetailsSkeleton.tsx";
 import CourseDetailsInfoSkeleton from "../components/skeletons/CourseDetailsInfoSkeleton.tsx";
+import {useEnrollUserInCourse} from "../hooks/useEnrollUserInCourse.tsx";
 
 function CourseDetails() {
-    const { user, accessToken, loading: authLoading } = useAuthContext();
-    const { enrollments, setEnrollments } = useCourseStorage();
+    const { loading: authLoading } = useAuthContext();
     const [loading, setLoading] = useState<boolean>(true);
     const { courseId } = useParams<{ courseId: string; courseTitle: string }>();
-    const [course, setCourse] = useState<CourseDetail | null>(null);
+    const [course, setCourse] = useState<CourseDetail>({
+        color: "",
+        courseContentCount: 0,
+        courseContents: [],
+        description: "",
+        descriptionLong: "",
+        descriptionShort: "",
+        difficulty: "BEGINNER",
+        durationMinutes: 0,
+        id: 0,
+        imageUrl: "",
+        price: 0,
+        rating: 0,
+        ratingCount: 0,
+        skillsGained: [],
+        title: "",
+        titleShort: "",
+        topicsCovered: [],
+        whatWillBeLearned: []
+    });
 
-    const handleBuyCourse = () => {
-        if (!user) {
-            showInfoToast("Please log in to enroll in the course.");
-            return Promise.reject("No user logged in");
-        }
-
-        return enrollUserApi(Number(courseId), accessToken || "")
-            .then(() => {
-                if (enrollments) {
-                    setEnrollments(enrollments.filter((enrollment) => enrollment.courseId !== Number(courseId)));
-                }
-                console.log("User enrolled in course successfully");
-            })
-            .catch((error) => {
-                console.error("Error enrolling user in course:", error);
-            })
-    }
+    const { enroll } = useEnrollUserInCourse(Number(courseId), course?.titleShort);
 
     useEffect(() => {
         setLoading(true);
@@ -45,7 +45,7 @@ function CourseDetails() {
                 setCourse(data);
             })
             .catch(err => {
-                console.error("Error fetching course details: ", err);
+                console.error("Error fetching javaObjects details: ", err);
             })
             .finally(() => {
                 setLoading(false);
@@ -63,7 +63,7 @@ function CourseDetails() {
                         <CoursesCarouselCourseDetails />
                     </> :
                     <>
-                        <HeroCourseDetails course={course} enrollUser={handleBuyCourse}/>
+                        <HeroCourseDetails course={course} enrollUser={enroll}/>
                         <CourseDetailsInfo course={course}/>
                         <CoursesCarouselCourseDetails/>
                     </>

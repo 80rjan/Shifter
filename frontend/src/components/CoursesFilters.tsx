@@ -1,7 +1,7 @@
 import React from "react";
 import Checkbox from "@mui/material/Checkbox";
 import {durationToQueryMapper, priceToQueryMapper} from "../utils/mapper.ts";
-import type {FilterParams} from "../types/FilterParams.tsx";
+import type {FilterParams} from "../models/FilterParams.tsx";
 import {useAuthContext} from "../context/AuthContext.tsx";
 
 function CoursesFilters({filters, setFilters, topics, skills}: {

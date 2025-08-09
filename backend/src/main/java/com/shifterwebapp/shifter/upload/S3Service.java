@@ -1,6 +1,5 @@
 package com.shifterwebapp.shifter.upload;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,11 +11,16 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
+import java.time.Duration;
+
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +37,29 @@ public class S3Service {
 
     @Value("${aws.s3.bucket-name}")
     private String bucketName;
+
+    public URL generatePresignedGetUrl(String key, int expirySeconds) {
+        S3Presigner presigner = S3Presigner.builder()
+                .region(Region.of(region))
+                .credentialsProvider(StaticCredentialsProvider.create(
+                        AwsBasicCredentials.create(accessKey, secretKey)
+                ))
+                .build();
+
+        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .build();
+
+        GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
+                .signatureDuration(Duration.ofSeconds(expirySeconds))
+                .getObjectRequest(getObjectRequest)
+                .build();
+
+        URL url = presigner.presignGetObject(presignRequest).url();
+        presigner.close();
+        return url;
+    }
 
     public List<S3UploadResponse> uploadCourseImageAndFiles(
             Long courseId,
@@ -87,7 +114,7 @@ public class S3Service {
 
 
             MetaInfo meta = new ObjectMapper().readValue(metaJson, MetaInfo.class);
-            responses.add(new S3UploadResponse("COURSE_LECTURE", key, meta));
+            responses.add(new S3UploadResponse("COURSE_LECTURE", file.getOriginalFilename(), meta));
         }
 
         return responses;

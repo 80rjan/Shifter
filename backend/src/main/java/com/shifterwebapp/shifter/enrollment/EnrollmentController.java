@@ -21,10 +21,7 @@ public class EnrollmentController {
 
     @PostMapping("/create/{courseId}")
     public ResponseEntity<?> enrollUserInCourse(@PathVariable Long courseId, Authentication authentication) {
-        validate.validateUserIsAuthenticated(authentication);
-
-        CustomAuthDetails details = (CustomAuthDetails) authentication.getDetails();
-        Long userId = details.getUserId();
+        Long userId = validate.extractUserId(authentication);
 
         EnrollmentDto enrollmentDto = enrollmentService.enrollUser(courseId, userId);
         if (enrollmentDto == null) {
@@ -35,13 +32,7 @@ public class EnrollmentController {
 
     @GetMapping("/user")
     public ResponseEntity<?> getEnrollmentsByUser(Authentication authentication) {
-        validate.validateUserIsAuthenticated(authentication);
-
-        Object detailsObj = authentication.getDetails();
-        if (!(detailsObj instanceof CustomAuthDetails details)) {
-            return ResponseEntity.badRequest().body(new ErrorResponse("Invalid authentication details"));
-        }
-        Long userId = details.getUserId();
+        Long userId = validate.extractUserId(authentication);
 
         List<EnrollmentDto> enrollmentDtos = enrollmentService.getEnrollmentsByUser(userId);
         return ResponseEntity.ok(enrollmentDtos);

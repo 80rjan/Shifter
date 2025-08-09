@@ -10,7 +10,6 @@ import CourseCardSkeleton from "./skeletons/CourseCardSkeleton.tsx";
 
 function CoursesCarouselHome() {
     const {recommendedCourses} = useCourseStorage();
-    console.log(recommendedCourses)
 
     return (
         <section
@@ -33,7 +32,7 @@ function CoursesCarouselHome() {
             <div className="relative mx-0 my-auto w-full p-0">
                 {recommendedCourses && recommendedCourses.length > 0 ? (
                     recommendedCourses.length <= 3 ? (
-                        <div className="flex gap-4 justify-center items-center">
+                        <div className="flex gap-12 justify-evenly items-center">
                             {recommendedCourses.map((course, index) => (
                                 <div key={index} className="max-w-1/3">
                                     <CourseCard card={course} key={index}/>

@@ -1,10 +1,12 @@
 import axios from "axios";
-import type {Enrollment} from "../types/Enrollment.tsx";
+import type {Enrollment} from "../models/javaObjects/Enrollment.tsx";
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-export const enrollUserApi = async (courseId: number, accessToken: string): Promise<void> => {
-    await axios.post(
+export const enrollUserApi = async (courseId: number, accessToken: string): Promise<Enrollment> => {
+    const res = await axios.post(
         `${backendUrl}/api/enrollments/create/${courseId}`,
         {},
         {
@@ -14,6 +16,7 @@ export const enrollUserApi = async (courseId: number, accessToken: string): Prom
         }
     )
 
+    return res.data;
 }
 
 export const fetchUserEnrollmentsApi = async (accessToken: string): Promise<Enrollment[]> => {

@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import type {UserRegister} from "../../types/UserRegister.tsx";
+import type {UserRegister} from "../../models/javaObjects/UserRegister.tsx";
 import RegisterSlider from "../inputs/RegisterSlider.tsx";
 import {fetchCoursesTopicsApi} from "../../api/courseApi.ts";
 
@@ -16,7 +16,7 @@ function RegisterStepThree({setUser, user, setError}: {
                 const topicsData = await fetchCoursesTopicsApi();
                 setInterests(topicsData);
             } catch (err) {
-                console.error("Failed to fetch course topics (user interests)", err);
+                console.error("Failed to fetch javaObjects topics (user interests)", err);
             }
         };
 

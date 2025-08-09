@@ -25,6 +25,7 @@
     --color-dark-gray: #666;
     --color-bright-gray: #DDDDDD;
     --color-gray: #E5E7EBFF;
+    --color-black-text: #333333;
 
 
     --shadow-up-sm: 0 -1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -78,7 +79,7 @@
 
 :root {
     --color-white: #F8F8F8;
-    --color-black: #111;
+    --color-black: #202024;
 
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;

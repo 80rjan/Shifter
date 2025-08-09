@@ -8,7 +8,6 @@ import Courses from "./pages/Courses.tsx";
 import {useEffect} from "react";
 import CourseDetails from "./pages/CourseDetails.tsx";
 import {ToastContainer} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import AppLoader from "./AppLoader.tsx";
 import Profile from "./pages/Profile.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
@@ -19,10 +18,16 @@ import {useAuthContext} from "./context/AuthContext.tsx";
 import AdminNavbar from "./admin/utils/AdminNavbar.tsx";
 import Admin from "./admin/Admin.tsx";
 import AdminAddCourse from "./admin/pages/AdminAddCourse.tsx";
+import CourseLearn from "./pages/CourseLearn.tsx";
+import NavbarLearn from "./layout/NavbarLearn.tsx";
 
 function LayoutWrapper() {
     const location = useLocation();
-    const hideLayout = location.pathname === "/login" || location.pathname === "/register"; // You can add more paths like || location.pathname === "/signup"
+    const isLearn = location.pathname.startsWith("/learn");
+    const hideLayout =
+        location.pathname === "/login" ||
+        location.pathname === "/register" ||
+        isLearn;
     const {user, authChecked} = useAuthContext();
 
     if (!authChecked)
@@ -31,10 +36,10 @@ function LayoutWrapper() {
     if (user?.isAdmin) {
         return (
             <>
-                <AdminNavbar />
+                <AdminNavbar/>
                 <Routes>
-                    <Route path="/" element={<Admin />}/>
-                    <Route path="/add-course" element={<AdminAddCourse />}/>
+                    <Route path="/" element={<Admin/>}/>
+                    <Route path="/add-course" element={<AdminAddCourse/>}/>
                     <Route path="/analytics" element={<p>Analytics</p>}/>
                 </Routes>
             </>
@@ -45,6 +50,7 @@ function LayoutWrapper() {
     return (
         <>
             {!hideLayout && <Navbar/>}
+            {isLearn && <NavbarLearn/>}
             <Routes>
                 <Route path="/login" element={
                     <PublicOnlyRoute>
@@ -72,11 +78,18 @@ function LayoutWrapper() {
                         <Profile/>
                     </UserOnlyRoute>
                 }/>
-                <Route path="/dashboard" element={
+
+                <Route path="/learn" element={
                     <UserOnlyRoute>
                         <Dashboard/>
                     </UserOnlyRoute>
                 }/>
+                <Route path="/learn/:courseId/:courseTitle" element={
+                    <UserOnlyRoute>
+                        <CourseLearn/>
+                    </UserOnlyRoute>
+                }/>
+
             </Routes>
             {!hideLayout && <Footer/>}
         </>

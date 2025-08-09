@@ -1,15 +1,16 @@
 import React, {useEffect, useMemo, useState} from "react";
 import CoursesFilters from "../components/CoursesFilters.tsx";
 import CoursesGrid from "../components/CoursesGrid.tsx";
-import type {FilterParams} from "../types/FilterParams.tsx";
+import type {FilterParams} from "../models/FilterParams.tsx";
 import {fetchCoursesApi} from "../api/courseApi.ts";
 import ShifterRocket from "../../public/Rocket-Blue-Fire.png"
 import {useCourseStorage} from "../context/CourseStorage.ts";
-import type {CoursePreview} from "../types/CoursePreview.tsx";
+import type {CoursePreview} from "../models/javaObjects/CoursePreview.tsx";
 import {useAuthContext} from "../context/AuthContext.tsx";
 import {useLocation, useNavigate} from "react-router-dom";
 import CoursesFiltersSkeleton from "../components/skeletons/CoursesFiltersSkeleton.tsx";
 import CoursesGridSkeleton from "../components/skeletons/CoursesGridSkeleton.tsx";
+import {getFromSessionStorage, saveToSessionStorage} from "../utils/useSessionStorage.ts";
 
 function getInitialFiltersFromSearch(locationSearch: string): FilterParams {
     const searchParams = new URLSearchParams(locationSearch);
@@ -58,23 +59,26 @@ function Courses() {
 
     // Effect to initialize courses
     useEffect(() => {
-        const storedCourses = sessionStorage.getItem("allCourses");
+        const storedCourses = getFromSessionStorage<typeof allCourses>("allCourses");
         if (storedCourses) {
-            setAllCourses(JSON.parse(storedCourses));
+            setAllCourses(storedCourses);
             return;
         }
 
         setLoading(true);
         fetchCoursesApi(accessToken || "")
-            .then(courses => {
-                setAllCourses(courses);
-                sessionStorage.setItem("allCourses", JSON.stringify(courses));
+            .then(resCourses => {
+                setAllCourses(resCourses);
             })
             .catch(err => {
                 console.error("Failed to fetch courses:", err);
             })
             .finally(() => setLoading(false));
     }, [authLoading])
+    
+    useEffect(() => {
+        saveToSessionStorage("allCourses", allCourses);
+    }, [allCourses])
 
     // Effect to filter courses based on filters and favorites
     useEffect(() => {

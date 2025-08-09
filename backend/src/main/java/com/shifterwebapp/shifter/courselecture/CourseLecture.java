@@ -29,7 +29,8 @@ public class CourseLecture {
     @Column(columnDefinition = "text")
     private String contentText;
 
-    private String contentStoragePath;
+    @Column(columnDefinition = "text")
+    private String contentFileName;
 
     @Enumerated(EnumType.STRING)
     private ContentType contentType;

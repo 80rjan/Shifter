@@ -1,6 +1,6 @@
 import type {Dispatch, SetStateAction} from "react";
 import AdminAddCourseInput from "./AdminAddCourseInput.tsx";
-import type {ContentType} from "../../types/ContentType.tsx";
+import type {ContentType} from "../../models/types/ContentType.tsx";
 import AdminAddCourseInputSelect from "./AdminAddCourseInputSelect.tsx";
 import AdminAddCourseInputTextArea from "./AdminAddCourseInputTextArea.tsx";
 import {X, MoveUp, MoveDown, ChevronUp, ChevronDown} from "lucide-react";
@@ -359,7 +359,7 @@ function AdminAddCourseContents({
                                                     title: "",
                                                     position: item.courseLectures.length + 1,
                                                     contentText: "",
-                                                    contentStoragePath: "",
+                                                    contentFileName: "",
                                                     contentType: "TEXT",
                                                     description: "",
                                                     durationMinutes: 0

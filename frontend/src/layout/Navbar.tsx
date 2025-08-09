@@ -1,4 +1,6 @@
 import {Link} from "react-router-dom";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 import logo from "../../public/Shifter-S2W-White-Transparent.png"
 import {useAuthContext} from "../context/AuthContext.tsx";
 import NavbarLink from "../components/NavbarLink.tsx";
@@ -31,7 +33,7 @@ function Navbar() {
                 <NavbarLink to="/about" label="About"/>
                 {user ? (
                     <>
-                        <NavbarLink to="/dashboard" label="Dashboard"/>
+                        <NavbarLink to="/learn" label="Dashboard"/>
                         <div className="flex gap-4 items-center">
                             <Link
                                 to="/profile"

@@ -43,7 +43,7 @@ function HeroHome() {
                     <div
                         className="absolute bottom-5 flex gap-2 bg-gray/20 backdrop-blur-lg p-1 rounded-full border-3 border-black/5 text-md">
                         <Link
-                            to="/"
+                            to="/free-consultation"
                             className="hover:shadow-lg hover:shadow-shifter/50 transition-all duration-200 ease-in-out cursor-pointer
                         rounded-full text-white px-8 py-3 bg-shifter border-3 border-white/50 font-semibold
                         shadow-md shadow-shifter/30">

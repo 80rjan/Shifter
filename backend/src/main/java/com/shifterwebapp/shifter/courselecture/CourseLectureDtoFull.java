@@ -22,7 +22,7 @@ public class CourseLectureDtoFull {
 
     private String contentText;
 
-    private String contentStoragePath;
+    private String contentFileName;
 
     private ContentType contentType;
 }

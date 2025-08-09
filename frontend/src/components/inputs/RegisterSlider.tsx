@@ -1,6 +1,6 @@
 import React from "react";
-import type {UserRegister} from "../../types/UserRegister.tsx";
-import type {SliderProps} from "../../types/SliderProps.tsx";
+import type {UserRegister} from "../../models/javaObjects/UserRegister.tsx";
+import type {SliderProps} from "../../models/SliderProps.tsx";
 
 function RegisterSlider(sliderProps: SliderProps) {
     const [allOptions] = React.useState<string[]>(sliderProps.options || []);

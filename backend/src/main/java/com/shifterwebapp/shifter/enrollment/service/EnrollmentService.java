@@ -12,7 +12,6 @@ import com.shifterwebapp.shifter.enums.*;
 import com.shifterwebapp.shifter.exception.AlreadyEnrolledException;
 import com.shifterwebapp.shifter.exception.PaymentNotCompleteException;
 import com.shifterwebapp.shifter.payment.Payment;
-import com.shifterwebapp.shifter.payment.PaymentRepository;
 import com.shifterwebapp.shifter.payment.service.PaymentService;
 import com.shifterwebapp.shifter.user.service.UserService;
 import lombok.RequiredArgsConstructor;

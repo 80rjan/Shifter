@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 public class S3UploadResponse {
     public String type;
-    public String url;
+    public String fileName;
     public MetaInfo meta;
 }

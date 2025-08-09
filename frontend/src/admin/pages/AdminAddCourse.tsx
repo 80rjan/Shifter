@@ -3,7 +3,7 @@ import type {CourseEntity} from "../types/CourseEntity.tsx";
 import CourseCard from "../../components/CourseCard.tsx";
 import {createCourseApi, uploadCourseFilesApi} from "../api/addCourse.ts";
 import {useAuthContext} from "../../context/AuthContext.tsx";
-import type {ContentType} from "../../types/ContentType.tsx";
+import type {ContentType} from "../../models/types/ContentType.tsx";
 import AdminAddCourseInfo from "../components/AdminAddCourseInfo.tsx";
 import AdminAddCourseContent from "../components/AdminAddCourseContent.tsx";
 import {useNavigate} from "react-router-dom";
@@ -34,7 +34,7 @@ function AdminAddCourse() {
 
     const courseCard = (
         <CourseCard card={{
-            id: 0, // temporary since new course has no ID yet
+            id: 0, // temporary since new javaObjects has no ID yet
             imageUrl: courseImage ? URL.createObjectURL(courseImage) : "",
             color: course.color,
             titleShort: course.titleShort,
@@ -51,14 +51,26 @@ function AdminAddCourse() {
     )
 
     const handleAddCourse = async () => {
-        if (
-            !courseImage ||
-            !course.titleShort || !course.title || !course.difficulty || !course.durationMinutes ||
+        const countFileOrVideoLectures = course.courseContents
+            .flatMap(content => content.courseLectures)
+            .filter(lecture => lecture.contentType === "FILE" || lecture.contentType === "VIDEO" || lecture.contentType === "QUIZ" || lecture.contentType === "TOOL")
+            .length;
+
+        if (!courseImage) {
+            setError("Please upload a course image");
+            return;
+        }
+        if (!course.titleShort || !course.title || !course.difficulty ||
             !course.descriptionShort || !course.description || !course.descriptionLong ||
-            course.whatWillBeLearned.length === 0 || course.skillsGained.length === 0 || course.topicsCovered.length === 0 ||
-            course.courseContents.length === 0
+            course.whatWillBeLearned.length === 0 || course.skillsGained.length === 0 || course.topicsCovered.length === 0) {
+            setError("Please fill in all course details");
+            return;
+        }
+        if (
+            course.courseContents.length === 0 || course.courseContents.some(content => content.title.length === 0) ||
+            course.courseContents.some(content => content.courseLectures.length === 0) || courseLectureFiles.length < countFileOrVideoLectures
         ) {
-            setError("Please fill in all fields");
+            setError("Please add at least one content with lectures and upload files for all file/video/quiz/tool lectures");
             return;
         }
 
@@ -80,19 +92,19 @@ function AdminAddCourse() {
         try {
             const courseId = await createCourseApi(JSON.stringify(course), accessToken || "");
             if (!courseId) {
-                throw new Error("Failed to create course.");
+                throw new Error("Failed to create javaObjects.");
             }
 
             try {
                 await uploadCourseFilesApi(courseId, formData, accessToken || "");
                 navigate('/')
             } catch (err) {
-                console.error("Error uploading course image and lecture files:", err);
-                setError("An error occurred while uploading course image and lecture files. Please try again or contact support.");
+                console.error("Error uploading javaObjects image and lecture files:", err);
+                setError("An error occurred while uploading javaObjects image and lecture files. Please try again or contact support.");
             }
         } catch (err) {
-            console.error("Error creating course:", err);
-            setError("An error occurred while creating the course. Please try again or contact support.");
+            console.error("Error creating javaObjects:", err);
+            setError("An error occurred while creating the javaObjects. Please try again or contact support.");
         } finally {
             setLoading(false);
         }

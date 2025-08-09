@@ -1,4 +1,4 @@
-import type {ContentType} from "./ContentType.tsx";
+import type {ContentType} from "../types/ContentType.tsx";
 
 export interface CourseLecturePreview {
     title: string;

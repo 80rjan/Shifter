@@ -1,5 +1,5 @@
 import AdminAddCourseInput from "./AdminAddCourseInput.tsx";
-import type {Difficulty} from "../../types/Difficulty.tsx";
+import type {Difficulty} from "../../models/types/Difficulty.tsx";
 import AdminAddCourseInputWithPills from "./AdminAddCourseInputWithPills.tsx";
 import AdminAddCourseInputTextArea from "./AdminAddCourseInputTextArea.tsx";
 import type {CourseEntity} from "../types/CourseEntity.tsx";

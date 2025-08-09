@@ -31,7 +31,7 @@ function ProfileModalAddSkillsInterests({type, label, closeModal}: {
                     setOptions(skills);
                 })
                 .catch(err => {
-                    console.error("Failed to fetch course skills", err);
+                    console.error("Failed to fetch javaObjects skills", err);
                 })
                 .finally(() => setComponentRenderLoading(false));
         } else if (type === "interests") {
@@ -41,7 +41,7 @@ function ProfileModalAddSkillsInterests({type, label, closeModal}: {
                     setOptions(topics);
                 })
                 .catch(err => {
-                    console.error("Failed to fetch course topics", err);
+                    console.error("Failed to fetch javaObjects topics", err);
                 })
                 .finally(() => setComponentRenderLoading(false));
         }

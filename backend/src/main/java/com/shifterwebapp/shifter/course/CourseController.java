@@ -4,16 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.shifterwebapp.shifter.Validate;
 import com.shifterwebapp.shifter.auth.CustomAuthDetails;
 import com.shifterwebapp.shifter.course.dto.CourseDtoDetail;
+import com.shifterwebapp.shifter.course.dto.CourseDtoFull;
 import com.shifterwebapp.shifter.course.dto.CourseDtoPreview;
 import com.shifterwebapp.shifter.course.service.CourseService;
 import com.shifterwebapp.shifter.enrollment.service.EnrollmentService;
-import com.shifterwebapp.shifter.enums.Difficulty;
 import com.shifterwebapp.shifter.exception.ErrorResponse;
-import com.shifterwebapp.shifter.exception.ResourceNotFoundException;
 import com.shifterwebapp.shifter.upload.S3Service;
 import com.shifterwebapp.shifter.upload.S3UploadResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -135,6 +133,16 @@ public class CourseController {
         return ResponseEntity.ok(recommendedCourses);
     }
 
+    @GetMapping("/{courseId}/enrolled")
+    public ResponseEntity<?> getEnrolledCourseById(
+            @PathVariable("courseId") Long courseId,
+            Authentication authentication) {
+        Long userId = validate.extractUserId(authentication);
+
+        CourseDtoFull courseDtoFull = courseService.getEnrolledCourseById(courseId, userId);
+        return ResponseEntity.ok(courseDtoFull);
+    }
+
     @GetMapping("/{courseId}")
     public ResponseEntity<?> getCourseById(@PathVariable("courseId") Long courseId) {
         CourseDtoDetail courseDto = courseService.getCourseById(courseId);
@@ -177,7 +185,6 @@ public class CourseController {
                     s3Service.uploadCourseImageAndFiles(courseId, courseImage, files, types, meta);
 
             Course finalCourse = courseService.updateCourseWithImagesAndFiles(courseId, s3UploadResponse);
-            System.out.println("Final course: " + finalCourse);
 
             return ResponseEntity.ok(null);
         } catch (Exception e) {

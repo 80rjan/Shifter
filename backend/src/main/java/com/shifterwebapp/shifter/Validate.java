@@ -2,6 +2,7 @@ package com.shifterwebapp.shifter;
 
 import com.shifterwebapp.shifter.auth.CustomAuthDetails;
 import com.shifterwebapp.shifter.course.CourseRepository;
+import com.shifterwebapp.shifter.exception.BadRequestException;
 import com.shifterwebapp.shifter.exception.ResourceNotFoundException;
 import com.shifterwebapp.shifter.exception.UnauthorizedException;
 import com.shifterwebapp.shifter.payment.PaymentRepository;
@@ -35,6 +36,17 @@ public class Validate {
             throw new UnauthorizedException("User is not authenticated");
         }
     }
+
+    public Long extractUserId(Authentication authentication) {
+        validateUserIsAuthenticated(authentication);
+
+        Object detailsObj = authentication.getDetails();
+        if (!(detailsObj instanceof CustomAuthDetails details)) {
+            throw new BadRequestException("Invalid authentication details");
+        }
+        return details.getUserId();
+    }
+
 
     public void validateUserIsAdmin(Authentication authentication) {
         validateUserIsAuthenticated(authentication);

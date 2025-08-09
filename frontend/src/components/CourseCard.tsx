@@ -2,8 +2,8 @@ import React from "react";
 import StarFilled from "../assets/icons/StarFilled.tsx";
 import {hexToRgb} from "../utils/hexToRGB.ts";
 import {slugify} from "../utils/slug.ts";
-import { Link } from "react-router-dom";
-import type {CoursePreview} from "../types/CoursePreview.tsx";
+import {Link, useNavigate} from "react-router-dom";
+import type {CoursePreview} from "../models/javaObjects/CoursePreview.tsx";
 import HeartOutline from "../assets/icons/HeartOutline.tsx";
 import HeartFill from "../assets/icons/HeartFill.tsx";
 import {useAuthContext} from "../context/AuthContext.tsx";
@@ -19,11 +19,13 @@ function CourseCard({ card }: {card: CoursePreview}) {
     const [isHoveredHeart, setIsHoveredHeart] = React.useState<boolean>(false);
     const bgColor = "bg-[var(--card-color)]";
     const shadowColor = `rgba(${hexToRgb(card.color)}, 0.6)`;
+    const navigate = useNavigate();
 
     const handleToggleFavoriteCourse = () => {
         setUser(prevUser => {
             if (!prevUser) {
-                showInfoToast("Please log in to save favorite courses.");
+                navigate("/login");
+                // showInfoToast("Please log in to save favorite courses.");
                 return prevUser; // Exit early
             }
 
@@ -54,7 +56,7 @@ function CourseCard({ card }: {card: CoursePreview}) {
                         };
                     });
 
-                    console.error("Error toggling course favorite status:", error);
+                    console.error("Error toggling javaObjects favorite status:", error);
                 });
         }
     };
@@ -73,7 +75,7 @@ function CourseCard({ card }: {card: CoursePreview}) {
 
 
             {/*TITLE AND TOPICS LEARNED*/}
-            <div className="flex flex-col gap-2 items-start text-left h-full">
+            <div className="flex flex-col gap-2 items-start text-left justify-between h-full">
                 {/*Title*/}
                 <h3 className="font-semibold text-xl">{card.titleShort}</h3>
 
