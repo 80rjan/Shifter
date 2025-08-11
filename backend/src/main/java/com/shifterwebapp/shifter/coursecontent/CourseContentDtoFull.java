@@ -12,6 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 public class CourseContentDtoFull {
 
+    private Long id;
+
     private String title;
 
     private Integer position;

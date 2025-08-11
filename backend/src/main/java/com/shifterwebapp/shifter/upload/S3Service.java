@@ -102,7 +102,7 @@ public class S3Service {
             String type = types.get(i);
             String metaJson = metaList.get(i);
 
-            String key = "private/courseContent/" + type.toLowerCase() + "/course" + courseId + "_" + file.getOriginalFilename();
+            String key = "private/courseContent/" + type.toLowerCase() + "/course_" + courseId + "/" + file.getOriginalFilename();
 
             s3Client.putObject(
                     PutObjectRequest.builder()

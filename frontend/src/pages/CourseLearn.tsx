@@ -1,93 +1,59 @@
-import {useEffect, useState} from "react";
-import type {CourseFull} from "../models/javaObjects/CourseFull.tsx";
 import {useParams} from "react-router-dom";
-import {fetchCourseFullApi} from "../api/courseApi.ts";
 import {useAuthContext} from "../context/AuthContext.tsx";
 import CourseContentSideNav from "../components/learn/CourseContentSideNav.tsx";
-import type {CourseLectureFull} from "../models/javaObjects/CourseLectureFull.tsx";
-import {fetchPresignedUrlApi} from "../api/s3Api.ts";
 import CourseLearnSkeleton from "../components/skeletons/CourseLearnSkeleton.tsx";
+import {ArrowLeft, MoveLeft, MoveRight} from "lucide-react";
+import TextWithUnderline from "../components/TextWithUnderline.tsx";
+import {useCourseLearn} from "../hooks/useCourseLearn.tsx";
+import {useEffect, useRef, useState} from "react";
 
 function CourseLearn() {
     const {courseId} = useParams<{ courseId: string }>();
-    const [course, setCourse] = useState<CourseFull | null>(null);
-    const [activeLecture, setActiveLecture] = useState<CourseLectureFull>({
-        id: -1,
-        contentFileName: "",
-        contentText: "",
-        contentType: "TEXT",
-        description: "",
-        durationMinutes: 0,
-        position: 0,
-        title: ""
-    });
-    const [loading, setLoading] = useState(true);
-    const [isDownloading, setIsDownloading] = useState(false);
-    const [videoUrl, setVideoUrl] = useState<string>("");
     const {accessToken} = useAuthContext();
+    const [showSideNav, setShowSideNav] = useState(true);
+    const {
+        activeLecture,
+        setActiveLecture,
+        course,
+        loading,
+        videoUrl,
+        isDownloading,
+        updateLecture,
+        triggerDownload,
+    } = useCourseLearn(Number(courseId), accessToken || "");
+    const spanRef = useRef<HTMLSpanElement>(null);
+    const [spanWidth, setSpanWidth] = useState(0);
+    const [isBtnHovered, setIsBtnHovered] = useState(false);
 
     useEffect(() => {
-        setLoading(true);
-        fetchCourseFullApi(Number(courseId), accessToken || "")
-            .then(resCourse => {
-                setCourse(resCourse)
-                setActiveLecture(resCourse?.courseContents[0]?.courseLectures[0]);
-            })
-            .catch(err => {
-                console.error("Error fetching full course api: ", err)
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-    }, [courseId, accessToken]);
-
-    useEffect(() => {
-        if (activeLecture.contentType === "VIDEO") {
-            getPresignedUrl(60 * 60)
-                .then(url => {
-                    setVideoUrl(url || "")
-                })
-                .catch(err => {
-                    console.error("Error fetching video URL: ", err);
-                });
-        } else {
-            setVideoUrl("");
+        if (spanRef.current) {
+            setSpanWidth(spanRef.current.offsetWidth);
         }
+    }, [showSideNav]);
+
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
     }, [activeLecture]);
 
 
-    const getPresignedUrl = async (expirySeconds: number): Promise<string | undefined> => {
-        const encodedFileName = encodeURIComponent(activeLecture.contentFileName);
-        try {
-            const url = await fetchPresignedUrlApi(accessToken || "", Number(courseId) || -1, Number(activeLecture.id), encodedFileName, expirySeconds);
-            console.log("Presigned URL: ", url);
-            return url;
-        } catch (err) {
-            console.error("Error fetching presigned URL: ", err);
-        }
-    };
-
-
-    const triggerDownload = (url: string, filename: string) => {
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-    };
-
     if (loading) {
         return (
-            <CourseLearnSkeleton />
+            <CourseLearnSkeleton/>
         );
     }
 
+    const firstLectureId = course?.courseContents[0].courseLectures[0].id;
+    const allLectures = course?.courseContents.flatMap(content => content.courseLectures);
+    const lastLectureId = allLectures ? allLectures[allLectures.length - 1].id : undefined;
+
     return (
-        <main className="flex ">
+        <main className="flex relative overflow-x-clip">
             <div className="flex flex-col">
                 {
-                    activeLecture.contentType === "VIDEO" && (
+                    activeLecture?.contentType === "VIDEO" && (
                         <video
                             src={videoUrl}
                             controls
@@ -101,21 +67,14 @@ function CourseLearn() {
                     <h1 className="text-4xl font-semibold">{activeLecture?.title}</h1>
                     <p className="text-lg leading-loose">{activeLecture?.contentText}</p>
                     {
-                        (activeLecture?.contentType === "FILE" || activeLecture.contentType === "TOOL") && (
+                        (activeLecture?.contentType === "FILE" || activeLecture?.contentType === "TOOL" || activeLecture?.contentType === "QUIZ") && (
                             <div className="flex justify-between w-full gap-20 items-center py-12">
                                 <p className="text-lg font-medium">
                                     {activeLecture.contentFileName}
                                 </p>
                                 <button
                                     disabled={isDownloading}
-                                    onClick={async () => {
-                                        setIsDownloading(true);
-                                        const url = await getPresignedUrl(60 * 5)
-                                        if (url) {
-                                            triggerDownload(url, activeLecture.contentFileName);
-                                        }
-                                        setIsDownloading(false);
-                                    }}
+                                    onClick={() => triggerDownload()}
                                     className={`disabled:cursor-not-allowed disabled:opacity-40 hover:shadow-lg transition-all duration-300 ease-in-out cursor-pointer
                                     bg-shifter text-white text-lg px-8 py-2 rounded-md shadow-md border-2 border-white/40 shadow-shifter/40`}
                                 >
@@ -127,10 +86,84 @@ function CourseLearn() {
                         )
                     }
                 </div>
+
+                <div className="px-horizontal-sm py-vertical-md w-full flex justify-between items-center">
+                    {
+                        firstLectureId !== activeLecture?.id && (
+                            <button
+                                onClick={() => {
+                                    if (!course || !activeLecture) return;
+                                    const allLectures = course.courseContents.flatMap(content => content.courseLectures);
+                                    const currentIndex = allLectures.findIndex(lec => lec.id === activeLecture.id);
+                                    if (currentIndex > 0) {
+                                        setActiveLecture(allLectures[currentIndex - 1]);
+                                    }
+                                }}
+                                className="mr-auto flex items-center gap-2 text-lg cursor-pointer py-2">
+                                <MoveLeft size={20} strokeWidth={2}/>
+                                <TextWithUnderline label={"Previous Lecture"} fromRightToLeft={true}/>
+                            </button>
+                        )
+                    }
+                    {
+                        lastLectureId !== activeLecture?.id && (
+                            <button
+                                onClick={() => {
+                                    updateLecture(activeLecture?.userCourseProgress.id || -1, true)
+                                    if (!course || !activeLecture) return;
+                                    const allLectures = course.courseContents.flatMap(content => content.courseLectures);
+                                    const currentIndex = allLectures.findIndex(lec => lec.id === activeLecture.id);
+                                    if (currentIndex < allLectures.length - 1) {
+                                        setActiveLecture(allLectures[currentIndex + 1]);
+                                    }
+                                }}
+                                className="ml-auto flex items-center gap-2 text-lg cursor-pointer py-2">
+                                <TextWithUnderline label={"Next Lecture"}/>
+                                <MoveRight size={20} strokeWidth={2}/>
+                            </button>
+                        )
+                    }
+                </div>
             </div>
-            <CourseContentSideNav
-                setActiveLecture={setActiveLecture}
-                courseContents={course?.courseContents}/>
+            {
+                activeLecture && course && showSideNav ? (
+                    <CourseContentSideNav
+                        activeLecture={activeLecture}
+                        setActiveLecture={setActiveLecture}
+                        courseContents={course.courseContents}
+                        updateLecture={updateLecture}
+                        closeModal={() => setShowSideNav(false)}
+                    />
+                ) : (
+                    <button
+                        onMouseEnter={() => setIsBtnHovered(true)}
+                        onMouseLeave={() => setIsBtnHovered(false)}
+                        onClick={() => {
+                            setShowSideNav(true)
+                            setIsBtnHovered(false)
+                        }}
+                        className="absolute top-12 right-0 flex items-center gap-2
+                        h-fit bg-shifter px-4 py-2 border border-white/40 rounded-sm cursor-pointer group overflow-hidden hover:translate-x-0"
+                        style={{
+                            transform: !isBtnHovered ? `translateX(${spanWidth + 16}px)` : "translateX(0)",
+                            transition: "transform 0.5s ease",
+                        }}
+                    >
+                        <ArrowLeft
+                            size={22}
+                            strokeWidth={1.5}
+                            color={"var(--color-white)"}
+                        />
+                        <span
+                            ref={spanRef}
+                            className="text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-in-out"
+                        >
+                            Course Content
+                        </span>
+                    </button>
+
+                )
+            }
         </main>
     )
 }

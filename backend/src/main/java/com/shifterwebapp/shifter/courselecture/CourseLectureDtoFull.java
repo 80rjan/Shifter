@@ -1,6 +1,7 @@
 package com.shifterwebapp.shifter.courselecture;
 
 import com.shifterwebapp.shifter.enums.ContentType;
+import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgressDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,4 +26,6 @@ public class CourseLectureDtoFull {
     private String contentFileName;
 
     private ContentType contentType;
+
+    private UserCourseProgressDto userCourseProgress;
 }

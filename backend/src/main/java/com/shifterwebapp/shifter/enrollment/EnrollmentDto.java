@@ -17,8 +17,6 @@ public class EnrollmentDto {
 
     private EnrollmentStatus enrollmentStatus;
 
-    private Integer percentCompleted;
-
     private Date date;
 
     private Long courseId;

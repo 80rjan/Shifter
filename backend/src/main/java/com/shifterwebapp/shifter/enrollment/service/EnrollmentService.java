@@ -3,7 +3,7 @@ package com.shifterwebapp.shifter.enrollment.service;
 import com.shifterwebapp.shifter.Validate;
 import com.shifterwebapp.shifter.course.Course;
 import com.shifterwebapp.shifter.course.CourseRepository;
-import com.shifterwebapp.shifter.course.service.CourseService;
+import com.shifterwebapp.shifter.courselecture.CourseLecture;
 import com.shifterwebapp.shifter.enrollment.Enrollment;
 import com.shifterwebapp.shifter.enrollment.EnrollmentDto;
 import com.shifterwebapp.shifter.enrollment.EnrollmentMapper;
@@ -14,6 +14,8 @@ import com.shifterwebapp.shifter.exception.PaymentNotCompleteException;
 import com.shifterwebapp.shifter.payment.Payment;
 import com.shifterwebapp.shifter.payment.service.PaymentService;
 import com.shifterwebapp.shifter.user.service.UserService;
+import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgress;
+import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgressRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,7 @@ public class EnrollmentService implements ImplEnrollmentService{
 
     private final EnrollmentRepository enrollmentRepository;
     private final CourseRepository courseRepository;
+    private final UserCourseProgressRepository userCourseProgressRepository;
     private final UserService userService;
     private final PaymentService paymentService;
     private final EnrollmentMapper enrollmentMapper;
@@ -59,12 +62,11 @@ public class EnrollmentService implements ImplEnrollmentService{
     }
 
     @Override
-    public EnrollmentDto getEnrollmentByUserAndCourse(Long userId, Long courseId) {
+    public Enrollment getEnrollmentByUserAndCourse(Long userId, Long courseId) {
         validate.validateUserExists(userId);
         validate.validateCourseExists(courseId);
 
-        Enrollment enrollment = enrollmentRepository.findEnrollmentByUserAndCourse(userId, courseId);
-        return enrollmentMapper.toDto(enrollment);
+        return enrollmentRepository.findEnrollmentByUserAndCourse(userId, courseId);
     }
 
 
@@ -88,7 +90,6 @@ public class EnrollmentService implements ImplEnrollmentService{
 
         Enrollment enrollment = Enrollment.builder()
                 .enrollmentStatus(EnrollmentStatus.PENDING)
-                .percentCompleted(0)
                 .date(new Date())
                 .payment(payment)
                 .review(null)
@@ -96,6 +97,21 @@ public class EnrollmentService implements ImplEnrollmentService{
                 .build();
 
         enrollmentRepository.save(enrollment);
+
+        List<CourseLecture> courseLectures = course.getCourseContents().stream()
+                .flatMap(content -> content.getCourseLectures().stream())
+                .toList();
+
+        List<UserCourseProgress> progressList = courseLectures.stream()
+                .map(lecture -> UserCourseProgress.builder()
+                        .courseLecture(lecture)
+                        .enrollment(enrollment)
+                        .completed(false)
+                        .completedAt(null)
+                        .build())
+                .toList();
+
+        userCourseProgressRepository.saveAll(progressList);
 
         return enrollmentMapper.toDto(enrollment);
     }

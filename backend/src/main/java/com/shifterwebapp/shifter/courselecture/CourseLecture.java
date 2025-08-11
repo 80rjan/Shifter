@@ -1,9 +1,12 @@
 package com.shifterwebapp.shifter.courselecture;
 
 import com.shifterwebapp.shifter.coursecontent.CourseContent;
+import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgress;
 import jakarta.persistence.*;
 import com.shifterwebapp.shifter.enums.ContentType;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -38,5 +41,8 @@ public class CourseLecture {
     @ManyToOne
     @JoinColumn(name = "course_content_id")
     private CourseContent courseContent;
+
+    @OneToMany(mappedBy = "courseLecture", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserCourseProgress> userCourseProgressList;
 }
 

@@ -25,8 +25,6 @@ public class Enrollment {
     @Enumerated(EnumType.STRING)
     private EnrollmentStatus enrollmentStatus;
 
-    private Integer percentCompleted;
-
     private Date date;
 
     @OneToOne(cascade = CascadeType.PERSIST, orphanRemoval = true)  // Persist ???? Orphan removal ????

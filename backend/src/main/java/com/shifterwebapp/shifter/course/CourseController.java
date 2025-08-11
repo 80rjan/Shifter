@@ -136,7 +136,8 @@ public class CourseController {
     @GetMapping("/{courseId}/enrolled")
     public ResponseEntity<?> getEnrolledCourseById(
             @PathVariable("courseId") Long courseId,
-            Authentication authentication) {
+            Authentication authentication
+    ) {
         Long userId = validate.extractUserId(authentication);
 
         CourseDtoFull courseDtoFull = courseService.getEnrolledCourseById(courseId, userId);

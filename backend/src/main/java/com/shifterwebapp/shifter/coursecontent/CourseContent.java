@@ -26,13 +26,11 @@ public class CourseContent {
     private Integer position;
 
     @OneToMany(mappedBy = "courseContent", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("position ASC")
     private List<CourseLecture> courseLectures;
 
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
-
-    @OneToMany(mappedBy = "courseContent", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserCourseProgress> userCourseProgressList;
 }
 

@@ -1,4 +1,5 @@
 import type {ContentType} from "../types/ContentType.tsx";
+import type {UserCourseProgress} from "./UserCourseProgress.tsx";
 
 export interface CourseLectureFull {
     id: number;
@@ -9,4 +10,5 @@ export interface CourseLectureFull {
     contentText: string;
     contentFileName: string;
     contentType: ContentType;
+    userCourseProgress: UserCourseProgress;
 }

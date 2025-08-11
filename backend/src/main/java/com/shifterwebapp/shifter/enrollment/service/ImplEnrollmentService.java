@@ -11,7 +11,7 @@ public interface ImplEnrollmentService {
     List<EnrollmentDto> getEnrollmentsByUser(Long userId);
     List<Long> getCourseIdsByUserEnrollments(Long userId);
     List<EnrollmentDto> getEnrollmentsByCourse(Long courseId);
-    EnrollmentDto getEnrollmentByUserAndCourse(Long userId, Long courseId);
+    Enrollment getEnrollmentByUserAndCourse(Long userId, Long courseId);
 
     EnrollmentDto enrollUser(Long courseId, Long userId);
 

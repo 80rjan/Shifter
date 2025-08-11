@@ -63,6 +63,7 @@ public class Course {
     private List<Enrollment> enrollments;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("position ASC")
     private List<CourseContent> courseContents;
 }
 

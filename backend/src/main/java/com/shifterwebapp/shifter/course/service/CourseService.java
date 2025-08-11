@@ -11,18 +11,28 @@ import com.shifterwebapp.shifter.course.mapper.CourseMapperDetail;
 import com.shifterwebapp.shifter.course.mapper.CourseMapperFull;
 import com.shifterwebapp.shifter.course.mapper.CourseMapperPreview;
 import com.shifterwebapp.shifter.coursecontent.CourseContent;
+import com.shifterwebapp.shifter.coursecontent.CourseContentDtoFull;
 import com.shifterwebapp.shifter.courselecture.CourseLecture;
+import com.shifterwebapp.shifter.courselecture.CourseLectureDtoFull;
+import com.shifterwebapp.shifter.enrollment.Enrollment;
 import com.shifterwebapp.shifter.enrollment.service.EnrollmentService;
 import com.shifterwebapp.shifter.exception.AccessDeniedException;
 import com.shifterwebapp.shifter.upload.MetaInfo;
 import com.shifterwebapp.shifter.upload.S3UploadResponse;
 import com.shifterwebapp.shifter.user.UserDto;
 import com.shifterwebapp.shifter.user.service.UserService;
+import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgress;
+import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgressDto;
+import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgressMapper;
+import com.shifterwebapp.shifter.usercourseprogress.service.UserCourseProgressService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +42,9 @@ public class CourseService implements ImplCourseService {
     private final CourseMapperPreview courseMapperPreview;
     private final CourseMapperDetail courseMapperDetail;
     private final CourseMapperFull courseMapperFull;
+    private final UserCourseProgressMapper userCourseProgressMapper;
     private final UserService userService;
+    private final UserCourseProgressService userCourseProgressService;
     private final Validate validate;
     private final EnrollmentService enrollmentService;
 
@@ -112,8 +124,30 @@ public class CourseService implements ImplCourseService {
             throw new AccessDeniedException("User with ID " + userId + " is not enrolled in course with ID " + courseId + " and is therefore not authorized to access the full course with its content!");
         }
 
+        Enrollment enrollment = enrollmentService.getEnrollmentByUserAndCourse(userId, courseId);
+        if (enrollment == null) {
+            throw new AccessDeniedException("User with ID " + userId + " is not enrolled in course with ID " + courseId + " and is therefore not authorized to access the full course with its content!");
+        }
+
+        List<UserCourseProgress> userCourseProgress = userCourseProgressService.getUserCourseProgressByEnrollment(enrollment.getId());
+
+        Map<Long, UserCourseProgress> progressMap = userCourseProgress.stream()
+                .collect(Collectors.toMap(
+                        UserCourseProgress::getCourseLectureId,
+                        Function.identity()
+                ));
+
         Course course = courseRepository.findById(courseId).orElseThrow();
-        return courseMapperFull.toDto(course);
+        CourseDtoFull courseDto = courseMapperFull.toDto(course);
+
+        for (CourseContentDtoFull contentDto : courseDto.getCourseContents()) {
+            for (CourseLectureDtoFull lectureDto : contentDto.getCourseLectures()) {
+                UserCourseProgress progress = progressMap.get(lectureDto.getId());
+                lectureDto.setUserCourseProgress(userCourseProgressMapper.toDto(progress));
+            }
+        }
+
+        return courseDto;
     }
 
     @Override

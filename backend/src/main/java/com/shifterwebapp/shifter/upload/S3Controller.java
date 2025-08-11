@@ -40,14 +40,12 @@ public class S3Controller {
             throw new AccessDeniedException("You do not have access to this course content.");
         }
 
-        System.out.println(fileName);
-        System.out.println(courseId);
         String contentType = courseLectureService.getContentType(fileName, courseId, lectureId);
         if (contentType == null) {
             throw new ResourceNotFoundException("Content type not found for the specified file.");
         }
 
-        String key = "private/courseContent/" + contentType.toLowerCase() + "/course" + courseId + "_" + fileName;
+        String key = "private/courseContent/" + contentType.toLowerCase() + "/course_" + courseId + "/" + fileName;
         System.out.println(key);
 
         if (!courseService.lectureFileExistsInCourse(courseId, fileName)) {
