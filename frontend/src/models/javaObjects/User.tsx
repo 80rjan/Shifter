@@ -2,6 +2,7 @@ export interface User {
     id: number,
     email: string;
     name: string;
+    hasUsedFreeConsultation: boolean;
     companyType: string;
     workPosition: string;
     interests: string[];

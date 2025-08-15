@@ -46,6 +46,19 @@ public class UserService implements ImplUserService {
     }
 
     @Override
+    public String getUserEmailById(Long userId) {
+        validate.validateUserExists(userId);
+        return userRepository.getUserEmailById(userId);
+    }
+
+    @Override
+    public Boolean getUserHasUsedFreeConsultation(String userEmail) {
+        validate.validateUserExists(userEmail);
+        User user = userRepository.findByEmail(userEmail).orElseThrow();
+        return user.getHasUsedFreeConsultation();
+    }
+
+    @Override
     public Boolean existsUserByEmail(String email) {
         return userRepository.existsUserByEmail(email);
     }
@@ -241,5 +254,13 @@ public class UserService implements ImplUserService {
         }
         userRepository.save(user);
         return userMapper.toDto(user);
+    }
+
+    @Override
+    public void markUserAsUsedFreeConsultation(String email) {
+        validate.validateUserExists(email);
+        User user = userRepository.findByEmail(email).orElseThrow();
+        user.setHasUsedFreeConsultation(true);
+        userRepository.save(user);
     }
 }

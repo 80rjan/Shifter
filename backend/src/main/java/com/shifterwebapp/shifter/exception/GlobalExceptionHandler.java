@@ -34,6 +34,23 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(ex.getMessage()));
     }
 
+    @ExceptionHandler(TimeSlotUnavailableException.class)
+    public ResponseEntity<ErrorResponse> handleTimeSlotUnavailableException(TimeSlotUnavailableException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(GoogleCalendarException.class)
+    public ResponseEntity<String> handleGoogleCalendarException(GoogleCalendarException e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Google Calendar error: " + e.getMessage());
+    }
+
+    @ExceptionHandler(ZoomMeetingException.class)
+    public ResponseEntity<String> handleZoomMeetingException(ZoomMeetingException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Zoom API error: " + e.getMessage());
+    }
+
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(ex.getMessage()));

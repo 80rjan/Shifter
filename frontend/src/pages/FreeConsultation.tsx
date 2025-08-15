@@ -1,7 +1,62 @@
 import {useAuthContext} from "../context/AuthContext.tsx";
+import React, {useEffect, useState} from "react";
+import {fetchExpertFreeTimeSlotsApi, scheduleMeetingApi} from "../api/meetingApi.ts";
+import type {UserMeetingInfoRequest} from "../models/UserMeetingInfoRequest.tsx";
 
 function FreeConsultation() {
-    const {user} = useAuthContext();
+    const {user, setUser, accessToken, authChecked} = useAuthContext();
+    const [loadingDateTime, setLoadingDateTime] = useState(true);
+    const [loadingSubmitForm, setLoadingSubmitForm] = useState(false);
+    const [error, setError] = useState<string>("");
+    const [selectedDate, setSelectedDate] = useState<string>("");
+    const [selectedTime, setSelectedTime] = useState<string>("");
+    const [freeSlots, setFreeSlots] = useState<Record<string, string[]>>({"": [""]});
+    const [userMeetingInfo, setUserMeetingInfo] = useState<UserMeetingInfoRequest>({
+        aboutCompany: "",
+        challenges: "",
+        expectations: "",
+        otherInfo: ""
+    });
+    const [meetingScheduled, setMeetingScheduled] = useState<boolean>(false);
+
+    const handleScheduleMeeting = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (!selectedDate || !selectedTime) {
+            setError("Please select both date and time.");
+            return;
+        }
+
+        setLoadingSubmitForm(true);
+        scheduleMeetingApi(accessToken || "", selectedTime, selectedDate, userMeetingInfo)
+            .then(() => {
+                setMeetingScheduled(true);
+                setError("");
+
+                if (user)
+                    setUser({...user, hasUsedFreeConsultation: true})
+            })
+            .catch(error => {
+                console.error("Error scheduling meeting:", error);
+                setError("Failed to schedule the meeting. Please try again later or contact support.");
+            })
+            .finally(() => setLoadingSubmitForm(false));
+    }
+
+    useEffect(() => {
+        if (!authChecked || !accessToken)
+            return;
+
+        setLoadingDateTime(true);
+        fetchExpertFreeTimeSlotsApi(accessToken)
+            .then(data => {
+                console.log("Available time slots:", data);
+                setFreeSlots(data)
+            })
+            .catch(error => {
+                console.error("Error fetching time slots:", error);
+            })
+            .finally(() => setLoadingDateTime(false));
+    }, []);
 
     return (
         <main className="">
@@ -12,8 +67,8 @@ function FreeConsultation() {
                 <div className="flex flex-col gap-4 w-1/2">
                     <h1 className="text-5xl font-bold">Book Your Free Expert Session</h1>
                     <p className="text-xl font-light ">
-                        Talk to an expert about your business goals and challenges. Get a personalized mentorship
-                        plan or course recommendation that fits your unique situation.
+                        Talk to an expert about your business goals and challenges.
+                        Get a personalized program recommendation tailored to your needs.
                     </p>
                 </div>
             </section>
@@ -25,17 +80,21 @@ function FreeConsultation() {
 
                     <div>
                         <ol className="flex flex-col">
+                            {/*<Step*/}
+                            {/*    title={"Submit Your Request"}*/}
+                            {/*    description={"Share your business challenges and objectives by completing the form. This helps us understand your needs and prepare a personalized session."}*/}
+                            {/*/>*/}
                             <Step
-                                title={"Expert Prepares and Sends Invite"}
-                                description={"Our expert reviews your request and sends a meeting invitation to your email."}
+                                title={"Your Expert is Assigned"}
+                                description={"We schedule an expert for your session and send you a confirmation email with all the meeting details."}
                             />
                             <Step
-                                title={"You Confirm the Invite"}
-                                description={"You’ll receive an email with the meeting details — simply confirm the invite to secure your spot."}
+                                title={"Expert Prepares for Your Session"}
+                                description={"Your expert reviews the information you provided to create valuable insights and a strategy tailored to your situation."}
                             />
                             <Step
-                                title={"Join Your Online Session"}
-                                description={"Attend the session and walk away with a tailored plan built around your goals — designed to help you overcome challenges, grow, and move forward with clarity."}
+                                title={"Attend Your Personalized Session"}
+                                description={"Join the session and receive actionable guidance along with a program or mentorship recommendation designed specifically for your goals."}
                                 isLast={true}
                             />
                         </ol>
@@ -45,7 +104,11 @@ function FreeConsultation() {
                 {/*FORM*/}
                 <div className="flex flex-col gap-4 bg-white rounded-xl w-2/3 px-horizontal-sm py-vertical-md ">
                     {/*Automatically populated*/}
-                    <div className="grid grid-cols-2 gap-y-6">
+                    <div className="grid grid-cols-2 gap-y-4">
+                        <p className="text-black/40 col-span-2">
+                            These values are automatically populated from your profile.
+                            If any of them are incorrect, please update them in the Profile page.
+                        </p>
                         <p className="font-light text-black/60 text-lg ">Name: <span
                             className="text-black font-medium">{user?.name}</span></p>
                         <p className="font-light text-black/60 text-lg ">Email: <span
@@ -55,38 +118,110 @@ function FreeConsultation() {
                         </p>
                         <p className="font-light text-black/60 text-lg ">Work Position: <span
                             className="text-black font-medium">{user?.workPosition}</span></p>
-                        <p className="text-black/40 col-span-2">
-                            <sup>*</sup> These values are automatically populated from your profile.
-                            If any of them are incorrect, please update them in the Profile page.
-                        </p>
                     </div>
 
                     <hr className="border-t-2 border-black/20"/>
 
                     {/*Form*/}
                     <form
+                        onSubmit={handleScheduleMeeting}
                         className="flex flex-col gap-6 w-full">
-                        <LabelInput
+                        <p className="text-black/40 col-span-2">
+                            <sup>*</sup> These fields are optional. Filling them out helps us better understand your
+                            challenges and objectives, so we can prepare a more personalized session.
+                        </p>
+                        <TextInput
                             label="About your business"
                             name="intro"
                             placeholder="What you do, industry, customers"
+                            onChange={(e) => setUserMeetingInfo({...userMeetingInfo, aboutCompany: e.target.value})}
                         />
-                        <LabelInput
+                        <TextInput
                             label="Your current challenges"
                             name="challenges"
                             placeholder="E.g. sales, growth, team issues"
+                            onChange={(e) => setUserMeetingInfo({...userMeetingInfo, challenges: e.target.value})}
                         />
-                        <LabelInput
+                        <TextInput
                             label="What you want from the session"
                             name="expectations"
                             placeholder="Advice, strategy, solutions"
+                            onChange={(e) => setUserMeetingInfo({...userMeetingInfo, expectations: e.target.value})}
                         />
-                        <LabelInput
-                            label="Anything else? (optional)"
+                        <TextInput
+                            label="Anything else"
                             name="additional"
                             placeholder="Extra context or details"
+                            onChange={(e) => setUserMeetingInfo({...userMeetingInfo, otherInfo: e.target.value})}
                         />
 
+                        <hr className="border-t-2 border-black/20"/>
+
+                        <div className="flex justify-between items-center">
+                            {
+                                loadingDateTime ? (
+                                    <>
+                                        <div className="bg-gray-300 animate-pulse py-2 px-8 rounded-sm h-10 w-50"></div>
+                                        <div className="bg-gray-300 animate-pulse py-2 px-8 rounded-sm h-10 w-50"></div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <SelectInput
+                                            value={selectedDate}
+                                            onChange={(e) => setSelectedDate(e.target.value)}
+                                            firstOption={"Select a date"}
+                                            options={Object.keys(freeSlots)}
+                                        />
+                                        <SelectInput
+                                            value={selectedTime}
+                                            onChange={(e) => setSelectedTime(e.target.value)}
+                                            firstOption={"Select a time"}
+                                            options={freeSlots[selectedDate]}
+                                        />
+                                    </>
+                                )
+                            }
+                        </div>
+
+                        {
+                            error && (
+                                <p className="text-red-500 text-md font-medium text-center">
+                                    {error}
+                                </p>
+                            )
+                        }
+                        {
+                            meetingScheduled ? (
+                                <div className="my-12 text-center">
+                                    <h2 className="text-2xl font-bold text-dark-blue mb-4">
+                                        Your free consultation is scheduled! 🎉
+                                    </h2>
+                                    <p className="text-lg font-medium text-black/80 max-w-xl mx-auto">
+                                        Completing the form was the <span className="font-semibold text-dark-blue">first step toward progress and growth</span>.
+                                        Check your <span className="font-semibold text-dark-blue">email for the Zoom link</span> to continue your journey.
+                                    </p>
+                                </div>
+
+                            ) : (
+                                <button
+                                    type="submit"
+                                    disabled={loadingSubmitForm}
+                                    className="disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none
+                                    hover:shadow-md hover:shadow-dark-blue/60 transition-all duration-300 ease-in-out
+                                    shadow-sm shadow-dark-blue/30 border-2 border-white/20
+                                    w-full py-2 bg-dark-blue text-white text-lg font-semibold rounded-sm cursor-pointer"
+                                >
+                                    {
+                                        loadingSubmitForm ? (
+                                            <div className="flex justify-center gap-6 items-center">
+                                                Booking...
+                                                <div className="loader-white w-8 h-8"/>
+                                            </div>
+                                        ) : "Book Session"
+                                    }
+                                </button>
+                            )
+                        }
                     </form>
                 </div>
             </section>
@@ -94,15 +229,17 @@ function FreeConsultation() {
     )
 }
 
-function LabelInput({label, name, placeholder}: {
+function TextInput({label, name, placeholder, onChange}: {
     label: string;
     name: string;
     placeholder: string;
+    onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }) {
     return (
         <label className="flex flex-col gap-2">
-            <span className="text-black font-semibold text-xl">{label}</span>
+            <span className="text-black font-semibold text-xl"><sup>*</sup> {label}</span>
             <textarea
+                onChange={onChange}
                 rows={2}
                 name={name}
                 placeholder={placeholder}
@@ -111,6 +248,27 @@ function LabelInput({label, name, placeholder}: {
             />
         </label>
     )
+}
+
+function SelectInput({value, onChange, firstOption, options}: {
+    value: string;
+    onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+    firstOption: string;
+    options: string[];
+}) {
+    return (
+        <select
+            className="bg-dark-blue/5 border-1 border-black/10 py-2 px-8 rounded-sm
+                font-medium resize-none overflow-hidden min-h-fit cursor-pointer"
+            value={value} onChange={onChange}>
+            <option value="">{firstOption}</option>
+            {options?.map((option) => (
+                <option key={option} value={option}>
+                    {option}
+                </option>
+            ))}
+        </select>
+    );
 }
 
 

@@ -187,18 +187,25 @@ select:-webkit-autofill {
 
 
 /* HTML: <div class="loader"></div> */
-.loader {
+.loader, .loader-white {
     /*margin-left: 20px;*/
     /*width: 40px;*/
     aspect-ratio: 1;
     display: grid;
     border: 4px solid #0000;
     border-radius: 50%;
-    border-right-color: var(--color-shifter);
     animation: l15 1s infinite linear;
 }
+.loader-white {
+    border-right-color: var(--color-white);
+}
+.loader {
+    border-right-color: var(--color-shifter);
+}
 .loader::before,
-.loader::after {
+.loader::after,
+.loader-white::before,
+.loader-white::after {
     content: "";
     grid-area: 1/1;
     margin: 2px;
@@ -206,7 +213,7 @@ select:-webkit-autofill {
     border-radius: 50%;
     animation: l15 2s infinite;
 }
-.loader::after {
+.loader::after, .loader-white::after {
     margin: 8px;
     animation-duration: 3s;
 }

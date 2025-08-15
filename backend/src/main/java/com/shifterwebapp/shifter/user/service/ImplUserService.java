@@ -13,6 +13,9 @@ public interface ImplUserService {
     UserDto getUserById(Long id);
     User getUserEntityById(Long userId);
     User getUserEntityByEmail(String email);
+    String getUserEmailById(Long userId);
+    Boolean getUserHasUsedFreeConsultation(String userEmail);
+
     Boolean existsUserByEmail(String email);
 
     User createUser(RegisterDto registerDto);
@@ -35,4 +38,5 @@ public interface ImplUserService {
     UserDto removePoints(Long id, Integer removePointsAchieved);
     UserDto removePayment(Long id, Payment removePayment);
 
+    void markUserAsUsedFreeConsultation(String userEmail);
 }
