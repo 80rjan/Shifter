@@ -1,8 +1,13 @@
 package com.shifterwebapp.shifter.review;
 
+import com.shifterwebapp.shifter.Validate;
 import com.shifterwebapp.shifter.review.service.ReviewService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +18,7 @@ import java.util.List;
 public class ReviewController {
 
     private final ReviewService reviewService;
+    private final Validate validate;
 
     @GetMapping("/{reviewId}")
     public ResponseEntity<ReviewDto> getReviewById(@PathVariable Long reviewId) {
@@ -20,25 +26,53 @@ public class ReviewController {
         return ResponseEntity.ok(reviewDto);
     }
 
-    @GetMapping("/{courseId}")
-    public ResponseEntity<List<ReviewDto>> getReviewByCourse(@PathVariable Long courseId) {
-        List<ReviewDto> reviewDtos = reviewService.getReviewsByCourse(courseId);
+    @GetMapping("/course/{courseId}")
+    public ResponseEntity<ReviewDto> getReviewByCourse(
+            @PathVariable Long courseId,
+            Authentication authentication
+    ) {
+        Long userId = validate.extractUserId(authentication);
+        ReviewDto reviewDtos = reviewService.getReviewByUserAndCourse(userId, courseId);
         return ResponseEntity.ok(reviewDtos);
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<ReviewDto>> getReviewByuser(@PathVariable Long userId) {
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<ReviewDto>> getReviewByUser(@PathVariable Long userId) {
         List<ReviewDto> reviewDtos = reviewService.getReviewsByUser(userId);
         return ResponseEntity.ok(reviewDtos);
     }
 
-    @PostMapping
-    public ResponseEntity<?> writeReview(@RequestParam Long enrollmentId, @RequestBody ReviewDto reviewDto) {
-        try {
-            ReviewDto savedReviewDto = reviewService.writeReview(enrollmentId, reviewDto);
-            return ResponseEntity.ok(savedReviewDto);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @PostMapping("/{courseId}")
+    public ResponseEntity<?> writeReview(
+            @PathVariable Long courseId,
+            @RequestBody ReviewRequest reviewRequest,
+            Authentication authentication
+    ) {
+        Long userId = validate.extractUserId(authentication);
+
+        reviewService.writeReview(
+                userId,
+                courseId,
+                reviewRequest
+        );
+
+        return ResponseEntity.ok("Successfully created review");
+    }
+
+    @PutMapping("/{courseId}")
+    public ResponseEntity<?> updateReview(
+            @PathVariable Long courseId,
+            @RequestBody ReviewRequest reviewRequest,
+            Authentication authentication
+    ) {
+        Long userId = validate.extractUserId(authentication);
+
+        reviewService.updateReview(
+                userId,
+                courseId,
+                reviewRequest
+        );
+
+        return ResponseEntity.ok("Successfully created review");
     }
 }

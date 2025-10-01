@@ -17,6 +17,8 @@ public interface ImplEnrollmentService {
 
     Boolean isUserEnrolledInCourse(Long userId, Long courseId);
 
-    EnrollmentDto updateEnrollmentStatusToActive(Long enrollmentId);
+    EnrollmentDto updateEnrollmentStatusToActive(Enrollment enrollment);
     EnrollmentDto updateEnrollmentStatusToCompleted(Long enrollmentId);
+
+    Enrollment saveEnrollment(Enrollment enrollment);
 }

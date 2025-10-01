@@ -3,7 +3,7 @@ export interface User {
     email: string;
     name: string;
     hasUsedFreeConsultation: boolean;
-    companyType: string;
+    companySize: string;
     workPosition: string;
     interests: string[];
     skills: string[];

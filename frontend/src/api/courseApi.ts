@@ -2,6 +2,7 @@ import axios from "axios";
 import type {CoursePreview} from "../models/javaObjects/CoursePreview.tsx";
 import type {CourseDetail} from "../models/javaObjects/CourseDetail.tsx";
 import type {CourseFull} from "../models/javaObjects/CourseFull.tsx";
+import type {CoursePreviewEnrolled} from "../models/javaObjects/CoursePreviewEnrolled.tsx";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
@@ -44,7 +45,7 @@ export const fetchRecommendedCoursesApi = async (accessToken: string): Promise<C
     return res.data;
 }
 
-export const fetchEnrolledCoursesApi = async (accessToken: string): Promise<CoursePreview[]> => {
+export const fetchEnrolledCoursesApi = async (accessToken: string): Promise<CoursePreviewEnrolled[]> => {
     const res = await axios.get(`${backendUrl}/api/courses/enrolled`, {
         headers: {
             Authorization: `Bearer ${accessToken}`

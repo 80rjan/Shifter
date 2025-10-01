@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Free Consultation is Scheduled!</title>
+    <style>
+        /* Universal inline styles for email client compatibility */
+        body, p, h1, h2, h3, h4, h5, h6 {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333333;
+            background-color: #F8F6F5; /* mainBgColor */
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* The .button class is still defined but not used here */
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 4px;
+            background-color: #008CC2; /* primaryColor/buttonBgColor */
+            color: #ffffff !important;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<table width="100%%" bgcolor="#F8F6F5" border="0" cellpadding="0" cellspacing="0" role="presentation">
+    <tr>
+        <td align="center">
+            <table width="600" style="max-width: 600px;" border="0" cellpadding="0" cellspacing="0" role="presentation">
+                <tr>
+                    <td height="30">&nbsp;</td>
+                </tr>
+
+                <tr>
+                    <td align="left" style="padding: 0 20px;">
+                        <table width="100%%" border="0" cellpadding="0" cellspacing="0" role="presentation">
+                            <tr>
+                                <td align="left" style="padding-bottom: 10px;">
+                                    <a href="https://www.shift-er.com" target="_blank">
+                                        <img src="https://www.shif-er.com/public/Shifter-S2W-Transparent.png" alt="Shifter Logo" width="120"
+                                             style="display: block; border: 0;">
+                                    </a>
+                                </td>
+                                <td align="right" style="font-size: 14px; color: #666666;">
+                                    <a href="https://www.shift-er.com/learn" target="_blank"
+                                       style="color: #666666; text-decoration: none;">My Courses</a>
+                                    |
+                                    <a href="https://www.shift-er.com/courses" target="_blank"
+                                       style="color: #666666; text-decoration: none;">Course Catalog</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td height="20">&nbsp;</td>
+                </tr>
+
+                <tr>
+                    <td align="center" bgcolor="#FFFFFF"
+                        style="border-radius: 8px; padding: 40px 40px 30px 40px; box-shadow: 0 4px 8px rgba(0,0,0,0.05);">
+                        <table width="100%%" border="0" cellpadding="0" cellspacing="0" role="presentation">
+                            <tr>
+                                <td align="left">
+                                    <h1 style="font-size: 30px; line-height: 1.2; margin-bottom: 20px;">
+                                        Consultation Scheduled!</h1>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left">
+                                    <p style="font-size: 16px; line-height: 1.6; color: #555555; margin-bottom: 20px;">
+                                        Thank you for booking a session with us. Your free consultation is successfully confirmed. Here are the details:
+                                    </p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td align="left" style="padding: 10px 0 25px 0;">
+                                    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size: 16px;">
+                                        <tr>
+                                            <td width="30%" style="font-weight: bold; padding-bottom: 8px; color: #222222;">Date:</td>
+                                            <td width="70%" style="padding-bottom: 8px; color: #333333;">${date}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold; padding-bottom: 8px; color: #222222;">Time:</td>
+                                            <td style="padding-bottom: 8px; color: #333333;">${time}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold; padding-bottom: 8px; color: #222222;">Location:</td>
+                                            <td style="padding-bottom: 8px; color: #333333;">Online - Zoom</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold; padding-bottom: 8px; color: #222222;">Link:</td>
+                                            <td style="padding-bottom: 8px;">
+                                                <a href="${zoomLink}" style="color: #008CC2; text-decoration: underline;" target="_blank">Join Meeting Here</a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td align="left">
+                                    <p style="font-size: 16px; line-height: 1.6; color: #555555; margin-bottom: 15px;">
+                                        This session is designed to understand your challenges, goals, and preferences. Our expert will provide valuable insights and a personalized program recommendation.
+                                    </p>
+                                    <p style="font-size: 16px; line-height: 1.6; color: #555555; margin-bottom: 0;">
+                                        <strong>We look forward to helping you take the next step!</strong>
+                                    </p>
+
+                                    <p style="font-size: 16px; line-height: 1.6; color: #555555; margin-top: 15px;">
+                                        If you need to <strong>reschedule or cancel</strong>, please send an email to our dedicated support team here:
+                                        <a href="mailto:support@shift-er.com" style="color: #008CC2; text-decoration: underline;">support@shift-er.com</a>
+                                    </p>
+                                </td>
+                            </tr>
+
+                        </table>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td height="30">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td align="center" style="font-size: 12px; color: #666666; padding: 0 20px;">
+                        <p>&copy; ${currentYear} Shifter. All rights reserved.</p>
+                        <p style="margin-top: 10px;">Need Help? Contact our support at <a
+                                href="mailto:support@shift-er.com" style="color: #666666;">support@shift-er.com</a></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td height="30">&nbsp;</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

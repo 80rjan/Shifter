@@ -5,6 +5,7 @@ import com.shifterwebapp.shifter.course.Course;
 import com.shifterwebapp.shifter.course.dto.CourseDtoDetail;
 import com.shifterwebapp.shifter.course.dto.CourseDtoFull;
 import com.shifterwebapp.shifter.course.dto.CourseDtoPreview;
+import com.shifterwebapp.shifter.course.dto.CourseDtoPreviewEnrolled;
 import com.shifterwebapp.shifter.upload.S3UploadResponse;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public interface ImplCourseService {
 //    List<CourseDtoPreview> getAllCourses(Specification<Course> specification);
     List<CourseDtoPreview> getAllCourses(List<Long> courseIds);
     List<CourseDtoPreview> getRecommendedCourses(Long userId);
-    List<CourseDtoPreview> getEnrolledCourses(Long userId);
+    List<CourseDtoPreviewEnrolled> getEnrolledCourses(Long userId);
     List<CourseDtoPreview> getTopRatedCourses();
     List<CourseDtoPreview> getMostPopularCourses();
     CourseDtoDetail getCourseById(Long id);

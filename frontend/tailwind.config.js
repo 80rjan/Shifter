@@ -32,6 +32,7 @@ export default {
                 'bright-gray': '#DDDDDD',
                 gray: '#E5E7EB',
                 'black-text': '#333333',
+                'white-text': '#EEEEEE',
             },
             boxShadow: {
                 'up-sm': '0 -1px 2px 0 rgba(0, 0, 0, 0.05)',

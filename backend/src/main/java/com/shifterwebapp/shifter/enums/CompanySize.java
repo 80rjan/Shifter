@@ -1,9 +1,10 @@
 package com.shifterwebapp.shifter.enums;
 
-public enum CompanyType {
+public enum CompanySize {
     FREELANCE,
-    STARTUP,
-    SME,
+    MICRO,
+    SMALL,
+    MEDIUM,
     MID_MARKET,
     ENTERPRISE,
     OTHER

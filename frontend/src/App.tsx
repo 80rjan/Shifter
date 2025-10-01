@@ -10,7 +10,7 @@ import CourseDetails from "./pages/CourseDetails.tsx";
 import {ToastContainer} from 'react-toastify';
 import AppLoader from "./AppLoader.tsx";
 import Profile from "./pages/Profile.tsx";
-import Dashboard from "./pages/Dashboard.tsx";
+import Learn from "./pages/Learn.tsx";
 import FreeConsultation from "./pages/FreeConsultation.tsx";
 import PublicOnlyRoute from "./components/routeProtectors/PublicOnlyRoute.tsx";
 import UserOnlyRoute from "./components/routeProtectors/UserOnlyRoute.tsx";
@@ -19,15 +19,23 @@ import AdminNavbar from "./admin/utils/AdminNavbar.tsx";
 import Admin from "./admin/Admin.tsx";
 import AdminAddCourse from "./admin/pages/AdminAddCourse.tsx";
 import CourseLearn from "./pages/CourseLearn.tsx";
-import NavbarLearn from "./layout/NavbarLearn.tsx";
+import About from "./pages/About.tsx";
+import Contact from "./pages/Contact.tsx";
+import Mentoring from "./pages/Mentoring.tsx";
+import Consulting from "./pages/Consulting.tsx";
+import Academies from "./pages/Academies.tsx";
 
 function LayoutWrapper() {
     const location = useLocation();
-    const isLearn = location.pathname.startsWith("/learn");
     const hideLayout =
         location.pathname === "/login" ||
         location.pathname === "/register" ||
-        isLearn;
+        location.pathname.startsWith("/learn/");
+    const hideFooter =
+        location.pathname === "/mentoring" ||
+        location.pathname === "/consulting" ||
+        location.pathname === "/academies" ||
+        location.pathname === "/contact";
     const {user, authChecked} = useAuthContext();
 
     if (!authChecked)
@@ -50,7 +58,6 @@ function LayoutWrapper() {
     return (
         <>
             {!hideLayout && <Navbar/>}
-            {isLearn && <NavbarLearn/>}
             <Routes>
                 <Route path="/login" element={
                     <PublicOnlyRoute>
@@ -63,9 +70,24 @@ function LayoutWrapper() {
                     </PublicOnlyRoute>
                 }/>
 
+                <Route path="/about" element={<About/>}/>
+
                 <Route path="/" element={<Home/>}/>
+
+                <Route path="/mentoring" element={<Mentoring/>}/>
+
+                <Route path="/consulting" element={<Consulting/>}/>
+
+                <Route path="/academies" element={<Academies/>}/>
+
                 <Route path="/courses" element={<Courses/>}/>
                 <Route path="/courses/:courseId/:courseTitle" element={<CourseDetails/>}/>
+
+                <Route path="/contact" element={
+                    <UserOnlyRoute>
+                        <Contact />
+                    </UserOnlyRoute>
+                }/>
 
                 <Route path="/free-consultation" element={
                     <UserOnlyRoute>
@@ -81,7 +103,7 @@ function LayoutWrapper() {
 
                 <Route path="/learn" element={
                     <UserOnlyRoute>
-                        <Dashboard/>
+                        <Learn/>
                     </UserOnlyRoute>
                 }/>
                 <Route path="/learn/:courseId/:courseTitle" element={
@@ -91,7 +113,7 @@ function LayoutWrapper() {
                 }/>
 
             </Routes>
-            {!hideLayout && <Footer/>}
+            {(!hideLayout && !hideFooter) && <Footer/>}
         </>
     );
 }

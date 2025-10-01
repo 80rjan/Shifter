@@ -15,33 +15,13 @@ public class CourseDtoFull {
 
     private Long id;
 
-    private String imageUrl;
-
-    private String color;
-
     private String titleShort;
 
     private String title;
 
-    private Difficulty difficulty;
+    private Integer rating;
 
-    private Integer durationMinutes;
-
-    private Double price;
-
-    private List<String> skillsGained;
-
-    private List<String> topicsCovered;
-
-    private String descriptionShort;
-
-    private String description;
-
-    private String descriptionLong;
-
-    private List<String> whatWillBeLearned;
-
-    // NEW FOR FULL DTO
+    private Boolean isFinished;
 
     private List<CourseContentDtoFull> courseContents;
 }

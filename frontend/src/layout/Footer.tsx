@@ -1,8 +1,10 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 import ShifterLogo from "../../public/Shifter-S2W-White-Transparent.png";
-import {Link} from "react-router-dom";
 import {useAuthContext} from "../context/AuthContext.tsx";
 import LinkedIn from "../assets/icons/LinkedIn.tsx";
 import Instagram from "../assets/icons/Instagram.tsx";
+import NavbarLink from "../components/NavbarLink.tsx";
 
 function Footer() {
     const {user, logout} = useAuthContext();
@@ -27,42 +29,17 @@ function Footer() {
                         <section className="flex flex-col gap-2 text-left font-light text-lg">
                             <h3 className="text-white font-bold text-2xl mb-4">Services</h3>
 
-                            <div className="flex flex-col gap-0 overflow-clip group w-fit">
-                                <Link to="/mentoring" className="transition-all
-                                    duration-300 ease-in-out z-10">Mentoring</Link>
-                                <hr className="relative -left-30 group-hover:-left-4 border-t-2
-                                    rounded-full transition-all duration-300 ease-in-out"/>
-                            </div>
-                            <div className="flex flex-col gap-0 overflow-clip group w-fit">
-                                <Link to="/courses" className="transition-all
-                                    duration-300 ease-in-out z-10">Courses</Link>
-                                <hr className="relative -left-30 group-hover:-left-4 border-t-2
-                                    rounded-full transition-all duration-300 ease-in-out"/>
-                            </div>
-                            <div className="flex flex-col gap-0 overflow-clip group w-fit">
-                                <Link to="/academies" className="transition-all
-                                    duration-300 ease-in-out z-10">Academies</Link>
-                                <hr className="relative -left-30 group-hover:-left-4 border-t-2
-                                    rounded-full transition-all duration-300 ease-in-out"/>
-                            </div>
+                            <NavbarLink to={"/mentoring"} label={"Mentoring"}/>
+                            <NavbarLink to={"/consulting"} label={"Consulting"}/>
+                            <NavbarLink to={"/courses"} label={"Courses"}/>
+                            <NavbarLink to={"/academies"} label={"Academies"}/>
                         </section>
 
                         {/*ABOUT SHIFTER*/}
                         <section className="flex flex-col gap-2 text-left font-light text-lg">
                             <h3 className="text-white font-bold text-2xl mb-4">About Us</h3>
 
-                            <div className="flex flex-col gap-0 overflow-clip group w-fit">
-                                <Link to="/about" className="transition-all
-                                    duration-300 ease-in-out z-10">About Shifter</Link>
-                                <hr className="relative -left-30 group-hover:-left-4 border-t-2
-                                    rounded-full transition-all duration-300 ease-in-out"/>
-                            </div>
-                            <div className="flex flex-col gap-0 overflow-clip group w-fit">
-                                <Link to="/experts" className="transition-all
-                                    duration-300 ease-in-out z-10">Experts</Link>
-                                <hr className="relative -left-30 group-hover:-left-4 border-t-2
-                                    rounded-full transition-all duration-300 ease-in-out"/>
-                            </div>
+                            <NavbarLink to={"/about"} label={"About Shifter"}/>
                         </section>
 
                         {/*PROFILE*/}
@@ -71,27 +48,19 @@ function Footer() {
 
                             {user ?
                                 <>
-                                    <div className="flex flex-col gap-0 overflow-clip group w-fit">
-                                        <Link to="/profile" className="transition-all
-                                duration-300 ease-in-out z-10">Profile</Link>
-                                        <hr className="relative -left-30 group-hover:-left-4 border-t-2
-                                rounded-full transition-all duration-300 ease-in-out"/>
-                                    </div>
+                                    <NavbarLink to={"/profile"} label={"Profile"}/>
                                     <div className="flex flex-col gap-0 overflow-clip group w-fit">
                                         <button
                                             onClick={logout}
-                                            className="transition-all
-                                duration-300 ease-in-out z-10 cursor-pointer">Log Out</button>
+                                            className="transition-all duration-300 ease-in-out z-10 cursor-pointer"
+                                        >
+                                            Log Out
+                                        </button>
                                         <hr className="relative -left-30 group-hover:-left-4 border-t-2
-                                rounded-full transition-all duration-300 ease-in-out"/>
+                                            rounded-full transition-all duration-300 ease-in-out"/>
                                     </div>
                                 </> :
-                                <div className="flex flex-col gap-0 overflow-clip p-1 group w-fit">
-                                    <Link to="/login" className="transition-all
-                                duration-300 ease-in-out z-10">Log in / Sign up </Link>
-                                    <hr className="relative -left-40 group-hover:-left-4 border-t-2
-                                rounded-full transition-all duration-300 ease-in-out"/>
-                                </div>
+                                <NavbarLink to={"/login"} label={"Log In / Sign Up"}/>
                             }
                         </section>
 
@@ -101,18 +70,8 @@ function Footer() {
                             <section className="flex flex-col gap-2 text-left font-light text-lg">
                                 <h3 className="text-white font-bold text-2xl mb-4">Dashboard</h3>
 
-                                <div className="flex flex-col gap-0 overflow-clip group w-fit">
-                                    <Link to="/profile" className="transition-all
-                                duration-300 ease-in-out z-10">My Courses</Link>
-                                    <hr className="relative -left-30 group-hover:-left-4 border-t-2
-                                rounded-full transition-all duration-300 ease-in-out"/>
-                                </div>
-                                <div className="flex flex-col gap-0 overflow-clip group w-fit">
-                                    <Link to="/profile" className="transition-all
-                                duration-300 ease-in-out z-10">Favorite Courses</Link>
-                                    <hr className="relative -left-40 group-hover:-left-4 border-t-2
-                                rounded-full transition-all duration-300 ease-in-out"/>
-                                </div>
+                                <NavbarLink to={"/profile"} label={"Profile"}/>
+                                <NavbarLink to={"/learn"} label={"My Learning"}/>
                             </section>
                         }
 

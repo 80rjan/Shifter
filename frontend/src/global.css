@@ -10,14 +10,15 @@
     --spacing-vertical-md: 2rem;
     --spacing-vertical-sm: 1rem;
 
+    --spacing-top-nav-xl: 9rem;
     --spacing-top-nav-lg: 8rem;
     --spacing-top-nav-md: 7rem;
     --spacing-top-nav-sm: 6rem;
 
 
-    --color-beige: #F0CFB5;
+    --color-beige: #F8F6F5;
     --color-shifter: #008CC2;
-    --color-red: #FF6F61;
+    --color-red: #E63946;
     --color-dark-blue: #002E5D;
     --color-deep-green: #2C6B3D;
     --color-gold: #FFB300;
@@ -26,6 +27,7 @@
     --color-bright-gray: #DDDDDD;
     --color-gray: #E5E7EBFF;
     --color-black-text: #333333;
+    --color-white-text: #F8F8F8;
 
 
     --shadow-up-sm: 0 -1px 2px 0 rgba(0, 0, 0, 0.05);

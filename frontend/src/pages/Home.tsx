@@ -1,18 +1,18 @@
 import HeroHome from "../components/HeroHome.tsx";
 import CollaborationSteps from "../components/CollaborationSteps.tsx";
-import RoadmapAI from "../components/RoadmapAI.tsx";
 import ShifterValues from "../components/ShifterValues.tsx";
 import CoursesCarouselHome from "../components/CoursesCarouselHome.tsx";
+import OurServices from "../components/OurServices.tsx";
 
 function Home() {
 
     return (
-        <main className="bg-white">
-            <div className="bg-dark-blue">
+        <main className="bg-beige">
+            <div className="px-4 py-vertical-sm">
                 <HeroHome/>
-                <CollaborationSteps/>
             </div>
-            <RoadmapAI/>
+            <OurServices />
+            <CollaborationSteps/>
             <CoursesCarouselHome/>
             <ShifterValues/>
         </main>

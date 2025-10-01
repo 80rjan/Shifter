@@ -6,7 +6,7 @@ VALUES
     ('Exploring Perception and Perspective', 2, 1),
     ('Transforming Mindsets for Growth', 3, 1);
 
-INSERT INTO course_lecture (content_text, content_type, content_url, description, duration_minutes, position, title, course_content_id)
+INSERT INTO course_lecture (content_text, content_type, content_file_name, description, duration_minutes, position, title, course_content_id)
 VALUES
     -- Understanding Paradigms & Mental Frameworks (course_content_id: 1)
     (NULL, 'VIDEO', 'https://www.youtube.com/watch?v=aeBaSrJmTMk&list=RDaeBaSrJmTMk&start_radio=1&ab_channel=AVAIONVEVO',
@@ -61,7 +61,7 @@ VALUES
     ('Building Accountability & Trust', 3, 2),
     ('Navigating Organizational Change', 4, 2);
 
-INSERT INTO course_lecture (content_text, content_type, content_url, description, duration_minutes, position, title, course_content_id)
+INSERT INTO course_lecture (content_text, content_type, content_file_name, description, duration_minutes, position, title, course_content_id)
 VALUES
     -- Leadership Mindsets & Models (course_content_id: 4)
     (NULL, 'VIDEO', 'https://www.youtube.com/watch?v=aeBaSrJmTMk&list=RDaeBaSrJmTMk&start_radio=1&ab_channel=AVAIONVEVO',
@@ -122,7 +122,7 @@ VALUES
     ('Implementing Change & Measuring Success', 3, 3),
     ('Building Agile & Resilient Organizations', 4, 3);
 
-INSERT INTO course_lecture (content_text, content_type, content_url, description, duration_minutes, position, title, course_content_id)
+INSERT INTO course_lecture (content_text, content_type, content_file_name, description, duration_minutes, position, title, course_content_id)
 VALUES
     -- Foundations of Business Transformation (course_content_id: 8)
     (NULL, 'VIDEO', 'https://www.youtube.com/watch?v=aeBaSrJmTMk&list=RDaeBaSrJmTMk&start_radio=1&ab_channel=AVAIONVEVO',
@@ -179,7 +179,7 @@ VALUES
     ('Aligning Teams & Vision', 2, 4),
     ('Building Sustainable Growth Systems', 3, 4);
 
-INSERT INTO course_lecture (content_text, content_type, content_url, description, duration_minutes, position, title, course_content_id)
+INSERT INTO course_lecture (content_text, content_type, content_file_name, description, duration_minutes, position, title, course_content_id)
 VALUES
     -- Core Foundations for SME Success (course_content_id: 12)
     (NULL, 'VIDEO', 'https://www.youtube.com/watch?v=aeBaSrJmTMk&list=RDaeBaSrJmTMk&start_radio=1&ab_channel=AVAIONVEVO',
@@ -225,7 +225,7 @@ VALUES
     ('Building High-Performance Sales Teams', 3, 5),
     ('Negotiation & Client Relationships', 4, 5);
 
-INSERT INTO course_lecture (content_text, content_type, content_url, description, duration_minutes, position, title, course_content_id)
+INSERT INTO course_lecture (content_text, content_type, content_file_name, description, duration_minutes, position, title, course_content_id)
 VALUES
     -- Sales Leadership Fundamentals (course_content_id: 15)
     (NULL, 'VIDEO', 'https://www.youtube.com/watch?v=aeBaSrJmTMk&list=RDaeBaSrJmTMk&start_radio=1&ab_channel=AVAIONVEVO',
@@ -283,7 +283,7 @@ VALUES
     ('Communication & Cognitive Tools for Success', 3, 6),
     ('Transforming Good Habits into Extraordinary Results', 4, 6);
 
-INSERT INTO course_lecture (content_text, content_type, content_url, description, duration_minutes, position, title, course_content_id)
+INSERT INTO course_lecture (content_text, content_type, content_file_name, description, duration_minutes, position, title, course_content_id)
 VALUES
     -- Foundations of Effective Skill-Building (course_content_id: 19)
     ('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text...',
@@ -335,7 +335,7 @@ VALUES
     ('Choosing Effective Marketing Channels', 3, 7),
     ('Integrating Strategy into Execution', 4, 7);
 
-INSERT INTO course_lecture (content_text, content_type, content_url, description, duration_minutes, position, title, course_content_id)
+INSERT INTO course_lecture (content_text, content_type, content_file_name, description, duration_minutes, position, title, course_content_id)
 VALUES
     -- Defining Your Ideal Client Profile (course_content_id: 23)
     ('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text...',
@@ -387,7 +387,7 @@ VALUES
     ('Developing Scalable Concepts', 3, 8),
     ('Positioning Yourself as a Strategic Partner', 4, 8);
 
-INSERT INTO course_lecture (content_text, content_type, content_url, description, duration_minutes, position, title, course_content_id)
+INSERT INTO course_lecture (content_text, content_type, content_file_name, description, duration_minutes, position, title, course_content_id)
 VALUES
     -- Understanding Client Problems Deeply (course_content_id: 27)
     ('Lorem Ipsum is simply dummy text...',
@@ -435,7 +435,7 @@ VALUES
     ('First Week Essentials', 2, 9),
     ('Long-Term Integration and Development', 3, 9);
 
-INSERT INTO course_lecture (content_text, content_type, content_url, description, duration_minutes, position, title, course_content_id)
+INSERT INTO course_lecture (content_text, content_type, content_file_name, description, duration_minutes, position, title, course_content_id)
 VALUES
     -- Pre-Onboarding Preparation (course_content_id: 31)
     ('Lorem Ipsum is simply dummy text...',
@@ -474,7 +474,7 @@ VALUES
     ('Developing Actionable Improvement Plans', 2, 10),
     ('Implementing Continuous Self-Improvement', 3, 10);
 
-INSERT INTO course_lecture (content_text, content_type, content_url, description, duration_minutes, position, title, course_content_id)
+INSERT INTO course_lecture (content_text, content_type, content_file_name, description, duration_minutes, position, title, course_content_id)
 VALUES
     -- Identifying Personal Barriers (course_content_id: 34)
     ('Lorem Ipsum is simply dummy text...',
@@ -513,7 +513,7 @@ VALUES
     ('Establishing Continuous Improvement Systems', 2, 11),
     ('Embedding a High-Performance Culture', 3, 11);
 
-INSERT INTO course_lecture (content_text, content_type, content_url, description, duration_minutes, position, title, course_content_id)
+INSERT INTO course_lecture (content_text, content_type, content_file_name, description, duration_minutes, position, title, course_content_id)
 VALUES
     -- Laying the Foundations of Excellence (course_content_id: 37)
     ('Lorem Ipsum is simply dummy text...',
@@ -552,7 +552,7 @@ VALUES
     ('Optimizing Systems for Agility', 2, 12),
     ('Maintaining Long-Term Performance', 3, 12);
 
-INSERT INTO course_lecture (content_text, content_type, content_url, description, duration_minutes, position, title, course_content_id)
+INSERT INTO course_lecture (content_text, content_type, content_file_name, description, duration_minutes, position, title, course_content_id)
 VALUES
     -- Building Effective Team Structures (course_content_id: 40)
     ('Lorem Ipsum is simply dummy text...',

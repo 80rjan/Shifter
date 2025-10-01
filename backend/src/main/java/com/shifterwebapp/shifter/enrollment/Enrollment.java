@@ -8,7 +8,7 @@ import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgress;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -25,7 +25,11 @@ public class Enrollment {
     @Enumerated(EnumType.STRING)
     private EnrollmentStatus enrollmentStatus;
 
-    private Date date;
+    private LocalDate date;
+
+    private LocalDate activatedAt;
+
+    private LocalDate completedAt;
 
     @OneToOne(cascade = CascadeType.PERSIST, orphanRemoval = true)  // Persist ???? Orphan removal ????
     @JoinColumn(name = "payment_id")

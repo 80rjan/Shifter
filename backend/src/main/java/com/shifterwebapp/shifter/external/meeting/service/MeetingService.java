@@ -1,4 +1,4 @@
-package com.shifterwebapp.shifter.meeting.service;
+package com.shifterwebapp.shifter.external.meeting.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.api.services.calendar.model.FreeBusyResponse;
@@ -7,9 +7,9 @@ import com.shifterwebapp.shifter.exception.TimeSlotUnavailableException;
 import com.shifterwebapp.shifter.external.email.EmailService;
 import com.shifterwebapp.shifter.external.ZoomService;
 import com.shifterwebapp.shifter.external.GoogleCalendarService;
-import com.shifterwebapp.shifter.meeting.MeetingUtils;
-import com.shifterwebapp.shifter.meeting.UserMeetingInfoRequest;
-import com.shifterwebapp.shifter.meeting.ZoomMeetingRequest;
+import com.shifterwebapp.shifter.external.meeting.MeetingUtils;
+import com.shifterwebapp.shifter.external.meeting.UserMeetingInfoRequest;
+import com.shifterwebapp.shifter.external.meeting.ZoomMeetingRequest;
 import com.shifterwebapp.shifter.scheduledemail.ScheduledEmail;
 import com.shifterwebapp.shifter.scheduledemail.ScheduledEmailService;
 import com.shifterwebapp.shifter.user.service.UserService;

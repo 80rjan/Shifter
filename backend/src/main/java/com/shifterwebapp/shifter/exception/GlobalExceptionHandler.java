@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(GoogleCalendarException.class)
     public ResponseEntity<String> handleGoogleCalendarException(GoogleCalendarException e) {
         e.printStackTrace();
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Google Calendar error: " + e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Google Calendar error: " + e.getMessage() + ". Needs re-authentication: " + e.isNeedsReauth());
     }
 
     @ExceptionHandler(ZoomMeetingException.class)
@@ -54,6 +54,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalStateException(IllegalStateException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(MultipartException.class)

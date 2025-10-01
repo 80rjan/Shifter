@@ -6,6 +6,7 @@ import com.shifterwebapp.shifter.auth.CustomAuthDetails;
 import com.shifterwebapp.shifter.course.dto.CourseDtoDetail;
 import com.shifterwebapp.shifter.course.dto.CourseDtoFull;
 import com.shifterwebapp.shifter.course.dto.CourseDtoPreview;
+import com.shifterwebapp.shifter.course.dto.CourseDtoPreviewEnrolled;
 import com.shifterwebapp.shifter.course.service.CourseService;
 import com.shifterwebapp.shifter.enrollment.service.EnrollmentService;
 import com.shifterwebapp.shifter.exception.ErrorResponse;
@@ -129,7 +130,7 @@ public class CourseController {
         }
         Long userId = details.getUserId();
 
-        List<CourseDtoPreview> recommendedCourses = courseService.getEnrolledCourses(userId);
+        List<CourseDtoPreviewEnrolled> recommendedCourses = courseService.getEnrolledCourses(userId);
         return ResponseEntity.ok(recommendedCourses);
     }
 

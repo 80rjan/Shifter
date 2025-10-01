@@ -98,10 +98,11 @@ function CoursesFilters({filters, setFilters, topics, skills}: {
                     )
                 }
                 <FilterSelect
-                    header={"Level"}
-                    options={difficulty}
-                    handleFilter={handleDifficultyChange}
-                    selectedOptions={filters.difficulty || []}
+                    header={"Price"}
+                    options={price}
+                    handleFilter={handlePriceChange}
+                    selectedOptions={filters.price || []}
+                    mapper={priceToQueryMapper}
                 />
                 <FilterSelect
                     header={"Topics"}
@@ -116,18 +117,17 @@ function CoursesFilters({filters, setFilters, topics, skills}: {
                     selectedOptions={filters.skill || []}
                 />
                 <FilterSelect
+                    header={"Level"}
+                    options={difficulty}
+                    handleFilter={handleDifficultyChange}
+                    selectedOptions={filters.difficulty || []}
+                />
+                <FilterSelect
                     header={"Duration"}
                     options={duration}
                     handleFilter={handleDurationChange}
                     selectedOptions={filters.duration || []}
                     mapper={durationToQueryMapper}
-                />
-                <FilterSelect
-                    header={"Price"}
-                    options={price}
-                    handleFilter={handlePriceChange}
-                    selectedOptions={filters.price || []}
-                    mapper={priceToQueryMapper}
                 />
 
             </div>

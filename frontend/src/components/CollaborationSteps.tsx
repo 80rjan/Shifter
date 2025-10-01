@@ -28,7 +28,7 @@ export default function CollaborationSteps() {
 
 
     return (
-        <section className="text-white py-vertical-md px-horizontal-md flex flex-col gap-12 items-center">
+        <section className="bg-dark-blue text-white py-vertical-md px-horizontal-md flex flex-col gap-12 items-center">
             <h2 className="text-5xl font-light">
                 How to Start Your Journey to <strong className="font-bold">Success</strong>
             </h2>
@@ -36,8 +36,7 @@ export default function CollaborationSteps() {
             <div className="relative flex w-full mt-4">
                 {/* LINE AND DOTS */}
                 <div className="absolute w-[104%] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 -rotate-16">
-                    <hr className="border-t-4 border-white rounded-full w-full absolute top-2"
-                    />
+                    <hr className="border-t-4 border-white rounded-full w-full absolute top-2"/>
 
                     {[-0.2, 25, 50, 75, 99.8].map((percent, idx) => (
                         <div
@@ -72,7 +71,7 @@ export default function CollaborationSteps() {
             {/* Button */}
             <button className="hover:shadow-white/40 hover:shadow-lg transition-all duration-300 ease-in-out cursor-pointer
                 w-3/10 whitespace-nowrap py-2 bg-white text-xl text-dark-blue rounded-sm font-semibold shadow-md shadow-white/20">
-                Start Now
+                Get Started
             </button>
         </section>
     );

@@ -10,12 +10,12 @@ function RegisterStepTwo({setUser, user, setError}: {
 }) {
 
     useEffect(() => {
-        if (!user.name || !user.workPosition || !user.companyType) {
+        if (!user.name || !user.workPosition || !user.companySize) {
             setError("Please ensure all inputs are completed.");
         } else {
             setError("");
         }
-    }, [user.name, user.workPosition, user.companyType]);
+    }, [user.name, user.workPosition, user.companySize]);
 
     return (
         <section
@@ -39,10 +39,10 @@ function RegisterStepTwo({setUser, user, setError}: {
                 user={user}
             />
             <RegisterSelect
-                label={"Company Type"}
-                name={"companyType"}
-                id={"company-type"}
-                options={["Freelance", "Startup", "SME", "Mid Market", "Enterprise", "Other"]}
+                label={"Company Size"}
+                name={"companySize"}
+                id={"company-size"}
+                options={["Freelance", "Micro", "Small", "Medium", "Mid Market", "Enterprise", "Other"]}
                 setUser={setUser}
                 user={user}
             />

@@ -1,6 +1,7 @@
 package com.shifterwebapp.shifter.usercourseprogress;
 
 import com.shifterwebapp.shifter.Validate;
+import com.shifterwebapp.shifter.enrollment.service.EnrollmentService;
 import com.shifterwebapp.shifter.usercourseprogress.service.UserCourseProgressService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +23,9 @@ public class UserCourseProgressController {
     ) {
         Long userId = validate.extractUserId(authentication);
 
-        UserCourseProgressDto userCourseProgressDto = userCourseProgressService.completeUserCourseProgress(progressId, userId);
+        userCourseProgressService.completeUserCourseProgress(progressId, userId);
 
-        return ResponseEntity.ok(userCourseProgressDto);
+        return ResponseEntity.ok("Successfully completed progress with ID: " + progressId + " for user with ID: " + userId);
     }
 
     @PutMapping("{progressId}/uncomplete")
@@ -34,8 +35,8 @@ public class UserCourseProgressController {
     ) {
         Long userId = validate.extractUserId(authentication);
 
-        UserCourseProgressDto userCourseProgressDto = userCourseProgressService.uncompleteUserCourseProgress(progressId, userId);
+        userCourseProgressService.uncompleteUserCourseProgress(progressId, userId);
 
-        return ResponseEntity.ok(userCourseProgressDto);
+        return ResponseEntity.ok("Successfully uncompleted progress with ID: " + progressId + " for user with ID: " + userId);
     }
 }

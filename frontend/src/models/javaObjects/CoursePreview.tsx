@@ -9,10 +9,10 @@ export interface CoursePreview {
     difficulty: Difficulty;
     durationMinutes: number;
     price: number;
-    rating: number;
-    ratingCount: number;
     skillsGained: string[];
     topicsCovered: string[];
     courseContentCount: number;
+    courseLectureCount: number;
+    averageRating: number;
 }
 

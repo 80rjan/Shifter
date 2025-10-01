@@ -1,6 +1,6 @@
-package com.shifterwebapp.shifter.meeting.service;
+package com.shifterwebapp.shifter.external.meeting.service;
 
-import com.shifterwebapp.shifter.meeting.UserMeetingInfoRequest;
+import com.shifterwebapp.shifter.external.meeting.UserMeetingInfoRequest;
 
 import java.util.List;
 import java.util.Map;

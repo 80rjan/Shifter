@@ -28,14 +28,14 @@ public class CourseDtoPreview {
 
     private Double price;
 
-    private Integer rating;
-
-    private Integer ratingCount;
-
     private List<String> skillsGained;
 
     private List<String> topicsCovered;
 
     private Integer courseContentCount;
+
+    private Integer courseLectureCount;
+
+    private Double averageRating;
 }
 

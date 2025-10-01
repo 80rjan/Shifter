@@ -1,12 +1,25 @@
 package com.shifterwebapp.shifter.external.email;
 
-import com.shifterwebapp.shifter.meeting.UserMeetingInfoRequest;
+import com.shifterwebapp.shifter.external.meeting.UserMeetingInfoRequest;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.Year;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+import org.springframework.mail.javamail.MimeMessageHelper;
+import jakarta.mail.internet.MimeMessage;
+import org.springframework.util.FileCopyUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -14,38 +27,11 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
 
-    public void sendFreeConsultationConfirmation(String to, String date, String time, String zoomLink) {
-        String subject = "Your Free Consultation Session is Scheduled - " + date + " at " + time;
-        String text = """
-                Hello,
-                
-                Your free consultation session has been successfully scheduled! 🎉
-                
-                📅 Date: {date} \s
-                ⏰ Time: {time} \s
-                📍 Location: Online - Zoom \s
-                🔗 Meeting Link: {zoomLink} \s
-                
-                This session is designed to understand your current challenges, goals, and preferences.
-                During this session, our expert will provide valuable insights based on your situation.
-                After the session, you will receive a personalized program recommendation tailored to your needs.
-                
-                If you have any questions or need to reschedule, please reply to this email.
-                
-                Excited to help you take the next step! \s
-                
-                Best regards, \s
-                The Shifter Team
-                """;
-        text = text
-                .replace("{date}", date)
-                .replace("{time}", time)
-                .replace("{zoomLink}", zoomLink);
+    public void contactExpert(ContactReq contactReq) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(text);
-
+        message.setTo(System.getProperty("EMAIL_USERNAME"));
+        message.setSubject("New Contact Message: " + contactReq.getSubject());
+        message.setText(contactReq.getText());
         int maxRetries = 3;
         int attempt = 0;
         while (true) {
@@ -55,133 +41,247 @@ public class EmailService {
             } catch (Exception e) {
                 attempt++;
                 if (attempt >= maxRetries) {
-                    throw new RuntimeException("Failed to send confirmation email after " + attempt + " attempts", e);
+                    throw new RuntimeException("Failed to send email to expert after " + attempt + " attempts", e);
                 }
             }
+        }
+    }
+
+    public void sendCoursePurchaseConfirmation(String to, String courseName, String courseDescription, String accessUrl, String userName) {
+
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+            helper.setTo(to);
+            helper.setSubject("Welcome to " + courseName + "! Start Learning Now");
+            helper.setFrom("support@shift-er.com");
+
+            int currentYear = Year.now().getValue();
+
+            String htmlTemplate;
+            try {
+                ClassPathResource resource = new ClassPathResource("email-templates/course_purchase_confirmation.html");
+                htmlTemplate = FileCopyUtils.copyToString(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
+            } catch (IOException e) {
+                // Throw a runtime exception if the template file can't be loaded
+                throw new UncheckedIOException("Failed to load email template: course_purchase_confirmation.html", e);
+            }
+
+            String htmlContent = htmlTemplate
+                    .replace("${courseName}", courseName)
+                    .replace("${courseDescription}", courseDescription)
+                    .replace("${accessUrl}", accessUrl)
+                    .replace("${currentYear}", String.valueOf(currentYear));
+
+            helper.setText(htmlContent, true);
+
+            int maxRetries = 3;
+            int attempt = 0;
+            while (true) {
+                try {
+                    mailSender.send(mimeMessage);
+                    return;
+                } catch (Exception e) {
+                    attempt++;
+                    if (attempt >= maxRetries) {
+                        throw new RuntimeException("Failed to send HTML email to " + to + " after " + attempt + " attempts", e);
+                    }
+                }
+            }
+
+        } catch (MessagingException e) {
+            throw new RuntimeException("Error preparing email message for " + to, e);
+        }
+    }
+
+    public void sendFreeConsultationConfirmation(String to, String date, String time, String zoomLink) {
+
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+            String subject = "Your Free Consultation Session is Scheduled - " + date + " at " + time;
+
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setFrom("support@shift-er.com");
+
+            String currentYear = String.valueOf(java.time.Year.now().getValue());
+
+            String htmlTemplate;
+            try {
+                ClassPathResource resource = new ClassPathResource("email-templates/free_consultation_confirmation.html");
+                htmlTemplate = FileCopyUtils.copyToString(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
+            } catch (IOException e) {
+                throw new UncheckedIOException("Failed to load email template: free_consultation_confirmation.html", e);
+            }
+
+            String htmlContent = htmlTemplate
+                    .replace("${date}", date)
+                    .replace("${time}", time)
+                    .replace("${zoomLink}", zoomLink)
+                    .replace("${currentYear}", currentYear);
+
+            helper.setText(htmlContent, true);
+
+            int maxRetries = 3;
+            int attempt = 0;
+            while (true) {
+                try {
+                    mailSender.send(mimeMessage);
+                    return;
+                } catch (Exception e) {
+                    attempt++;
+                    if (attempt >= maxRetries) {
+                        throw new RuntimeException("Failed to send HTML email to " + to + " after " + attempt + " attempts", e);
+                    }
+                }
+            }
+
+        } catch (MessagingException e) {
+            throw new RuntimeException("Error preparing email message for " + to, e);
         }
     }
 
     public void sendFreeConsultationReminder(String to, String meetingDate, String meetingTime, String zoomLink) {
+
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE; // e.g., "2025-10-01"
+
         LocalDate today = LocalDate.now();
+        LocalDate meetingLocalDate = LocalDate.parse(meetingDate, dateFormatter);
 
         String subject;
-        if (LocalDate.parse(meetingDate).isBefore(today))
-            subject = "Reminder: Tomorrow is your Free Consultation Session at " + meetingTime;
-        else
-            subject = "Reminder: Free Consultation Session in 2 hours";
+        String reminderHeading;
+        String reminderText;
 
-        String text = """
-                Hello,
-                
-                This is a friendly reminder for your upcoming free consultation session! ⏰
-                
-                📅 Date: {meetingDate} \s
-                ⏰ Time: {meetingTime} \s
-                📍 Location: Online - Zoom \s
-                🔗 Meeting Link: {zoomLink} \s
-                
-                This session is designed to understand your current challenges, goals, and preferences.
-                During this session, our expert will provide valuable insights based on your situation.
-                After the session, you will receive a personalized program recommendation tailored to your needs.
-                
-                If you have any questions or need to reschedule, please reply to this email.
-                
-                Excited to help you take the next step! \s
-                
-                Best regards, \s
-                The Shifter Team
-                """;
-        text = text
-                .replace("{meetingDate}", meetingDate)
-                .replace("{meetingTime}", meetingTime)
-                .replace("{zoomLink}", zoomLink);
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(text);
-        int maxRetries = 3;
-        int attempt = 0;
-        while (true) {
+        if (meetingLocalDate.isEqual(today.plusDays(1))) {
+            subject = "Reminder: Tomorrow is your Free Consultation Session at " + meetingTime;
+            reminderHeading = "Your Session is Tomorrow!";
+            reminderText = "This is a friendly reminder that your free consultation session is scheduled for tomorrow. We look forward to meeting with you and helping you plan your next steps!";
+        }
+        else if (meetingLocalDate.isEqual(today)) {
+            subject = "Reminder: Free Consultation Session in 2 hours";
+            reminderHeading = "Your Session is in 2 Hours!";
+            reminderText = "This is a crucial final reminder. Your free consultation session is starting soon. Please use the link below to join promptly!";
+        }
+        else {
+            System.out.println("Scheduler error: Reminder function called outside of expected time window for meeting on: " + meetingDate);
+            return;
+        }
+
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setFrom("support@shift-er.com");
+
+            String currentYear = String.valueOf(Year.now().getValue());
+
+            String htmlTemplate;
             try {
-                mailSender.send(message);
-                return;
-            } catch (Exception e) {
-                attempt++;
-                if (attempt >= maxRetries) {
-                    throw new RuntimeException("Failed to send reminder email after " + attempt + " attempts", e);
+                ClassPathResource resource = new ClassPathResource("email-templates/consultation_reminder.html");
+                htmlTemplate = FileCopyUtils.copyToString(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
+            } catch (IOException e) {
+                throw new UncheckedIOException("Failed to load email template: consultation_reminder.html", e);
+            }
+
+            String htmlContent = htmlTemplate
+                    .replace("${subject}", subject)
+                    .replace("${meetingDate}", meetingDate)
+                    .replace("${meetingTime}", meetingTime)
+                    .replace("${zoomLink}", zoomLink)
+                    .replace("${reminderHeading}", reminderHeading)
+                    .replace("${reminderText}", reminderText)
+                    .replace("${currentYear}", currentYear);
+
+            helper.setText(htmlContent, true);
+
+            int maxRetries = 3;
+            int attempt = 0;
+            while (true) {
+                try {
+                    mailSender.send(mimeMessage);
+                    return;
+                } catch (Exception e) {
+                    attempt++;
+                    if (attempt >= maxRetries) {
+                        throw new RuntimeException("Failed to send HTML reminder email to " + to + " after " + attempt + " attempts", e);
+                    }
                 }
             }
+
+        } catch (MessagingException e) {
+            throw new RuntimeException("Error preparing email message for " + to, e);
         }
     }
 
     public void sendExpertMeetingInformation(UserMeetingInfoRequest userMeetingInfoRequest, String time, String date, String userTimeZone, String zoomLink) {
+
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+
+        String expertEmail = System.getProperty("EMAIL_USERNAME");
+
         String subject = "You Have an Upcoming Free Consultation Session - " + date + " at " + time;
 
-        String text = """
-        Hello,
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
-        A new user has booked a free consultation session. Here are their details and the meeting information:
+            helper.setTo(expertEmail); // Send to the expert's email
+            helper.setSubject(subject);
+            helper.setFrom("support@shift-er.com");
 
-        📅 Date: {date}
-        ⏰ Time: {time}
-        🔗 Zoom Meeting Link: {zoomLink}
+            String currentYear = String.valueOf(Year.now().getValue());
 
-        --- User Information ---
-
-        Name: {name}
-        Email: {email}
-        Company Type: {companyType}
-        Work Position: {workPosition}
-        Time Zone: {userTimeZone}
-
-        About the Company:
-        {aboutCompany}
-
-        Current Challenges:
-        {challenges}
-
-        Expectations from the Session:
-        {expectations}
-
-        Additional Information:
-        {otherInfo}
-
-        Please review this information before the session to provide the best personalized guidance.
-
-        Best regards,
-        The Shifter Team
-        """;
-
-        text = text
-                .replace("{date}", date)
-                .replace("{time}", time)
-                .replace("{zoomLink}", zoomLink)
-                .replace("{name}", userMeetingInfoRequest.getName())
-                .replace("{email}", userMeetingInfoRequest.getEmail())
-                .replace("{companyType}", userMeetingInfoRequest.getCompanyType().toString())
-                .replace("{workPosition}", userMeetingInfoRequest.getWorkPosition())
-                .replace("{userTimeZone}", userTimeZone)
-                .replace("{aboutCompany}", userMeetingInfoRequest.getAboutCompany() != null ? userMeetingInfoRequest.getAboutCompany() : "N/A")
-                .replace("{challenges}", userMeetingInfoRequest.getChallenges() != null ? userMeetingInfoRequest.getChallenges() : "N/A")
-                .replace("{expectations}", userMeetingInfoRequest.getExpectations() != null ? userMeetingInfoRequest.getExpectations() : "N/A")
-                .replace("{otherInfo}", userMeetingInfoRequest.getOtherInfo() != null ? userMeetingInfoRequest.getOtherInfo() : "N/A");
-
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(System.getProperty("EMAIL_USERNAME"));
-        message.setSubject(subject);
-        message.setText(text);
-        int maxRetries = 3;
-        int attempt = 0;
-        while (true) {
+            String htmlTemplate;
             try {
-                mailSender.send(message);
-                return;
-            } catch (Exception e) {
-                attempt++;
-                if (attempt >= maxRetries) {
-                    throw new RuntimeException("Failed to send expert email with meeting info after " + attempt + " attempts", e);
+                ClassPathResource resource = new ClassPathResource("email-templates/expert_meeting_info.html");
+                htmlTemplate = FileCopyUtils.copyToString(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
+            } catch (IOException e) {
+                throw new UncheckedIOException("Failed to load email template: expert_meeting_info.html", e);
+            }
+
+            String htmlContent = htmlTemplate
+                    .replace("${subject}", subject)
+                    .replace("${date}", date)
+                    .replace("${time}", time)
+                    .replace("${zoomLink}", zoomLink)
+                    .replace("${name}", userMeetingInfoRequest.getName())
+                    .replace("${email}", userMeetingInfoRequest.getEmail())
+                    .replace("${companyType}", userMeetingInfoRequest.getCompanySize() != null ? userMeetingInfoRequest.getCompanySize().toString() : "N/A")
+                    .replace("${workPosition}", userMeetingInfoRequest.getWorkPosition())
+                    .replace("${userTimeZone}", userTimeZone)
+                    // Using ternary operators directly for "N/A" fallback
+                    .replace("${aboutCompany}", userMeetingInfoRequest.getAboutCompany() != null ? userMeetingInfoRequest.getAboutCompany() : "N/A")
+                    .replace("${challenges}", userMeetingInfoRequest.getChallenges() != null ? userMeetingInfoRequest.getChallenges() : "N/A")
+                    .replace("${expectations}", userMeetingInfoRequest.getExpectations() != null ? userMeetingInfoRequest.getExpectations() : "N/A")
+                    .replace("${otherInfo}", userMeetingInfoRequest.getOtherInfo() != null ? userMeetingInfoRequest.getOtherInfo() : "N/A")
+                    .replace("${currentYear}", currentYear);
+
+
+            helper.setText(htmlContent, true);
+
+            int maxRetries = 3;
+            int attempt = 0;
+            while (true) {
+                try {
+                    mailSender.send(mimeMessage);
+                    return;
+                } catch (Exception e) {
+                    attempt++;
+                    if (attempt >= maxRetries) {
+                        throw new RuntimeException("Failed to send expert email with meeting info after " + attempt + " attempts", e);
+                    }
                 }
             }
+
+        } catch (MessagingException e) {
+            throw new RuntimeException("Error preparing email message for expert", e);
         }
     }
 }

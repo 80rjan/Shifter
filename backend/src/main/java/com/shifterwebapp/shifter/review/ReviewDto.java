@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -17,9 +18,7 @@ public class ReviewDto {
 
     private String comment;
 
-    private Boolean canBeUsedAsTestimonial;
-
-    private Date date;
+    private LocalDate date;
 
     private Integer enrollmentId;
 }

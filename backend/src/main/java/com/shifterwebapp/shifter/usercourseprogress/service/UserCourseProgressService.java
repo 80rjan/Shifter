@@ -4,8 +4,6 @@ import com.shifterwebapp.shifter.Validate;
 import com.shifterwebapp.shifter.enrollment.service.EnrollmentService;
 import com.shifterwebapp.shifter.exception.AccessDeniedException;
 import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgress;
-import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgressDto;
-import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgressMapper;
 import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgressRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +16,6 @@ import java.util.List;
 public class UserCourseProgressService implements ImplUserCourseProgressService {
 
     private final UserCourseProgressRepository userCourseProgressRepository;
-    private final UserCourseProgressMapper userCourseProgressMapper;
     private final EnrollmentService enrollmentService;
     private final Validate validate;
 
@@ -28,26 +25,39 @@ public class UserCourseProgressService implements ImplUserCourseProgressService 
     }
 
     @Override
-    public UserCourseProgressDto completeUserCourseProgress(Long progressId, Long userId) {
+    public List<UserCourseProgress> getUserCourseProgressByEnrollmentAndCompletedTrue(Long enrollmentId) {
+        return userCourseProgressRepository.findByEnrollmentIdAAndCompletedTrue(enrollmentId);
+    }
+
+    @Override
+    public List<UserCourseProgress> saveAllUserCourseProgress(List<UserCourseProgress> userCourseProgresses) {
+        return userCourseProgressRepository.saveAll(userCourseProgresses);
+    }
+
+    @Override
+    public UserCourseProgress completeUserCourseProgress(Long progressId, Long userId) {
         validate.validateUserCourseProgressExists(progressId);
 
         Long courseId = userCourseProgressRepository.getCourseId(progressId);
+        Long enrollmentId = userCourseProgressRepository.getEnrollmentId(progressId);
 
         boolean isUserEnrolledInCourse = enrollmentService.isUserEnrolledInCourse(userId, courseId);
         if (!isUserEnrolledInCourse) {
             throw new AccessDeniedException("User is not enrolled in the course with ID: " + courseId + " to update progress with ID: " + progressId);
         }
 
+        enrollmentService.updateEnrollmentStatusToCompleted(enrollmentId);
+
         UserCourseProgress userCourseProgress = userCourseProgressRepository.findById(progressId).orElseThrow();
         userCourseProgress.setCompleted(true);
         userCourseProgress.setCompletedAt(LocalDateTime.now());
         userCourseProgressRepository.save(userCourseProgress);
 
-        return userCourseProgressMapper.toDto(userCourseProgress);
+        return userCourseProgress;
     }
 
     @Override
-    public UserCourseProgressDto uncompleteUserCourseProgress(Long progressId, Long userId) {
+    public UserCourseProgress uncompleteUserCourseProgress(Long progressId, Long userId) {
         validate.validateUserCourseProgressExists(progressId);
 
         Long courseId = userCourseProgressRepository.getCourseId(progressId);
@@ -62,6 +72,8 @@ public class UserCourseProgressService implements ImplUserCourseProgressService 
         userCourseProgress.setCompletedAt(LocalDateTime.now());
         userCourseProgressRepository.save(userCourseProgress);
 
-        return userCourseProgressMapper.toDto(userCourseProgress);
+        return userCourseProgress;
     }
+
+
 }

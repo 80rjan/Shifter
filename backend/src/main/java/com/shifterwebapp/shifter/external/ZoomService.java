@@ -3,7 +3,7 @@ package com.shifterwebapp.shifter.external;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shifterwebapp.shifter.exception.ZoomMeetingException;
-import com.shifterwebapp.shifter.meeting.ZoomMeetingRequest;
+import com.shifterwebapp.shifter.external.meeting.ZoomMeetingRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;

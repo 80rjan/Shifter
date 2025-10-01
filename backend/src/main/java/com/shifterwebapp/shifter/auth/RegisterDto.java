@@ -1,6 +1,6 @@
 package com.shifterwebapp.shifter.auth;
 
-import com.shifterwebapp.shifter.enums.CompanyType;
+import com.shifterwebapp.shifter.enums.CompanySize;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -20,7 +20,7 @@ public class RegisterDto {
     @NotBlank
     private String name;
 
-    private CompanyType companyType;
+    private CompanySize companySize;
 
     private String workPosition;
 

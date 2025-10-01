@@ -3,15 +3,18 @@ import {useEffect, useState} from "react";
 import {ChevronDown, ClipboardList, File, ListChecks, Text, TvMinimalPlay} from "lucide-react";
 import type {CourseLectureFull} from "../../models/javaObjects/CourseLectureFull.tsx";
 import {X} from "lucide-react";
+import CircularProgress from "../../assets/CircularProgress.tsx";
 
-function CourseContentSideNav({ activeLecture, setActiveLecture, courseContents, updateLecture, closeModal }: {
+function CourseContentSideNav({ activeLecture, setActiveLecture, courseContents, updateLecture, closeModal, progressPercentage }: {
     activeLecture: CourseLectureFull,
     setActiveLecture: (lecture: CourseLectureFull) => void,
     courseContents: CourseContentFull[] | undefined,
     updateLecture: (progressId: number, isComplete: boolean) => void,
-    closeModal: () => void
+    closeModal: () => void,
+    progressPercentage: number
 }) {
     const [openContentIds, setOpenContentIds] = useState<number[]>([]);
+
 
     const toggleAccordion = (contentId: number) => {
         if (openContentIds.includes(contentId)) {
@@ -36,7 +39,14 @@ function CourseContentSideNav({ activeLecture, setActiveLecture, courseContents,
     return (
         <aside className="sticky top-0 right-0 min-w-28/100 h-screen overflow-y-auto border-l-1 border-black/20">
             <div className="py-4 px-4 flex items-center justify-between">
-                <h2 className="text-left font-bold">Course content</h2>
+                <div className="flex items-center gap-4">
+                    <CircularProgress
+                        percentage={progressPercentage}
+                        size={28}
+                        strokeWidth={2}
+                    />
+                    <h2 className="text-left font-bold">Course content</h2>
+                </div>
                 <button
                     onClick={closeModal}
                     className="hover:bg-black/10 rounded-sm cursor-pointer p-1.5">

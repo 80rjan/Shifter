@@ -28,8 +28,10 @@ public class ShifterApplication {
 
 		System.setProperty("GOOGLE_CLIENT_ID", dotenv.get("GOOGLE_CLIENT_ID"));
 		System.setProperty("GOOGLE_CLIENT_SECRET", dotenv.get("GOOGLE_CLIENT_SECRET"));
-		System.setProperty("GOOGLE_EXPERT_CALENDAR_ID", dotenv.get("GOOGLE_EXPERT_CALENDAR_ID"));
 		System.setProperty("GOOGLE_REFRESH_TOKEN", dotenv.get("GOOGLE_REFRESH_TOKEN"));
+		System.setProperty("GOOGLE_EXPERT_CALENDAR_ID", dotenv.get("GOOGLE_EXPERT_CALENDAR_ID"));
+		System.setProperty("GOOGLE_SERVICE_ACCOUNT_EMAIL", dotenv.get("GOOGLE_SERVICE_ACCOUNT_EMAIL"));
+		System.setProperty("GOOGLE_PRIVATE_KEY", dotenv.get("GOOGLE_PRIVATE_KEY").replace("\\n", "\n"));
 
 		System.setProperty("EMAIL_HOST", dotenv.get("EMAIL_HOST"));
 		System.setProperty("EMAIL_PORT", dotenv.get("EMAIL_PORT"));

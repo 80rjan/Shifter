@@ -1,4 +1,4 @@
-package com.shifterwebapp.shifter.meeting;
+package com.shifterwebapp.shifter.external.meeting;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;

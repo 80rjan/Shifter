@@ -7,9 +7,12 @@ import java.util.List;
 
 public interface ImplUserCourseProgressService {
 
-    UserCourseProgressDto completeUserCourseProgress(Long progressId, Long userId);
+    List<UserCourseProgress> saveAllUserCourseProgress(List<UserCourseProgress> userCourseProgresses);
 
-    UserCourseProgressDto uncompleteUserCourseProgress(Long progressId, Long userId);
+    UserCourseProgress completeUserCourseProgress(Long progressId, Long userId);
+
+    UserCourseProgress uncompleteUserCourseProgress(Long progressId, Long userId);
 
     List<UserCourseProgress> getUserCourseProgressByEnrollment(Long enrollmentId);
+    List<UserCourseProgress> getUserCourseProgressByEnrollmentAndCompletedTrue(Long enrollmentId);
 }

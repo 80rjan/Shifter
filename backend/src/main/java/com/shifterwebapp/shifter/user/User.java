@@ -1,8 +1,8 @@
 package com.shifterwebapp.shifter.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.shifterwebapp.shifter.enums.CompanySize;
 import com.shifterwebapp.shifter.payment.Payment;
-import com.shifterwebapp.shifter.enums.CompanyType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -38,7 +38,7 @@ public class User implements UserDetails {
     private Boolean hasUsedFreeConsultation;
 
     @Enumerated(EnumType.STRING)
-    private CompanyType companyType;
+    private CompanySize companySize;
     
     private String workPosition;
     

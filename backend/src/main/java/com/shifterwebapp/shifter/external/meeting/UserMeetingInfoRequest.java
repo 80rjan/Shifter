@@ -1,6 +1,6 @@
-package com.shifterwebapp.shifter.meeting;
+package com.shifterwebapp.shifter.external.meeting;
 
-import com.shifterwebapp.shifter.enums.CompanyType;
+import com.shifterwebapp.shifter.enums.CompanySize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ public class UserMeetingInfoRequest {
 
     private String email;
 
-    private CompanyType companyType;
+    private CompanySize companySize;
 
     private String workPosition;
 

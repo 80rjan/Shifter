@@ -16,6 +16,7 @@ import com.shifterwebapp.shifter.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -79,7 +80,7 @@ public class PaymentService implements ImplPaymentService {
 
         Payment payment = Payment.builder()
                 .amount(course.getPrice())
-                .date(new Date())
+                .date(LocalDate.now())
                 .paymentMethod(paymentMethod)
                 .paymentStatus(PaymentStatus.COMPLETED)
                 .user(user)

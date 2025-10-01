@@ -11,6 +11,48 @@ export function useCourseLearn(courseId: number, accessToken: string) {
     const [loading, setLoading] = useState(true);
     const [videoUrl, setVideoUrl] = useState<string>("");
     const [isDownloading, setIsDownloading] = useState(false);
+    const [isLastLectureFinished, setIsLastLectureFinished] = useState(false);
+    const [progressPercentage, setProgressPercentage] = useState(0);
+
+    const courseFinishedPunchlines = [
+        "🎓 Course Completed - The Future is Yours to Shape!",
+        "🔥 Course Completed - Your Hard Work is Paying Off!",
+        "🌟 Course Completed - You’re Unlocking Your True Potential!",
+        "🚀 Course Completed - Your Journey to Success Continues!",
+        "🏆 Course Completed - You’re One Step Closer to Your Dreams!",
+        "💪 Course Completed - You’ve Proven Your Dedication!",
+        "✨ Course Completed - Your Growth is Inspiring!",
+        "🎉 Course Completed - You’re Ready for New Challenges!",
+        "💡 Course Completed - Your Knowledge is Expanding!",
+        "🎯 Course Completed - You’re Hitting Your Targets!",
+        "🌍 Course Completed - You’re Making an Impact!",
+        "💥 Course Completed - You’re Breaking Barriers!",
+        "🚀 Course Completed - Your Journey is Just Beginning!",
+        "💫 Course Completed - You’re Reaching New Heights!",
+        "🌟 Course Completed - You’re a Star in the Making!",
+        "🎓 Course Completed - Your Knowledge is Your Superpower!",
+        "🎉 Course Completed - You’re a Force to be Reckoned With!",
+        "💪 Course Completed - Your Strength is Unmatched!",
+        "💡 Course Completed - Keep Growing, Keep Shining!",
+        "🚀 Course Completed - The Sky is Not the Limit, It’s Just the Beginning!",
+        "🌟 Course Completed - Your Potential is Limitless!",
+        "🎉 Course Completed - Celebrate Your Success and Keep Moving Forward!",
+        "🏆 Course Completed - You’ve Earned Your Place Among the Best!",
+        "💪 Course Completed - Your Determination is Unstoppable!",
+    ]
+
+    useEffect(() => {
+        if (!course?.courseContents) return;
+        const completedLectures = course.courseContents.flatMap(content =>
+            content.courseLectures.filter(lecture => lecture.userCourseProgress.completed)
+        ) || [];
+
+        const totalLectures = course.courseContents.flatMap(content => content.courseLectures) || [];
+
+        setProgressPercentage(
+            Math.round((completedLectures.length / (totalLectures.length || 1)) * 100)
+        );
+    }, [course?.courseContents]);
 
     useEffect(() => {
         setLoading(true);
@@ -26,9 +68,6 @@ export function useCourseLearn(courseId: number, accessToken: string) {
             .finally(() => setLoading(false));
     }, [courseId, accessToken]);
 
-    useEffect(() => {
-        console.log(activeLecture)
-    }, [activeLecture])
 
     useEffect(() => {
         if (activeLecture?.contentType === "VIDEO") {
@@ -117,6 +156,7 @@ export function useCourseLearn(courseId: number, accessToken: string) {
 
     return {
         course,
+        setCourse,
         activeLecture,
         setActiveLecture,
         loading,
@@ -126,5 +166,9 @@ export function useCourseLearn(courseId: number, accessToken: string) {
         updateLecture,
         triggerDownload,
         getPresignedUrl,
+        isLastLectureFinished,
+        setIsLastLectureFinished,
+        courseFinishedPunchlines,
+        progressPercentage
     };
 }

@@ -7,9 +7,8 @@ import com.shifterwebapp.shifter.course.*;
 import com.shifterwebapp.shifter.course.dto.CourseDtoDetail;
 import com.shifterwebapp.shifter.course.dto.CourseDtoFull;
 import com.shifterwebapp.shifter.course.dto.CourseDtoPreview;
-import com.shifterwebapp.shifter.course.mapper.CourseMapperDetail;
-import com.shifterwebapp.shifter.course.mapper.CourseMapperFull;
-import com.shifterwebapp.shifter.course.mapper.CourseMapperPreview;
+import com.shifterwebapp.shifter.course.dto.CourseDtoPreviewEnrolled;
+import com.shifterwebapp.shifter.course.mapper.CourseMapper;
 import com.shifterwebapp.shifter.coursecontent.CourseContent;
 import com.shifterwebapp.shifter.coursecontent.CourseContentDtoFull;
 import com.shifterwebapp.shifter.courselecture.CourseLecture;
@@ -22,7 +21,6 @@ import com.shifterwebapp.shifter.upload.S3UploadResponse;
 import com.shifterwebapp.shifter.user.UserDto;
 import com.shifterwebapp.shifter.user.service.UserService;
 import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgress;
-import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgressDto;
 import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgressMapper;
 import com.shifterwebapp.shifter.usercourseprogress.service.UserCourseProgressService;
 import lombok.RequiredArgsConstructor;
@@ -39,22 +37,17 @@ import java.util.stream.Collectors;
 public class CourseService implements ImplCourseService {
 
     private final CourseRepository courseRepository;
-    private final CourseMapperPreview courseMapperPreview;
-    private final CourseMapperDetail courseMapperDetail;
-    private final CourseMapperFull courseMapperFull;
-    private final UserCourseProgressMapper userCourseProgressMapper;
+    private final CourseMapper courseMapper;
     private final UserService userService;
-    private final UserCourseProgressService userCourseProgressService;
     private final Validate validate;
     private final EnrollmentService enrollmentService;
+    private final CourseDtoBuilder courseDtoBuilder;
 
 
     @Override
     public Course createCourse(String courseJson) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         Course course = objectMapper.readValue(courseJson, Course.class);
-        course.setRating(0);
-        course.setRatingCount(0);
 
         for (CourseContent content : course.getCourseContents()) {
             content.setCourse(course);
@@ -128,26 +121,10 @@ public class CourseService implements ImplCourseService {
         if (enrollment == null) {
             throw new AccessDeniedException("User with ID " + userId + " is not enrolled in course with ID " + courseId + " and is therefore not authorized to access the full course with its content!");
         }
-
-        List<UserCourseProgress> userCourseProgress = userCourseProgressService.getUserCourseProgressByEnrollment(enrollment.getId());
-
-        Map<Long, UserCourseProgress> progressMap = userCourseProgress.stream()
-                .collect(Collectors.toMap(
-                        UserCourseProgress::getCourseLectureId,
-                        Function.identity()
-                ));
-
+        enrollmentService.updateEnrollmentStatusToActive(enrollment);
         Course course = courseRepository.findById(courseId).orElseThrow();
-        CourseDtoFull courseDto = courseMapperFull.toDto(course);
 
-        for (CourseContentDtoFull contentDto : courseDto.getCourseContents()) {
-            for (CourseLectureDtoFull lectureDto : contentDto.getCourseLectures()) {
-                UserCourseProgress progress = progressMap.get(lectureDto.getId());
-                lectureDto.setUserCourseProgress(userCourseProgressMapper.toDto(progress));
-            }
-        }
-
-        return courseDto;
+        return courseDtoBuilder.getCourseDtoFull(course, enrollment);
     }
 
     @Override
@@ -155,7 +132,7 @@ public class CourseService implements ImplCourseService {
         List<Course> courses = courseIds != null && !courseIds.isEmpty() ?
                 courseRepository.findCoursesByIdNotIn(courseIds) :
                 courseRepository.findAll();
-        return courseMapperPreview.toDto(courses);
+        return courseDtoBuilder.getCourseDtoPreview(courses);
     }
 
 //    @Override
@@ -203,15 +180,19 @@ public class CourseService implements ImplCourseService {
                 .subList(0, limit)
                 .stream()
                 .map(ScoredCourse::getCourse)
-                .map(courseMapperPreview::toDto)
+                .map(courseDtoBuilder::getCourseDtoPreview)
                 .toList();
     }
 
     @Override
-    public List<CourseDtoPreview> getEnrolledCourses(Long userId) {
+    public List<CourseDtoPreviewEnrolled> getEnrolledCourses(Long userId) {
         List<Long> enrolledCourseIds = enrollmentService.getCourseIdsByUserEnrollments(userId);
         List<Course> courses = courseRepository.findAllById(enrolledCourseIds);
-        return courseMapperPreview.toDto(courses);
+
+        if (courses.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return courseDtoBuilder.getCourseDtoPreviewEnrolled(courses, userId);
     }
 
 
@@ -219,7 +200,7 @@ public class CourseService implements ImplCourseService {
     public List<CourseDtoPreview> getTopRatedCourses() {
         List<Course> courses = courseRepository.findCoursesOrderedByRating();
         int limit = Math.min(5, courses.size());
-        return courseMapperPreview.toDto(
+        return courseDtoBuilder.getCourseDtoPreview(
                 courses
                         .subList(0, limit)
         );
@@ -229,18 +210,17 @@ public class CourseService implements ImplCourseService {
     public List<CourseDtoPreview> getMostPopularCourses() {
         List<Course> courses = courseRepository.findCoursesOrderedByPopularity();
         int limit = Math.min(5, courses.size());
-        return courseMapperPreview.toDto(
+        return courseDtoBuilder.getCourseDtoPreview(
                 courses
                         .subList(0, limit)
         );
     }
 
-
     @Override
     public CourseDtoDetail getCourseById(Long courseId) {
         validate.validateCourseExists(courseId);
         Course course = courseRepository.findById(courseId).orElseThrow();
-        return courseMapperDetail.toDto(course);
+        return courseDtoBuilder.getCourseDtoDetail(course);
     }
 
     @Override

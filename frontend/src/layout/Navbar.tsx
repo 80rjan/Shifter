@@ -10,54 +10,54 @@ function Navbar() {
 
     return (
         <nav
-            className=" fixed top-2 z-50 w-11/12 left-1/2 -translate-x-1/2 flex items-center justify-between py-3 px-10 pr-0 rounded-full
-            border-3 border-white/30 bg-black/50 backdrop-blur-md text-white font-light overflow-clip"
+            className="fixed top-2 z-50 w-11/12 left-1/2 -translate-x-1/2 flex items-center justify-between py-2 rounded-full
+            border-3 border-white/30 bg-black/50 backdrop-blur-md text-white font-light overflow-clip gap-20"
         >
             {/* Left nav links */}
-            <div className="flex w-36/100 justify-between text-lg items-center">
+            <div className={`flex w-40/100 justify-between text-md items-center
+                                pl-10 ${user?.hasUsedFreeConsultation && "pl-12"}`}>
                 {/* Link group */}
                 <NavbarLink to="/courses" label="Courses"/>
                 <NavbarLink to="/mentoring" label="Mentoring"/>
+                <NavbarLink to="/consulting" label="Consulting"/>
                 <NavbarLink to="/academies" label="Academies"/>
             </div>
 
             {/* Centered Logo (NO ABSOLUTE!) */}
-            <div className="flex justify-center items-center w-fit px-20">
+            <div className="flex justify-center items-center w-fit">
                 <Link to="/">
-                    <img src={logo} alt="Shifter Logo" className="h-14"/>
+                    <img src={logo} alt="Shifter Logo" className="h-12"/>
                 </Link>
             </div>
 
             {/* Right nav links + profile */}
-            <div className="flex w-36/100 justify-between text-lg items-center gap-6">
+            <div className="flex w-40/100 justify-between text-md items-center gap-6">
                 <NavbarLink to="/about" label="About"/>
-                {user ? (
-                    <>
-                        <NavbarLink to="/learn" label="Dashboard"/>
-                        <div className="flex gap-4 items-center">
-                            <Link
-                                to="/profile"
-                                className="hover:bg-shifter transition-all duration-200 ease-in-out cursor-pointer
+                {
+                    user ?
+                        <NavbarLink to="/learn" label="My Learning"/> :
+                        <NavbarLink to="/login" label="Login / Register"/>
+                }
+                <div className="flex gap-4 items-center">
+                    {
+                        user &&
+                        <Link
+                            to="/profile"
+                            className="hover:bg-shifter transition-all duration-200 ease-in-out cursor-pointer
                                 h-full aspect-square rounded-full border-2 border-white/20 p-3 bg-shifter/40 text-white font-bold flex items-center justify-center"
-                            >
-                                {user.name.split(" ")[0].charAt(0).toUpperCase()}
-                            </Link>
-                            <Link
-                                to="/free-consultation"
-                                className="hover:-translate-x-2 transition-all duration-200 ease-in-out cursor-pointer
-                                relative -mr-4 px-6 pr-9 py-2 bg-shifter rounded-l-lg font-medium
-                                shadow-md shadow-shifter/30"
-                            >Free Consultation
-                            </Link>
-                        </div>
-                    </>
-                ) : (
-                    <Link to="/login"
-                          className="hover:-translate-x-4 transition-all duration-200 ease-in-out cursor-pointer
-                              relative -mr-4 px-6 pr-9 py-2 bg-shifter rounded-l-lg font-medium
-                              shadow-md shadow-shifter/30"
-                    >Login / Register</Link>
-                )}
+                        >
+                            {user.name.split(" ")[0].charAt(0).toUpperCase()}
+                        </Link>
+                    }
+                    <Link
+                        to={`${user?.hasUsedFreeConsultation ? "/contact" : "/free-consultation"}`}
+                        className={`hover:-translate-x-2 transition-all duration-200 ease-in-out cursor-pointer
+                                relative -mr-4 py-2 bg-shifter rounded-l-lg font-medium
+                                shadow-md shadow-shifter/30 px-8 pr-10 ${user?.hasUsedFreeConsultation && "px-10 pr-12"}`}
+                    >
+                        {user?.hasUsedFreeConsultation ? "Contact Us" : "Free Consultation"}
+                    </Link>
+                </div>
             </div>
         </nav>
 

@@ -7,6 +7,7 @@ import com.shifterwebapp.shifter.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -22,7 +23,7 @@ public class Payment {
 
     private Double amount;
 
-    private Date date;
+    private LocalDate date;
 
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;

@@ -1,7 +1,6 @@
 package com.shifterwebapp.shifter.user;
 
-import com.shifterwebapp.shifter.payment.PaymentDto;
-import com.shifterwebapp.shifter.enums.CompanyType;
+import com.shifterwebapp.shifter.enums.CompanySize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +20,7 @@ public class UserDto {
 
     private Boolean hasUsedFreeConsultation;
 
-    private CompanyType companyType;
+    private CompanySize companySize;
 
     private String workPosition;
 

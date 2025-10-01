@@ -2,6 +2,7 @@ import {useAuthContext} from "../context/AuthContext.tsx";
 import React, {useEffect, useState} from "react";
 import {fetchExpertFreeTimeSlotsApi, scheduleMeetingApi} from "../api/meetingApi.ts";
 import type {UserMeetingInfoRequest} from "../models/UserMeetingInfoRequest.tsx";
+import ShifterArrow from "../../public/Shifter-Arrow-White.png"
 
 function FreeConsultation() {
     const {user, setUser, accessToken, authChecked} = useAuthContext();
@@ -63,7 +64,7 @@ function FreeConsultation() {
             {/*HERO*/}
             <section
                 style={{paddingTop: 'calc(var(--spacing-top-nav-lg) + 4rem)'}}
-                className="bg-dark-blue text-white w-full px-horizontal-lg py-vertical-lg pt-top-nav-lg text-left">
+                className="relative bg-dark-blue text-white w-full px-horizontal-lg py-vertical-lg pt-top-nav-lg text-left overflow-x-clip">
                 <div className="flex flex-col gap-4 w-1/2">
                     <h1 className="text-5xl font-bold">Book Your Free Expert Session</h1>
                     <p className="text-xl font-light ">
@@ -71,6 +72,8 @@ function FreeConsultation() {
                         Get a personalized program recommendation tailored to your needs.
                     </p>
                 </div>
+
+                <img src={ShifterArrow} className="absolute right-20 -bottom-20 h-120 rotate-45 opacity-5"/>
             </section>
 
             <section className="bg-dark-blue/5 flex gap-20 py-vertical-lg px-horizontal-lg text-left">
@@ -114,7 +117,7 @@ function FreeConsultation() {
                         <p className="font-light text-black/60 text-lg ">Email: <span
                             className="text-black font-medium">{user?.email}</span></p>
                         <p className="font-light text-black/60 text-lg ">Company Type: <span
-                            className="text-black font-medium">{user?.companyType.toLowerCase().split("_").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}</span>
+                            className="text-black font-medium">{user?.companySize.toLowerCase().split("_").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}</span>
                         </p>
                         <p className="font-light text-black/60 text-lg ">Work Position: <span
                             className="text-black font-medium">{user?.workPosition}</span></p>
@@ -177,6 +180,7 @@ function FreeConsultation() {
                                             onChange={(e) => setSelectedTime(e.target.value)}
                                             firstOption={"Select a time"}
                                             options={freeSlots[selectedDate]}
+                                            isDisabled={selectedDate.length === 0}
                                         />
                                     </>
                                 )
@@ -250,16 +254,19 @@ function TextInput({label, name, placeholder, onChange}: {
     )
 }
 
-function SelectInput({value, onChange, firstOption, options}: {
+function SelectInput({value, onChange, firstOption, options, isDisabled}: {
     value: string;
     onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
     firstOption: string;
     options: string[];
+    isDisabled?: boolean;
 }) {
     return (
         <select
-            className="bg-dark-blue/5 border-1 border-black/10 py-2 px-8 rounded-sm
+            className="disabled:opacity-20 disabled:cursor-not-allowed
+            bg-dark-blue/5 border-1 border-black/10 py-2 px-8 rounded-sm
                 font-medium resize-none overflow-hidden min-h-fit cursor-pointer"
+            disabled={isDisabled}
             value={value} onChange={onChange}>
             <option value="">{firstOption}</option>
             {options?.map((option) => (

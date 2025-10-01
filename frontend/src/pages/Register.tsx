@@ -33,7 +33,7 @@ function Register() {
         passwordConfirmation: "",
         name: "",
         workPosition: "",
-        companyType: "",
+        companySize: "",
         interests: [],
         desiredSkills: [],
     });

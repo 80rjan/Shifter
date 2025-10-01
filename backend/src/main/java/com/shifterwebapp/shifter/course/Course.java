@@ -35,10 +35,6 @@ public class Course {
     
     private Double price;
     
-    private Integer rating;
-    
-    private Integer ratingCount;
-    
     private String descriptionShort;
 
     @Column(columnDefinition = "text")

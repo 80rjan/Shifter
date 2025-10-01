@@ -1,102 +1,71 @@
-import StarFilled from "../assets/icons/StarFilled.tsx";
-import ShifterArrow from "../../public/Shifter-Arrow.png";
+
 import {Link} from 'react-router-dom';
+import Silk from "../assets/animations/Silk.tsx";
+import CountUp from "react-countup";
 
 function HeroHome() {
 
     return (
-        <section
-            className="relative flex flex-col gap-0
-        items-center pt-top-nav-md bg-white w-full rounded-b-[60px]">
-            <h1 className="text-6xl">
-                Business <strong className="text-shifter">Excellence</strong>
-                <br/>
-                Powered by <strong className="text-shifter">Expertise</strong>
-            </h1>
+        <section className="relative ">
 
-            {/*<img src={ShifterRocket} alt="Shifter Rocket Image"*/}
-            {/*     className="absolute left-30 rotate-50 w-20 h-auto"/>*/}
+            <div className="relative flex flex-col items-center gap-0 rounded-4xl shadow-lg shadow-black/20
+             overflow-clip py-top-nav-lg">
+                <Silk
+                    className="absolute inset-0 opacity-90"
+                    speed={8}
+                    scale={1}
+                    color="#008CC2"
+                    noiseIntensity={1}
+                    rotation={0}
+                />
 
-            <div className="relative z-1 px-horizontal-md bg-white rounded-b-[60px] flex justify-between items-center w-full">
-
-                {/*LEFT TEXT*/}
-                <div className="relative max-w-sm text-left">
-                    <img src={ShifterArrow} alt="Shifter Arrow"
-                         className="absolute left-5 -top-30 h-35 w-30 rotate-40 opacity-20"/>
-                    <img src={ShifterArrow} alt="Shifter Arrow"
-                         className="absolute -left-25 top-5 h-35 w-30 -rotate-140 opacity-20"/>
-
-                    <p className="text-lg text-black leading-relaxed">
-                        We guide businesses from the basics of planning to complete transformations, offering
-                        expert
-                        mentoring, consulting, and e-learning. Whether you're starting small or aiming for major
-                        growth,
-                        we provide the support and tools to achieve lasting success!
-                    </p>
-                </div>
-
-                {/*CENTER IMAGE*/}
-                <div className="flex justify-center items-center w-fit h-fit overflow-clip">
-                    <div className="relative -bottom-20 bg-dark-gray/20 w-100 h-100 rounded-full"></div>
-
-                    {/*CTA BUTTONS*/}
-                    <div
-                        className="absolute bottom-5 flex gap-2 bg-gray/20 backdrop-blur-lg p-1 rounded-full border-3 border-black/5 text-md">
-                        <Link
-                            to="/free-consultation"
-                            className="hover:shadow-lg hover:shadow-shifter/50 transition-all duration-200 ease-in-out cursor-pointer
-                        rounded-full text-white px-8 py-3 bg-shifter border-3 border-white/50 font-semibold
-                        shadow-md shadow-shifter/30">
-                            Book a Free Consultation
-                        </Link>
-                        <Link
-                            to="/courses"
-                            className="hover:shadow-lg hover:shadow-shifter/50 transition-all duration-200 ease-in-out cursor-pointer
-                        rounded-full text-shifter px-8 py-3 bg-white border-3 border-shifter/50 font-bold
-                        shadow-md shadow-shifter/30">Explore
-                            Our Courses
-                        </Link>
+                <div className="flex flex-col gap-12 justify-center items-center z-1">
+                    <div className="flex flex-col gap-6 items-center justify-center">
+                        <div className="border-1 border-white/40
+                        bg-black/10 rounded-full py-1 px-8 font-medium text-sm text-white shadow-sm">
+                            {/*Simply Shift*/}
+                            Shift 2 Win
+                        </div>
+                        <h1 className="text-7xl font-semibold text-white max-w-3/4">
+                            {/*Get tailored strategies that actually work*/}
+                            Simplify your growth journey
+                        </h1>
+                        <p className="text-xl font-light text-white max-w-3/4">
+                            {/*Practical tools and guidance to help your business grow with ease.*/}
+                            {/*Expert mentorship, practical courses, and group academies in one place.*/}
+                            Expert guidance, practical courses, and group academies designed to help family-owned businesses thrive.
+                        </p>
                     </div>
-                </div>
-
-                {/*RIGHT STATISTICS*/}
-                <div className="flex flex-col gap-4 items-center">
-                    <div className=" grid grid-cols-2 grid-rows-2 gap-x-12 gap-y-6">
-                        <p className="text-right min-w-fit">
-                            <span className="text-3xl font-bold">20+</span> <br/>
-                            <span className="whitespace-nowrap font-light">Years Experience</span>
-                        </p>
-                        <p className="text-right">
-                            <span className="text-3xl font-bold">300+</span> <br/>
-                            <span className="whitespace-nowrap font-light">Clients Empowered</span>
-                        </p>
-                        <p className="text-right">
-                            <span className="text-3xl font-bold">10+</span> <br/>
-                            <span className="whitespace-nowrap font-light">Courses Available</span>
-                        </p>
-                        <p className="text-right">
-                            <span className="text-3xl font-bold">5000+</span> <br/>
-                            <span className="whitespace-nowrap font-light">Mentoring Hours</span>
-                        </p>
-                        {/*<p className="text-right">*/}
-                        {/*    <span className="text-3xl font-bold">2</span> <br/>*/}
-                        {/*    <span className="whitespace-nowrap font-light">Expert Mentors</span>*/}
-                        {/*</p>*/}
-                    </div>
-                    <div className="flex gap-1 text-gold">
-                        <StarFilled className="w-10 h-10 opacity-80"/>
-                        <StarFilled className="w-10 h-10 opacity-80"/>
-                        <StarFilled className="w-10 h-10 opacity-80"/>
-                        <StarFilled className="w-10 h-10 opacity-80"/>
-                        <StarFilled className="w-10 h-10 opacity-80"/>
-                    </div>
+                    <Link
+                        to="/free-consultation"
+                        className="hover:shadow-white/60 transition-all duration-200 ease-in-out cursor-pointer
+                        rounded-full text-black/90 px-8 py-3 bg-white font-bold border-2 border-black/20
+                        w-fit shadow-md shadow-white/40">
+                        Book a Free Consultation
+                    </Link>
                 </div>
             </div>
 
-            <div
-                className="shadow-md shadow-black/80
-                absolute bottom-0 w-full h-40 z-0 rounded-b-[60px]"
-            />
+            <div className="absolute bottom-0 translate-y-1/2 left-1/2 translate-x-[-50%] border-2 border-black/10
+                 flex justify-between bg-black/40 backdrop-blur-md w-9/10 py-6 px-24 rounded-lg">
+                <div className="text-white">
+                    <h3 className="text-4xl font-bold"><CountUp start={0} end={250} duration={4} separator={"."}  />+</h3>
+                    <p className="font-light whitespace-nowrap">Businesses Empowered</p>
+                </div>
+                <div className="text-white">
+                    <h3 className="text-4xl font-bold"><CountUp start={0} end={2000} duration={4} separator={"."}  />+</h3>
+                    <p className="font-light whitespace-nowrap">Mentoring Hours</p>
+                </div>
+                <div className="text-white">
+                    <h3 className="text-4xl font-bold"><CountUp start={0} end={4} duration={4} separator={"."}  />+</h3>
+                    <p className="font-light whitespace-nowrap">Years of Shifter</p>
+                </div>
+                <div className="text-white">
+                    <h3 className="text-4xl font-bold"><CountUp start={0} end={10} duration={4} separator={"."}  />+</h3>
+                    {/*<p className="font-light whitespace-nowrap">Courses & Academies Available</p>*/}
+                    <p className="font-light whitespace-nowrap">Growth Programs Delivered</p>
+                </div>
+            </div>
         </section>
     )
 }

@@ -1,7 +1,7 @@
-package com.shifterwebapp.shifter.meeting;
+package com.shifterwebapp.shifter.external.meeting;
 
 import com.shifterwebapp.shifter.Validate;
-import com.shifterwebapp.shifter.meeting.service.MeetingService;
+import com.shifterwebapp.shifter.external.meeting.service.MeetingService;
 import com.shifterwebapp.shifter.user.UserDto;
 import com.shifterwebapp.shifter.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ public class MeetingController {
         UserDto user = userService.getUserById(userId);
         userMeetingInfoRequest.setEmail(user.getEmail());
         userMeetingInfoRequest.setName(user.getName());
-        userMeetingInfoRequest.setCompanyType(user.getCompanyType());
+        userMeetingInfoRequest.setCompanySize(user.getCompanySize());
         userMeetingInfoRequest.setWorkPosition(user.getWorkPosition());
 
         meetingService.scheduleMeeting(date, startTime, userTimeZone, userMeetingInfoRequest);

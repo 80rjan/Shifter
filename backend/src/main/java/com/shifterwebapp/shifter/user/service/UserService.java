@@ -75,7 +75,7 @@ public class UserService implements ImplUserService {
                 .passwordHash(passwordEncoder.encode(registerDto.getPassword()))
                 .isAdmin(false)
                 .hasUsedFreeConsultation(false)
-                .companyType(registerDto.getCompanyType())
+                .companySize(registerDto.getCompanySize())
                 .workPosition(registerDto.getWorkPosition())
                 .interests(registerDto.getInterests())
                 .skills(List.of())
@@ -101,8 +101,8 @@ public class UserService implements ImplUserService {
         if (userInfoDto.getName() != null) {
             user.setName(userInfoDto.getName());
         }
-        if (userInfoDto.getCompanyType() != null) {
-            user.setCompanyType(userInfoDto.getCompanyType());
+        if (userInfoDto.getCompanySize() != null) {
+            user.setCompanySize(userInfoDto.getCompanySize());
         }
         if (userInfoDto.getWorkPosition() != null) {
             user.setWorkPosition(userInfoDto.getWorkPosition());

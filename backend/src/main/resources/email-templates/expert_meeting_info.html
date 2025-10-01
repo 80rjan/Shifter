@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${subject}</title>
+    <style>
+        /* Universal inline styles for email client compatibility */
+        body, p, h1, h2, h3, h4, h5, h6 {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333333;
+            background-color: #F8F6F5; /* mainBgColor */
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<table width="100%%" bgcolor="#F8F6F5" border="0" cellpadding="0" cellspacing="0" role="presentation">
+    <tr>
+        <td align="center">
+            <table width="600" style="max-width: 600px;" border="0" cellpadding="0" cellspacing="0" role="presentation">
+                <tr>
+                    <td height="30">&nbsp;</td>
+                </tr>
+
+                <tr>
+                    <td align="left" style="padding: 0 20px;">
+                        <table width="100%%" border="0" cellpadding="0" cellspacing="0" role="presentation">
+                            <tr>
+                                <td align="left" style="padding-bottom: 10px;">
+                                    <a href="https://www.shift-er.com" target="_blank">
+                                        <img src="https://www.shif-er.com/public/Shifter-S2W-Transparent.png" alt="Shifter Logo" width="120"
+                                             style="display: block; border: 0;">
+                                    </a>
+                                </td>
+                                <td align="right" style="font-size: 14px; color: #666666;">
+                                    Internal Notification
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td height="20">&nbsp;</td>
+                </tr>
+
+                <tr>
+                    <td align="center" bgcolor="#FFFFFF"
+                        style="border-radius: 8px; padding: 30px 40px; box-shadow: 0 4px 8px rgba(0,0,0,0.05);">
+                        <table width="100%%" border="0" cellpadding="0" cellspacing="0" role="presentation">
+
+                            <tr>
+                                <td align="left" style="padding-bottom: 20px;">
+                                    <h1 style="font-size: 26px; line-height: 1.2; color: #222222; margin-bottom: 10px;">
+                                        New Consultation Booked!
+                                    </h1>
+                                    <p style="font-size: 16px; line-height: 1.6; color: #555555;">
+                                        A new user has booked a free consultation session. Please review the details below.
+                                    </p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td align="left">
+                                    <h2 style="font-size: 20px; font-weight: bold; margin-top: 15px; margin-bottom: 15px;">
+                                        Session Details
+                                    </h2>
+                                    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size: 16px; margin-bottom: 20px;">
+                                        <tr>
+                                            <td width="30%" style="font-weight: bold; padding-bottom: 8px; color: #222222;">Date:</td>
+                                            <td width="70%" style="padding-bottom: 8px; color: #333333;">${date}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold; padding-bottom: 8px; color: #222222;">Time:</td>
+                                            <td style="padding-bottom: 8px; color: #333333;">${time}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold; padding-bottom: 8px; color: #222222;">Zoom Link:</td>
+                                            <td style="padding-bottom: 8px;">
+                                                <a href="${zoomLink}" style="color: #008CC2; text-decoration: underline;" target="_blank">Join Meeting</a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td height="1" style="font-size: 1px; line-height: 1px; background-color: #DDDDDD;">
+                                    &nbsp;
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td align="left">
+                                    <h2 style="font-size: 20px; font-weight: bold; color: #222222; margin-top: 15px; margin-bottom: 15px;">
+                                        User Information
+                                    </h2>
+                                    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size: 16px; margin-bottom: 20px;">
+                                        <tr>
+                                            <td width="30%" style="font-weight: bold; padding-bottom: 8px; color: #222222;">Name:</td>
+                                            <td width="70%" style="padding-bottom: 8px; color: #333333;">${name}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold; padding-bottom: 8px; color: #222222;"> Email:</td>
+                                            <td style="padding-bottom: 8px;"><a href="mailto:${email}" style="color: #008CC2; text-decoration: underline;">${email}</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold; padding-bottom: 8px; color: #222222;">Company Type:</td>
+                                            <td style="padding-bottom: 8px; color: #333333;">${companyType}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold; padding-bottom: 8px; color: #222222;">Position:</td>
+                                            <td style="padding-bottom: 8px; color: #333333;">${workPosition}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold; padding-bottom: 8px; color: #222222;">Time Zone:</td>
+                                            <td style="padding-bottom: 8px; color: #333333;">${userTimeZone}</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td align="left">
+                                    <h3 style="font-size: 18px; font-weight: bold; color: #222222; margin-top: 10px; margin-bottom: 10px;">
+                                        About the Company:
+                                    </h3>
+                                    <p style="font-size: 16px; line-height: 1.6; color: #555555; margin-bottom: 20px; padding: 10px; background-color: #F8F8F8; border-left: 3px solid #008CC2;">
+                                        ${aboutCompany}
+                                    </p>
+
+                                    <h3 style="font-size: 18px; font-weight: bold; color: #222222; margin-top: 10px; margin-bottom: 10px;">
+                                        Current Challenges:
+                                    </h3>
+                                    <p style="font-size: 16px; line-height: 1.6; color: #555555; margin-bottom: 20px; padding: 10px; background-color: #F8F8F8; border-left: 3px solid #008CC2;">
+                                        ${challenges}
+                                    </p>
+
+                                    <h3 style="font-size: 18px; font-weight: bold; color: #222222; margin-top: 10px; margin-bottom: 10px;">
+                                        Expectations from the Session:
+                                    </h3>
+                                    <p style="font-size: 16px; line-height: 1.6; color: #555555; margin-bottom: 20px; padding: 10px; background-color: #F8F8F8; border-left: 3px solid #008CC2;">
+                                        ${expectations}
+                                    </p>
+
+                                    <h3 style="font-size: 18px; font-weight: bold; color: #222222; margin-top: 10px; margin-bottom: 10px;">
+                                        Additional Information:
+                                    </h3>
+                                    <p style="font-size: 16px; line-height: 1.6; color: #555555; margin-bottom: 20px; padding: 10px; background-color: #F8F8F8; border-left: 3px solid #008CC2;">
+                                        ${otherInfo}
+                                    </p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td align="left" style="padding-top: 20px;">
+                                    <p style="font-size: 16px; line-height: 1.6; color: #333333; font-weight: bold;">
+                                        Please review this information before the session to provide the best personalized guidance.
+                                    </p>
+                                    <p style="font-size: 16px; line-height: 1.6; color: #555555; margin-top: 10px;">
+                                        Best regards,
+                                        <br>
+                                        The Shifter Team
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td height="30">&nbsp;</td>
+                </tr>
+
+                <tr>
+                    <td align="center" style="font-size: 12px; color: #666666; padding: 0 20px;">
+                        <p>&copy; ${currentYear} Shifter. All rights reserved.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td height="30">&nbsp;</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

@@ -23,6 +23,7 @@ interface AuthContextType {
     logout: () => void;
     refreshAccessToken: () => Promise<void>;
     loading: boolean;
+    useFreeConsultation: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -35,6 +36,12 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
     const [authChecked, setAuthChecked] = useState<boolean>(false);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+
+    const useFreeConsultation = () => {
+        if (user) {
+            setUser({...user, hasUsedFreeConsultation: true});
+        }
+    }
 
     const register = async (user: UserRegister) => {
         return registerApi(user)
@@ -113,6 +120,7 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
                 setAccessToken,
                 authChecked,
                 setAuthChecked,
+                useFreeConsultation,
                 register,
                 login,
                 logout,

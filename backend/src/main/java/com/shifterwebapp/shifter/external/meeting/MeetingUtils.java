@@ -1,4 +1,4 @@
-package com.shifterwebapp.shifter.meeting;
+package com.shifterwebapp.shifter.external.meeting;
 import org.springframework.stereotype.Component;
 import java.time.*;
 

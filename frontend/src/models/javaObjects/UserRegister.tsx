@@ -4,7 +4,7 @@ export interface UserRegister {
     passwordConfirmation: string;
     name: string;
     workPosition: string;
-    companyType: string;
+    companySize: string;
     interests: string[];
     desiredSkills: string[];
 }

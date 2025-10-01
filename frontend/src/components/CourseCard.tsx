@@ -8,7 +8,6 @@ import HeartOutline from "../assets/icons/HeartOutline.tsx";
 import HeartFill from "../assets/icons/HeartFill.tsx";
 import {useAuthContext} from "../context/AuthContext.tsx";
 import {toggleFavoriteCourseApi} from "../api/userApi.ts";
-import {showInfoToast} from "../utils/showInfoToast.ts";
 import {Sparkle} from "lucide-react";
 
 
@@ -94,15 +93,10 @@ function CourseCard({ card }: {card: CoursePreview}) {
             {/*INFO*/}
             <div className="flex flex-wrap gap-2 whitespace-nowrap">
                 {
-                    card.ratingCount > 10 ? (
-                        <>
-                            <div className="flex items-center gap-1 px-2 border-1 border-black/20 rounded-sm text-black/60">
-                                <StarFilled className="w-4 h-4 text-gold"/> {card.rating / card.ratingCount}
-                            </div>
-                            <div className="flex items-center gap-1 px-2 border-1 border-black/20 rounded-sm text-black/60">
-                                {card.ratingCount} reviews
-                            </div>
-                        </>
+                    card.rating > 0 ? (
+                        <div className="flex items-center gap-1 px-2 border-1 border-black/20 rounded-sm text-black/60">
+                            <StarFilled className="w-4 h-4 text-gold"/> card.rating
+                        </div>
                     ) : (
                         <div className="flex items-center gap-1 px-2 border-1 border-black/20 rounded-sm text-black/60">
                             <Sparkle className="w-4 h-4 text-gold"/> New

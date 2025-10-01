@@ -8,6 +8,7 @@ target/
 /src/main/resources/application-test.properties
 
 .env
+./src/main/java/com/shifterwebapp/shifter/external/service-account.json
 
 ### IntelliJ IDEA ###
 .idea

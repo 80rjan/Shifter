@@ -4,6 +4,7 @@ import com.shifterwebapp.shifter.enrollment.Enrollment;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -21,9 +22,7 @@ public class Review {
 
     private String comment;
 
-    private Boolean canBeUsedAsTestimonial;
-
-    private Date date;
+    private LocalDate review_date;
 
     @OneToOne
     @JoinColumn(name = "enrollment_id")
