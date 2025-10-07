@@ -2,6 +2,8 @@ import {useAuthContext} from "../context/AuthContext.tsx";
 import React, {useEffect, useState} from "react";
 import {fetchExpertFreeTimeSlotsApi, scheduleMeetingApi} from "../api/meetingApi.ts";
 import type {UserMeetingInfoRequest} from "../models/UserMeetingInfoRequest.tsx";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 import ShifterArrow from "../../public/Shifter-Arrow-White.png"
 
 function FreeConsultation() {
@@ -38,7 +40,10 @@ function FreeConsultation() {
             })
             .catch(error => {
                 console.error("Error scheduling meeting:", error);
-                setError("Failed to schedule the meeting. Please try again later or contact support.");
+                if (error.response.data.message === "User has already used free consultation")
+                    setError('We couldn’t schedule your meeting. It appears you’ve already used your free consultation. Feel free to get in touch with us through our Contact page for more options.');
+                else
+                    setError("Failed to schedule the meeting. Please try again later or contact support.");
             })
             .finally(() => setLoadingSubmitForm(false));
     }

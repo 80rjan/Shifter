@@ -6,8 +6,9 @@ import com.shifterwebapp.shifter.course.dto.CourseDtoDetail;
 import com.shifterwebapp.shifter.course.dto.CourseDtoFull;
 import com.shifterwebapp.shifter.course.dto.CourseDtoPreview;
 import com.shifterwebapp.shifter.course.dto.CourseDtoPreviewEnrolled;
-import com.shifterwebapp.shifter.upload.S3UploadResponse;
+import com.shifterwebapp.shifter.external.upload.S3UploadResponse;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 public interface ImplCourseService {
@@ -19,6 +20,8 @@ public interface ImplCourseService {
     Boolean lectureFileExistsInCourse(Long courseId, String storagePath);
 
     CourseDtoFull getEnrolledCourseById(Long courseId, Long userId);
+
+    byte[] downloadCertificate(Long courseId, Long userId) throws Exception;
 
 //    List<CourseDtoPreview> getAllCourses(Specification<Course> specification);
     List<CourseDtoPreview> getAllCourses(List<Long> courseIds);

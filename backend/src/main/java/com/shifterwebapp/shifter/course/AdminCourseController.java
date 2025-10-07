@@ -2,8 +2,8 @@ package com.shifterwebapp.shifter.course;
 
 import com.shifterwebapp.shifter.Validate;
 import com.shifterwebapp.shifter.course.service.CourseService;
-import com.shifterwebapp.shifter.upload.S3Service;
-import com.shifterwebapp.shifter.upload.S3UploadResponse;
+import com.shifterwebapp.shifter.external.upload.S3Service;
+import com.shifterwebapp.shifter.external.upload.S3UploadResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

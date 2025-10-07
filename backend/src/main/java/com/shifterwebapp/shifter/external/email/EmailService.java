@@ -7,6 +7,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -27,11 +28,18 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
 
-    public void contactExpert(ContactReq contactReq) {
+    @Value("${EMAIL_USERNAME}")
+    private String expertEmail;
+
+    public void contactExpert(String userEmail, ContactReq contactReq) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(System.getProperty("EMAIL_USERNAME"));
+
+        message.setFrom(expertEmail);
+        message.setTo(expertEmail);
+        message.setReplyTo(userEmail);
         message.setSubject("New Contact Message: " + contactReq.getSubject());
-        message.setText(contactReq.getText());
+        String body = "From: " + userEmail + "\n\n" + contactReq.getText();
+        message.setText(body);
         int maxRetries = 3;
         int attempt = 0;
         while (true) {
@@ -41,6 +49,7 @@ public class EmailService {
             } catch (Exception e) {
                 attempt++;
                 if (attempt >= maxRetries) {
+                    System.out.println(e.getMessage());
                     throw new RuntimeException("Failed to send email to expert after " + attempt + " attempts", e);
                 }
             }
@@ -56,7 +65,8 @@ public class EmailService {
 
             helper.setTo(to);
             helper.setSubject("Welcome to " + courseName + "! Start Learning Now");
-            helper.setFrom("support@shift-er.com");
+            helper.setFrom(expertEmail);
+            helper.setReplyTo("support@shift-er.com");
 
             int currentYear = Year.now().getValue();
 
@@ -107,7 +117,8 @@ public class EmailService {
 
             helper.setTo(to);
             helper.setSubject(subject);
-            helper.setFrom("support@shift-er.com");
+            helper.setFrom(expertEmail);
+            helper.setReplyTo("support@shift-er.com");
 
             String currentYear = String.valueOf(java.time.Year.now().getValue());
 
@@ -179,7 +190,8 @@ public class EmailService {
 
             helper.setTo(to);
             helper.setSubject(subject);
-            helper.setFrom("support@shift-er.com");
+            helper.setFrom(expertEmail);
+            helper.setReplyTo("support@shift-er.com");
 
             String currentYear = String.valueOf(Year.now().getValue());
 
@@ -234,7 +246,8 @@ public class EmailService {
 
             helper.setTo(expertEmail); // Send to the expert's email
             helper.setSubject(subject);
-            helper.setFrom("support@shift-er.com");
+            helper.setFrom(expertEmail);
+            helper.setReplyTo("support@shift-er.com");
 
             String currentYear = String.valueOf(Year.now().getValue());
 

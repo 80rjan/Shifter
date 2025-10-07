@@ -4,6 +4,7 @@ import com.shifterwebapp.shifter.enrollment.Enrollment;
 import com.shifterwebapp.shifter.enrollment.EnrollmentDto;
 import com.shifterwebapp.shifter.enums.EnrollmentStatus;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ImplEnrollmentService {

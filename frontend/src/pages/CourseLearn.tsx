@@ -9,6 +9,7 @@ import {type JSX, useEffect, useRef, useState} from "react";
 import StarFilled from "../assets/icons/StarFilled.tsx";
 import NavbarLearn from "../layout/NavbarLearn.tsx";
 import ModalReviewCourse from "../components/ModalReviewCourse.tsx";
+import Certificate from "../assets/icons/Certificate.tsx";
 
 function CourseLearn() {
     const {courseId} = useParams<{ courseId: string }>();
@@ -25,6 +26,7 @@ function CourseLearn() {
         isDownloading,
         updateLecture,
         triggerDownload,
+        downloadCertificate,
         isLastLectureFinished,
         setIsLastLectureFinished,
         courseFinishedPunchlines,
@@ -93,11 +95,14 @@ function CourseLearn() {
                                         onClick={() => {
                                             setShowReviewModal(true);
                                         }}
-                                        btnText={<>
-                                            <StarFilled className="text-gold h-6 "/>
-                                            Leave a Review
-                                        </>}
+                                        btnText={
+                                            <div className="flex items-center gap-2">
+                                                <StarFilled className="text-gold h-6 "/>
+                                                Leave a Review
+                                            </div>
+                                        }
                                         btnShow={(course?.rating ?? 0) === 0}
+                                        downloadCertificate={downloadCertificate}
                                     />
                                 )
                             }
@@ -128,7 +133,7 @@ function CourseLearn() {
                                                 disabled={isDownloading}
                                                 onClick={() => triggerDownload()}
                                                 className={`disabled:cursor-not-allowed disabled:opacity-40 hover:shadow-lg transition-all duration-300 ease-in-out cursor-pointer
-                                    bg-shifter text-white text-lg px-8 py-2 rounded-md shadow-md border-2 border-white/40 shadow-shifter/40`}
+                                                bg-shifter text-white text-lg px-8 py-2 rounded-md shadow-md border-2 border-white/40 shadow-shifter/40`}
                                             >
                                                 {
                                                     isDownloading ? "Downloading..." : "Download File"
@@ -244,12 +249,14 @@ function CourseLearn() {
     )
 }
 
-function LastLectureFinished({title, onClick, btnText, btnShow}: {
+function LastLectureFinished({title, onClick, btnText, btnShow, downloadCertificate}: {
     title: string,
     onClick: () => void,
     btnText: string | JSX.Element,
     btnShow: boolean
+    downloadCertificate?: () => void
 }) {
+    const [loading, setLoading] = useState<boolean>(false);
 
     return (
         <>
@@ -260,10 +267,43 @@ function LastLectureFinished({title, onClick, btnText, btnShow}: {
                         <button
                             onClick={onClick}
                             className="hover:bg-shifter/10
-                            flex gap-2 items-center text-lg  text-shifter font-bold px-8 py-2 rounded-md border-1 border-shifter cursor-pointer">
+                            flex gap-2 items-center justify-center text-lg   font-bold px-8 py-2 rounded-md border-1 border-shifter cursor-pointer">
                             {btnText}
                         </button>
-                    )}
+                    )
+                }
+                {
+                    downloadCertificate && (
+                        <button
+                            disabled={loading}
+                            onClick={async () => {
+                                setLoading(true);
+                                try {
+                                    await downloadCertificate()
+                                } catch (error) {
+                                    console.error("Certificate download failed:", error);
+                                } finally {
+                                    setLoading(false);
+                                }
+                            }}
+                            className="disabled:cursor-not-allowed disabled:opacity-60 hover:bg-shifter/10
+                            flex gap-2 items-center justify-center text-lg   font-bold px-8 py-2 rounded-md border-1 border-shifter cursor-pointer">
+                            {
+                                loading ? (
+                                    <>
+                                        Downloading...
+                                        <div className="loader"/>
+                                    </>
+                                ) : (
+                                    <div className="flex items-center gap-2">
+                                        <Certificate className="text-black h-6 "/>
+                                        Download Certificate
+                                    </div>
+                                )
+                            }
+                        </button>
+                    )
+                }
                 <Link to="/learn"
                       className="text-lg font-bold text-shifter underline hover:text-shifter/60">
                     Exit from Course

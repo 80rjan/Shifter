@@ -79,6 +79,8 @@ function Footer() {
                         <section className="flex flex-col gap-2 text-left font-light text-lg">
                             <h3 className="text-white font-bold text-2xl mb-4">Contact</h3>
 
+                            <NavbarLink to={"/contact"} label={"Contact Us"}/>
+                            <hr className="border-t-1 border-white/40 rounded-full" />
                             <p>contact@shifter.com</p>
                             <div className="flex gap-2 items-center">
                                 Visit us at:

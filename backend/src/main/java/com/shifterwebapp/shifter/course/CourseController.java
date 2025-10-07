@@ -1,6 +1,5 @@
 package com.shifterwebapp.shifter.course;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.shifterwebapp.shifter.Validate;
 import com.shifterwebapp.shifter.auth.CustomAuthDetails;
 import com.shifterwebapp.shifter.course.dto.CourseDtoDetail;
@@ -10,15 +9,23 @@ import com.shifterwebapp.shifter.course.dto.CourseDtoPreviewEnrolled;
 import com.shifterwebapp.shifter.course.service.CourseService;
 import com.shifterwebapp.shifter.enrollment.service.EnrollmentService;
 import com.shifterwebapp.shifter.exception.ErrorResponse;
-import com.shifterwebapp.shifter.upload.S3Service;
-import com.shifterwebapp.shifter.upload.S3UploadResponse;
+import com.shifterwebapp.shifter.external.upload.S3Service;
+import com.shifterwebapp.shifter.external.upload.S3UploadResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -149,6 +156,21 @@ public class CourseController {
     public ResponseEntity<?> getCourseById(@PathVariable("courseId") Long courseId) {
         CourseDtoDetail courseDto = courseService.getCourseById(courseId);
         return ResponseEntity.ok(courseDto);
+    }
+
+    @GetMapping("/{courseId}/certificate")
+    public ResponseEntity<byte[]> getCourseCertificate(@PathVariable("courseId") Long courseId, Authentication authentication) throws Exception {
+        Long userId = validate.extractUserId(authentication);
+
+        byte[] personalizedPdf = courseService.downloadCertificate(courseId, userId);
+
+        String fileName = courseService.getCourseById(courseId).getTitleShort().replaceAll("\\s+", "_") + "_Certificate.pdf";
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                .contentType(MediaType.APPLICATION_PDF)
+                .contentLength(personalizedPdf.length)
+                .body(personalizedPdf);
     }
 
     @GetMapping("/topics")

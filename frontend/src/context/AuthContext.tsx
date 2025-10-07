@@ -90,8 +90,8 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
 
         return refreshAccessTokenApi()
             .then(data => {
-                console.log(data.accessToken)
-                console.log(encodeURIComponent(Intl.DateTimeFormat().resolvedOptions().timeZone))
+                // console.log(data.accessToken)
+                // console.log(encodeURIComponent(Intl.DateTimeFormat().resolvedOptions().timeZone))
                 setAccessToken(data.accessToken);
                 setUser(data.user);
             })

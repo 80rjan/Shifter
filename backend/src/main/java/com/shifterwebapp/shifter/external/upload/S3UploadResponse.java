@@ -1,4 +1,4 @@
-package com.shifterwebapp.shifter.upload;
+package com.shifterwebapp.shifter.external.upload;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

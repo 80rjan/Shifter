@@ -1,7 +1,6 @@
-package com.shifterwebapp.shifter.upload;
+package com.shifterwebapp.shifter.external.upload;
 
 import com.shifterwebapp.shifter.Validate;
-import com.shifterwebapp.shifter.upload.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

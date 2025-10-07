@@ -15,22 +15,25 @@ function Contact() {
     const [subject, setSubject] = React.useState("");
     const [message, setMessage] = React.useState("");
     const [loading, setLoading] = React.useState(false);
+    const [error, setError] = React.useState("");
+    const [isMessageSent, setIsMessageSent] = React.useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Handle form submission logic here
-        console.log("Subject:", subject);
-        console.log("Message:", message);
 
         setLoading(true);
         sendEmailApi(accessToken || "", subject, message)
             .then(() => {
-                console.log("Successfully sent email");
+                setIsMessageSent(true);
+                setError("")
             })
             .catch((err) => {
-                console.error("Error sending email:", err);
+                setError("We’re experiencing a temporary issue with our mail service. Please try again shortly or contact us directly at contact@shift-er.com")
+                console.error("Error sending email for contact form:", err);
             })
-            .finally(() => setLoading(false));
+            .finally(() => {
+                setLoading(false)
+            });
     }
 
     return (
@@ -106,19 +109,40 @@ function Contact() {
                                 rows={8}
                                 onChange={(e) => setMessage(e.target.value)}
                             />
-                            <div className="flex items-center gap-6">
-                                <button
-                                    className="hover:shadow-shifter/40 transition-all duration-200 ease-in-out
+                            {
+                                error && (
+                                    <p className="text-red-500 text-md font-medium text-center">
+                                        {error}
+                                    </p>
+                                )
+                            }
+                            {
+                                isMessageSent ? (
+                                    <div className="text-center w-full">
+                                        <h2 className="text-xl font-bold text-shifter mb-2">
+                                            Your message has been sent successfully!
+                                        </h2>
+                                        <p className="text-md font-medium text-black/80 max-w-xl mx-auto">
+                                            Thank you for reaching out to us. Our team will review your message and get back to you as soon as possible.
+                                            Keep an eye on your <span className="font-semibold text-shifter">inbox for our reply</span>.
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center gap-6">
+                                        <button
+                                            className="hover:shadow-shifter/40 transition-all duration-200 ease-in-out
                                     disabled:cursor-not-allowed disabled:opacity-60
                                     shadow-md shadow-shifter/20 bg-shifter text-white py-2 px-6 rounded-md cursor-pointer"
-                                    disabled={loading}
-                                    type="submit">
-                                    {loading ? "Sending..." : "Send Message"}
-                                </button>
-                                {
-                                    loading && <div className="loader" />
-                                }
-                            </div>
+                                            disabled={loading}
+                                            type="submit">
+                                            {loading ? "Sending..." : "Send Message"}
+                                        </button>
+                                        {
+                                            loading && <div className="loader" />
+                                        }
+                                    </div>
+                                )
+                            }
                         </form>
                     </div>
                 </div>
@@ -172,6 +196,7 @@ function TextInput({label, name, placeholder, rows, onChange}: {
         <label className="w-full flex flex-col items-start gap-2">
             <span className="text-black/40 font-semibold text-md peer-focused:text-shifter">{label}</span>
             <textarea
+                required={true}
                 onChange={onChange}
                 rows={rows}
                 name={name}

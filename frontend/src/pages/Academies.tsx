@@ -15,20 +15,21 @@ function Academies() {
     const [subject, setSubject] = React.useState("");
     const [message, setMessage] = React.useState("");
     const [loading, setLoading] = React.useState(false);
+    const [error, setError] = React.useState("");
+    const [isMessageSent, setIsMessageSent] = React.useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Handle form submission logic here
-        console.log("Subject:", subject);
-        console.log("Message:", message);
 
         setLoading(true);
-        sendEmailApi(accessToken || "", "Mentoring: " + subject, message)
+        sendEmailApi(accessToken || "", "Academies Inquiry - " + subject, message)
             .then(() => {
-                console.log("Successfully sent email");
+                setIsMessageSent(true);
+                setError("")
             })
             .catch((err) => {
-                console.error("Error sending email:", err);
+                setError("We’re experiencing a temporary issue with our mail service. Please try again shortly or contact us directly at contact@shift-er.com")
+                console.error("Error sending email for academies inquiry:", err);
             })
             .finally(() => setLoading(false));
     }
@@ -38,10 +39,12 @@ function Academies() {
             {/*Hero*/}
             <section className="flex flex-col items-center gap-4 w-full pb-60 pt-top-nav-lg px-horizontal-lg
                 text-white-text">
-                <h1 className="text-5xl font-bold">Transform Your Team's Expertise with Corporate Group Academies & Training</h1>
+                <h1 className="text-5xl font-bold">Transform Your Team's Expertise with Corporate Group Academies &
+                    Training</h1>
                 <p className="text-xl font-light">
                     Transform your team into a synchronized unit of high-performers.
-                    Our Group Academies deliver <strong className="font-bold">standardized, expert-led training</strong> to rapidly upskill entire departments,
+                    Our Group Academies deliver <strong className="font-bold">standardized, expert-led
+                    training</strong> to rapidly upskill entire departments,
                     close knowledge gaps, and drive consistent execution across your organization.
                     Inquire now to secure a personalized curriculum review for your business.
                 </p>
@@ -63,17 +66,17 @@ function Academies() {
                             </p>
                         </div>
                         <div className="flex gap-4 items-center">
-                            <Mail size={24} color="var(--color-white)" />
+                            <Mail size={24} color="var(--color-white)"/>
                             contact@shift-er.com
                         </div>
                         <div className="flex gap-4 items-center">
-                            <MapPin size={24} color="var(--color-white)" />
+                            <MapPin size={24} color="var(--color-white)"/>
                             Skopje, N. Macedonia
                         </div>
 
                         <div className="absolute -bottom-26 right-12 flex flex-col opacity-40 rotate-40">
-                            <img src={Arrow} className="w-28 h-auto" alt="Shifter Arrow" />
-                            <img src={Arrow} className="w-28 h-auto rotate-180" alt="Shifter Arrow" />
+                            <img src={Arrow} className="w-28 h-auto" alt="Shifter Arrow"/>
+                            <img src={Arrow} className="w-28 h-auto rotate-180" alt="Shifter Arrow"/>
                         </div>
                     </div>
 
@@ -109,19 +112,40 @@ function Academies() {
                                 rows={8}
                                 onChange={(e) => setMessage(e.target.value)}
                             />
-                            <div className="flex items-center gap-6">
-                                <button
-                                    className="hover:shadow-shifter/40 transition-all duration-200 ease-in-out
+                            {
+                                error && (
+                                    <p className="text-red-500 text-md font-medium text-center">
+                                        {error}
+                                    </p>
+                                )
+                            }
+                            {
+                                isMessageSent ? (
+                                    <div className="text-center w-full">
+                                        <h2 className="text-xl font-bold text-shifter mb-2">
+                                            Your message has been sent successfully!
+                                        </h2>
+                                        <p className="text-md font-medium text-black/80 max-w-xl mx-auto">
+                                            Thank you for reaching out to us. Our team will review your message and get
+                                            back to you as soon as possible.
+                                            Keep an eye on your <span className="font-semibold text-shifter">inbox for our reply</span>.
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center gap-6">
+                                        <button
+                                            className="hover:shadow-shifter/40 transition-all duration-200 ease-in-out
                                     disabled:cursor-not-allowed disabled:opacity-60
                                     shadow-md shadow-shifter/20 bg-shifter text-white py-2 px-6 rounded-md cursor-pointer"
-                                    disabled={loading}
-                                    type="submit">
-                                    {loading ? "Sending..." : "Send Message"}
-                                </button>
-                                {
-                                    loading && <div className="loader" />
-                                }
-                            </div>
+                                            disabled={loading}
+                                            type="submit">
+                                            {loading ? "Sending..." : "Send Message"}
+                                        </button>
+                                        {
+                                            loading && <div className="loader"/>
+                                        }
+                                    </div>
+                                )}
                         </form>
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-package com.shifterwebapp.shifter.upload;
+package com.shifterwebapp.shifter.external.upload;
 
 import com.shifterwebapp.shifter.Validate;
 import com.shifterwebapp.shifter.course.service.CourseService;

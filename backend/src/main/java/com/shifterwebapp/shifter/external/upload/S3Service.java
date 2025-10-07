@@ -1,4 +1,4 @@
-package com.shifterwebapp.shifter.upload;
+package com.shifterwebapp.shifter.external.upload;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
@@ -59,6 +61,24 @@ public class S3Service {
         URL url = presigner.presignGetObject(presignRequest).url();
         presigner.close();
         return url;
+    }
+
+    public ResponseInputStream<GetObjectResponse> downloadFile(String key) {
+        S3Client s3Client = S3Client.builder()
+                .region(Region.of(region))
+                .credentialsProvider(
+                        StaticCredentialsProvider.create(
+                                AwsBasicCredentials.create(accessKey, secretKey)
+                        )
+                )
+                .build();
+
+        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .build();
+
+        return s3Client.getObject(getObjectRequest);
     }
 
     public List<S3UploadResponse> uploadCourseImageAndFiles(

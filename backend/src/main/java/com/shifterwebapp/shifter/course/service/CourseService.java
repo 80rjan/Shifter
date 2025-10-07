@@ -10,33 +10,40 @@ import com.shifterwebapp.shifter.course.dto.CourseDtoPreview;
 import com.shifterwebapp.shifter.course.dto.CourseDtoPreviewEnrolled;
 import com.shifterwebapp.shifter.course.mapper.CourseMapper;
 import com.shifterwebapp.shifter.coursecontent.CourseContent;
-import com.shifterwebapp.shifter.coursecontent.CourseContentDtoFull;
 import com.shifterwebapp.shifter.courselecture.CourseLecture;
-import com.shifterwebapp.shifter.courselecture.CourseLectureDtoFull;
 import com.shifterwebapp.shifter.enrollment.Enrollment;
 import com.shifterwebapp.shifter.enrollment.service.EnrollmentService;
 import com.shifterwebapp.shifter.exception.AccessDeniedException;
-import com.shifterwebapp.shifter.upload.MetaInfo;
-import com.shifterwebapp.shifter.upload.S3UploadResponse;
+import com.shifterwebapp.shifter.external.PdfManipulationService;
+import com.shifterwebapp.shifter.external.upload.MetaInfo;
+import com.shifterwebapp.shifter.external.upload.S3Service;
+import com.shifterwebapp.shifter.external.upload.S3UploadResponse;
 import com.shifterwebapp.shifter.user.UserDto;
 import com.shifterwebapp.shifter.user.service.UserService;
-import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgress;
-import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgressMapper;
-import com.shifterwebapp.shifter.usercourseprogress.service.UserCourseProgressService;
 import lombok.RequiredArgsConstructor;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
 public class CourseService implements ImplCourseService {
 
     private final CourseRepository courseRepository;
+    private final S3Service s3Service;
+    private final PdfManipulationService pdfService;
     private final CourseMapper courseMapper;
     private final UserService userService;
     private final Validate validate;
@@ -125,6 +132,41 @@ public class CourseService implements ImplCourseService {
         Course course = courseRepository.findById(courseId).orElseThrow();
 
         return courseDtoBuilder.getCourseDtoFull(course, enrollment);
+    }
+
+    public byte[] downloadCertificate(Long courseId, Long userId) throws Exception {
+        validate.validateCourseExists(courseId);
+        if (!enrollmentService.isUserEnrolledInCourse(userId, courseId))
+            throw new AccessDeniedException("User with ID " + userId + " is not enrolled in course with ID " + courseId + " and is therefore not authorized to access the course certificate!");
+
+        String courseTitle = getCourseById(courseId).getTitleShort();
+        String userName = userService.getUserById(userId).getName();
+        LocalDate completedDate = enrollmentService.getEnrollmentByUserAndCourse(userId, courseId).getCompletedAt();
+
+        // TODO: uncomment this and check if logic for date is okay
+//        if (completedDate == null)
+//            throw new AccessDeniedException("User with ID " + userId + " has not yet completed course with ID " + courseId + " and is therefore not authorized to access the course certificate!");
+
+        String date = (completedDate != null ? completedDate : LocalDate.now()).format(DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH));
+
+        // 1. Define the S3 key for your template PDF
+        String s3Key = "private/Shifter_Certificate.pdf";
+
+        // 2. Fetch the template PDF from S3 as an InputStream
+        try (InputStream templateStream = s3Service.downloadFile(s3Key)) {
+
+            // 3. Modify the PDF with the dynamic data
+            byte[] personalizedPdf = pdfService.fillPdfForm(
+                    templateStream,
+                    userName,
+                    "This is to certify that",
+                    "has successfully completed the course " + courseTitle + " through Shifter, demonstrating commitment to continuous learning and professional growth.",
+                    date,
+                    courseTitle
+            );
+
+            return personalizedPdf;
+        }
     }
 
     @Override

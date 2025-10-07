@@ -1,6 +1,7 @@
 package com.shifterwebapp.shifter.external.email;
 
 import com.shifterwebapp.shifter.Validate;
+import com.shifterwebapp.shifter.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -15,13 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmailController {
 
     private final EmailService emailService;
+    private final UserService userService;
     private final Validate validate;
 
     @PostMapping("/contact-us")
     public ResponseEntity<?> sendEmailToExpert(@RequestBody ContactReq contactReq, Authentication authentication) {
-        validate.validateUserIsAuthenticated(authentication);
+        Long userId = validate.extractUserId(authentication);
+        String userEmail = userService.getUserEmailById(userId);
 
-        emailService.contactExpert(contactReq);
+        emailService.contactExpert(userEmail, contactReq);
         return ResponseEntity.ok().build();
     }
 }

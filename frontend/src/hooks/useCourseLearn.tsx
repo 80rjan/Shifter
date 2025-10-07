@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import type {CourseFull} from "../models/javaObjects/CourseFull.tsx";
 import type {CourseLectureFull} from "../models/javaObjects/CourseLectureFull.tsx";
-import {fetchCourseFullApi} from "../api/courseApi.ts";
+import {fetchCourseCertificateApi, fetchCourseFullApi} from "../api/courseApi.ts";
 import {fetchPresignedUrlApi} from "../api/s3Api.ts";
 import {completeLectureApi, uncompleteLectureApi} from "../api/userCourseProgressApi.ts";
 
@@ -118,6 +118,46 @@ export function useCourseLearn(courseId: number, accessToken: string) {
         }
     };
 
+    const downloadCertificate = async () => {
+        try {
+            const response = await fetchCourseCertificateApi(Number(courseId || -1), accessToken || "");
+
+            const pdfBlob = response.data;
+
+            const disposition = response.headers['content-disposition'] || response.headers['Content-Disposition'];
+            let filename = `Shifter_Certificate_${courseId}.pdf`; // Fallback filename
+
+            if (disposition) {
+                const filenameMatch = disposition.match(/filename="(.+?)"|filename\*=UTF-8''(.+)/i);
+                if (filenameMatch) {
+                    // Prioritize the filename from the second capture group (UTF-8 encoding)
+                    // otherwise use the first group.
+                    filename = filenameMatch[2] || filenameMatch[1];
+
+                    // Clean up the filename if it was URL-encoded (common for UTF-8)
+                    if (filename.includes('%')) {
+                        filename = decodeURIComponent(filename);
+                    }
+                }
+            }
+
+            const url = window.URL.createObjectURL(pdfBlob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+
+            window.URL.revokeObjectURL(url);
+            a.remove();
+
+        } catch (error) {
+            console.error("Error during certificate download:", error);
+            alert('Failed to download certificate. Check authentication or permissions.');
+        }
+    }
+
     const updateLecture = (progressId: number, isComplete: boolean) => {
         if (!course) return;
 
@@ -165,6 +205,7 @@ export function useCourseLearn(courseId: number, accessToken: string) {
         setIsDownloading,
         updateLecture,
         triggerDownload,
+        downloadCertificate,
         getPresignedUrl,
         isLastLectureFinished,
         setIsLastLectureFinished,

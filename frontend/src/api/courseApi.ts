@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {type AxiosResponse} from "axios";
 import type {CoursePreview} from "../models/javaObjects/CoursePreview.tsx";
 import type {CourseDetail} from "../models/javaObjects/CourseDetail.tsx";
 import type {CourseFull} from "../models/javaObjects/CourseFull.tsx";
@@ -83,6 +83,20 @@ export const fetchCoursesTopicsApi = async (): Promise<string[]> => {
 export const fetchCoursesSkillsApi = async (): Promise<string[]> => {
     const res = await axios.get(`${backendUrl}/api/courses/skills`);
     return res.data;
+}
+
+type CertificateResponse = AxiosResponse<Blob>
+
+export const fetchCourseCertificateApi = async (courseId: number, accessToken: string): Promise<CertificateResponse> => {
+    const res = await axios.get(
+        `${backendUrl}/api/courses/${courseId}/certificate`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            responseType: 'blob'
+        }
+    );
+    return res;
 }
 
 

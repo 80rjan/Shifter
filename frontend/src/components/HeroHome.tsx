@@ -2,8 +2,10 @@
 import {Link} from 'react-router-dom';
 import Silk from "../assets/animations/Silk.tsx";
 import CountUp from "react-countup";
+import {useAuthContext} from "../context/AuthContext.tsx";
 
 function HeroHome() {
+    const {user} = useAuthContext()
 
     return (
         <section className="relative ">
@@ -37,11 +39,11 @@ function HeroHome() {
                         </p>
                     </div>
                     <Link
-                        to="/free-consultation"
+                        to={user?.hasUsedFreeConsultation ? "/contact" : "/free-consultation"}
                         className="hover:shadow-white/60 transition-all duration-200 ease-in-out cursor-pointer
-                        rounded-full text-black/90 px-8 py-3 bg-white font-bold border-2 border-black/20
+                        rounded-full text-black/90 px-12 py-3 bg-white font-bold border-2 border-black/20
                         w-fit shadow-md shadow-white/40">
-                        Book a Free Consultation
+                        {user?.hasUsedFreeConsultation ? "Get In Touch" : "Book a Free Consultation"}
                     </Link>
                 </div>
             </div>
