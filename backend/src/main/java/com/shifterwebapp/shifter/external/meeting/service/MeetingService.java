@@ -6,7 +6,7 @@ import com.shifterwebapp.shifter.exception.AccessDeniedException;
 import com.shifterwebapp.shifter.exception.TimeSlotUnavailableException;
 import com.shifterwebapp.shifter.external.email.EmailService;
 import com.shifterwebapp.shifter.external.ZoomService;
-import com.shifterwebapp.shifter.external.GoogleCalendarService;
+import com.shifterwebapp.shifter.external.google.GoogleCalendarService;
 import com.shifterwebapp.shifter.external.meeting.MeetingUtils;
 import com.shifterwebapp.shifter.external.meeting.UserMeetingInfoRequest;
 import com.shifterwebapp.shifter.external.meeting.ZoomMeetingRequest;

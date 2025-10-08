@@ -1,4 +1,5 @@
 import axios from "axios";
+import type {User} from "../models/javaObjects/User.tsx";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
@@ -50,4 +51,17 @@ export const updateUserDesiredSkillsApi = async (desiredSkills: string[], access
             }
         }
     )
+}
+
+export const getUserApi = async (accessToken: string): Promise<User> => {
+    const res = await axios.get(
+        `${backendUrl}/api/users/me`,
+        {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            }
+        }
+    )
+
+    return res.data;
 }

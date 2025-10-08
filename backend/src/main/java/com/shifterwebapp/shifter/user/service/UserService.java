@@ -2,6 +2,7 @@ package com.shifterwebapp.shifter.user.service;
 
 import com.shifterwebapp.shifter.Validate;
 import com.shifterwebapp.shifter.auth.UserPersonalizationDto;
+import com.shifterwebapp.shifter.enums.LoginProvider;
 import com.shifterwebapp.shifter.user.UserInfoDto;
 import com.shifterwebapp.shifter.payment.Payment;
 import com.shifterwebapp.shifter.user.*;
@@ -65,7 +66,7 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public User createInitialUser(String email, String password) {
+    public User createInitialUser(String email, String password, LoginProvider loginProvider) {
         if (userRepository.existsUserByEmail(email)) {
             throw new RuntimeException("Email already in use");
         }
@@ -76,6 +77,7 @@ public class UserService implements ImplUserService {
                 .isAdmin(false)
                 .hasUsedFreeConsultation(false)
                 .points(0)
+                .loginProvider(loginProvider)
                 .build();
 
         return userRepository.save(user);
@@ -83,8 +85,6 @@ public class UserService implements ImplUserService {
 
     @Override
     public User createUser(UserPersonalizationDto userPersonalizationDto) {
-        System.out.println(userPersonalizationDto.toString());
-        System.out.println(userPersonalizationDto.getEmail());
         User user = userRepository.findByEmail(userPersonalizationDto.getEmail()).orElseThrow();
 
         user.setName(userPersonalizationDto.getName());

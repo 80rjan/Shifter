@@ -25,6 +25,7 @@ import Mentoring from "./pages/Mentoring.tsx";
 import Consulting from "./pages/Consulting.tsx";
 import Academies from "./pages/Academies.tsx";
 import Personalize from "./pages/Personalize.tsx";
+import OAuth2RedirectHandler from "./api/OAuth2RedirectHandler.tsx";
 
 function LayoutWrapper() {
     const location = useLocation();
@@ -77,9 +78,11 @@ function LayoutWrapper() {
                     </PublicOnlyRoute>
                 }/>
 
-                <Route path="/about" element={<About/>}/>
+                <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
 
                 <Route path="/" element={<Home/>}/>
+
+                <Route path="/about" element={<About/>}/>
 
                 <Route path="/mentoring" element={<Mentoring/>}/>
 

@@ -1,4 +1,4 @@
-package com.shifterwebapp.shifter.external;
+package com.shifterwebapp.shifter.external.google;
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
@@ -7,7 +7,6 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.*;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.shifterwebapp.shifter.exception.GoogleCalendarException;
 import lombok.Getter;
 import org.springframework.stereotype.Service;

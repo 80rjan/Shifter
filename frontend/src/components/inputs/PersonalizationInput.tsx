@@ -2,7 +2,7 @@ import {Eye, EyeOff} from "lucide-react";
 import React from "react";
 import type { UserPersonalization } from "../../models/javaObjects/UserPersonalization.tsx";
 
-type UserStrFields = 'email' | 'password' | 'passwordConfirmation' | 'name' | 'workPosition' | 'companyType';
+type UserStrFields = 'name' | 'workPosition' | 'companySize';
 interface InputProps {
     placeholder: string;
     label: string;

@@ -3,7 +3,7 @@ import {X} from "lucide-react";
 import {useEffect, useState} from "react";
 import StarFilled from "../assets/icons/StarFilled";
 import StarOutline from "../assets/icons/StarOutline";
-import {getReviewApi, updateReviewApi, writeReviewApi} from "../api/reviewApi.tsx";
+import {getReviewApi, updateReviewApi, writeReviewApi} from "../api/reviewApi.ts";
 import {useAuthContext} from "../context/AuthContext.tsx";
 import ModalReviewCourseSkeleton from "./skeletons/ModalReviewCourseSkeleton.tsx";
 

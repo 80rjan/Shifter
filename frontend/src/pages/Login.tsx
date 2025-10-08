@@ -8,6 +8,7 @@ import React from "react";
 import {Eye, EyeOff} from "lucide-react";
 import {Link, useNavigate} from "react-router-dom";
 import {useAuthContext} from "../context/AuthContext.tsx";
+import GoogleLoginButton from "../components/GoogleLoginButton.tsx";
 
 interface InputProps {
     placeholder: string;
@@ -44,7 +45,7 @@ function Login() {
             })
             .catch((err) => {
                 if (err.response?.status === 401) {
-                    setError("Invalid email or password.");
+                    setError(err.response.data.message);
                 } else {
                     setError("Something went wrong. Please try again.");
                 }
@@ -125,7 +126,7 @@ function Login() {
                     {error && <p className="text-red-500 text-sm">{error}</p>}
 
                     {/* Buttons */}
-                    <div className="flex gap-2 justify-start text-md w-full text-lg mt-4">
+                    <div className="flex gap-2 justify-center text-md w-full text-lg mt-4">
                         <button
                             type="submit"
                             disabled={isLoading}
@@ -153,7 +154,16 @@ function Login() {
                             )
                         }
                     </div>
+
                 </form>
+
+                <div className="my-4 flex items-center gap-2 w-9/10 text-black opacity-20">
+                    <hr className="border-t-2 border-black w-full"/>
+                    <p>or</p>
+                    <hr className="border-t-2 border-black w-full"/>
+                </div>
+
+                <GoogleLoginButton text="Log in with Google"/>
             </section>
         </main>
     );

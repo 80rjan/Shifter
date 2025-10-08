@@ -2,6 +2,7 @@ package com.shifterwebapp.shifter.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shifterwebapp.shifter.config.JwtService;
+import com.shifterwebapp.shifter.enums.LoginProvider;
 import com.shifterwebapp.shifter.exception.InvalidVerificationTokenException;
 import com.shifterwebapp.shifter.external.email.EmailService;
 import com.shifterwebapp.shifter.user.User;
@@ -18,9 +19,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
@@ -65,7 +69,7 @@ public class AuthService {
 
 
     public void register(String email, String password) {
-        User user = userService.createInitialUser(email, password);
+        User user = userService.createInitialUser(email, password, LoginProvider.LOCAL);
 
         UUID token = verificationTokenService.generateNewToken(user);
 
@@ -97,13 +101,32 @@ public class AuthService {
     }
 
     public void authenticate(LoginDto request, HttpServletResponse response) throws IOException {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
+        Optional<User> userOptional = userRepository.findByEmail(request.getEmail());
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+
+            if (user.getLoginProvider() != LoginProvider.LOCAL) {
+                throw new BadCredentialsException(
+                        "This account was registered with " + user.getLoginProvider() +
+                                ". Please use the corresponding login method."
+                );
+            }
+        }
+
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+        } catch (AuthenticationException ex) {
+            throw new BadCredentialsException("Invalid email or password.");
+        }
+
         User user = userService.getUserEntityByEmail(request.getEmail());
+
         if (user.getIsEnabled())
             sendTokens(response, user);
     }

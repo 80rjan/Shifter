@@ -2,6 +2,7 @@ package com.shifterwebapp.shifter.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shifterwebapp.shifter.enums.CompanySize;
+import com.shifterwebapp.shifter.enums.LoginProvider;
 import com.shifterwebapp.shifter.payment.Payment;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,7 +30,10 @@ public class User implements UserDetails {
 
     @Column(unique = true, nullable = false)
     private String email;
-    
+
+    @Enumerated(EnumType.STRING)
+    private LoginProvider loginProvider;
+
     @JsonIgnore
     private String passwordHash;    // SHOULD I USE JSON IGNORE HERE? OR IS IT ENOUGH TO NOT EXPOSE IT IN DTO?
 

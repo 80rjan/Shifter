@@ -19,6 +19,13 @@ public class UserController {
     private final UserService userService;
     private final Validate validate;
 
+    @GetMapping("/me")
+    public ResponseEntity<?> getUser(Authentication authentication) {
+        Long userId = validate.extractUserId(authentication);
+
+        return ResponseEntity.ok(userService.getUserById(userId));
+    }
+
     @PutMapping("/favorite-course/{courseId}")
     public ResponseEntity<?> toggleFavoriteCourse(@PathVariable Integer courseId, Authentication authentication) {
         validate.validateUserIsAuthenticated(authentication);

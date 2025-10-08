@@ -8,6 +8,7 @@ import {Link} from "react-router-dom";
 import React from "react";
 import {Eye, EyeOff} from "lucide-react";
 import {useRegisterHook} from "../hooks/useRegisterHook.tsx";
+import GoogleLoginButton from "../components/GoogleLoginButton.tsx";
 
 function Register() {
     const {
@@ -45,7 +46,7 @@ function Register() {
             </section>
 
             {/* RIGHT FORM CONTAINER */}
-            <section className="relative flex flex-col justify-center items-center flex-1 px-horizontal-md gap-6">
+            <section className="relative flex flex-col justify-center items-center flex-1 px-horizontal-md">
                 <div className="absolute top-0 px-4 py-4 flex w-full justify-between items-center">
                     <Link to={"/"} >
                         <img
@@ -75,76 +76,86 @@ function Register() {
                                 </div>
                             </div>
                     ) : (
-                        <form
-                            onSubmit={handleRegister}
-                            className="flex flex-col gap-4 w-full items-center">
-                            <Input
-                                placeholder={"name@email.com"}
-                                label={"Email address"}
-                                name={"email"}
-                                type={"email"}
-                                id={"email"}
-                                value={email}
-                                onChange={e => setEmail(e.target.value)}
-                                showPassword={showPassword}
-                                setShowPassword={setShowPassword}
-                            />
-                            <Input
-                                placeholder={"********"}
-                                label={"Password"}
-                                name={"password"}
-                                type={"password"}
-                                id={"password"}
-                                value={password}
-                                onChange={e => setPassword(e.target.value)}
-                                showPassword={showPassword}
-                                setShowPassword={setShowPassword}
-                            />
-                            <Input
-                                placeholder={"********"}
-                                label={"Confirm password"}
-                                name={"passwordConfirmation"}
-                                type={"password"}
-                                id={"password-confirmation"}
-                                value={passwordConfirmation}
-                                onChange={e => setPasswordConfirmation(e.target.value)}
-                                showPassword={showPassword}
-                                setShowPassword={setShowPassword}
-                            />
+                        <>
+                            <form
+                                onSubmit={handleRegister}
+                                className="flex flex-col gap-4 w-full items-center">
+                                <Input
+                                    placeholder={"name@email.com"}
+                                    label={"Email address"}
+                                    name={"email"}
+                                    type={"email"}
+                                    id={"email"}
+                                    value={email}
+                                    onChange={e => setEmail(e.target.value)}
+                                    showPassword={showPassword}
+                                    setShowPassword={setShowPassword}
+                                />
+                                <Input
+                                    placeholder={"********"}
+                                    label={"Password"}
+                                    name={"password"}
+                                    type={"password"}
+                                    id={"password"}
+                                    value={password}
+                                    onChange={e => setPassword(e.target.value)}
+                                    showPassword={showPassword}
+                                    setShowPassword={setShowPassword}
+                                />
+                                <Input
+                                    placeholder={"********"}
+                                    label={"Confirm password"}
+                                    name={"passwordConfirmation"}
+                                    type={"password"}
+                                    id={"password-confirmation"}
+                                    value={passwordConfirmation}
+                                    onChange={e => setPasswordConfirmation(e.target.value)}
+                                    showPassword={showPassword}
+                                    setShowPassword={setShowPassword}
+                                />
 
-                            {/* Error Message */}
-                            {showError && <p className="text-red-500 text-sm">{error}</p>}
+                                {/* Error Message */}
+                                {showError && <p className="text-red-500 text-sm">{error}</p>}
 
-                            {/* Buttons */}
-                            <div className="flex gap-2 justify-start text-md w-full text-lg mt-4">
-                                <button
-                                    type="submit"
-                                    disabled={isLoading}
-                                    className={`hover:shadow-md hover:shadow-shifter/60 transition-all duration-200 ease-in-out cursor-pointer
+                                {/* Buttons */}
+                                <div className="flex gap-2 justify-center text-md w-full text-lg mt-4">
+                                    <button
+                                        type="submit"
+                                        disabled={isLoading}
+                                        className={`hover:shadow-md hover:shadow-shifter/60 transition-all duration-200 ease-in-out cursor-pointer
                                     rounded-md border-3 border-white/50 text-white px-8 py-1 bg-shifter font-medium
                                     whitespace-nowrap ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
-                                >
-                                    {
-                                        isLoading ? "Creating account..." : "Create Account"
-                                    }
-                                </button>
-                                <Link
-                                    to="/login"
-                                    className="hover:shadow-md hover:shadow-shifter/20 transition-all duration-200 ease-in-out cursor-pointer
+                                    >
+                                        {
+                                            isLoading ? "Creating account..." : "Create Account"
+                                        }
+                                    </button>
+                                    <Link
+                                        to="/login"
+                                        className="hover:shadow-md hover:shadow-shifter/20 transition-all duration-200 ease-in-out cursor-pointer
                                     rounded-md text-shifter/80 w-1/3 py-1 bg-white border-3 border-shifter/20 font-medium
                                     whitespace-nowrap opacity-80"
-                                >
-                                    Log In
-                                </Link>
+                                    >
+                                        Log In
+                                    </Link>
 
-                                {/* Loading Animation */}
-                                {
-                                    isLoading && (
-                                        <div className="h-full loader"></div>
-                                    )
-                                }
+                                    {/* Loading Animation */}
+                                    {
+                                        isLoading && (
+                                            <div className="h-full loader"></div>
+                                        )
+                                    }
+                                </div>
+                            </form>
+
+                            <div className="my-4 flex items-center gap-2 w-9/10 text-black opacity-20">
+                                <hr className="border-t-2 border-black w-full"/>
+                                <p>or</p>
+                                <hr className="border-t-2 border-black w-full"/>
                             </div>
-                        </form>
+
+                            <GoogleLoginButton text="Sign in with Google"/>
+                        </>
                     )
                 }
             </section>
