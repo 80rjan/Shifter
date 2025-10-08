@@ -1,11 +1,11 @@
 import React, {useEffect} from "react";
-import type {UserRegister} from "../../models/javaObjects/UserRegister.tsx";
-import RegisterSlider from "../inputs/RegisterSlider.tsx";
+import type {UserPersonalization} from "../../models/javaObjects/UserPersonalization.tsx";
+import PersonalizationSlider from "../inputs/PersonalizationSlider.tsx";
 import {fetchCoursesTopicsApi} from "../../api/courseApi.ts";
 
-function RegisterStepThree({setUser, user, setError}: {
-    setUser: React.Dispatch<React.SetStateAction<UserRegister>>,
-    user: UserRegister,
+function PersonalizationStepTwo({setUser, user, setError}: {
+    setUser: React.Dispatch<React.SetStateAction<UserPersonalization>>,
+    user: UserPersonalization,
     setError: React.Dispatch<React.SetStateAction<string>>,
 }) {
     const [interests, setInterests] = React.useState<string[]>([]);
@@ -37,7 +37,7 @@ function RegisterStepThree({setUser, user, setError}: {
             className="flex flex-col gap-4 w-full items-center">
             {
                 interests.length > 0 &&
-                <RegisterSlider
+                <PersonalizationSlider
                     label={"Select Topics You Like"}
                     name={"interests"}
                     id={"interests"}
@@ -50,4 +50,4 @@ function RegisterStepThree({setUser, user, setError}: {
     )
 }
 
-export default RegisterStepThree;
+export default PersonalizationStepTwo;

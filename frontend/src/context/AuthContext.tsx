@@ -7,9 +7,9 @@ import React, {
     type SetStateAction,
 } from "react";
 import type {User} from "../models/javaObjects/User.tsx";
-import type {UserRegister} from "../models/javaObjects/UserRegister.tsx";
-import {loginApi, logoutApi, refreshAccessTokenApi, registerApi} from "../api/authApi.ts";
+import {loginApi, logoutApi, personalizeApi, refreshAccessTokenApi, registerApi, verifyApi} from "../api/authApi.ts";
 import {useNavigate} from "react-router-dom";
+import type {UserPersonalization} from "../models/javaObjects/UserPersonalization.tsx";
 
 interface AuthContextType {
     user: User | null;
@@ -18,7 +18,9 @@ interface AuthContextType {
     setAccessToken: Dispatch<SetStateAction<string | null>>;
     authChecked: boolean;
     setAuthChecked: Dispatch<SetStateAction<boolean>>;
-    register: (user: UserRegister) => Promise<void>;
+    register: (email: string, password: string) => Promise<void>;
+    verify: (verificationToken: string) => Promise<string>;
+    personalize: (user: UserPersonalization) => Promise<void>;
     login: (email: string, password: string) => Promise<void>;
     logout: () => void;
     refreshAccessToken: () => Promise<void>;
@@ -43,8 +45,31 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
         }
     }
 
-    const register = async (user: UserRegister) => {
-        return registerApi(user)
+    const register = async (email: string, password: string) => {
+        return registerApi(email, password)
+            .then(() => {
+                console.log("Successfully registered and sent email to user");
+            })
+            .catch(error => {
+                console.log("Registration failed:", error);
+                throw error;
+            });
+    }
+
+    const verify = async (verificationToken: string) => {
+        return verifyApi(verificationToken)
+            .then(userEmail => {
+                console.log("Successfully verified user email");
+                return userEmail;
+            })
+            .catch(error => {
+                console.log("Verification failed:", error);
+                throw error;
+            });
+    }
+
+    const personalize = async (user: UserPersonalization) => {
+        return personalizeApi(user)
             .then(data => {
                 setAccessToken(data.accessToken);
                 setUser(data.user);
@@ -52,7 +77,7 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
             .catch(error => {
                 setAccessToken(null);
                 setUser(null);
-                console.log("Registration failed:", error);
+                console.log("Personalization failed:", error);
                 throw error;
             });
     }
@@ -122,6 +147,8 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
                 setAuthChecked,
                 useFreeConsultation,
                 register,
+                verify,
+                personalize,
                 login,
                 logout,
                 refreshAccessToken,

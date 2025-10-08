@@ -1,8 +1,8 @@
 import React from "react";
-import type {UserRegister} from "../../models/javaObjects/UserRegister.tsx";
+import type {UserPersonalization} from "../../models/javaObjects/UserPersonalization.tsx";
 import type {SliderProps} from "../../models/SliderProps.tsx";
 
-function RegisterSlider(sliderProps: SliderProps) {
+function PersonalizationSlider(sliderProps: SliderProps) {
     const [allOptions] = React.useState<string[]>(sliderProps.options || []);
     const [options, setOptions] = React.useState<string[]>(allOptions);
     const [filterText, setFilterText] = React.useState("");
@@ -16,7 +16,7 @@ function RegisterSlider(sliderProps: SliderProps) {
     };
 
     const handleOptionClick = (option: string) => {
-        sliderProps.setUser((prev: UserRegister) => {
+        sliderProps.setUser((prev: UserPersonalization) => {
             const arr = prev[sliderProps.name] as string[] || [];
             const newArr = arr.includes(option)
                 ? arr.filter(item => item !== option)
@@ -30,7 +30,7 @@ function RegisterSlider(sliderProps: SliderProps) {
     };
 
     return (
-        <div className="flex flex-col justify-center gap-4 px-6 py-1 items-start w-full">
+        <div className="w-full flex flex-col justify-center gap-4 px-6 py-1 items-start w-full">
             <div className="flex justify-between w-full flex-wrap gap-2">
                 <label htmlFor={sliderProps.id} className="text-shifter font-medium text-xl">
                     {sliderProps.label}
@@ -75,4 +75,4 @@ function RegisterSlider(sliderProps: SliderProps) {
     );
 }
 
-export default RegisterSlider;
+export default PersonalizationSlider;

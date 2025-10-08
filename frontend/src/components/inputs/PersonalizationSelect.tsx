@@ -1,12 +1,12 @@
-import type {UserRegister} from "../../models/javaObjects/UserRegister.tsx";
+import type {UserPersonalization} from "../../models/javaObjects/UserPersonalization.tsx";
 import type {SelectProps} from "../../models/SelectProps.tsx";
 import {toEnumFormat} from "../../utils/toEnumFormat.ts";
 
-function RegisterSelect(selectProps: SelectProps) {
+function PersonalizationSelect(selectProps: SelectProps) {
 
     return (
         <div
-            className="w-8/10 relative flex flex-col gap-1 px-6 py-1 border-2 border-shifter group focus-within:border-l-20 transition-all ease-in-out duration-300 items-start rounded-sm">
+            className="w-full relative flex flex-col gap-1 px-6 py-1 border-2 border-shifter group focus-within:border-l-20 transition-all ease-in-out duration-300 items-start rounded-sm">
             <label
                 htmlFor={selectProps.id}
                 className="text-shifter font-medium"
@@ -20,7 +20,7 @@ function RegisterSelect(selectProps: SelectProps) {
                     className="w-full focus:outline-none text-lg cursor-pointer"
                     value={selectProps.user[selectProps.name] || ""}
                     onChange={e =>
-                        selectProps.setUser((prev: UserRegister) => ({
+                        selectProps.setUser((prev: UserPersonalization) => ({
                             ...prev,
                             [selectProps.name]: e.target.value
                         }))
@@ -43,4 +43,4 @@ function RegisterSelect(selectProps: SelectProps) {
     );
 }
 
-export default RegisterSelect;
+export default PersonalizationSelect;

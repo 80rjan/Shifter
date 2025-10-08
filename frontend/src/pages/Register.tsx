@@ -1,131 +1,33 @@
-import React from "react";
-import ShifterLogo from "../../public/Shifter-S2W-Transparent.png";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 import ShifterArrow from "../../public/Shifter-Arrow-White.png";
-import {
-    Stepper,
-    Step,
-    StepLabel,
-    Box,
-} from "@mui/material";
-import {CustomStepperConnector, CustomStepperStepIcon} from "../components/registerSteps/CustomStepper.tsx";
-import {Link, useNavigate} from "react-router-dom";
-import {motion, AnimatePresence} from "framer-motion";
-import type {UserRegister} from "../models/javaObjects/UserRegister.tsx";
-import RegisterStepOne from "../components/registerSteps/RegisterStepOne.tsx";
-import RegisterStepTwo from "../components/registerSteps/RegisterStepTwo.tsx";
-import RegisterStepThree from "../components/registerSteps/RegisterStepThree.tsx";
-import RegisterStepFour from "../components/registerSteps/RegisterStepFour.tsx";
-import {useAuthContext} from "../context/AuthContext.tsx";
-import {isValidEmail} from "../utils/validation.ts";
-import {checkEmailExistsApi} from "../api/authApi.ts";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+import ShifterLogo from "../../public/Shifter-S2W-Transparent.png";
+import {Link} from "react-router-dom";
+import React from "react";
+import {Eye, EyeOff} from "lucide-react";
+import {useRegisterHook} from "../hooks/useRegisterHook.tsx";
 
 function Register() {
-    const {register} = useAuthContext();
-    const [isLoading, setIsLoading] = React.useState<boolean>(false);
-    const [isCheckingEmail, setIsCheckingEmail] = React.useState<boolean>(false);
-    const [activeStep, setActiveStep] = React.useState(0);
-    const [showError, setShowError] = React.useState(false);
-    const [error, setError] = React.useState("");
-    const [direction, setDirection] = React.useState(0); // 1 for next, -1 for back
-    const [user, setUser] = React.useState<UserRegister>({
-        email: "",
-        password: "",
-        passwordConfirmation: "",
-        name: "",
-        workPosition: "",
-        companySize: "",
-        interests: [],
-        desiredSkills: [],
-    });
-    const navigate = useNavigate();
-
-    const handleNext = async () => {
-        if (error.length > 0) {
-            setShowError(true);
-            return;
-        }
-
-        if (activeStep === 0) {
-            if (!isValidEmail(user.email)) {
-                setError("Please enter a valid email.");
-                setShowError(true);
-                return;
-            }
-
-            setIsCheckingEmail(true);
-            try {
-                const exists = await checkEmailExistsApi(user.email);
-                if (exists) {
-                    setError("Email already exists");
-                    setShowError(true);
-                    setIsCheckingEmail(false);
-                    return;
-                }
-            } catch (err) {
-                setError("Error checking email. There's a problem with the server.");
-                setShowError(true);
-                setIsCheckingEmail(false);
-                console.error("Error checking email: ", err);
-                return;
-            }
-            setIsCheckingEmail(false);
-        }
-
-        // If we get here, no errors => proceed to next step
-        setError("");
-        setShowError(false);
-        setDirection(1);
-        setActiveStep((prev) => prev + 1);
-    };
-
-
-    const handleBack = () => {
-        setDirection(-1);
-        setActiveStep((prev) => prev - 1);
-    };
-    const variants = {
-        enter: (dir: number) => ({
-            x: dir > 0 ? 100 : -100,
-            opacity: 0,
-        }),
-        center: {
-            x: 0,
-            opacity: 1,
-        },
-        exit: (dir: number) => ({
-            x: dir > 0 ? -100 : 100,
-            opacity: 0,
-        }),
-    };
-
-    const handleRegister = async () => {
-        if (error.length > 0) {
-            setShowError(true);
-            return;
-        }
-
-        setIsLoading(true);
-
-        try {
-            await register(user);
-            navigate("/");
-        } catch (err) {
-            setError("Registration failed. Please try again.");
-            console.error("Registration error: ", err);
-        } finally {
-            setIsLoading(false);
-        }
-    }
-
-    const stepsContent = [
-        <RegisterStepOne setUser={setUser} user={user} setError={setError} />,
-        <RegisterStepTwo setUser={setUser} user={user} setError={setError} />,
-        <RegisterStepThree setUser={setUser} user={user} setError={setError} />,
-        <RegisterStepFour setUser={setUser} user={user} setError={setError} />
-    ];
+    const {
+        email,
+        setEmail,
+        password,
+        setPassword,
+        passwordConfirmation,
+        setPasswordConfirmation,
+        showPassword,
+        setShowPassword,
+        showError,
+        error,
+        isSuccess,
+        isLoading,
+        handleRegister
+    } = useRegisterHook();
 
     return (
-        <main className="flex font-montserrat h-screen bg-white">
+        <main className="flex font-montserrat h-screen bg-beige">
 
             {/* LEFT HEADER AND BACKGROUND */}
             <section className="relative bg-black w-[55%] overflow-hidden">
@@ -143,7 +45,7 @@ function Register() {
             </section>
 
             {/* RIGHT FORM CONTAINER */}
-            <section className="relative flex flex-col justify-center items-center flex-1 px-20 gap-6">
+            <section className="relative flex flex-col justify-center items-center flex-1 px-horizontal-md gap-6">
                 <div className="absolute top-0 px-4 py-4 flex w-full justify-between items-center">
                     <Link to={"/"} >
                         <img
@@ -161,84 +63,79 @@ function Register() {
                     </Link>
                 </div>
 
-                {/* STEPPER */}
-                <Box className="w-full flex flex-col">
-                    <Stepper
-                        activeStep={activeStep}
-                        alternativeLabel
-                        connector={<CustomStepperConnector/>}
-                    >
-                        {stepsContent.map((_, index) => (
-                            <Step key={index}>
-                                <StepLabel StepIconComponent={CustomStepperStepIcon}
-                                           className="text-shifter font-semibold"
-                                />
-                            </Step>
-                        ))}
-                    </Stepper>
+                {
+                    isSuccess ? (
+                            <div className="flex flex-col items-center justify-center">
+                                <div className="flex flex-col gap-4 bg-white rounded-2xl shadow-lg p-8 w-fit text-center">
+                                    <h2 className="text-2xl font-bold text-shifter">Verify your email to continue</h2>
+                                    <p className="font-medium text-black-text/80 max-w-xl mx-auto">
+                                        A verification link has been sent to <span className='font-semibold text-shifter'>{email}</span>.
+                                        Please check your inbox and click the link to activate your account.
+                                    </p>
+                                </div>
+                            </div>
+                    ) : (
+                        <form
+                            onSubmit={handleRegister}
+                            className="flex flex-col gap-4 w-full items-center">
+                            <Input
+                                placeholder={"name@email.com"}
+                                label={"Email address"}
+                                name={"email"}
+                                type={"email"}
+                                id={"email"}
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
+                                showPassword={showPassword}
+                                setShowPassword={setShowPassword}
+                            />
+                            <Input
+                                placeholder={"********"}
+                                label={"Password"}
+                                name={"password"}
+                                type={"password"}
+                                id={"password"}
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
+                                showPassword={showPassword}
+                                setShowPassword={setShowPassword}
+                            />
+                            <Input
+                                placeholder={"********"}
+                                label={"Confirm password"}
+                                name={"passwordConfirmation"}
+                                type={"password"}
+                                id={"password-confirmation"}
+                                value={passwordConfirmation}
+                                onChange={e => setPasswordConfirmation(e.target.value)}
+                                showPassword={showPassword}
+                                setShowPassword={setShowPassword}
+                            />
 
-                    <Box className="flex flex-col overflow-hidden gap-2">
+                            {/* Error Message */}
+                            {showError && <p className="text-red-500 text-sm">{error}</p>}
 
-                        {/*STEPPER CONTENT*/}
-                        <AnimatePresence mode="wait" initial={false} custom={direction}>
-                            <motion.div
-                                key={activeStep}
-                                custom={direction}
-                                variants={variants}
-                                initial="enter"
-                                animate="center"
-                                exit="exit"
-                                transition={{
-                                    x: {type: "spring", stiffness: 500, damping: 40},
-                                    opacity: {duration: 0.2},
-                                }}
-                                className="h-80 flex flex-col justify-center"
-                            >
-                                {stepsContent[activeStep]}
-                            </motion.div>
-                        </AnimatePresence>
-
-                        {/* Error Message */}
-                        {showError && <p className="text-red-500 text-sm">{error}</p>}
-
-
-                        {/*STEPPER BUTTONS*/}
-                        <Box className="flex flex-col justify-center items-center gap-2">
-                            <div className="flex justify-center gap-4 ">
+                            {/* Buttons */}
+                            <div className="flex gap-2 justify-start text-md w-full text-lg mt-4">
                                 <button
-                                    disabled={activeStep === 0}
-                                    onClick={handleBack}
-                                    className="disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none
-                                    hover:shadow-sm hover:shadow-black/20 transition-all duration-200 ease-in-out
-                                border-3 border-white/50 px-10 py-1 bg-black/10 text-black/60 cursor-pointer rounded-sm "
+                                    type="submit"
+                                    disabled={isLoading}
+                                    className={`hover:shadow-md hover:shadow-shifter/60 transition-all duration-200 ease-in-out cursor-pointer
+                                    rounded-md border-3 border-white/50 text-white px-8 py-1 bg-shifter font-medium
+                                    whitespace-nowrap ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
                                 >
-                                    Back
+                                    {
+                                        isLoading ? "Creating account..." : "Create Account"
+                                    }
                                 </button>
-                                {activeStep === stepsContent.length - 1 ? (
-                                    <button
-                                        onClick={handleRegister}
-                                        className={`hover:shadow-md hover:shadow-shifter/60 transition-all duration-200 ease-in-out
-                                    px-20 border-3 border-white/50 bg-shifter text-white cursor-pointer rounded-md 
-                                    ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
-                                    >
-                                        {
-                                            isLoading ? "Setting up..." : "Start Your Journey"
-                                        }
-                                    </button>
-                                ) : (
-                                    <button
-                                        onClick={handleNext}
-                                        // disabled={!canContinue}
-                                        className={`disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none
-                                        hover:shadow-md hover:shadow-shifter/60 transition-all duration-200 ease-in-out
-                                    px-20 border-3 border-white/50 bg-shifter text-white cursor-pointer rounded-md`}
-                                    >
-                                        {
-                                            isCheckingEmail ? "Checking if email exists..." : "Next"
-                                        }
-                                    </button>
-                                )}
-
+                                <Link
+                                    to="/login"
+                                    className="hover:shadow-md hover:shadow-shifter/20 transition-all duration-200 ease-in-out cursor-pointer
+                                    rounded-md text-shifter/80 w-1/3 py-1 bg-white border-3 border-shifter/20 font-medium
+                                    whitespace-nowrap opacity-80"
+                                >
+                                    Log In
+                                </Link>
 
                                 {/* Loading Animation */}
                                 {
@@ -247,21 +144,63 @@ function Register() {
                                     )
                                 }
                             </div>
-                            <p
-                                className="text-black/40"
-                            >
-                                Already have an account?
-                                <Link to={"/login"}
-                                      className="relative text-shifter font-medium w-fit hover:font-semibold"
-                                >
-                                    {" "}Log In
-                                </Link>
-                            </p>
-                        </Box>
-                    </Box>
-                </Box>
+                        </form>
+                    )
+                }
             </section>
         </main>
+    )
+}
+
+interface InputProps {
+    placeholder: string;
+    label: string;
+    name: string;
+    type: string;
+    id: string;
+    value: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    showPassword: boolean;
+    setShowPassword: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function Input(inputProps: InputProps) {
+
+    return (
+        <div
+            className="relative flex flex-col gap-1 px-6 py-1.5 border-2 border-shifter group focus-within:border-l-20 transition-all ease-in-out duration-300 items-start rounded-sm w-full">
+            <label htmlFor={inputProps.id} className="text-shifter text-light">
+                {inputProps.label}
+            </label>
+            <div className="flex gap-2 w-full">
+                <div className="w-full">
+                    <input
+                        id={inputProps.id}
+                        type={inputProps.showPassword ? "text" : inputProps.type}
+                        name={inputProps.name}
+                        placeholder={inputProps.placeholder}
+                        className="w-full focus:outline-none text-lg"
+                        value={inputProps.value}
+                        onChange={inputProps.onChange}
+                    />
+                    <hr className="border-t-2 border-black/5 rounded-full w-full" />
+                </div>
+                {inputProps.type === "password" && (
+                    <button
+                        type="button"
+                        onClick={() => inputProps.setShowPassword(prev => !prev)}
+                        className="text-black cursor-pointer hover:bg-black/5 rounded-full p-1"
+                        aria-label={inputProps.showPassword ? "Hide password" : "Show password"}
+                    >
+                        {!inputProps.showPassword ? (
+                            <EyeOff size={20} opacity={0.6} />
+                        ) : (
+                            <Eye size={20} opacity={0.6} />
+                        )}
+                    </button>
+                )}
+            </div>
+        </div>
     );
 }
 

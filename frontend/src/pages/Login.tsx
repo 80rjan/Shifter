@@ -1,9 +1,13 @@
-import ShifterLogo from "../../public/Shifter-S2W-Transparent.png";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 import ShifterArrow from "../../public/Shifter-Arrow-White.png";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+import ShifterLogo from "../../public/Shifter-S2W-Transparent.png";
 import React from "react";
-import { Eye, EyeOff } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuthContext } from "../context/AuthContext.tsx";
+import {Eye, EyeOff} from "lucide-react";
+import {Link, useNavigate} from "react-router-dom";
+import {useAuthContext} from "../context/AuthContext.tsx";
 
 interface InputProps {
     placeholder: string;
@@ -16,7 +20,7 @@ interface InputProps {
 }
 
 function Login() {
-    const { login } = useAuthContext();
+    const {login} = useAuthContext();
     const [email, setEmail] = React.useState<string>("");
     const [password, setPassword] = React.useState<string>("");
     const [error, setError] = React.useState<string>("");
@@ -38,7 +42,7 @@ function Login() {
             .then(() => {
                 navigate("/");
             })
-            .catch((err: any) => {
+            .catch((err) => {
                 if (err.response?.status === 401) {
                     setError("Invalid email or password.");
                 } else {
@@ -51,10 +55,11 @@ function Login() {
     };
 
     return (
-        <main className="flex font-montserrat h-screen bg-white">
+        <main className="flex font-montserrat h-screen bg-beige">
             {/* LEFT HEADER AND BACKGROUND */}
             <section className="relative bg-black w-[55%] overflow-hidden">
-                <div className="absolute w-full h-full bg-shifter/80 z-0 text-white px-20 flex flex-col gap-4 justify-center text-start">
+                <div
+                    className="absolute w-full h-full bg-shifter/80 z-0 text-white px-20 flex flex-col gap-4 justify-center text-start">
                     <img
                         src={ShifterArrow}
                         alt="Shifter Arrow"
@@ -74,9 +79,9 @@ function Login() {
             </section>
 
             {/* RIGHT FORM CONTAINER */}
-            <section className="relative flex flex-col justify-center items-center flex-1 px-30">
+            <section className="relative flex flex-col justify-center items-center flex-1 px-horizontal-md">
                 <div className="absolute top-0 px-4 py-4 flex w-full justify-between items-center">
-                    <Link to={"/"} >
+                    <Link to={"/"}>
                         <img
                             src={ShifterLogo}
                             alt="Shifter Logo"
@@ -125,8 +130,8 @@ function Login() {
                             type="submit"
                             disabled={isLoading}
                             className={`hover:shadow-md hover:shadow-shifter/60 transition-all duration-200 ease-in-out cursor-pointer
-              rounded-md border-3 border-white/50 text-white w-1/3 py-1 bg-shifter font-medium
-              whitespace-nowrap ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+                            rounded-md border-3 border-white/50 text-white w-1/3 py-1 bg-shifter font-medium
+                            whitespace-nowrap ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
                         >
                             {
                                 isLoading ? "Logging in..." : "Log In"
@@ -135,8 +140,8 @@ function Login() {
                         <Link
                             to="/register"
                             className="hover:shadow-md hover:shadow-shifter/20 transition-all duration-200 ease-in-out cursor-pointer
-              rounded-md text-shifter/80 w-1/3 py-1 bg-white border-3 border-shifter/20 font-medium
-              whitespace-nowrap"
+                            rounded-md text-shifter/80 w-1/3 py-1 bg-white border-3 border-shifter/20 font-medium
+                            whitespace-nowrap opacity-80"
                         >
                             Register
                         </Link>
@@ -180,7 +185,7 @@ function Input(inputProps: InputProps) {
                         value={inputProps.value}
                         onChange={inputProps.onChange}
                     />
-                    <hr className="border-t-2 border-black/5 rounded-full w-full" />
+                    <hr className="border-t-2 border-black/5 rounded-full w-full"/>
                 </div>
                 {inputProps.name === "password" && (
                     <button
@@ -190,9 +195,9 @@ function Input(inputProps: InputProps) {
                         aria-label={showPassword ? "Hide password" : "Show password"}
                     >
                         {!showPassword ? (
-                            <EyeOff size={20} opacity={0.6} />
+                            <EyeOff size={20} opacity={0.6}/>
                         ) : (
-                            <Eye size={20} opacity={0.6} />
+                            <Eye size={20} opacity={0.6}/>
                         )}
                     </button>
                 )}

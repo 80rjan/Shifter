@@ -1,5 +1,5 @@
 import axios from "axios";
-import type {UserRegister} from "../models/javaObjects/UserRegister.tsx";
+import type {UserPersonalization} from "../models/javaObjects/UserPersonalization.tsx";
 import type {User} from "../models/javaObjects/User.tsx";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -15,8 +15,24 @@ export const refreshAccessTokenApi = async (): Promise<{user: User, accessToken:
     return res.data;
 }
 
-export const registerApi = async (user: UserRegister): Promise<{user: User, accessToken: string}> => {
-    const res = await axios.post(`${backendUrl}/api/auth/register`,
+export const registerApi = async (email: string, password: string): Promise<void> => {
+    await axios.post(`${backendUrl}/api/auth/register`,
+        {email, password},
+        { withCredentials: true }
+    );
+}
+
+export const verifyApi = async (token: string): Promise<string> => {
+    const res = await axios.post(`${backendUrl}/api/auth/verify`,
+        {token},
+        { withCredentials: true }
+    );
+
+    return res.data;
+}
+
+export const personalizeApi = async (user: UserPersonalization): Promise<{user: User, accessToken: string}> => {
+    const res = await axios.post(`${backendUrl}/api/auth/personalize`,
         user,
         { withCredentials: true }
     );

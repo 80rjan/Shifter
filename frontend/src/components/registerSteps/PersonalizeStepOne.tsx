@@ -1,11 +1,11 @@
 import React, {useEffect} from "react";
-import type {UserRegister} from "../../models/javaObjects/UserRegister.tsx";
-import RegisterInput from "../inputs/RegisterInput.tsx";
-import RegisterSelect from "../inputs/RegisterSelect.tsx";
+import type {UserPersonalization} from "../../models/javaObjects/UserPersonalization.tsx";
+import PersonalizationInput from "../inputs/PersonalizationInput.tsx";
+import PersonalizationSelect from "../inputs/PersonalizationSelect.tsx";
 
-function RegisterStepTwo({setUser, user, setError}: {
-    setUser: React.Dispatch<React.SetStateAction<UserRegister>>,
-    user: UserRegister,
+function PersonalizeStepOne({setUser, user, setError}: {
+    setUser: React.Dispatch<React.SetStateAction<UserPersonalization>>,
+    user: UserPersonalization,
     setError: React.Dispatch<React.SetStateAction<string>>,
 }) {
 
@@ -20,7 +20,7 @@ function RegisterStepTwo({setUser, user, setError}: {
     return (
         <section
             className="flex flex-col gap-4 w-full items-center">
-            <RegisterInput
+            <PersonalizationInput
                 placeholder={"John Doe"}
                 label={"Full Name"}
                 name={"name"}
@@ -29,7 +29,7 @@ function RegisterStepTwo({setUser, user, setError}: {
                 setUser={setUser}
                 user={user}
             />
-            <RegisterInput
+            <PersonalizationInput
                 placeholder={"Your Position"}
                 label={"Work Position"}
                 name={"workPosition"}
@@ -38,7 +38,7 @@ function RegisterStepTwo({setUser, user, setError}: {
                 setUser={setUser}
                 user={user}
             />
-            <RegisterSelect
+            <PersonalizationSelect
                 label={"Company Size"}
                 name={"companySize"}
                 id={"company-size"}
@@ -50,4 +50,4 @@ function RegisterStepTwo({setUser, user, setError}: {
     );
 }
 
-export default RegisterStepTwo;
+export default PersonalizeStepOne;

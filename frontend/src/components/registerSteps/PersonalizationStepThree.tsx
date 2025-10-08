@@ -1,11 +1,11 @@
 import React, {useEffect} from "react";
-import type {UserRegister} from "../../models/javaObjects/UserRegister.tsx";
-import RegisterSlider from "../inputs/RegisterSlider.tsx";
+import type {UserPersonalization} from "../../models/javaObjects/UserPersonalization.tsx";
+import PersonalizationSlider from "../inputs/PersonalizationSlider.tsx";
 import {fetchCoursesSkillsApi} from "../../api/courseApi.ts";
 
-function RegisterStepFour({setUser, user, setError}: {
-    setUser: React.Dispatch<React.SetStateAction<UserRegister>>,
-    user: UserRegister,
+function PersonalizationStepThree({setUser, user, setError}: {
+    setUser: React.Dispatch<React.SetStateAction<UserPersonalization>>,
+    user: UserPersonalization,
     setError: React.Dispatch<React.SetStateAction<string>>,
 }){
     const [skills, setSkills] = React.useState<string[]>([]);
@@ -36,7 +36,7 @@ function RegisterStepFour({setUser, user, setError}: {
             className="flex flex-col gap-4 w-full">
             {
                 skills.length > 0 &&
-                <RegisterSlider
+                <PersonalizationSlider
                     label={"Outline Your Learning Goals"}
                     name={"desiredSkills"}
                     id={"desired-skills"}
@@ -49,4 +49,4 @@ function RegisterStepFour({setUser, user, setError}: {
     )
 }
 
-export default RegisterStepFour;
+export default PersonalizationStepThree;

@@ -2,9 +2,15 @@ package com.shifterwebapp.shifter.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shifterwebapp.shifter.config.JwtService;
+import com.shifterwebapp.shifter.exception.InvalidVerificationTokenException;
+import com.shifterwebapp.shifter.external.email.EmailService;
 import com.shifterwebapp.shifter.user.User;
 import com.shifterwebapp.shifter.user.UserMapper;
+import com.shifterwebapp.shifter.user.UserRepository;
 import com.shifterwebapp.shifter.user.service.UserService;
+import com.shifterwebapp.shifter.verificationtoken.VerificationToken;
+import com.shifterwebapp.shifter.verificationtoken.VerificationTokenRepository;
+import com.shifterwebapp.shifter.verificationtoken.service.VerificationTokenService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,6 +23,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.time.Instant;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +34,10 @@ public class AuthService {
     private final JwtService jwtService;
     private final UserMapper userMapper;
     private final AuthenticationManager authenticationManager;
+    private final VerificationTokenService verificationTokenService;
+    private final EmailService emailService;
+    private final VerificationTokenRepository verificationTokenRepository;
+    private final UserRepository userRepository;
 
     private void sendTokens(HttpServletResponse response, User user) throws IOException {
         String accessToken = jwtService.generateToken(user);
@@ -52,11 +64,37 @@ public class AuthService {
     }
 
 
-    public void register(RegisterDto request, HttpServletResponse response) throws IOException {
-        User user = userService.createUser(request);
-        sendTokens(response, user);
+    public void register(String email, String password) {
+        User user = userService.createInitialUser(email, password);
+
+        UUID token = verificationTokenService.generateNewToken(user);
+
+        // TODO: CHANGE THE URL TO BE SHIFT-ER.COM NOT LOCALHOST
+        String verificationUrl = "http://localhost:5173/welcome?token=" + token;
+        emailService.sendVerificationToken(user.getEmail(), verificationUrl);
     }
 
+    public String verify(String token) {
+        UUID uuid = UUID.fromString(token);
+        VerificationToken verificationToken = verificationTokenRepository.findById(uuid)
+                .orElseThrow(() -> new InvalidVerificationTokenException("Invalid or expired token"));
+
+        if (verificationToken.getExpiresAt().isBefore(Instant.now()))
+            throw new InvalidVerificationTokenException("Expired token");
+
+        User user = verificationToken.getUser();
+        user.setIsEnabled(true);
+        userRepository.save(user);
+
+        verificationTokenRepository.delete(verificationToken);
+
+        return user.getEmail();
+    }
+
+    public void personalize(UserPersonalizationDto userPersonalizationDto, HttpServletResponse response) throws IOException {
+        User user = userService.createUser(userPersonalizationDto);
+        sendTokens(response, user);
+    }
 
     public void authenticate(LoginDto request, HttpServletResponse response) throws IOException {
         authenticationManager.authenticate(
@@ -66,7 +104,8 @@ public class AuthService {
                 )
         );
         User user = userService.getUserEntityByEmail(request.getEmail());
-        sendTokens(response, user);
+        if (user.getIsEnabled())
+            sendTokens(response, user);
     }
 
 

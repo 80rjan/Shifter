@@ -35,6 +35,8 @@ public class User implements UserDetails {
 
     private Boolean isAdmin;
 
+    private Boolean isEnabled;
+
     private Boolean hasUsedFreeConsultation;
 
     @Enumerated(EnumType.STRING)

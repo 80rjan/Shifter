@@ -297,4 +297,50 @@ public class EmailService {
             throw new RuntimeException("Error preparing email message for expert", e);
         }
     }
+
+    public void sendVerificationToken(String to, String verificationUrl) {
+
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+            helper.setTo(to);
+            helper.setSubject("Your Shifter Account");
+            helper.setFrom(expertEmail);
+            helper.setReplyTo("support@shift-er.com");
+
+            String htmlTemplate;
+            try {
+                ClassPathResource resource = new ClassPathResource("email-templates/verify_account.html");
+                htmlTemplate = FileCopyUtils.copyToString(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
+            } catch (IOException e) {
+                // Throw a runtime exception if the template file can't be loaded
+                throw new UncheckedIOException("Failed to load email template: verify_account.html", e);
+            }
+
+            String htmlContent = htmlTemplate
+                    .replace("${verificationUrl}", verificationUrl)
+                    .replace("${currentYear}", String.valueOf(Year.now().getValue()));
+
+            helper.setText(htmlContent, true);
+
+            int maxRetries = 3;
+            int attempt = 0;
+            while (true) {
+                try {
+                    mailSender.send(mimeMessage);
+                    return;
+                } catch (Exception e) {
+                    attempt++;
+                    if (attempt >= maxRetries) {
+                        throw new RuntimeException("Failed to send HTML email to " + to + " after " + attempt + " attempts", e);
+                    }
+                }
+            }
+
+        } catch (MessagingException e) {
+            throw new RuntimeException("Error preparing email message for " + to, e);
+        }
+    }
 }

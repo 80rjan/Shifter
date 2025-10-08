@@ -1,6 +1,6 @@
 package com.shifterwebapp.shifter.user.service;
 
-import com.shifterwebapp.shifter.auth.RegisterDto;
+import com.shifterwebapp.shifter.auth.UserPersonalizationDto;
 import com.shifterwebapp.shifter.user.UserInfoDto;
 import com.shifterwebapp.shifter.payment.Payment;
 import com.shifterwebapp.shifter.user.User;
@@ -18,7 +18,8 @@ public interface ImplUserService {
 
     Boolean existsUserByEmail(String email);
 
-    User createUser(RegisterDto registerDto);
+    User createInitialUser(String email, String password);
+    User createUser(UserPersonalizationDto userPersonalizationDto);
     void deleteUser(Long id);
 
     UserDto updateUser(Long id, UserInfoDto userInfoDto);

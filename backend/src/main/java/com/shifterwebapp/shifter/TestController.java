@@ -26,5 +26,13 @@ public class TestController {
                 );
     }
 
+    @GetMapping("/send-verification-email")
+    public void sendVerificationEmail() {
+        emailService.sendVerificationToken(
+                "borjangjorgjievski1@gmail.com",
+                "https://localhost:5173"
+        );
+    }
+
 
 }

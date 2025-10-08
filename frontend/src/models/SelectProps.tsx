@@ -1,11 +1,11 @@
 import React from "react";
-import type {UserRegister} from "./javaObjects/UserRegister.tsx";
+import type {UserPersonalization} from "./javaObjects/UserPersonalization.tsx";
 
 export interface SelectProps {
     label: string;
-    name: keyof UserRegister;
+    name: keyof UserPersonalization;
     id: string;
     options?: string[];
-    setUser: React.Dispatch<React.SetStateAction<UserRegister>>;
-    user: UserRegister;
+    setUser: React.Dispatch<React.SetStateAction<UserPersonalization>>;
+    user: UserPersonalization;
 }

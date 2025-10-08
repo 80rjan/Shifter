@@ -24,12 +24,14 @@ import Contact from "./pages/Contact.tsx";
 import Mentoring from "./pages/Mentoring.tsx";
 import Consulting from "./pages/Consulting.tsx";
 import Academies from "./pages/Academies.tsx";
+import Personalize from "./pages/Personalize.tsx";
 
 function LayoutWrapper() {
     const location = useLocation();
     const hideLayout =
         location.pathname === "/login" ||
         location.pathname === "/register" ||
+        location.pathname === "/welcome" ||
         location.pathname.startsWith("/learn/");
     const hideFooter =
         location.pathname === "/mentoring" ||
@@ -67,6 +69,11 @@ function LayoutWrapper() {
                 <Route path="/register" element={
                     <PublicOnlyRoute>
                         <Register/>
+                    </PublicOnlyRoute>
+                }/>
+                <Route path="/welcome" element={
+                    <PublicOnlyRoute>
+                        <Personalize/>
                     </PublicOnlyRoute>
                 }/>
 

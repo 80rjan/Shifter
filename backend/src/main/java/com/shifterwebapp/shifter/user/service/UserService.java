@@ -1,7 +1,7 @@
 package com.shifterwebapp.shifter.user.service;
 
 import com.shifterwebapp.shifter.Validate;
-import com.shifterwebapp.shifter.auth.RegisterDto;
+import com.shifterwebapp.shifter.auth.UserPersonalizationDto;
 import com.shifterwebapp.shifter.user.UserInfoDto;
 import com.shifterwebapp.shifter.payment.Payment;
 import com.shifterwebapp.shifter.user.*;
@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -64,25 +65,35 @@ public class UserService implements ImplUserService {
     }
 
     @Override
-    public User createUser(RegisterDto registerDto) {
-        if (userRepository.existsUserByEmail(registerDto.getEmail())) {
+    public User createInitialUser(String email, String password) {
+        if (userRepository.existsUserByEmail(email)) {
             throw new RuntimeException("Email already in use");
         }
 
         User user = User.builder()
-                .name(registerDto.getName())
-                .email(registerDto.getEmail())
-                .passwordHash(passwordEncoder.encode(registerDto.getPassword()))
+                .email(email)
+                .passwordHash(passwordEncoder.encode(password))
                 .isAdmin(false)
                 .hasUsedFreeConsultation(false)
-                .companySize(registerDto.getCompanySize())
-                .workPosition(registerDto.getWorkPosition())
-                .interests(registerDto.getInterests())
-                .skills(List.of())
-                .desiredSkills(registerDto.getDesiredSkills())
                 .points(0)
-                .favoriteCourses(List.of())
                 .build();
+
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User createUser(UserPersonalizationDto userPersonalizationDto) {
+        System.out.println(userPersonalizationDto.toString());
+        System.out.println(userPersonalizationDto.getEmail());
+        User user = userRepository.findByEmail(userPersonalizationDto.getEmail()).orElseThrow();
+
+        user.setName(userPersonalizationDto.getName());
+        user.setCompanySize(userPersonalizationDto.getCompanySize());
+        user.setWorkPosition(userPersonalizationDto.getWorkPosition());
+        user.setInterests(new ArrayList<>(userPersonalizationDto.getInterests()));
+        user.setDesiredSkills(new ArrayList<>(userPersonalizationDto.getDesiredSkills()));
+        user.setSkills(new ArrayList<>());
+        user.setFavoriteCourses(new ArrayList<>());
 
         return userRepository.save(user);
     }

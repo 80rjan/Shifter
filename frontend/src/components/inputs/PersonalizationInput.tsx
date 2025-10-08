@@ -1,4 +1,3 @@
-
 import {Eye, EyeOff} from "lucide-react";
 import React from "react";
 import type { UserPersonalization } from "../../models/javaObjects/UserPersonalization.tsx";
@@ -20,7 +19,7 @@ function PersonalizationInput(inputProps: InputProps) {
 
     return (
         <div
-            className="w-8/10 relative flex flex-col items- gap-1 px-6 py-1 border-2 border-shifter group focus-within:border-l-20 transition-all ease-in-out duration-300 items-start rounded-sm">
+            className="w-full relative flex flex-col items- gap-1 px-6 py-1 border-2 border-shifter group focus-within:border-l-20 transition-all ease-in-out duration-300 items-start rounded-sm">
             <label
                 htmlFor={inputProps.id}
                 className="text-shifter font-medium"

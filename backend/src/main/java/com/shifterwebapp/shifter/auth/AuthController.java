@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -19,9 +20,27 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public void register(@RequestBody RegisterDto request, HttpServletResponse response) throws IOException {
-        authService.register(request, response);
+    public void register(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        String password = body.get("password");
+        authService.register(email, password);
     }
+
+    @PostMapping("/verify")
+    public ResponseEntity<String> verify(@RequestBody Map<String, String> body) {
+        String token = body.get("token");
+        String userEmail = authService.verify(token);
+        return ResponseEntity.ok(userEmail);
+    }
+
+    @PostMapping("/personalize")
+    public void personalize(
+            @RequestBody UserPersonalizationDto userPersonalizationDto,
+            HttpServletResponse response
+    ) throws IOException {
+        authService.personalize(userPersonalizationDto, response);
+    }
+
 
     @PostMapping("/authenticate")
     public void authenticate(@RequestBody LoginDto request, HttpServletResponse response) throws IOException {

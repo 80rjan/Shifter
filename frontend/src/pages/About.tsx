@@ -1,16 +1,15 @@
-import HeroAbout from "../components/HeroAbout.tsx";
 import {
-    IconArrowBigUpFilled,
-    IconChessKnightFilled,
     IconTrendingUp,
     IconRotate360,
-    IconRoute, IconTarget, IconRocket, IconTelescope, IconChessKnight, IconArrowBigUp
+    IconRoute, IconChessKnight, IconArrowBigUp
 } from '@tabler/icons-react';
 import {LightBeams} from "../assets/animations/SpikeAnimation.tsx"
 import CountUp from "react-countup";
 import {Link} from "react-router-dom";
 import {ArrowRight} from "lucide-react";
 import MagicBento from "../assets/animations/MagicBento.tsx";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 import ShifterArrow from "../../public/Shifter-Arrow-White.png"
 
 const reasons = [
