@@ -1,0 +1,24 @@
+{
+  "hero": {
+    "title": "Transform Your Vision into Results",
+    "description": "Complete the form and our team will respond shortly to help you take the next step."
+  },
+  "info": {
+    "title": "Contact Information",
+    "description": "Complete the form and our team will respond shortly to help you take the next step.",
+    "email": "contact@shift-er.com",
+    "location": "Skopje, N. Macedonia"
+  },
+  "form": {
+    "subject": "Your Subject",
+    "subjectPlaceholder": "Enter the subject of your message",
+    "message": "Message",
+    "messagePlaceholder": "Write your message here...",
+    "sendingError": "We’re experiencing a temporary issue with our mail service. Please try again shortly or contact us directly at contact@shift-er.com",
+    "successTitle": "Your message has been sent successfully!",
+    "successDescription": "Thank you for reaching out to us. Our team will review your message and get back to you as soon as possible. Keep an eye on your inbox for our reply.",
+    "sendButton": "Send Message",
+    "sending": "Sending..."
+  },
+  "profileNotice": "These values are automatically populated from your profile. If any of them are incorrect, please update them in the Profile page."
+}

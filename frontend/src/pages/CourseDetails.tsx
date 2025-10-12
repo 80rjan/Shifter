@@ -54,7 +54,7 @@ function CourseDetails() {
     }, [courseId])
 
     return (
-        <main className="bg-white">
+        <main className="bg-beige text-black-text">
             {
                 (authLoading || loading) ?
                     <>
@@ -65,7 +65,7 @@ function CourseDetails() {
                     <>
                         <HeroCourseDetails course={course} enrollUser={enroll}/>
                         <CourseDetailsInfo course={course}/>
-                        <CoursesCarouselCourseDetails/>
+                        <CoursesCarouselCourseDetails courseId={course.id}/>
                     </>
             }
         </main>

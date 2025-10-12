@@ -1,0 +1,44 @@
+{
+  "hero": {
+    "title": "Business Development & Transformation Center",
+    "description": "<span class='font-semibold'>Shifter</span> is a center for business development and transformation, offering mentorship, consulting, academies, and e-learning for family businesses."
+  },
+  "stats": {
+    "clients": "Clients Empowered",
+    "hours": "Mentoring Hours",
+    "years": "Years of Shifter"
+  },
+  "whyChoose": {
+    "title": "Why choose <span class='font-bold text-shifter'>Shifter?</span>"
+  },
+  "reasons": [
+    {
+      "title": "Tailored Strategies",
+      "description": "Strategies and programs designed specifically for your business goals and challenges."
+    },
+    {
+      "title": "Empowering Clients",
+      "description": "Teaching clients how to solve challenges independently, not just provide ready-made solutions."
+    },
+    {
+      "title": "Holistic Approach",
+      "description": "A comprehensive method that addresses root causes across your business, not just the symptoms."
+    },
+    {
+      "title": "Sustainable Growth",
+      "description": "Strategic solutions that strengthen processes, teams, and systems for long-term success."
+    },
+    {
+      "title": "Expert Guidance",
+      "description": "Solutions from professionals who make business challenges manageable."
+    }
+  ],
+  "about": {
+    "title": "About <span class='text-shifter font-black'>Shifter</span>",
+    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+    "cta": "Book a Free Consultation"
+  },
+  "foundations": {
+    "title": "Our Foundations"
+  }
+}

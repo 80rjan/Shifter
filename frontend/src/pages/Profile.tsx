@@ -16,7 +16,7 @@ function Profile() {
     }
 
     return (
-        <main className="grid grid-cols-4 gap-x-12 py-vertical-lg pt-top-nav-lg px-horizontal-md bg-dark-blue/5">
+        <main className="grid grid-cols-4 gap-x-12 py-vertical-lg pt-top-nav-lg px-horizontal-md  bg-beige">
             <div className="col-span-1 flex flex-col gap-6">
                 <ProfileInfo/>
                 {user?.skills && user.skills.length > 0 && (

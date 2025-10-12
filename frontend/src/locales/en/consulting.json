@@ -1,0 +1,20 @@
+{
+  "heroTitle": "Personalized Strategic Consulting",
+  "heroDescription": "Our consulting engagement ensures maximum client results by operating with <strong class='font-bold'>limited openings</strong>. This guarantees that every client receives the <strong class='font-bold'>undivided attention</strong> and continuous strategic execution necessary to deliver <strong class='font-bold'>measurable outcomes</strong>. Submit your inquiry to begin the qualification process for exclusive strategic support.",
+  "contactInfoTitle": "Contact Information",
+  "contactInfoDescription": "Complete the form and our team will respond shortly to help you take the next step.",
+  "contactEmail": "contact@shift-er.com",
+  "contactLocation": "Skopje, N. Macedonia",
+  "autoFilledNote": "These values are automatically populated from your profile. If any of them are incorrect, please update them in the Profile page.",
+  "name": "Name",
+  "email": "Email",
+  "subjectLabel": "Your Subject",
+  "subjectPlaceholder": "Enter the subject of your message",
+  "messageLabel": "Message",
+  "messagePlaceholder": "Write your message here...",
+  "emailError": "We’re experiencing a temporary issue with our mail service. Please try again shortly or contact us directly at contact@shift-er.com",
+  "messageSentTitle": "Your message has been sent successfully!",
+  "messageSentDescription": "Thank you for reaching out to us. Our team will review your message and get back to you as soon as possible. Keep an eye on your <span class='font-semibold text-shifter'>inbox for our reply</span>.",
+  "sending": "Sending...",
+  "sendMessage": "Send Message"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Прескокни кон успех",
+  "subtitle": "Започнете го вашето патување кон паметен и скалабилен бизнис раст.",
+  "backToMain": "Назад кон главната страница",
+  "emailLabel": "Емаил адреса",
+  "emailPlaceholder": "ime@domen.com",
+  "passwordLabel": "Лозинка",
+  "passwordPlaceholder": "********",
+  "passwordConfirmationLabel": "Потврдете ја лозинката",
+  "passwordConfirmationPlaceholder": "********",
+  "createAccount": "Креирај сметка",
+  "creatingAccount": "Се креира сметка...",
+  "logIn": "Најави се",
+  "or": "или",
+  "googleLogin": "Најави се со Google",
+  "verifyEmail": "Верифицирајте ја вашата емаил адреса за продолжување",
+  "verificationSent1": "Линк за верификација е испратен на",
+  "verificationSent2": "Ве молиме проверете ја вашата е-пошта и кликнете на линкот за да ја активирате вашата сметка."
+}

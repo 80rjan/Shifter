@@ -2,6 +2,7 @@ import React, {useEffect} from "react";
 import type {UserPersonalization} from "../../models/javaObjects/UserPersonalization.tsx";
 import PersonalizationSlider from "../inputs/PersonalizationSlider.tsx";
 import {fetchCoursesTopicsApi} from "../../api/courseApi.ts";
+import {useTranslation} from "react-i18next";
 
 function PersonalizationStepTwo({setUser, user, setError}: {
     setUser: React.Dispatch<React.SetStateAction<UserPersonalization>>,
@@ -9,6 +10,7 @@ function PersonalizationStepTwo({setUser, user, setError}: {
     setError: React.Dispatch<React.SetStateAction<string>>,
 }) {
     const [interests, setInterests] = React.useState<string[]>([]);
+    const { t } = useTranslation("personalize");
 
     useEffect(() => {
         const fetchCourseTopics = async () => {
@@ -25,7 +27,7 @@ function PersonalizationStepTwo({setUser, user, setError}: {
 
     useEffect(() => {
         if (user.interests.length === 0) {
-            setError("Help us understand you better — select at least one topic you like");
+            setError(t("stepTwo.errorNoInterest"));
         } else {
             setError("");
         }
@@ -38,7 +40,7 @@ function PersonalizationStepTwo({setUser, user, setError}: {
             {
                 interests.length > 0 &&
                 <PersonalizationSlider
-                    label={"Select Topics You Like"}
+                    label={t("stepTwo.interests")}
                     name={"interests"}
                     id={"interests"}
                     options={interests}

@@ -1,0 +1,32 @@
+{
+  "title": "Shift into Success",
+  "subtitle": "Start your journey toward smarter, scalable business growth.",
+  "backToMain": "Back to Main Page",
+  "verificationFailedTitle": "Verification Failed",
+  "verificationFailedMessage1": "We couldn’t verify your email address. The verification link may be invalid or expired.",
+  "verificationFailedMessage2": "Please try registering again or request a new verification link.",
+  "back": "Back",
+  "next": "Next",
+  "settingUp": "Setting up...",
+  "startUsing": "Start Using Shifter",
+
+  "stepOne": {
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "John Doe",
+    "workPosition": "Work Position",
+    "workPositionPlaceholder": "Your Position",
+    "companySize": "Company Size",
+    "companySizeOptions": ["Freelance", "Micro", "Small", "Medium", "Mid Market", "Enterprise", "Other"],
+    "errorIncomplete": "Please ensure all inputs are completed."
+  },
+
+  "stepTwo": {
+    "interests": "Select Topics You Like",
+    "errorNoInterest": "Help us understand you better — select at least one topic you like"
+  },
+
+  "stepThree": {
+    "desiredSkills": "Outline Your Learning Goals",
+    "errorNoSkill": "We’d love to support your growth — select at least one skill you'd like to improve"
+  }
+}

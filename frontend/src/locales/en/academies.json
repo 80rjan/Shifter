@@ -1,0 +1,20 @@
+{
+  "heroTitle": "Transform Your Team's Expertise with Corporate Group Academies & Training",
+  "heroDescription": "Transform your team into a synchronized unit of high-performers. Our Group Academies deliver <strong class='font-bold'>standardized, expert-led training</strong> to rapidly upskill entire departments, close knowledge gaps, and drive consistent execution across your organization. Inquire now to secure a personalized curriculum review for your business.",
+  "contactInfoTitle": "Contact Information",
+  "contactInfoDescription": "Complete the form and our team will respond shortly to help you take the next step.",
+  "contactEmail": "contact@shift-er.com",
+  "contactLocation": "Skopje, N. Macedonia",
+  "autoFilledNote": "These values are automatically populated from your profile. If any of them are incorrect, please update them in the Profile page.",
+  "name": "Name",
+  "email": "Email",
+  "subjectLabel": "Your Subject",
+  "subjectPlaceholder": "Enter the subject of your message",
+  "messageLabel": "Message",
+  "messagePlaceholder": "Write your message here...",
+  "emailError": "We’re experiencing a temporary issue with our mail service. Please try again shortly or contact us directly at contact@shift-er.com",
+  "messageSentTitle": "Your message has been sent successfully!",
+  "messageSentDescription": "Thank you for reaching out to us. Our team will review your message and get back to you as soon as possible. Keep an eye on your <span class='font-semibold text-shifter'>inbox for our reply</span>.",
+  "sending": "Sending...",
+  "sendMessage": "Send Message"
+}

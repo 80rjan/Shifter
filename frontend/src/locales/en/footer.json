@@ -1,0 +1,49 @@
+{
+  "cta": {
+    "title": { "part1": "Simplify Your Growth", "part2": "Journey" },
+    "subtitle": {
+      "line1": "Take the first step toward smarter business solutions.",
+      "line2": "Let us guide you every step of the way."
+    },
+    "button": {
+      "consultation": "Schedule a Free Consultation",
+      "contact": "Contact Us"
+    }
+  },
+  "social": { "visit": "Visit us at" },
+  "sections": {
+    "services": {
+      "title": "Services",
+      "items": {
+        "mentoring": "Mentoring",
+        "consulting": "Consulting",
+        "courses": "Courses",
+        "academies": "Academies"
+      }
+    },
+    "about": {
+      "title": "About Us",
+      "items": { "about": "About Shifter" }
+    },
+    "profile": {
+      "title": "Profile",
+      "items": {
+        "profile": "Profile",
+        "logout": "Log Out",
+        "login": "Log In / Sign Up"
+      }
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "items": {
+        "profile": "Profile",
+        "learning": "My Learning"
+      }
+    },
+    "contact": {
+      "title": "Contact",
+      "items": { "contact": "Contact Us" }
+    }
+  },
+  "rights": "All rights reserved."
+}

@@ -6,6 +6,7 @@ import com.shifterwebapp.shifter.enums.LoginProvider;
 import com.shifterwebapp.shifter.exception.InvalidVerificationTokenException;
 import com.shifterwebapp.shifter.external.email.EmailService;
 import com.shifterwebapp.shifter.user.User;
+import com.shifterwebapp.shifter.user.UserDto;
 import com.shifterwebapp.shifter.user.UserMapper;
 import com.shifterwebapp.shifter.user.UserRepository;
 import com.shifterwebapp.shifter.user.service.UserService;
@@ -131,6 +132,12 @@ public class AuthService {
             sendTokens(response, user);
     }
 
+    public void finalizeOAuthLogin(Long userId, HttpServletResponse response) throws IOException {
+        User user = userService.getUserEntityById(userId);
+
+        if (user.getIsEnabled())
+            sendTokens(response, user);
+    }
 
     public AuthResponse refreshToken(HttpServletRequest request) {
         String refreshToken = null;

@@ -36,12 +36,7 @@ function CourseDetailsInfo({ course }: { course: CourseDetail | null}) {
         <>
             {/*WHAT WILL BE LEARNED*/}
             <section className="relative flex flex-col gap-12 text-left px-horizontal-lg py-vertical-md overflow-clip ">
-                <img src={ShifterArrow} alt="Shifter Arrow"
-                     className="absolute opacity-10 h-150 w-120 -rotate-130 -top-40 right-0"/>
-                <img src={ShifterArrow} alt="Shifter Arrow"
-                     className="absolute opacity-10 h-150 w-120 rotate-50 -bottom-40 left-0"/>
-
-                <h2 className="text-5xl">What you'll learn</h2>
+                <h2 className="text-5xl font-semibold">What you'll learn</h2>
                 <div className="grid grid-cols-2 gap-y-4 gap-x-20">
                     {
                         course?.whatWillBeLearned.map((learning, index) => (
@@ -57,7 +52,7 @@ function CourseDetailsInfo({ course }: { course: CourseDetail | null}) {
             {/*COURSE CONTENT*/}
             <section
                 className="relative flex flex-col gap-12 text-left px-horizontal-lg py-vertical-md overflow-clip ">
-                <h2 className="text-5xl">Course content</h2>
+                <h2 className="text-5xl font-semibold">Course content</h2>
                 <div>
                     {
                         course?.courseContents.map((content, index) => {
@@ -74,7 +69,7 @@ function CourseDetailsInfo({ course }: { course: CourseDetail | null}) {
                                             <ChevronDown size={32} strokeWidth={1}
                                                          className={`text-black ${isOpen ? "rotate-180" : "rotate-0"} transition-all duration-500 ease-in-out `}
                                             />
-                                            <h3 className="text-2xl font-semibold">{content.title}</h3>
+                                            <h3 className="text-2xl font-medium">{content.title}</h3>
                                         </div>
 
                                         <div className="flex gap-2 items-center text-black/80">
@@ -101,7 +96,7 @@ function CourseDetailsInfo({ course }: { course: CourseDetail | null}) {
 
                                                                 <div className="flex flex-col gap-2">
                                                                     <h4 className="font-medium">{lecture.title}</h4>
-                                                                    <p className="opacity-80">{lecture.description}</p>
+                                                                    <p className="font-light opacity-80">{lecture.description}</p>
                                                                 </div>
                                                             </div>
                                                             <span>{lecture.durationMinutes}min</span>
@@ -120,7 +115,7 @@ function CourseDetailsInfo({ course }: { course: CourseDetail | null}) {
 
             {/*DESCRIPTION*/}
             <section className="flex flex-col gap-12 text-left px-horizontal-lg py-vertical-md">
-                <h2 className="text-5xl">Course description</h2>
+                <h2 className="text-5xl font-semibold">Course description</h2>
 
                 <div>
                     <div className="relative overflow-hidden">

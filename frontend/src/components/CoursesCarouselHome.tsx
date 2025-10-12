@@ -1,41 +1,41 @@
 import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 import CourseCard from "./CourseCard.tsx";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+import 'slick-carousel/slick/slick.css';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+import 'slick-carousel/slick/slick-theme.css';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 import "../slick-custom.css";
 
-import ShifterArrow from "../../public/Shifter-Arrow.png";
-import {useCourseStorage} from "../context/CourseStorage.ts";
+import { useCourseStorage } from "../context/CourseStorage.ts";
 import CourseCardSkeleton from "./skeletons/CourseCardSkeleton.tsx";
+import { useTranslation } from "react-i18next";
 
 function CoursesCarouselHome() {
-    const {recommendedCourses} = useCourseStorage();
+    const { recommendedCourses } = useCourseStorage();
+    const { t } = useTranslation("home");
 
     return (
         <section
-            className="relative flex flex-col gap-10 items-center bg-dark-blue/10 py-vertical-md px-horizontal-lg overflow-clip">
-            <img src={ShifterArrow} alt="Shifter Arrow"
-                 className="absolute opacity-30 h-150 w-120 -rotate-130 -top-30 right-0"/>
-            <img src={ShifterArrow} alt="Shifter Arrow"
-                 className="absolute opacity-30 h-150 w-120 rotate-50 -bottom-30 left-0"/>
+            className="relative flex flex-col items-center gap-between-md py-vertical-lg px-horizontal-lg overflow-clip">
 
-            <div className="text-center flex flex-col gap-4">
-                <h2 className="text-5xl whitespace-nowrap">
-                    Unlock Your Growth With <strong className="text-shifter">E-Learning</strong>
-                </h2>
-                <p className="text-2xl font-light text-black/80">
-                    Access expert-led courses designed to help you master business, strategy, and success - anytime,
-                    anywhere.
-                </p>
+            {/* TEXT */}
+            <div className="text-center flex flex-col gap-4 text-black-text">
+                <h2 className="text-5xl font-semibold whitespace-nowrap" dangerouslySetInnerHTML={{ __html: t("coursesCarousel.heading") }} />
+                <p className="text-xl font-light opacity-80">{t("coursesCarousel.description")}</p>
             </div>
 
+            {/* SLIDER / CARDS */}
             <div className="relative mx-0 my-auto w-full p-0">
                 {recommendedCourses && recommendedCourses.length > 0 ? (
                     recommendedCourses.length <= 3 ? (
                         <div className="flex gap-12 justify-evenly items-center">
                             {recommendedCourses.map((course, index) => (
                                 <div key={index} className="max-w-1/3">
-                                    <CourseCard card={course} key={index}/>
+                                    <CourseCard card={course} />
                                 </div>
                             ))}
                         </div>
@@ -43,7 +43,7 @@ function CoursesCarouselHome() {
                         <Slider {...settings}>
                             {recommendedCourses.map((course, index) => (
                                 <div key={index}>
-                                    <CourseCard card={course}/>
+                                    <CourseCard card={course} />
                                 </div>
                             ))}
                         </Slider>
@@ -52,7 +52,7 @@ function CoursesCarouselHome() {
                     <Slider {...settings}>
                         {[...Array(4)].map((_, index) => (
                             <div key={index}>
-                                <CourseCardSkeleton/>
+                                <CourseCardSkeleton />
                             </div>
                         ))}
                     </Slider>
@@ -92,6 +92,5 @@ const settings = {
         }
     ]
 };
-
 
 export default CoursesCarouselHome;

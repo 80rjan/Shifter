@@ -1,7 +1,6 @@
 import {Route, Routes, useLocation} from "react-router-dom";
 import Home from "./pages/Home.tsx";
 import Navbar from "./layout/Navbar.tsx";
-import Footer from "./layout/Footer.tsx";
 import Login from "./pages/Login.tsx";
 import Register from "./pages/Register.tsx";
 import Courses from "./pages/Courses.tsx";
@@ -11,7 +10,6 @@ import {ToastContainer} from 'react-toastify';
 import AppLoader from "./AppLoader.tsx";
 import Profile from "./pages/Profile.tsx";
 import Learn from "./pages/Learn.tsx";
-import FreeConsultation from "./pages/FreeConsultation.tsx";
 import PublicOnlyRoute from "./components/routeProtectors/PublicOnlyRoute.tsx";
 import UserOnlyRoute from "./components/routeProtectors/UserOnlyRoute.tsx";
 import {useAuthContext} from "./context/AuthContext.tsx";
@@ -26,6 +24,10 @@ import Consulting from "./pages/Consulting.tsx";
 import Academies from "./pages/Academies.tsx";
 import Personalize from "./pages/Personalize.tsx";
 import OAuth2RedirectHandler from "./api/OAuth2RedirectHandler.tsx";
+import FooterNew from "./layout/FooterNew.tsx";
+import FooterSmall from "./layout/FooterSmall.tsx";
+import FreeConsultation from "./pages/FreeConsultation.tsx";
+import LanguageToggle from "./layout/LanguageToggle.tsx";
 
 function LayoutWrapper() {
     const location = useLocation();
@@ -34,11 +36,15 @@ function LayoutWrapper() {
         location.pathname === "/register" ||
         location.pathname === "/welcome" ||
         location.pathname.startsWith("/learn/");
-    const hideFooter =
+    const showSmallFooter =
+        location.pathname === "/profile" ||
+        location.pathname === "/courses" ||
+        location.pathname === "/learn" ||
         location.pathname === "/mentoring" ||
         location.pathname === "/consulting" ||
         location.pathname === "/academies" ||
-        location.pathname === "/contact";
+        location.pathname === "/contact" ||
+        location.pathname === "/free-consultation";
     const {user, authChecked} = useAuthContext();
 
     if (!authChecked)
@@ -78,24 +84,36 @@ function LayoutWrapper() {
                     </PublicOnlyRoute>
                 }/>
 
-                <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
+                <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler/>}/>
 
                 <Route path="/" element={<Home/>}/>
 
                 <Route path="/about" element={<About/>}/>
 
-                <Route path="/mentoring" element={<Mentoring/>}/>
+                <Route path="/mentoring" element={
+                    <UserOnlyRoute>
+                        <Mentoring/>
+                    </UserOnlyRoute>
+                }/>
 
-                <Route path="/consulting" element={<Consulting/>}/>
+                <Route path="/consulting" element={
+                    <UserOnlyRoute>
+                        <Consulting/>
+                    </UserOnlyRoute>
+                }/>
 
-                <Route path="/academies" element={<Academies/>}/>
+                <Route path="/academies" element={
+                    <UserOnlyRoute>
+                        <Academies/>
+                    </UserOnlyRoute>
+                }/>
 
                 <Route path="/courses" element={<Courses/>}/>
                 <Route path="/courses/:courseId/:courseTitle" element={<CourseDetails/>}/>
 
                 <Route path="/contact" element={
                     <UserOnlyRoute>
-                        <Contact />
+                        <Contact/>
                     </UserOnlyRoute>
                 }/>
 
@@ -123,7 +141,7 @@ function LayoutWrapper() {
                 }/>
 
             </Routes>
-            {(!hideLayout && !hideFooter) && <Footer/>}
+            {(!hideLayout) && showSmallFooter ? <FooterSmall/> : <FooterNew/>}
         </>
     );
 }
@@ -153,6 +171,7 @@ function App() {
                 pauseOnHover
             />
             <LayoutWrapper/>
+            <LanguageToggle/>
         </>
     );
 }

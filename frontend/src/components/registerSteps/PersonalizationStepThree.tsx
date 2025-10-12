@@ -2,6 +2,7 @@ import React, {useEffect} from "react";
 import type {UserPersonalization} from "../../models/javaObjects/UserPersonalization.tsx";
 import PersonalizationSlider from "../inputs/PersonalizationSlider.tsx";
 import {fetchCoursesSkillsApi} from "../../api/courseApi.ts";
+import {useTranslation} from "react-i18next";
 
 function PersonalizationStepThree({setUser, user, setError}: {
     setUser: React.Dispatch<React.SetStateAction<UserPersonalization>>,
@@ -9,6 +10,7 @@ function PersonalizationStepThree({setUser, user, setError}: {
     setError: React.Dispatch<React.SetStateAction<string>>,
 }){
     const [skills, setSkills] = React.useState<string[]>([]);
+    const { t } = useTranslation("personalize");
 
     useEffect(() => {
         const fetchSkills = async () => {
@@ -25,7 +27,7 @@ function PersonalizationStepThree({setUser, user, setError}: {
 
     useEffect(() => {
         if (user.desiredSkills.length === 0) {
-            setError("We’d love to support your growth — select at least one skill you'd like to improve");
+            setError(t("stepThree.errorNoSkill"));
         } else {
             setError("");
         }
@@ -37,7 +39,7 @@ function PersonalizationStepThree({setUser, user, setError}: {
             {
                 skills.length > 0 &&
                 <PersonalizationSlider
-                    label={"Outline Your Learning Goals"}
+                    label={t("stepThree.desiredSkills")}
                     name={"desiredSkills"}
                     id={"desired-skills"}
                     options={skills}

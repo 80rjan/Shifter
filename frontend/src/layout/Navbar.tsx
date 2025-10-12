@@ -4,9 +4,11 @@ import {Link} from "react-router-dom";
 import logo from "../../public/Shifter-S2W-White-Transparent.png"
 import {useAuthContext} from "../context/AuthContext.tsx";
 import NavbarLink from "../components/NavbarLink.tsx";
+import {useTranslation} from "react-i18next";
 
 function Navbar() {
     const {user} = useAuthContext();
+    const { t } = useTranslation("navbar");
 
     return (
         <nav
@@ -17,10 +19,10 @@ function Navbar() {
             <div className={`flex w-40/100 justify-between text-md items-center
                                 pl-10 ${user?.hasUsedFreeConsultation && "pl-12"}`}>
                 {/* Link group */}
-                <NavbarLink to="/courses" label="Courses"/>
-                <NavbarLink to="/mentoring" label="Mentoring"/>
-                <NavbarLink to="/consulting" label="Consulting"/>
-                <NavbarLink to="/academies" label="Academies"/>
+                <NavbarLink to="/courses" label={t("courses")}/>
+                <NavbarLink to="/mentoring" label={t("mentoring")}/>
+                <NavbarLink to="/consulting" label={t("consulting")}/>
+                <NavbarLink to="/academies" label={t("academies")}/>
             </div>
 
             {/* Centered Logo (NO ABSOLUTE!) */}
@@ -32,11 +34,11 @@ function Navbar() {
 
             {/* Right nav links + profile */}
             <div className="flex w-40/100 justify-between text-md items-center gap-6">
-                <NavbarLink to="/about" label="About"/>
+                <NavbarLink to="/about" label={t("about")}/>
                 {
                     user ?
-                        <NavbarLink to="/learn" label="My Learning"/> :
-                        <NavbarLink to="/login" label="Login / Register"/>
+                        <NavbarLink to="/learn" label={t("learn")}/> :
+                        <NavbarLink to="/login" label={t("login")}/>
                 }
                 <div className="flex gap-4 items-center">
                     {
@@ -55,7 +57,7 @@ function Navbar() {
                                 relative -mr-4 py-2 bg-shifter rounded-l-lg font-medium
                                 shadow-md shadow-shifter/30 px-8 pr-10 ${user?.hasUsedFreeConsultation && "px-10 pr-12"}`}
                     >
-                        {user?.hasUsedFreeConsultation ? "Contact Us" : "Free Consultation"}
+                        {user?.hasUsedFreeConsultation ? t("contact") : t("freeConsultation")}
                     </Link>
                 </div>
             </div>

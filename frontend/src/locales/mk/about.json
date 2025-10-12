@@ -1,0 +1,44 @@
+{
+  "hero": {
+    "title": "Центар за Развој и Трансформација на Бизнисот",
+    "description": "<span class='font-semibold'>Shifter</span> е центар за развој и трансформација на бизнисот, нудејќи менторство, консултации, академии и е-учење за семејни бизниси."
+  },
+  "stats": {
+    "clients": "Овластени клиенти",
+    "hours": "Менторски часови",
+    "years": "Години Shifter"
+  },
+  "whyChoose": {
+    "title": "Зошто да го изберете <span class='font-bold text-shifter'>Shifter?</span>"
+  },
+  "reasons": [
+    {
+      "title": "Прилагодени стратегии",
+      "description": "Стратегии и програми дизајнирани специфично за целите и предизвиците на вашиот бизнис."
+    },
+    {
+      "title": "Овластување на клиенти",
+      "description": "Учиме клиенти како да решаваат предизвици самостојно, а не само да обезбедиме готови решенија."
+    },
+    {
+      "title": "Холистички пристап",
+      "description": "Севкупен метод кој се занимава со коренските причини во вашиот бизнис, а не само со симптомите."
+    },
+    {
+      "title": "Одржлив раст",
+      "description": "Стратегиски решенија кои ја зајакнуваат работата, тимовите и системите за долгорочен успех."
+    },
+    {
+      "title": "Експертска насока",
+      "description": "Решенија од професионалци кои ги прават бизнис предизвиците управливи."
+    }
+  ],
+  "about": {
+    "title": "За <span class='text-shifter font-black'>Shifter</span>",
+    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+    "cta": "Закажете бесплатна консултација"
+  },
+  "foundations": {
+    "title": "Нашите основи"
+  }
+}

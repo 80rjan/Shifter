@@ -1,0 +1,18 @@
+{
+  "welcomeBack": "Добредојдовте повторно!",
+  "subtitle": "Да ја отклучиме вашата следна деловна пресвртница!",
+  "backToMain": "Назад кон главната страница",
+  "emailLabel": "Емаил адреса",
+  "emailPlaceholder": "ime@domen.com",
+  "passwordLabel": "Лозинка",
+  "passwordPlaceholder": "********",
+  "logIn": "Најави се",
+  "register": "Регистрирај се",
+  "loggingIn": "Се најавуваме...",
+  "or": "или",
+  "googleLogin": "Најави се со Google",
+  "errors": {
+    "fillAllFields": "Ве молиме пополнете ги сите полиња.",
+    "somethingWentWrong": "Нешто тргна наопаку. Обидете се повторно."
+  }
+}

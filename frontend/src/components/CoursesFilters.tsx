@@ -12,10 +12,10 @@ function CoursesFilters({filters, setFilters, topics, skills}: {
 }) {
     const {user} = useAuthContext();
     const duration = [
-        "< 3 hours",
-        "3-6 hours",
-        "6-10 hours",
-        "10+ hours"
+        "< 3h",
+        "3h - 6h",
+        "6h - 10h",
+        "10h + "
     ]
     const difficulty = [
         "BEGINNER",

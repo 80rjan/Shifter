@@ -1,10 +1,14 @@
 package com.shifterwebapp.shifter.auth;
 
+import com.shifterwebapp.shifter.Validate;
+import com.shifterwebapp.shifter.user.UserDto;
 import com.shifterwebapp.shifter.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -16,7 +20,7 @@ import java.util.Map;
 public class AuthController {
 
     private final AuthService authService;
-
+    private final Validate validate;
     private final UserService userService;
 
     @PostMapping("/register")
@@ -45,6 +49,13 @@ public class AuthController {
     @PostMapping("/authenticate")
     public void authenticate(@RequestBody LoginDto request, HttpServletResponse response) throws IOException {
         authService.authenticate(request, response);
+    }
+
+    @GetMapping("/oauth/finalize")
+    public void finalizeOAuthLogin(Authentication authentication, HttpServletResponse response) throws IOException {
+        Long userId = validate.extractUserId(authentication);
+
+        authService.finalizeOAuthLogin(userId, response);
     }
 
     @PostMapping("/refresh")

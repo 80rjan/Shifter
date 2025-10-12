@@ -6,7 +6,7 @@ import type {User} from "../models/javaObjects/User.tsx";
 // @ts-expect-error
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-export const refreshAccessTokenApi = async (): Promise<{user: User, accessToken: string}> => {
+export const refreshAccessTokenApi = async (): Promise<{ user: User, accessToken: string }> => {
     const res = await axios.post(`${backendUrl}/api/auth/refresh`,
         {},
         {withCredentials: true}
@@ -18,29 +18,41 @@ export const refreshAccessTokenApi = async (): Promise<{user: User, accessToken:
 export const registerApi = async (email: string, password: string): Promise<void> => {
     await axios.post(`${backendUrl}/api/auth/register`,
         {email, password},
-        { withCredentials: true }
+        {withCredentials: true}
     );
 }
 
 export const verifyApi = async (token: string): Promise<string> => {
     const res = await axios.post(`${backendUrl}/api/auth/verify`,
         {token},
-        { withCredentials: true }
+        {withCredentials: true}
     );
 
     return res.data;
 }
 
-export const personalizeApi = async (user: UserPersonalization): Promise<{user: User, accessToken: string}> => {
+export const personalizeApi = async (user: UserPersonalization): Promise<{ user: User, accessToken: string }> => {
     const res = await axios.post(`${backendUrl}/api/auth/personalize`,
         user,
-        { withCredentials: true }
+        {withCredentials: true}
     );
 
     return res.data;
 }
 
-export const loginApi = async (email: string, password: string): Promise<{user: User, accessToken: string}> => {
+export const oAuthLoginApi = async (accessToken: string): Promise<{ user: User, accessToken: string }> => {
+    const res = await axios.get(`${backendUrl}/api/auth/oauth/finalize`, {
+            withCredentials: true,
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+        }
+    );
+
+    return res.data;
+}
+
+export const loginApi = async (email: string, password: string): Promise<{ user: User, accessToken: string }> => {
     const res = await axios.post(`${backendUrl}/api/auth/authenticate`,
         {email, password},
         {withCredentials: true}

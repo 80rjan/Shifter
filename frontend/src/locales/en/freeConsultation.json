@@ -1,0 +1,39 @@
+{
+  "hero": {
+    "title": "Book Your Free Expert Session",
+    "description": "Talk to an expert about your business goals and challenges. Get a personalized program recommendation tailored to your needs."
+  },
+  "nextSteps": {
+    "title": "Next Steps After Submission?",
+    "steps": [
+      {"title": "Your Expert is Assigned","description":"We schedule an expert for your session and send you a confirmation email with all the meeting details."},
+      {"title": "Expert Prepares for Your Session","description":"Your expert reviews the information you provided to create valuable insights and a strategy tailored to your situation."},
+      {"title": "Attend Your Personalized Session","description":"Join the session and receive actionable guidance along with a program or mentorship recommendation designed specifically for your goals."}
+    ]
+  },
+  "form": {
+    "profileHint": "These values are automatically populated from your profile. If any of them are incorrect, please update them in the Profile page.",
+    "name": "Name",
+    "email": "Email",
+    "fields": {
+      "aboutCompany": {"label":"About your business","placeholder":"What you do, industry, customers"},
+      "challenges": {"label":"Your current challenges","placeholder":"E.g. sales, growth, team issues"},
+      "expectations": {"label":"What you want from the session","placeholder":"Advice, strategy, solutions"},
+      "otherInfo": {"label":"Anything else","placeholder":"Extra context or details"}
+    },
+    "selectDate": "Select a date",
+    "selectTime": "Select a time",
+    "book": "Book Session",
+    "booking": "Booking..."
+  },
+  "confirmation": {
+    "title": "Your free consultation is scheduled! 🎉",
+    "description": "Completing the form was the <span class='font-semibold text-shifter'>first step toward progress and growth</span>. Check your <span class='font-semibold text-shifter'>email for the Zoom link.</span>"
+  },
+  "optionalHint": "<sup>*</sup> These fields are optional. Filling them out helps us better understand your challenges and objectives, so we can prepare a more personalized session.",
+  "errors": {
+    "selectDateTime": "Please select both date and time.",
+    "alreadyUsed": "We couldn’t schedule your meeting. It appears you’ve already used your free consultation. Feel free to get in touch with us through our Contact page for more options.",
+    "failedSchedule": "Failed to schedule the meeting. Please try again later or contact support."
+  }
+}

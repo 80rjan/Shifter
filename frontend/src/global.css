@@ -1,11 +1,12 @@
 @import "tailwindcss";
 
 @theme {
+    --spacing-horizontal-xl: 12rem;
     --spacing-horizontal-lg: 10rem;
     --spacing-horizontal-md: 7rem;
     --spacing-horizontal-sm: 4rem;
-    /*--spacing-horizontal: 7rem;*/
 
+    --spacing-vertical-xl: 5rem;
     --spacing-vertical-lg: 3rem;
     --spacing-vertical-md: 2rem;
     --spacing-vertical-sm: 1rem;
@@ -14,6 +15,10 @@
     --spacing-top-nav-lg: 8rem;
     --spacing-top-nav-md: 7rem;
     --spacing-top-nav-sm: 6rem;
+
+    --spacing-between-lg: 6rem;
+    --spacing-between-md: 4rem;
+    --spacing-between-sm: 2rem;
 
 
     --color-beige: #F8F6F5;
@@ -94,6 +99,9 @@
 }
 
 #root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
     background: var(--color-white);
     width: 100%;
     margin: 0 0;

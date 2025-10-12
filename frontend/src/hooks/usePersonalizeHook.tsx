@@ -78,12 +78,19 @@ export function usePersonalizeHook() {
             })
             .catch(err => {
                 setIsVerified(false);
-                console.error("Error verifying user" + err);
+                setError("Verification failed. Please try again.");
+                setShowError(true);
+                console.error("Error verifying user " + err);
             })
             .finally(() => setVerificationChecked(true))
     }
 
     const handlePersonalize = async () => {
+        if (!isVerified) {
+            setError("Verification failed. Please try again.");
+            setShowError(true);
+            return;
+        }
         setIsLoading(true);
         personalize(user)
             .then(() => {

@@ -1,12 +1,12 @@
-export default function Instagram({className = "w-6 h-6 text-black"}) {
+export default function Instagram({ className = "w-6 h-6 text-black" }) {
     return (
-        <svg xmlns="http://www.w3.org/2000/svg"
-             viewBox="0 0 24 24"
-             fill="currentColor"
-             className={className}>
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-            <path
-                d="M16 3a5 5 0 0 1 5 5v8a5 5 0 0 1 -5 5h-8a5 5 0 0 1 -5 -5v-8a5 5 0 0 1 5 -5zm-4 5a4 4 0 0 0 -3.995 3.8l-.005 .2a4 4 0 1 0 4 -4m4.5 -1.5a1 1 0 0 0 -.993 .883l-.007 .127a1 1 0 0 0 1.993 .117l.007 -.127a1 1 0 0 0 -1 -1"/>
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"     // Reset full view
+            fill="currentColor"
+            className={className}
+        >
+            <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 7a4 4 0 1 0 4 4 4 4 0 0 0-4-4zm4.5-3.5a1.25 1.25 0 1 0 1.25 1.25A1.25 1.25 0 0 0 16.5 5.5z" />
         </svg>
-    )
+    );
 }

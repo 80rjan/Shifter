@@ -43,7 +43,7 @@ function ProfileMyProfile() {
             <h2 className="text-3xl font-semibold">My Profile</h2>
             <form
                 onSubmit={handleSubmit}
-                className="flex flex-col gap-6 px-24 py-6 border-1 border-dark-blue/10 bg-white rounded-lg w-full ">
+                className="shadow-md flex flex-col gap-6 px-24 py-6 border-1 border-dark-blue/10 bg-white rounded-lg w-full ">
                 <Input name={"name"} value={formData.name} func={setFormData} />
                 <Input name={"workPosition"} value={formData.workPosition} func={setFormData} />
                 <select

@@ -1,0 +1,18 @@
+{
+  "welcomeBack": "Welcome Back!",
+  "subtitle": "Let's unlock your next breakthrough in business!",
+  "backToMain": "Back to Main Page",
+  "emailLabel": "Email address",
+  "emailPlaceholder": "name@email.com",
+  "passwordLabel": "Password",
+  "passwordPlaceholder": "********",
+  "logIn": "Log In",
+  "register": "Register",
+  "loggingIn": "Logging in...",
+  "or": "or",
+  "googleLogin": "Log in with Google",
+  "errors": {
+    "fillAllFields": "Please fill in all fields.",
+    "somethingWentWrong": "Something went wrong. Please try again."
+  }
+}

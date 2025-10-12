@@ -32,11 +32,11 @@ function HeroCourseDetails({course, enrollUser}: { course: CourseDetail | null, 
     return (
         <div
             style={{"--card-color": course?.color} as React.CSSProperties}
-            className="bg-dark-blue py-4">
+            className={`py-4 bg-shifter`}>
             {/*HEADER AND DESCRIPTION*/}
             <section
-                className="flex flex-col items-center gap-8 bg-white mx-6 px-horizontal-lg pb-12 pt-40 rounded-xl shadow-lg shadow-black/20">
-                <h1 className="text-5xl">{course?.title}</h1>
+                className="flex flex-col items-center gap-8 bg-white mx-6 px-horizontal-lg pb-12 pt-40 rounded-xl shadow-lg shadow-black/20 text-black-text">
+                <h1 className="text-5xl font-semibold">{course?.title}</h1>
                 <p>{course?.description}</p>
                 {
                     enrollments && enrollments.some(enrollment => enrollment.courseId === course?.id) ?
@@ -50,7 +50,7 @@ function HeroCourseDetails({course, enrollUser}: { course: CourseDetail | null, 
                                     <Link
                                         to={`/learn/${course?.id}/${toUrlFormat(course?.titleShort || "")}`}
                                         className={`
-                                            ${bgColor}
+                                            bg-shifter
                                             hover:shadow-lg hover:shadow-deep-green/50 transition-all duration-300 ease-in-out cursor-pointer
                                             shadow-md shadow-deep-green/30 text-white font-medium text-xl border-3 border-white/50 rounded-full px-14 py-2
                                         `}
@@ -69,7 +69,7 @@ function HeroCourseDetails({course, enrollUser}: { course: CourseDetail | null, 
                                     <div className="w-8 loader"></div>
                                 ) : (
                                     <button className={`
-                                                ${bgColor}
+                                                bg-shifter
                                                 hover:shadow-lg hover:shadow-deep-green/50 transition-all duration-300 ease-in-out cursor-pointer
                                                 shadow-md shadow-deep-green/30 text-white font-medium text-xl border-3 border-white/50 rounded-full px-14 py-2
                                             `}

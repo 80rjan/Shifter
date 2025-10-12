@@ -26,7 +26,7 @@ function ProfileSkillsInterests({ title, pills, openModal }: {
                     )
                 }
             </div>
-            <div className="flex gap-2 w-full flex-wrap border-1 border-dark-blue/10 bg-white rounded-lg p-4">
+            <div className="shadow-md flex gap-2 w-full flex-wrap border-1 border-dark-blue/10 bg-white rounded-lg p-4">
                 {
                     visiblePills.map((pill, index) => (
                         <span

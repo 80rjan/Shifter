@@ -8,17 +8,24 @@ export default {
         extend: {
             spacing: {
                 // Map your spacing variables as custom spacing tokens
-                'horizontal-lg': '10rem',   // --spacing-horizontal-lg
-                'horizontal-md': '7rem',    // --spacing-horizontal-md
-                'horizontal-sm': '4rem',    // --spacing-horizontal-sm
+                'horizontal-xl': '12rem',
+                'horizontal-lg': '10rem',
+                'horizontal-md': '7rem',
+                'horizontal-sm': '4rem',
 
-                'vertical-lg': '3rem',      // --spacing-vertical-lg
-                'vertical-md': '2rem',      // --spacing-vertical-md
-                'vertical-sm': '1rem',      // --spacing-vertical-sm
+                'vertical-xl': '5rem',
+                'vertical-lg': '3rem',
+                'vertical-md': '2rem',
+                'vertical-sm': '1rem',
 
-                'top-nav-lg': '8rem',       // --spacing-top-nav-lg
-                'top-nav-md': '7rem',       // --spacing-top-nav-md
-                'top-nav-sm': '6rem',       // --spacing-top-nav-sm
+                'top-nav-xl': '9rem',
+                'top-nav-lg': '8rem',
+                'top-nav-md': '7rem',
+                'top-nav-sm': '6rem',
+
+                'between-lg': '3rem',
+                'between-md': '2rem',
+                'between-sm': '1rem',
             },
             colors: {
                 beige: '#F0CFB5',

@@ -1,7 +1,7 @@
 
 function HeroCourseDetailsSkeleton() {
     return (
-        <div className="bg-dark-blue py-4">
+        <div className="bg-shifter py-4">
             {/*HEADER AND DESCRIPTION*/}
             <section className="flex flex-col items-center gap-8 bg-white mx-6 px-horizontal-lg pb-12 pt-40 rounded-xl shadow-lg shadow-black/20">
                 {/* Title */}

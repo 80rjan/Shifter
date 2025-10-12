@@ -29,11 +29,13 @@ export function useEnrolledCourses() {
             return;
         }
         const storedCourses = sessionStorage.getItem("allCourses");
-        if (storedCourses) {
-            setAllCoursesStorage(JSON.parse(storedCourses));
-            setAllCourses(JSON.parse(storedCourses));
+        const parsedCourses = storedCourses ? JSON.parse(storedCourses) : null;
+        if (parsedCourses) {
+            setAllCoursesStorage(parsedCourses);
+            setAllCourses(parsedCourses);
             return;
         }
+
         fetchCoursesApi(accessToken || "")
             .then(courses => {
                 setAllCoursesStorage(courses);

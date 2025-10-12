@@ -1,7 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext.tsx";
-import {getUserApi} from "./userApi.ts";
+import {oAuthLoginApi} from "./authApi.ts";
 
 export default function OAuth2RedirectHandler() {
     const navigate = useNavigate();
@@ -15,12 +15,12 @@ export default function OAuth2RedirectHandler() {
 
         if (token) {
             if (login) {
-                getUserApi(token)
-                    .then(user => {
-                        setUser(user);
+                oAuthLoginApi(token)
+                    .then(data => {
                         setAuthChecked(true);
-                        setAccessToken(token);
-                        navigate("/", { replace: true }); // Use replace to avoid adding to history
+                        setUser(data.user);
+                        setAccessToken(data.accessToken);
+                        navigate("/", { replace: true }); // Using replace to avoid adding to history
                     })
                     .catch(err => console.log("Cannot fetch user: ", err));
             } else {
