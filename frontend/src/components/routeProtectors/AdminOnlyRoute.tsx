@@ -1,9 +1,11 @@
 import type {JSX} from "react";
 import {useAuthContext} from "../../context/AuthContext.tsx";
 import {Navigate} from "react-router-dom";
+import {useUserContext} from "../../context/UserContext.tsx";
 
 const AdminOnlyRoute = ({children}: { children: JSX.Element }) => {
-    const {user, authChecked} = useAuthContext();
+    const {authChecked} = useAuthContext();
+    const { user } = useUserContext();
 
     if (!authChecked) {
         return null;

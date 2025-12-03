@@ -1,0 +1,40 @@
+{
+  "myProfile": {
+    "title": "My Profile",
+    "fields": {
+      "name": "Full Name",
+      "workPosition": "Work Position",
+      "companySize": "Select Company Size"
+    },
+    "fieldLabels": {
+      "name": "Name",
+      "workPosition": "Work Position",
+      "companySize": "Company Size"
+    },
+    "saveChanges": "Save Changes",
+    "saving": "Saving..."
+  },
+  "companySizeOptions": {
+    "freelance": "Freelance",
+    "micro": "Micro",
+    "small": "Small",
+    "medium": "Medium",
+    "midMarket": "Mid Market",
+    "enterprise": "Enterprise",
+    "other": "Other"
+  },
+  "skillsGained": {
+    "title": "Skills Gained"
+  },
+  "interests": {
+    "title": "Interests"
+  },
+  "logout": "Log Out",
+  "modal": {
+    "chooseTopics": "Choose Topics You’re Interested In"
+  },
+  "successfulUpdate": "You’ve successfully updated your profile!",
+  "error": {
+    "selectAtLeastOne": "Help us tailor your experience — please select at least one option"
+  }
+}

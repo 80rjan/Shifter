@@ -1,15 +1,16 @@
 import {useEnrolledCourses} from "../hooks/useEnrolledCourses.tsx";
 import {useState} from "react";
-import {useAuthContext} from "../context/AuthContext.tsx";
 import CourseCardLearnDashboard from "../components/CourseCardLearnDashboard.tsx";
 import CourseCardEnrolledSkeleton from "../components/skeletons/CourseCardEnrolledSkeleton.tsx";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import ShifterArrow from "../../public/Shifter-Arrow-White.png";
+import {useUserContext} from "../context/UserContext.tsx";
+import {useTranslation} from "react-i18next";
 
 function Learn() {
     const [selectedTab, setSelectedTab] = useState("all");
-    const {user} = useAuthContext();
+    const {user} = useUserContext();
     const {
         allCourses,
         enrolledCourses,
@@ -17,13 +18,16 @@ function Learn() {
         loading
     } = useEnrolledCourses();
 
+    const {t} = useTranslation("learn")
+
     function renderContent() {
         const noCoursesMessage = {
-            all: "You haven't enrolled in any courses yet!",
-            active: "No active courses — time to start learning!",
-            completed: "Nothing completed yet — keep going!",
-            favorites: "You have no favorites — find courses you love!"
+            all: t("messages.all"),
+            active: t("messages.active"),
+            completed: t("messages.completed"),
+            favorites: t("messages.favorites")
         };
+
 
         switch (selectedTab) {
             case "all":
@@ -50,20 +54,17 @@ function Learn() {
                 return (
                     <>
                         {
-                            enrolledCourses.length > 0 ?
-                                enrolledCourses.map((course, index) => {
-                                    if (course.isFinished) return null;
-                                    return (
-                                        <CourseCardLearnDashboard
-                                            course={course}
-                                            key={index}
-                                            markCourseAsRated={(rating) => setEnrolledCourses([
-                                                ...enrolledCourses.filter(c => c.id !== course.id),
-                                                {...course, rating: rating}
-                                            ])}
-                                        />
-                                    )
-                                }) : (
+                            enrolledCourses.filter(course => !course.isFinished).length > 0 ?
+                                enrolledCourses.map((course, index) => (
+                                    <CourseCardLearnDashboard
+                                        course={course}
+                                        key={index}
+                                        markCourseAsRated={(rating) => setEnrolledCourses([
+                                            ...enrolledCourses.filter(c => c.id !== course.id),
+                                            {...course, rating: rating}
+                                        ])}
+                                    />
+                                )) : (
                                     <h2 className="text-2xl font-semibold text-black/60 text-left whitespace-nowrap">{noCoursesMessage.active}</h2>
                                 )
                         }
@@ -91,6 +92,7 @@ function Learn() {
                     </>
                 );
             case "favorites":
+                // TODO: check the markCourseAsRated for favorite courses, and check the whole favorite courses flow
                 return (
                     <>
                         {
@@ -123,15 +125,15 @@ function Learn() {
                     pointer-events-none w-60 h-auto"
                     />
 
-                    <h1 className="text-4xl font-semibold">My Learning</h1>
+                    <h1 className="text-4xl font-semibold">{t("title")}</h1>
                     <ul>
-                        <ListTab name={"All"} isSelected={selectedTab === "all"}
+                        <ListTab name={t("tabs.all")} isSelected={selectedTab === "all"}
                                  setSelectedTab={() => setSelectedTab("all")}/>
-                        <ListTab name={"Active"} isSelected={selectedTab === "active"}
+                        <ListTab name={t("tabs.active")} isSelected={selectedTab === "active"}
                                  setSelectedTab={() => setSelectedTab("active")}/>
-                        <ListTab name={"Completed"} isSelected={selectedTab === "completed"}
+                        <ListTab name={t("tabs.completed")} isSelected={selectedTab === "completed"}
                                  setSelectedTab={() => setSelectedTab("completed")}/>
-                        <ListTab name={"Favorites"} isSelected={selectedTab === "favorites"}
+                        <ListTab name={t("tabs.favorites")} isSelected={selectedTab === "favorites"}
                                  setSelectedTab={() => setSelectedTab("favorites")}/>
                     </ul>
                 </section>

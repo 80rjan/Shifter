@@ -26,6 +26,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     Review findReviewByEnrollment(Long enrollmentId);
 
     @Query("select case when count(r) > 0 then true else false end" +
-            " from Review r where r.enrollment.payment.user.id = :userId and r.enrollment.course.id = :userId")
+            " from Review r where r.enrollment.payment.user.id = :userId and r.enrollment.course.id = :courseId")
     Boolean findHasBeenReviewedByUser(@Param("userId") Long userId, @Param("courseId") Long courseId);
 }

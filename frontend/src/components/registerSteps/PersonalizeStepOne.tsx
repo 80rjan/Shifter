@@ -3,6 +3,7 @@ import type {UserPersonalization} from "../../models/javaObjects/UserPersonaliza
 import PersonalizationInput from "../inputs/PersonalizationInput.tsx";
 import PersonalizationSelect from "../inputs/PersonalizationSelect.tsx";
 import {useTranslation} from "react-i18next";
+import {companySizeOptions} from "../../models/types/CompanySize.tsx";
 
 function PersonalizeStepOne({setUser, user, setError}: {
     setUser: React.Dispatch<React.SetStateAction<UserPersonalization>>,
@@ -10,14 +11,15 @@ function PersonalizeStepOne({setUser, user, setError}: {
     setError: React.Dispatch<React.SetStateAction<string>>,
 }) {
     const { t } = useTranslation("personalize");
+    const { i18n } = useTranslation();
 
     useEffect(() => {
         if (!user.name || !user.workPosition || !user.companySize) {
-            setError("Please ensure all inputs are completed.");
+            setError(t("stepOne.errorIncomplete"));
         } else {
             setError("");
         }
-    }, [user.name, user.workPosition, user.companySize]);
+    }, [user.name, user.workPosition, user.companySize, i18n.language]);
 
     return (
         <section
@@ -44,7 +46,8 @@ function PersonalizeStepOne({setUser, user, setError}: {
                 label={t("stepOne.companySize")}
                 name={"companySize"}
                 id={"company-size"}
-                options={t("stepOne.companySizeOptions") as unknown as string[]}
+                optionsShow={t("stepOne.companySizeOptions", {returnObjects: true}) as string[]}
+                options={companySizeOptions}
                 setUser={setUser}
                 user={user}
             />

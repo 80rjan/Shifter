@@ -4,41 +4,45 @@ import ShifterLogo from "../../public/Shifter-S2W-Transparent.png";
 import { useAuthContext } from "../context/AuthContext.tsx";
 import LinkedIn from "../assets/icons/LinkedIn.tsx";
 import Instagram from "../assets/icons/Instagram.tsx";
-import NavbarLink from "../components/NavbarLink.tsx";
-import { Link } from "react-router-dom";
+import NavbarLink from "../components/links/NavbarLink.tsx";
 import { useTranslation } from "react-i18next";
+import {useUserContext} from "../context/UserContext.tsx";
+import {LocalizedLink} from "../components/links/LocalizedLink.tsx";
+import {ArrowRight} from "lucide-react";
 
 function FooterNew() {
-    const { user, logout } = useAuthContext();
+    const { logout } = useAuthContext();
+    const { user } = useUserContext();
     const { t } = useTranslation("footer");
 
     return (
-        <section className="relative flex flex-col gap-24 pt-top-nav-md overflow-clip bg-beige">
+        <section className="relative flex flex-col gap-24 pt-top-nav-lg overflow-clip bg-beige">
 
             {/* background circles */}
             <div className="absolute -bottom-150 -left-80 w-320 aspect-square bg-[radial-gradient(circle_at_center,rgba(0,140,194,0.4),transparent_70%)]"></div>
             <div className="absolute -bottom-150 -right-80 w-320 aspect-square bg-[radial-gradient(circle_at_center,rgba(0,140,194,0.4),transparent_70%)]"></div>
 
             {/* CTA */}
-            <section className="flex flex-col gap-4 z-1 text-black-text">
-                <h2 className="text-6xl font-semibold">
+            <section className="flex flex-col gap-6 z-1 text-black-text">
+                <h2 className="text-5xl font-semibold leading-tight">
                     {t("cta.title.part1")} <br /> {t("cta.title.part2")}
                 </h2>
-                <p className="font-light">
-                    {t("cta.subtitle.line1")} <br />
-                    {t("cta.subtitle.line2")}
+                <p className="text-lg font-light">
+                    {t("cta.subtitle")}
                 </p>
-                <div className="mt-12">
-                    <Link
+                <div className="mt-12 w-full flex justify-center">
+                    <LocalizedLink
                         to={user?.hasUsedFreeConsultation ? "/contact" : "/free-consultation"}
                         className="hover:shadow-shifter/60 transition-all duration-200 ease-in-out cursor-pointer
-                        shadow-md shadow-shifter/40 font-bold border-2 border-white/20
-                        bg-shifter py-3 px-12 rounded-full text-white "
+                        flex items-center gap-2 w-fit shadow-md shadow-shifter/40 font-bold border-2 border-white/20
+                        bg-shifter py-3 px-8 rounded-full text-white group"
                     >
                         {user?.hasUsedFreeConsultation
                             ? t("cta.button.contact")
                             : t("cta.button.consultation")}
-                    </Link>
+                        <ArrowRight size={20} strokeWidth={1.5}
+                                    className="group-hover:translate-x-1 transition-all duration-250 ease-in-out"/>
+                    </LocalizedLink>
                 </div>
             </section>
 
@@ -49,16 +53,19 @@ function FooterNew() {
 
                     <div className="flex justify-between">
                         <section className="flex flex-col justify-center gap-12 max-w-1/4">
-                            <img
-                                src={ShifterLogo}
-                                alt="Shifter - Business Consulting, Mentoring & Online Courses Logo"
-                                className="w-40"
-                            />
+                            <LocalizedLink to="/">
+                                <img
+                                    src={ShifterLogo}
+                                    alt="Shifter - Business Consulting, Mentoring & Online Courses Logo"
+                                    className="w-40"
+                                />
+                            </LocalizedLink>
 
                             <div className="flex flex-col items-start text-xs">
-                                <p>contact@shift-er.com</p>
+                                <p>contact@mail.shift-er.com</p>
                                 <div className="flex gap-2 items-center">
                                     {t("social.visit")}:
+                                    {/* TODO: change these footer links to original links*/}
                                     <a
                                         href="http://www.google.com"
                                         target="_blank"
@@ -119,16 +126,16 @@ function FooterNew() {
                                 </section>
 
                                 {/* DASHBOARD */}
-                                {user && (
-                                    <section className="flex flex-col gap-1 text-left font-light">
-                                        <h3 className="font-bold text-lg mb-4">{t("sections.dashboard.title")}</h3>
-                                        <NavbarLink to="/profile" label={t("sections.dashboard.items.profile")} classNameLine="border-black-text" />
-                                        <NavbarLink to="/learn" label={t("sections.dashboard.items.learning")} classNameLine="border-black-text" />
-                                    </section>
-                                )}
+                                {/*{user && (*/}
+                                {/*    <section className="flex flex-col gap-1 text-left font-light">*/}
+                                {/*        <h3 className="font-bold text-lg mb-4">{t("sections.dashboard.title")}</h3>*/}
+                                {/*        <NavbarLink to="/profile" label={t("sections.dashboard.items.profile")} classNameLine="border-black-text" />*/}
+                                {/*        <NavbarLink to="/learn" label={t("sections.dashboard.items.learning")} classNameLine="border-black-text" />*/}
+                                {/*    </section>*/}
+                                {/*)}*/}
 
                                 {/* CONTACT */}
-                                <section className="flex flex-col gap-2 text-left font-light">
+                                <section className="flex flex-col gap-1 text-left font-light">
                                     <h3 className="font-bold text-lg mb-4">{t("sections.contact.title")}</h3>
                                     <NavbarLink to="/contact" label={t("sections.contact.items.contact")} classNameLine="border-black-text" />
                                 </section>

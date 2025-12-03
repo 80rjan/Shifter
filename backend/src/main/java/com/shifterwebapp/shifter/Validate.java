@@ -1,16 +1,23 @@
 package com.shifterwebapp.shifter;
 
+import com.shifterwebapp.shifter.attribute.repository.AttributeRepository;
 import com.shifterwebapp.shifter.auth.CustomAuthDetails;
-import com.shifterwebapp.shifter.course.CourseRepository;
+import com.shifterwebapp.shifter.course.repository.CourseRepository;
+import com.shifterwebapp.shifter.courselecture.repository.CourseLectureRepository;
+import com.shifterwebapp.shifter.enums.Language;
 import com.shifterwebapp.shifter.exception.BadRequestException;
 import com.shifterwebapp.shifter.exception.ResourceNotFoundException;
+import com.shifterwebapp.shifter.exception.TranslationAlreadyExistsException;
 import com.shifterwebapp.shifter.exception.UnauthorizedException;
 import com.shifterwebapp.shifter.payment.PaymentRepository;
-import com.shifterwebapp.shifter.user.UserRepository;
+import com.shifterwebapp.shifter.user.User;
+import com.shifterwebapp.shifter.user.repository.UserRepository;
 import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgressRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 @Component
 @RequiredArgsConstructor
@@ -20,6 +27,8 @@ public class Validate {
     private final CourseRepository courseRepository;
     private final UserCourseProgressRepository userCourseProgressRepository;
     private final PaymentRepository paymentRepository;
+    private final AttributeRepository attributeRepository;
+    private final CourseLectureRepository courseLectureRepository;
 
     public void validateUserExists(Long userId) {
         if (!userRepository.existsById(userId)) {
@@ -64,10 +73,22 @@ public class Validate {
         }
     }
 
+    public void validateUserProfileNotComplete(User user) {
+        if (user.getIsProfileComplete())
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "User already completed profile and does not need verification token.");
+    }
+
 
     public void validateCourseExists(Long courseId) {
         if (!courseRepository.existsById(courseId)) {
             throw new ResourceNotFoundException("Course with ID " + courseId + " not found!");
+        }
+    }
+
+    public void validateLectureExists(Long lectureId) {
+        if (!courseLectureRepository.existsById(lectureId)) {
+            throw new ResourceNotFoundException("Lecture with ID " + lectureId + " not found!");
         }
     }
 
@@ -86,6 +107,18 @@ public class Validate {
     public void validateEnrollmentExists(Long enrollmentId) {
         if (!paymentRepository.existsById(enrollmentId)) {
             throw new ResourceNotFoundException("Enrollment with ID " + enrollmentId + " not found!");
+        }
+    }
+
+    public void validateAttributeExists(Long attributeId) {
+        if (!attributeRepository.existsById(attributeId)) {
+            throw new ResourceNotFoundException("Attribute with ID " + attributeId + " not found!");
+        }
+    }
+
+    public void validateCourseTranslation(Long courseId, Language language) {
+        if (courseRepository.courseHasBeenTranslated(courseId, language)) {
+            throw new TranslationAlreadyExistsException("Course with id " + courseId + " already has a translation for language " + language);
         }
     }
 }

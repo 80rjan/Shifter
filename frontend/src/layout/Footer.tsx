@@ -4,10 +4,12 @@ import ShifterLogo from "../../public/Shifter-S2W-White-Transparent.png";
 import {useAuthContext} from "../context/AuthContext.tsx";
 import LinkedIn from "../assets/icons/LinkedIn.tsx";
 import Instagram from "../assets/icons/Instagram.tsx";
-import NavbarLink from "../components/NavbarLink.tsx";
+import NavbarLink from "../components/links/NavbarLink.tsx";
+import {useUserContext} from "../context/UserContext.tsx";
 
 function Footer() {
-    const {user, logout} = useAuthContext();
+    const {logout} = useAuthContext();
+    const { user } = useUserContext();
 
     return (
         <footer className="bg-dark-blue border-t-4 border-white/20">
@@ -81,7 +83,7 @@ function Footer() {
 
                             <NavbarLink to={"/contact"} label={"Contact Us"}/>
                             <hr className="border-t-1 border-white/40 rounded-full" />
-                            <p>contact@shifter.com</p>
+                            <p>contact@mail.shifter.com</p>
                             <div className="flex gap-2 items-center">
                                 Visit us at:
                                 <a

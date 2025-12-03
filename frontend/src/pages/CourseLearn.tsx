@@ -1,26 +1,25 @@
-import {Link, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {useAuthContext} from "../context/AuthContext.tsx";
 import CourseContentSideNav from "../components/learn/CourseContentSideNav.tsx";
 import CourseLearnSkeleton from "../components/skeletons/CourseLearnSkeleton.tsx";
 import {ArrowLeft, MoveLeft, MoveRight, CheckCheck} from "lucide-react";
 import TextWithUnderline from "../components/TextWithUnderline.tsx";
 import {useCourseLearn} from "../hooks/useCourseLearn.tsx";
-import {type JSX, useEffect, useRef, useState} from "react";
+import {type JSX, useState} from "react";
 import StarFilled from "../assets/icons/StarFilled.tsx";
 import NavbarLearn from "../layout/NavbarLearn.tsx";
 import ModalReviewCourse from "../components/ModalReviewCourse.tsx";
 import Certificate from "../assets/icons/Certificate.tsx";
+import {LocalizedLink} from "../components/links/LocalizedLink.tsx";
+import NavbarLearnSkeleton from "../components/skeletons/NavbarLearnSkeleton.tsx";
 
 function CourseLearn() {
     const {courseId} = useParams<{ courseId: string }>();
     const {accessToken} = useAuthContext();
-    const [showSideNav, setShowSideNav] = useState(true);
-    const [showReviewModal, setShowReviewModal] = useState(false);
     const {
         activeLecture,
         setActiveLecture,
         course,
-        setCourse,
         loading,
         videoUrl,
         isDownloading,
@@ -30,47 +29,34 @@ function CourseLearn() {
         isLastLectureFinished,
         setIsLastLectureFinished,
         courseFinishedPunchlines,
-        progressPercentage
+        progressPercentage,
+        markCourseAsRated,
+        showReviewModal,
+        setShowReviewModal,
+        showSideNav,
+        setShowSideNav,
+        isBtnHovered,
+        setIsBtnHovered,
+        spanWidth,
+        spanRef
     } = useCourseLearn(Number(courseId), accessToken || "");
-    const spanRef = useRef<HTMLSpanElement>(null);
-    const [spanWidth, setSpanWidth] = useState(0);
-    const [isBtnHovered, setIsBtnHovered] = useState(false);
 
     const firstLectureId = course?.courseContents[0].courseLectures[0].id;
     const allLectures = course?.courseContents.flatMap(content => content.courseLectures);
     const lastLectureId = allLectures ? allLectures[allLectures.length - 1].id : undefined;
 
-
-    useEffect(() => {
-        if (spanRef.current) {
-            setSpanWidth(spanRef.current.offsetWidth);
-        }
-    }, [showSideNav]);
-
-    useEffect(() => {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth",
-        });
-    }, [activeLecture]);
-
-    const markCourseAsRated = (newRating: number) => {
-        if (!course) return;
-        setCourse({...course, rating: newRating})
-    }
-
     if (loading) {
         return (
             <>
-                <NavbarLearn courseRating={0} markCourseAsRated={markCourseAsRated}/>
-                <CourseLearnSkeleton/>
+                <NavbarLearnSkeleton />
+                <CourseLearnSkeleton />
             </>
         );
     }
 
     return (
         <>
-            <NavbarLearn courseRating={course?.rating} markCourseAsRated={markCourseAsRated}/>
+            <NavbarLearn course={course!} markCourseAsRated={markCourseAsRated} />
             <main className="flex overflow-x-clip">
                 {
                     isLastLectureFinished ? (
@@ -304,10 +290,10 @@ function LastLectureFinished({title, onClick, btnText, btnShow, downloadCertific
                         </button>
                     )
                 }
-                <Link to="/learn"
+                <LocalizedLink to="/learn"
                       className="text-lg font-bold text-shifter underline hover:text-shifter/60">
                     Exit from Course
-                </Link>
+                </LocalizedLink>
             </div>
         </>
     )

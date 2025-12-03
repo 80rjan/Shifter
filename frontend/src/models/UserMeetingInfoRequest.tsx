@@ -1,6 +1,6 @@
 export interface UserMeetingInfoRequest {
+    basicInfo: string;
     aboutCompany: string;
     challenges: string;
-    expectations: string;
     otherInfo: string;
 }

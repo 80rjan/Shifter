@@ -1,12 +1,10 @@
 package com.shifterwebapp.shifter.auth;
 
 import com.shifterwebapp.shifter.Validate;
-import com.shifterwebapp.shifter.user.UserDto;
 import com.shifterwebapp.shifter.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -24,17 +22,10 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public void register(@RequestBody Map<String, String> body) {
+    public void register(@RequestBody Map<String, String> body, HttpServletResponse response) throws IOException {
         String email = body.get("email");
         String password = body.get("password");
-        authService.register(email, password);
-    }
-
-    @PostMapping("/verify")
-    public ResponseEntity<String> verify(@RequestBody Map<String, String> body) {
-        String token = body.get("token");
-        String userEmail = authService.verify(token);
-        return ResponseEntity.ok(userEmail);
+        authService.register(email, password, response);
     }
 
     @PostMapping("/personalize")

@@ -1,6 +1,9 @@
 package com.shifterwebapp.shifter.auth;
 
+import com.shifterwebapp.shifter.attribute.Attribute;
+import com.shifterwebapp.shifter.attribute.dto.AttributeDto;
 import com.shifterwebapp.shifter.enums.CompanySize;
+import com.shifterwebapp.shifter.enums.Language;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -18,7 +21,7 @@ public class UserPersonalizationDto {
 
     private String workPosition;
 
-    private List<String> interests;
+    private Language language;
 
-    private List<String> desiredSkills;
+    private List<Long> attributeIdList;
 }

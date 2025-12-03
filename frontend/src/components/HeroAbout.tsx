@@ -1,8 +1,9 @@
 import { ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
 import CountUp from "react-countup";
+import {LocalizedLink} from "./links/LocalizedLink.tsx";
 
 function HeroAbout() {
+
     return (
         <section className="grid grid-cols-2 gap-x-20 px-horizontal-md py-vertical-lg pt-top-nav-md rounded-3xl bg-dark-blue/5
                 shadow-md shadow-black/20">
@@ -19,11 +20,11 @@ function HeroAbout() {
                         with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
                         publishing software like Aldus PageMaker including versions of Lorem Ipsum.
                     </p>
-                    <Link to={"/free-consultation"}
+                    <LocalizedLink to={"/free-consultation"}
                         className="flex gap-4 items-center text-white bg-shifter px-8 py-2 w-fit rounded-sm">
                         Schedule a Free Consultation
                         <ArrowRight size={20} strokeWidth={1.5} />
-                    </Link>
+                    </LocalizedLink>
                 </div>
 
                 <hr className="border-t-2 border-black/20 w-full" />

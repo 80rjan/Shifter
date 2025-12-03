@@ -2,10 +2,12 @@ import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext.tsx";
 import {oAuthLoginApi} from "./authApi.ts";
+import {useUserContext} from "../context/UserContext.tsx";
 
 export default function OAuth2RedirectHandler() {
     const navigate = useNavigate();
-    const { setAccessToken, setUser, setAuthChecked } = useAuthContext();
+    const { setAccessToken, setAuthChecked } = useAuthContext();
+    const { loadUserProfile } = useUserContext();
     const location = useLocation();
 
     useEffect(() => {
@@ -16,13 +18,15 @@ export default function OAuth2RedirectHandler() {
         if (token) {
             if (login) {
                 oAuthLoginApi(token)
-                    .then(data => {
-                        setAuthChecked(true);
-                        setUser(data.user);
+                    .then(async data => {
+                        // TODO: check if because of this i dont need to call refresh token func
                         setAccessToken(data.accessToken);
-                        navigate("/", { replace: true }); // Using replace to avoid adding to history
+                        await loadUserProfile(data.accessToken);
+
+                        setAuthChecked(true);
+                        navigate("/", { replace: true });
                     })
-                    .catch(err => console.log("Cannot fetch user: ", err));
+                    .catch(err => console.error("Cannot fetch user: ", err));
             } else {
                 navigate(`/welcome?token=${token}`, { replace: true });
             }

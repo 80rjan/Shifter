@@ -1,18 +1,28 @@
-import {useEffect, useState} from "react";
-import type {CourseFull} from "../models/javaObjects/CourseFull.tsx";
-import type {CourseLectureFull} from "../models/javaObjects/CourseLectureFull.tsx";
-import {fetchCourseCertificateApi, fetchCourseFullApi} from "../api/courseApi.ts";
+import {useEffect, useRef, useState} from "react";
+import type {CourseLearn} from "../models/javaObjects/CourseLearn.tsx";
+import type {CourseLectureLearn} from "../models/javaObjects/CourseLectureLearn.tsx";
+import {fetchCourseCertificateApi, fetchEnrolledCourseLearnApi} from "../api/courseApi.ts";
 import {fetchPresignedUrlApi} from "../api/s3Api.ts";
 import {completeLectureApi, uncompleteLectureApi} from "../api/userCourseProgressApi.ts";
+import type {Language} from "../models/types/Language.tsx";
+import {useTranslation} from "react-i18next";
+import {useUserContext} from "../context/UserContext.tsx";
 
 export function useCourseLearn(courseId: number, accessToken: string) {
-    const [course, setCourse] = useState<CourseFull | null>(null);
-    const [activeLecture, setActiveLecture] = useState<CourseLectureFull | null>(null);
+    const [course, setCourse] = useState<CourseLearn | null>(null);
+    const [activeLecture, setActiveLecture] = useState<CourseLectureLearn | null>(null);
     const [loading, setLoading] = useState(true);
     const [videoUrl, setVideoUrl] = useState<string>("");
     const [isDownloading, setIsDownloading] = useState(false);
     const [isLastLectureFinished, setIsLastLectureFinished] = useState(false);
     const [progressPercentage, setProgressPercentage] = useState(0);
+    const spanRef = useRef<HTMLSpanElement>(null);
+    const [spanWidth, setSpanWidth] = useState(0);
+    const [isBtnHovered, setIsBtnHovered] = useState(false);
+    const [showSideNav, setShowSideNav] = useState(true);
+    const [showReviewModal, setShowReviewModal] = useState(false);
+    const { loadUserProfile } = useUserContext();
+    const { i18n } = useTranslation();
 
     const courseFinishedPunchlines = [
         "🎓 Course Completed - The Future is Yours to Shape!",
@@ -56,7 +66,7 @@ export function useCourseLearn(courseId: number, accessToken: string) {
 
     useEffect(() => {
         setLoading(true);
-        fetchCourseFullApi(courseId, accessToken)
+        fetchEnrolledCourseLearnApi(courseId, accessToken, i18n.language as Language)
             .then(resCourse => {
                 setCourse(resCourse);
                 const firstUncompletedLecture = resCourse?.courseContents
@@ -81,9 +91,9 @@ export function useCourseLearn(courseId: number, accessToken: string) {
 
     const getPresignedUrl = async (expirySeconds: number): Promise<string | undefined> => {
         if (!activeLecture) return undefined;
-        const encodedFileName = encodeURIComponent(activeLecture.contentFileName);
+
         try {
-            const url = await fetchPresignedUrlApi(accessToken, courseId, activeLecture.id, encodedFileName, expirySeconds);
+            const url = await fetchPresignedUrlApi(accessToken, activeLecture.id, i18n.language as Language, expirySeconds);
             return url;
         } catch (err) {
             console.error("Error fetching presigned URL: ", err);
@@ -164,6 +174,7 @@ export function useCourseLearn(courseId: number, accessToken: string) {
         const oldCourse = structuredClone(course);
         const updatedCourse = {
             ...course,
+            isFinished: course.isFinished,
             courseContents: course.courseContents.map(content => ({
                 ...content,
                 courseLectures: content.courseLectures.map(lecture =>
@@ -181,7 +192,26 @@ export function useCourseLearn(courseId: number, accessToken: string) {
             })),
         };
 
-        setCourse(updatedCourse);
+        let hasFinishedCourse = course.isFinished;
+        if (!course.isFinished) {
+            hasFinishedCourse = updatedCourse.courseContents
+                .flatMap(content => content.courseLectures)
+                .flatMap(lecture => lecture.userCourseProgress)
+                .filter(progress => !progress.completed)
+                .length === 0;
+        }
+
+        setCourse({
+            ...updatedCourse,
+            isFinished: hasFinishedCourse
+        });
+
+        if (hasFinishedCourse) {
+            loadUserProfile(accessToken)
+                .catch(err => {
+                    console.error("Error updating user skills after course completion: ", err);
+                });
+        }
 
         const apiCall = isComplete
             ? completeLectureApi(progressId, accessToken)
@@ -193,6 +223,24 @@ export function useCourseLearn(courseId: number, accessToken: string) {
                 setCourse(oldCourse);
             });
     };
+
+    useEffect(() => {
+        if (spanRef.current) {
+            setSpanWidth(spanRef.current.offsetWidth);
+        }
+    }, [showSideNav]);
+
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
+    }, [activeLecture]);
+
+    const markCourseAsRated = (newRating: number) => {
+        if (!course) return;
+        setCourse({...course, rating: newRating})
+    }
 
     return {
         course,
@@ -210,6 +258,15 @@ export function useCourseLearn(courseId: number, accessToken: string) {
         isLastLectureFinished,
         setIsLastLectureFinished,
         courseFinishedPunchlines,
-        progressPercentage
+        progressPercentage,
+        markCourseAsRated,
+        showReviewModal,
+        setShowReviewModal,
+        showSideNav,
+        setShowSideNav,
+        isBtnHovered,
+        setIsBtnHovered,
+        spanWidth,
+        spanRef
     };
 }

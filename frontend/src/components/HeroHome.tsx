@@ -1,12 +1,11 @@
-
-import {Link} from 'react-router-dom';
 import Silk from "../assets/animations/Silk.tsx";
 import CountUp from "react-countup";
-import {useAuthContext} from "../context/AuthContext.tsx";
 import {useTranslation} from "react-i18next";
+import {useUserContext} from "../context/UserContext.tsx";
+import {LocalizedLink} from "./links/LocalizedLink.tsx";
 
 function HeroHome() {
-    const {user} = useAuthContext()
+    const {user} = useUserContext()
     const { t } = useTranslation("home");
 
     return (
@@ -29,23 +28,23 @@ function HeroHome() {
                         bg-black/10 rounded-full py-1 px-8 font-medium text-sm text-white shadow-sm">
                             {t("hero.label")}
                         </div>
-                        <h1 className="text-7xl font-semibold text-white max-w-3/4">
+                        <h1 className="text-6xl font-bold text-white-text max-w-3/4">
                             {t("hero.title")}
                         </h1>
-                        <p className="text-xl font-light text-white max-w-3/4">
+                        <p className="text-xl font-light text-white-text max-w-3/4">
                             {t("hero.description")}
                         </p>
                     </div>
-                    <Link
+                    <LocalizedLink
                         to={user?.hasUsedFreeConsultation ? "/contact" : "/free-consultation"}
-                        className="hover:shadow-white/60 transition-all duration-200 ease-in-out cursor-pointer
+                        className="hover:shadow-white/60 transition-all duration-300 ease-in-out cursor-pointer
                         rounded-full text-black/90 px-12 py-3 bg-white font-bold border-2 border-black/20
                         w-fit shadow-md shadow-white/40">
                         {user?.hasUsedFreeConsultation ?
                             t("hero.cta.contact") :
                             t("hero.cta.freeConsultation")
                         }
-                    </Link>
+                    </LocalizedLink>
                 </div>
             </div>
 

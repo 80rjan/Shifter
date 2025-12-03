@@ -1,7 +1,6 @@
 package com.shifterwebapp.shifter.course.dto;
 
-import com.shifterwebapp.shifter.coursecontent.CourseContentDtoPreview;
-import com.shifterwebapp.shifter.enums.Difficulty;
+import com.shifterwebapp.shifter.coursecontent.dto.CourseContentDtoPreview;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

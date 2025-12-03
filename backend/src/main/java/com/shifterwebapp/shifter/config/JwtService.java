@@ -1,7 +1,7 @@
 package com.shifterwebapp.shifter.config;
 
 import com.shifterwebapp.shifter.user.User;
-import com.shifterwebapp.shifter.user.UserRepository;
+import com.shifterwebapp.shifter.user.repository.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.Claims;

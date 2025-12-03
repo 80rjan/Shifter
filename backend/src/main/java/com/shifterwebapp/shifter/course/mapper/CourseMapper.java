@@ -1,51 +1,63 @@
 package com.shifterwebapp.shifter.course.mapper;
 
 import com.shifterwebapp.shifter.course.Course;
-import com.shifterwebapp.shifter.course.dto.CourseDtoDetail;
-import com.shifterwebapp.shifter.course.dto.CourseDtoFull;
-import com.shifterwebapp.shifter.course.dto.CourseDtoPreview;
-import com.shifterwebapp.shifter.course.dto.CourseDtoPreviewEnrolled;
-import org.mapstruct.InheritInverseConfiguration;
-import org.mapstruct.Mapper;
+import com.shifterwebapp.shifter.course.CourseTranslate;
+import com.shifterwebapp.shifter.course.dto.*;
+import com.shifterwebapp.shifter.coursecontent.mapper.CourseContentMapper;
+import com.shifterwebapp.shifter.enums.Language;
+import org.mapstruct.*;
 
 import java.util.List;
+import java.util.Optional;
 
-@Mapper(componentModel = "spring")
-public interface CourseMapper {
+@Mapper(componentModel = "spring", uses = {CourseContentMapper.class})
+public abstract class CourseMapper {
+    public abstract CourseDtoPreview toDtoPreview(Course course, @Context Language lang);
 
-    // ---- Forward mappings ----
-    CourseDtoPreview toDtoPreview(Course course);
-    List<CourseDtoPreview> toDtoPreview(List<Course> courses);
+    public abstract List<CourseDtoPreview> toDtoPreview(List<Course> courses, @Context Language lang);
 
-    CourseDtoDetail toDtoDetail(Course course);
-    List<CourseDtoDetail> toDtoDetail(List<Course> courses);
+    public abstract CourseDtoDetail toDtoDetail(Course course, @Context Language lang);
 
-    CourseDtoPreviewEnrolled toDtoEnrolled(Course course);
-    List<CourseDtoPreviewEnrolled> toDtoEnrolled(List<Course> courses);
+    public abstract List<CourseDtoDetail> toDtoDetail(List<Course> courses, @Context Language lang);
 
-    CourseDtoFull toDtoFull(Course course);
-    List<CourseDtoFull> toDtoFull(List<Course> courses);
+    public abstract CourseDtoPreviewEnrolled toDtoPreviewEnrolled(Course course, @Context Language lang);
 
-    // ---- Inverse mappings (explicitly reference which to invert) ----
-    @InheritInverseConfiguration(name = "toDtoPreview")
-    Course toEntityPreview(CourseDtoPreview courseDto);
-    @InheritInverseConfiguration(name = "toDtoPreview")
-    List<Course> toEntityPreview(List<CourseDtoPreview> courseDtos);
+    public abstract List<CourseDtoPreviewEnrolled> toDtoPreviewEnrolled(List<Course> courses, @Context Language lang);
 
-    @InheritInverseConfiguration(name = "toDtoDetail")
-    Course toEntityDetail(CourseDtoDetail courseDto);
-    @InheritInverseConfiguration(name = "toDtoDetail")
-    List<Course> toEntityDetail(List<CourseDtoDetail> courseDtos);
+    public abstract CourseDtoLearn toDtoLearn(Course course, @Context Language lang);
 
-    @InheritInverseConfiguration(name = "toDtoEnrolled")
-    Course toEntityEnrolled(CourseDtoPreviewEnrolled courseDto);
-    @InheritInverseConfiguration(name = "toDtoEnrolled")
-    List<Course> toEntityEnrolled(List<CourseDtoPreviewEnrolled> courseDtos);
+    public abstract List<CourseDtoLearn> toDtoLearn(List<Course> courses, @Context Language lang);
 
-    @InheritInverseConfiguration(name = "toDtoFull")
-    Course toEntityFull(CourseDtoFull courseDto);
-    @InheritInverseConfiguration(name = "toDtoFull")
-    List<Course> toEntityFull(List<CourseDtoFull> courseDtos);
+    public abstract CourseDtoFull toDtoFull(Course course, @Context Language lang);
+
+    public abstract List<CourseDtoFull> toDtoFull(List<Course> courses, @Context Language lang);
+
+    @AfterMapping
+    protected void applyTranslation(Course course, @MappingTarget Object dto, @Context Language lang) {
+        Optional<CourseTranslate> translationOpt = course.getCourseTranslates().stream().filter(t -> t.getLanguage().equals(lang)).findFirst();
+        if (translationOpt.isEmpty()) {
+            return;
+        }
+        CourseTranslate t = translationOpt.get();
+        if (dto instanceof CourseDtoPreview d) {
+            d.setTitleShort(t.getTitleShort());
+            d.setTitle(t.getTitle());
+        }
+        if (dto instanceof CourseDtoDetail d) {
+            d.setTitleShort(t.getTitleShort());
+            d.setTitle(t.getTitle());
+            d.setDescriptionShort(t.getDescriptionShort());
+            d.setDescription(t.getDescription());
+            d.setDescriptionLong(t.getDescriptionLong());
+            d.setWhatWillBeLearned(t.getWhatWillBeLearned());
+        }
+        if (dto instanceof CourseDtoPreviewEnrolled d) {
+            d.setTitleShort(t.getTitleShort());
+            d.setTitle(t.getTitle());
+        }
+        if (dto instanceof CourseDtoLearn d) {
+            d.setTitleShort(t.getTitleShort());
+            d.setTitle(t.getTitle());
+        }
+    }
 }
-
-

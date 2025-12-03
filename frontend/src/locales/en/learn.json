@@ -1,0 +1,15 @@
+{
+  "title": "My Learning",
+  "tabs": {
+    "all": "All",
+    "active": "Active",
+    "completed": "Completed",
+    "favorites": "Favorites"
+  },
+  "messages": {
+    "all": "You haven't enrolled in any courses yet!",
+    "active": "No active courses — time to start learning!",
+    "completed": "Nothing completed yet — keep going!",
+    "favorites": "You have no favorites — find courses you love!"
+  }
+}

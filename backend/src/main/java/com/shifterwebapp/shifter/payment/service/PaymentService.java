@@ -2,8 +2,7 @@ package com.shifterwebapp.shifter.payment.service;
 
 import com.shifterwebapp.shifter.Validate;
 import com.shifterwebapp.shifter.course.Course;
-import com.shifterwebapp.shifter.course.CourseRepository;
-import com.shifterwebapp.shifter.enrollment.Enrollment;
+import com.shifterwebapp.shifter.course.repository.CourseRepository;
 import com.shifterwebapp.shifter.enrollment.EnrollmentRepository;
 import com.shifterwebapp.shifter.payment.Payment;
 import com.shifterwebapp.shifter.payment.PaymentDto;
@@ -12,14 +11,12 @@ import com.shifterwebapp.shifter.payment.PaymentRepository;
 import com.shifterwebapp.shifter.enums.PaymentMethod;
 import com.shifterwebapp.shifter.enums.PaymentStatus;
 import com.shifterwebapp.shifter.user.User;
-import com.shifterwebapp.shifter.user.UserRepository;
+import com.shifterwebapp.shifter.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor

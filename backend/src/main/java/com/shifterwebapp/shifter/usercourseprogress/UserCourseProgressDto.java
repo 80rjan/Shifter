@@ -1,6 +1,5 @@
 package com.shifterwebapp.shifter.usercourseprogress;
 
-import com.shifterwebapp.shifter.coursecontent.CourseContentDtoPreview;
 import lombok.*;
 
 import java.time.LocalDateTime;

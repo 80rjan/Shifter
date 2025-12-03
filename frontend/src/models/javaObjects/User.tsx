@@ -1,3 +1,4 @@
+
 export interface User {
     id: number,
     email: string;
@@ -6,9 +7,9 @@ export interface User {
     companySize: string;
     workPosition: string;
     interests: string[];
-    skills: string[];
-    desiredSkills: string[];
+    skillsGained: string[];
     points: number;
     favoriteCourses: number[];
     isAdmin: boolean;
+    isProfileComplete: boolean;
 }

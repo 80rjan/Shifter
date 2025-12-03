@@ -3,5 +3,44 @@
   "highlight": "Next Step?",
   "description": "Explore courses designed not just to teach — but to shift your mindset, sharpen your skills, and accelerate your journey toward real impact. Whether you're scaling a business, leading a team, or growing as a professional, this is where transformation begins.",
   "rocketAlt": "Shifter Rocket",
-  "difficultyOptions": ["Beginner", "Intermediate", "Advanced"]
+  "difficultyOptions": ["Beginner", "Intermediate", "Advanced", "Expert"],
+  "courseDetails": {
+    "free": "Free",
+    "buttonEnrolled": "Go To Course",
+    "buttonEnroll": "Enroll Now",
+    "tripleInfo": [
+      {
+        "header": "Modules Total"
+      },
+      {
+        "header": "Hours Duration",
+        "description": "Learn at your own pace with flexible timing, plus optional exercises and helpful templates."
+      },
+      {
+        "headerRating": "Rating",
+        "headerNew": "New & Trending",
+        "descriptionRating": "Rated highly by learners for its practical insights and actionable strategies.",
+        "descriptionNew": "New to the platform, this course is growing quickly. Be among the first learners to benefit from its insights."
+      }
+    ],
+    "whatYoullLearn": "What you'll learn",
+    "courseContent": "Course content",
+    "lectures": "lectures",
+    "min": "min",
+    "courseDescription": "Course description",
+    "showMore": "Show more",
+    "showLess": "Show less",
+    "peopleAlsoBought": "People also bought"
+  },
+  "error": "No results found",
+  "filterBy": "Filter by",
+  "favoriteCourses": "Favorite Courses",
+  "myFavorites": "My Favorites",
+  "searchPlaceholder": "Search...",
+  "discover": "Discover",
+  "price": "Price",
+  "topics": "Topics",
+  "skills": "Skills",
+  "difficulty": "Difficulty",
+  "duration": "Duration"
 }

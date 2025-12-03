@@ -3,10 +3,12 @@ import React, {useEffect, useState} from "react";
 import {fetchExpertFreeTimeSlotsApi, scheduleMeetingApi} from "../api/meetingApi.ts";
 import type {UserMeetingInfoRequest} from "../models/UserMeetingInfoRequest.tsx";
 import { useTranslation } from "react-i18next";
+import {useUserContext} from "../context/UserContext.tsx";
 
 function FreeConsultation() {
     const { t } = useTranslation("freeConsultation");
-    const {user, setUser, accessToken, authChecked} = useAuthContext();
+    const { accessToken, authChecked} = useAuthContext();
+    const { user, setUser} = useUserContext();
     const [loadingDateTime, setLoadingDateTime] = useState(true);
     const [loadingSubmitForm, setLoadingSubmitForm] = useState(false);
     const [error, setError] = useState<string>("");
@@ -14,9 +16,9 @@ function FreeConsultation() {
     const [selectedTime, setSelectedTime] = useState<string>("");
     const [freeSlots, setFreeSlots] = useState<Record<string, string[]>>({"": [""]});
     const [userMeetingInfo, setUserMeetingInfo] = useState<UserMeetingInfoRequest>({
+        basicInfo: "",
         aboutCompany: "",
         challenges: "",
-        expectations: "",
         otherInfo: ""
     });
     const [meetingScheduled, setMeetingScheduled] = useState<boolean>(false);
@@ -25,6 +27,11 @@ function FreeConsultation() {
         e.preventDefault();
         if (!selectedDate || !selectedTime) {
             setError(t("errors.selectDateTime"));
+            return;
+        }
+
+        if (!userMeetingInfo.basicInfo || !userMeetingInfo.aboutCompany || !userMeetingInfo.challenges) {
+            setError(t("errors.completeAllInputs"))
             return;
         }
 
@@ -101,7 +108,7 @@ function FreeConsultation() {
 
                         <form onSubmit={handleScheduleMeeting} className="flex flex-col gap-12 items-start">
                             <div className="flex flex-col gap-4 items-center w-full">
-                                {["aboutCompany","challenges","expectations","otherInfo"].map(field => (
+                                {["basicInfo", "aboutCompany","challenges","otherInfo"].map(field => (
                                     <TextInput
                                         key={field}
                                         label={t(`form.fields.${field}.label`)}
@@ -148,7 +155,7 @@ function FreeConsultation() {
                             ) : (
                                 <div className="flex items-center gap-6">
                                     <button
-                                        className="hover:shadow-shifter/40 transition-all duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-60 shadow-md shadow-shifter/20 bg-shifter text-white py-2 px-6 rounded-md cursor-pointer"
+                                        className="hover:shadow-shifter/40 transition-all duration-300 ease-in-out disabled:cursor-not-allowed disabled:opacity-60 shadow-md shadow-shifter/20 bg-shifter text-white py-2 px-6 rounded-md cursor-pointer"
                                         disabled={loadingSubmitForm}
                                         type="submit"
                                     >
@@ -158,7 +165,6 @@ function FreeConsultation() {
                                 </div>
                             )}
                         </form>
-                        <p className="text-xs text-black/40">{t("form.optionalHint")}</p>
                     </div>
                 </div>
             </section>
@@ -166,10 +172,17 @@ function FreeConsultation() {
     )
 }
 
-function TextInput({label, name, placeholder, onChange}: {label:string,name:string,placeholder:string,onChange:(e:React.ChangeEvent<HTMLTextAreaElement>)=>void}) {
+function TextInput({label, name, placeholder, onChange}: {
+    label:string,
+    name:string,
+    placeholder:string,
+    onChange:(e:React.ChangeEvent<HTMLTextAreaElement>)=>void,
+}) {
     return (
         <label className="w-full flex flex-col items-start gap-2 text-black-text">
-            <span className="text-black/40 font-semibold text-md peer-focused:text-shifter"><sup>*</sup> {label}</span>
+            <span className="text-black/40 font-semibold text-md peer-focused:text-shifter">
+                {label}
+            </span>
             <textarea rows={2} name={name} onChange={onChange} placeholder={placeholder} className="peer w-full bg-dark-blue/5 border-1 border-black/10 py-1 px-2 rounded-sm resize-none min-h-fit custom-scrollbar focus:outline-none focus:border-shifter/40 focus:border-2"/>
         </label>
     )

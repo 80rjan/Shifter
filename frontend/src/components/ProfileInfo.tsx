@@ -1,7 +1,7 @@
-import {useAuthContext} from "../context/AuthContext.tsx";
+import {useUserContext} from "../context/UserContext.tsx";
 
 function ProfileInfo() {
-    const {user} = useAuthContext();
+    const {user} = useUserContext();
 
     return (
         <section className="shadow-md border-1 border-dark-blue/10 flex flex-col gap-6 items-center justify-center bg-white w-full rounded-xl p-8 ">

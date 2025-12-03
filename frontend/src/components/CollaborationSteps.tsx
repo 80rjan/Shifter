@@ -1,9 +1,9 @@
-import { useAuthContext } from "../context/AuthContext.tsx";
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import {useUserContext} from "../context/UserContext.tsx";
+import {LocalizedLink} from "./links/LocalizedLink.tsx";
 
 export default function CollaborationSteps() {
-    const { user } = useAuthContext();
+    const { user } = useUserContext();
     const { t } = useTranslation("home");
 
     const steps = [
@@ -69,7 +69,7 @@ export default function CollaborationSteps() {
                         <strong className="text-4xl font-bold text-white/60">{step.number}</strong>
                         <div className="flex flex-col justify-start h-full gap-2">
                             <div className="flex justify-center items-center min-h-[3.5rem]">
-                                <h3 className="text-2xl font-semibold text-center line-clamp-2">{step.title}</h3>
+                                <h3 className="text-2xl font-semibold text-center">{step.title}</h3>
                             </div>
                             <p className="font-light text-white/70">{step.description}</p>
                         </div>
@@ -77,13 +77,13 @@ export default function CollaborationSteps() {
                 ))}
             </div>
 
-            <Link
+            <LocalizedLink
                 to={user?.hasUsedFreeConsultation ? "/contact" : "/free-consultation"}
                 className="z-1 hover:shadow-white/60 transition-all duration-200 ease-in-out cursor-pointer
                 w-3/10 whitespace-nowrap py-2 bg-white text-xl text-black-text rounded-md font-semibold
-                shadow-md shadow-white/40 border-2 border-shifter/20">
+                shadow-md shadow-white/40 border-2 border-shifter/10">
                 {t("collaborationSteps.button")}
-            </Link>
+            </LocalizedLink>
         </section>
     );
 }

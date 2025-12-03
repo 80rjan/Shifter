@@ -1,8 +1,8 @@
 import HeroHome from "../components/HeroHome.tsx";
 import CollaborationSteps from "../components/CollaborationSteps.tsx";
-import ShifterValues from "../components/ShifterValues.tsx";
 import CoursesCarouselHome from "../components/CoursesCarouselHome.tsx";
 import OurServices from "../components/OurServices.tsx";
+import AcoSection from "../components/AcoSection.tsx";
 
 function Home() {
 
@@ -13,8 +13,8 @@ function Home() {
             </div>
             <OurServices />
             <CollaborationSteps/>
-            <CoursesCarouselHome/>
-            <ShifterValues/>
+            {/*<CoursesCarouselHome/>*/}
+            <AcoSection />
         </main>
     )
 }

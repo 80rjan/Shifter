@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import {LocalizedLink} from "./links/LocalizedLink.tsx";
 
 function ShifterValues() {
     const { t } = useTranslation("home");
@@ -26,12 +27,14 @@ function ShifterValues() {
                     </div>
                 </div>
 
-                <button className="hover:shadow-shifter/40 hover:shadow-lg transition-all duration-300 ease-in-out cursor-pointer
+                <LocalizedLink
+                    to={"/about"}
+                    className="hover:shadow-shifter/40 hover:shadow-lg transition-all duration-300 ease-in-out cursor-pointer
                     bg-shifter rounded-md border-3 border-white/40 py-2
                     text-white text-xl shadow-md shadow-shifter/20 font-medium w-7/10"
                 >
                     {t("shifterValues.button")}
-                </button>
+                </LocalizedLink>
             </div>
 
             <div className="relative w-1/2 flex items-center justify-start">

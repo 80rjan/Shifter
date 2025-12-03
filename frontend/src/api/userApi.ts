@@ -1,5 +1,6 @@
 import axios from "axios";
 import type {User} from "../models/javaObjects/User.tsx";
+import type {Language} from "../models/types/Language.tsx";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
@@ -17,7 +18,7 @@ export const toggleFavoriteCourseApi = async (courseId: number, accessToken: str
     )
 }
 
-export const updateUserApi = async (userInfo: {name: string, workPosition: string, companyType: string}, accessToken: string): Promise<void> => {
+export const updateUserApi = async (userInfo: {name: string, workPosition: string, companySize: string}, accessToken: string): Promise<void> => {
     await axios.put(
         `${backendUrl}/api/users/update/info`,
         userInfo,
@@ -29,10 +30,10 @@ export const updateUserApi = async (userInfo: {name: string, workPosition: strin
     )
 }
 
-export const updateUserInterestsApi = async (interests: string[], accessToken: string): Promise<void> => {
+export const updateUserAttributesApi = async (attributeIdList: number[], accessToken: string): Promise<void> => {
     await axios.put(
-        `${backendUrl}/api/users/update/interests`,
-        interests,
+        `${backendUrl}/api/users/update/attributes`,
+        attributeIdList,
         {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -41,21 +42,9 @@ export const updateUserInterestsApi = async (interests: string[], accessToken: s
     )
 }
 
-export const updateUserDesiredSkillsApi = async (desiredSkills: string[], accessToken: string): Promise<void> => {
-    await axios.put(
-        `${backendUrl}/api/users/update/desired-skills`,
-        desiredSkills,
-        {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            }
-        }
-    )
-}
-
-export const getUserApi = async (accessToken: string): Promise<User> => {
+export const getUserApi = async (accessToken: string, language: Language): Promise<User> => {
     const res = await axios.get(
-        `${backendUrl}/api/users/me`,
+        `${backendUrl}/api/users/me?language=${language}`,
         {
             headers: {
                 Authorization: `Bearer ${accessToken}`,

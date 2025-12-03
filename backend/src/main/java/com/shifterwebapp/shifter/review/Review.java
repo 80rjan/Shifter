@@ -3,6 +3,8 @@ package com.shifterwebapp.shifter.review;
 import com.shifterwebapp.shifter.enrollment.Enrollment;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -26,5 +28,6 @@ public class Review {
 
     @OneToOne
     @JoinColumn(name = "enrollment_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Enrollment enrollment;
 }

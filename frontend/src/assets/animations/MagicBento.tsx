@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { IconRocket, IconTarget, IconTelescope } from "@tabler/icons-react";
+import {useTranslation} from "react-i18next";
 
 export interface BentoCardProps {
     icon: React.ReactNode;
@@ -28,24 +29,6 @@ const DEFAULT_PARTICLE_COUNT = 12;
 const DEFAULT_SPOTLIGHT_RADIUS = 300;
 const DEFAULT_GLOW_COLOR = '0, 140, 194'; // RGB for "shifter" color
 const MOBILE_BREAKPOINT = 768;
-
-const cardData: BentoCardProps[] = [
-    {
-        icon: <IconTarget size={40} color="var(--color-white)" />,
-        title: "Purpose",
-        description: "To create positive change in the world of family entrepreneurship by empowering leaders to drive growth, inspire teams, strengthen culture, and achieve sustainable success."
-    },
-    {
-        icon: <IconRocket size={40} color="var(--color-white)" />,
-        title: "Mission",
-        description: "To empower family businesses to unlock their full potential and drive sustainable growth through mentorship, consulting, and digital learning programs, including online courses and academies."
-    },
-    {
-        icon: <IconTelescope size={40} color="var(--color-white)" />,
-        title: "Vision",
-        description: "To become the leading center for business development, transformation, and continuous learning for family businesses in Europe."
-    }
-];
 
 const createParticleElement = (x: number, y: number, color: string = DEFAULT_GLOW_COLOR): HTMLDivElement => {
     const el = document.createElement('div');
@@ -104,7 +87,7 @@ const ParticleCard: React.FC<{
       }) => {
     const cardRef = useRef<HTMLDivElement>(null);
     const particlesRef = useRef<HTMLDivElement[]>([]);
-    const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
+    const timeoutsRef = useRef<number[]>([]);
     const isHoveredRef = useRef(false);
     const memoizedParticles = useRef<HTMLDivElement[]>([]);
     const particlesInitialized = useRef(false);
@@ -514,6 +497,27 @@ const MagicBento: React.FC<BentoProps> = ({
     const baseBackgroundColor = "var(--color-beige)"; // White color for the cards
     const textColor = "#060010"; // Dark color for the text
 
+    const { t } = useTranslation("about");
+
+
+    const cardData: BentoCardProps[] = [
+        {
+            icon: <IconTelescope size={40} color="var(--color-white)" />,
+            title: t("foundations.vision.title"),
+            description: t("foundations.vision.description")
+        },
+        {
+            icon: <IconRocket size={40} color="var(--color-white)" />,
+            title: t("foundations.mission.title"),
+            description: t("foundations.mission.description")
+        },
+        {
+            icon: <IconTarget size={40} color="var(--color-white)" />,
+            title: t("foundations.purpose.title"),
+            description: t("foundations.purpose.description")
+        }
+    ];
+
     return (
         <>
             <style>
@@ -653,7 +657,7 @@ const MagicBento: React.FC<BentoProps> = ({
                         const content = (
                             <>
                                 <div className="p-4 bg-shifter rounded-md">{card.icon}</div>
-                                <h3 className={`font-normal text-3xl m-0 ${textAutoHide ? 'text-clamp-1' : ''}`}>
+                                <h3 className={`font-medium text-3xl m-0 ${textAutoHide ? 'text-clamp-1' : ''}`}>
                                     {card.title}
                                 </h3>
                                 <p

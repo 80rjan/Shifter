@@ -1,11 +1,11 @@
 import type {CoursePreviewEnrolled} from "../models/javaObjects/CoursePreviewEnrolled.tsx";
-import {Link} from "react-router-dom";
 import React from "react";
-import {toUrlFormat} from "../utils/toUrlFormat.ts";
 import StarFilled from "../assets/icons/StarFilled.tsx";
 import StarOutline from "../assets/icons/StarOutline.tsx";
 import ModalReviewCourse from "./ModalReviewCourse.tsx";
 import type {CoursePreview} from "../models/javaObjects/CoursePreview.tsx";
+import {LocalizedLink} from "./links/LocalizedLink.tsx";
+import {fromEnumFormat} from "../utils/toEnumFormat.ts";
 
 function CourseCardLearnDashboard({course, markCourseAsRated}: {
     course: CoursePreviewEnrolled | CoursePreview;
@@ -15,14 +15,14 @@ function CourseCardLearnDashboard({course, markCourseAsRated}: {
 
     return (
         <aside className="h-full">
-            <Link
+            <LocalizedLink
                 style={{"--card-color": course.color} as React.CSSProperties}
                 className="hover:shadow-md transition-all duration-300 ease-in-out
                 flex flex-col gap-2 items-center col-span-1 p-2 rounded-md h-full"
                 to={
                     "rating" in course ?
-                        `/learn/${course.id}/${toUrlFormat(course.titleShort)}` :
-                        `/courses/${course.id}//${toUrlFormat(course.titleShort)}`
+                        `/learn/${course.id}/${course.urlSlug}` :
+                        `/courses/${course.id}/${course.urlSlug}`
                 }>
 
                 {/*IMAGE*/}
@@ -35,15 +35,18 @@ function CourseCardLearnDashboard({course, markCourseAsRated}: {
                 <div className="flex flex-col gap-2 justify-between flex-1 text-left">
                     <h3 className="text-md font-bold">{course.titleShort}</h3>
 
-                    <p className="text-black/60 text-sm">{
-                        course.topicsCovered.map(item =>
-                            item
-                                .toLowerCase()
-                                .replace(/_/g, " ")
-                                .replace(/\b\w/g, c => c.toUpperCase())
-                        )
-                            .join(" • ")
-                    }</p>
+                    <p className="text-black/60 text-sm">{(() => {
+                        const MAX_CHARS = 80;
+                        const fullStr = (course.topicsCovered ?? [])
+                            .map(item =>
+                                fromEnumFormat(item)
+                                    // .replace(/\b\w/g, c => c.toUpperCase())
+                            )
+                            .join(" • ");
+                        if (fullStr.length > MAX_CHARS)
+                            return fullStr.slice(0, 80).trim() + "...";
+                        return fullStr;
+                    })()}</p>
                 </div>
 
                 {/*PROGRESS BAR*/}
@@ -61,7 +64,7 @@ function CourseCardLearnDashboard({course, markCourseAsRated}: {
                             </div>
                             <div className="flex justify-between w-full">
                                 <p className="text-xs text-black/60">
-                                    {course.lecturesFinishedCount / course.courseLectureCount * 100}% completed
+                                    {Math.round(course.lecturesFinishedCount / course.courseLectureCount * 100)}% completed
                                 </p>
                                 {
                                     course.isFinished && (
@@ -76,7 +79,7 @@ function CourseCardLearnDashboard({course, markCourseAsRated}: {
                                         >
                                             {[1, 2, 3, 4, 5].map((star) => {
                                                 const courseRating = course.rating;
-                                                const StarIcon = courseRating > 0 && star <= courseRating ? StarFilled : StarOutline;
+                                                const StarIcon = courseRating && star <= courseRating ? StarFilled : StarOutline;
                                                 return <StarIcon key={star} className="w-2 text-yellow-400"/>;
                                             })}
                                         </button>
@@ -86,7 +89,7 @@ function CourseCardLearnDashboard({course, markCourseAsRated}: {
                         </div>
                     )
                 }
-            </Link>
+            </LocalizedLink>
 
             {
                 "lecturesFinishedCount" in course && showReviewModal && (
@@ -94,7 +97,7 @@ function CourseCardLearnDashboard({course, markCourseAsRated}: {
                         courseId={course.id}
                         closeModal={() => setShowReviewModal(false)}
                         markCourseAsRated={markCourseAsRated}
-                        isUpdate={true}
+                        isUpdate={course.rating !== null}
                     />
                 )
             }

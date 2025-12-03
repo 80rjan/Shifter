@@ -6,14 +6,13 @@ import React, {
     type Dispatch,
     type SetStateAction,
 } from "react";
-import type {User} from "../models/javaObjects/User.tsx";
-import {loginApi, logoutApi, personalizeApi, refreshAccessTokenApi, registerApi, verifyApi} from "../api/authApi.ts";
+import {loginApi, logoutApi, personalizeApi, refreshAccessTokenApi, registerApi} from "../api/authApi.ts";
+
 import {useNavigate} from "react-router-dom";
 import type {UserPersonalization} from "../models/javaObjects/UserPersonalization.tsx";
+import {verifyApi} from "../api/verificationTokenApi.ts";
 
 interface AuthContextType {
-    user: User | null;
-    setUser: Dispatch<SetStateAction<User | null>>;
     accessToken: string | null;
     setAccessToken: Dispatch<SetStateAction<string | null>>;
     authChecked: boolean;
@@ -25,7 +24,6 @@ interface AuthContextType {
     logout: () => void;
     refreshAccessToken: () => Promise<void>;
     loading: boolean;
-    useFreeConsultation: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -33,17 +31,10 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 );
 
 export const AuthProvider = ({children}: { children: ReactNode }) => {
-    const [user, setUser] = useState<User | null>(null);
     const [accessToken, setAccessToken] = useState<string | null>(null);
     const [authChecked, setAuthChecked] = useState<boolean>(false);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-
-    const useFreeConsultation = () => {
-        if (user) {
-            setUser({...user, hasUsedFreeConsultation: true});
-        }
-    }
 
     const register = async (email: string, password: string) => {
         return registerApi(email, password)
@@ -51,7 +42,7 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
                 console.log("Successfully registered and sent email to user");
             })
             .catch(error => {
-                console.log("Registration failed:", error);
+                console.error("Registration failed:", error);
                 throw error;
             });
     }
@@ -63,36 +54,32 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
                 return userEmail;
             })
             .catch(error => {
-                console.log("Verification failed:", error);
+                console.error("Verification failed:", error);
                 throw error;
             });
     }
 
     const personalize = async (user: UserPersonalization) => {
         return personalizeApi(user)
-            .then(data => {
+            .then(async data => {
                 setAccessToken(data.accessToken);
-                setUser(data.user);
             })
             .catch(error => {
                 setAccessToken(null);
-                setUser(null);
-                console.log("Personalization failed:", error);
+                console.error("Personalization failed:", error);
                 throw error;
             });
     }
 
     const login = async (email: string, password: string) => {
         return loginApi(email, password)
-            .then(data => {
+            .then(async data => {
                 setAccessToken(data.accessToken);
-                setUser(data.user);
             })
             .catch(error => {
-                    setAccessToken(null);
-                    setUser(null);
-                    console.log("Login failed:", error);
-                    throw error;
+                setAccessToken(null);
+                console.error("Login failed:", error);
+                throw error;
             });
     };
 
@@ -100,7 +87,6 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
         return logoutApi()
             .then(() => {
                 setAccessToken(null);
-                setUser(null);
                 navigate("/");
             })
             .catch(err => {
@@ -114,23 +100,20 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
         setLoading(true);
 
         return refreshAccessTokenApi()
-            .then(data => {
-                // console.log(data.accessToken)
-                // console.log(encodeURIComponent(Intl.DateTimeFormat().resolvedOptions().timeZone))
+            .then(async data => {
+                console.log("ACCESS TOKEN", data.accessToken)
                 setAccessToken(data.accessToken);
-                setUser(data.user);
             })
             .catch(error => {
                 setAccessToken(null);
-                setUser(null);
-                console.log("Refresh token failed: ", error);
-                throw error;
+                console.error("Refresh token failed: ", error);
             })
             .finally(() => {
                 setLoading(false);
                 setAuthChecked(true);
             })
     };
+
 
     useEffect(() => {
         refreshAccessToken();
@@ -139,13 +122,10 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
     return (
         <AuthContext.Provider
             value={{
-                user,
-                setUser,
                 accessToken,
                 setAccessToken,
                 authChecked,
                 setAuthChecked,
-                useFreeConsultation,
                 register,
                 verify,
                 personalize,

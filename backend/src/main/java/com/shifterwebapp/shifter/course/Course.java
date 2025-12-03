@@ -1,10 +1,13 @@
 package com.shifterwebapp.shifter.course;
 
+import com.shifterwebapp.shifter.attribute.Attribute;
 import com.shifterwebapp.shifter.enums.Difficulty;
 import com.shifterwebapp.shifter.coursecontent.CourseContent;
 import com.shifterwebapp.shifter.enrollment.Enrollment;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -23,10 +26,6 @@ public class Course {
     private String imageUrl;
 
     private String color;
-    
-    private String titleShort;
-
-    private String title;
 
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
@@ -35,31 +34,24 @@ public class Course {
     
     private Double price;
     
-    private String descriptionShort;
-
-    @Column(columnDefinition = "text")
-    private String description;
-
-    @Column(columnDefinition = "text")
-    private String descriptionLong;
-
-    @ElementCollection
-    @Column(columnDefinition = "text")
-    private List<String> whatWillBeLearned;
-
-    @ElementCollection
-    @Column(columnDefinition = "text")
-    private List<String> skillsGained;
-
-    @ElementCollection
-    @Column(columnDefinition = "text")
-    private List<String> topicsCovered;
-    
     @OneToMany(mappedBy = "course", orphanRemoval = true)        // IS THIS GOOD BUSINESS LOGIC? SHOULD I HAVE CASCADES?
     private List<Enrollment> enrollments;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("position ASC")
     private List<CourseContent> courseContents;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CourseTranslate> courseTranslates;
+
+    @ManyToMany
+    @JoinTable(
+            name = "course_attribute",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "attribute_id")
+    )
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Attribute> attributes;
+
 }
 

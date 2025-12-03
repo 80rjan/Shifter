@@ -1,11 +1,14 @@
 package com.shifterwebapp.shifter.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.shifterwebapp.shifter.attribute.Attribute;
 import com.shifterwebapp.shifter.enums.CompanySize;
 import com.shifterwebapp.shifter.enums.LoginProvider;
 import com.shifterwebapp.shifter.payment.Payment;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,6 +44,8 @@ public class User implements UserDetails {
 
     private Boolean isEnabled;
 
+    private Boolean isProfileComplete;
+
     private Boolean hasUsedFreeConsultation;
 
     @Enumerated(EnumType.STRING)
@@ -48,25 +53,23 @@ public class User implements UserDetails {
     
     private String workPosition;
     
-    @ElementCollection
-    @Column(columnDefinition = "text")
-    private List<String> interests;
-
-    @ElementCollection
-    @Column(columnDefinition = "text")
-    private List<String> skills;
-
-    @ElementCollection
-    @Column(columnDefinition = "text")
-    private List<String> desiredSkills;
-    
     private Integer points;
 
     @ElementCollection
-    private List<Integer> favoriteCourses;
+    private List<Integer> favoriteCourseList;
 
     @OneToMany(mappedBy = "user")
-    private List<Payment> payments;             // WHEN DELETING USER SET PAYMENTS TO NULL, BECAUSE PAYMENTS DONT GET DELETED
+    private List<Payment> paymentList;             // WHEN DELETING USER SET PAYMENTS TO NULL, BECAUSE PAYMENTS DONT GET DELETED
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_attribute",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "attribute_id")
+    )
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Attribute> attributes;
+
 
 
 

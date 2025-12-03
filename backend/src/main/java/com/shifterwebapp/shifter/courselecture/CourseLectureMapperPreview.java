@@ -1,5 +1,6 @@
 package com.shifterwebapp.shifter.courselecture;
 
+import com.shifterwebapp.shifter.courselecture.dto.CourseLectureDtoPreview;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 

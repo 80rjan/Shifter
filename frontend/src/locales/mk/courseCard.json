@@ -1,0 +1,13 @@
+{
+  "new": "Ново",
+  "hours": "часови",
+  "modules": "модули",
+  "free": "Бесплатно",
+  "explore": "Истражи",
+  "difficulty": {
+    "beginner": "Почетник",
+    "intermediate": "Средно",
+    "advanced": "Напредно",
+    "expert": "Експерт"
+  }
+}

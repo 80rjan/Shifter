@@ -26,31 +26,44 @@ function ProfileSkillsInterests({ title, pills, openModal }: {
                     )
                 }
             </div>
-            <div className="shadow-md flex gap-2 w-full flex-wrap border-1 border-dark-blue/10 bg-white rounded-lg p-4">
-                {
-                    visiblePills.map((pill, index) => (
-                        <span
-                            key={index}
-                            className="font-medium text-white px-4 py-1 bg-shifter/60 border-2 border-white/40 rounded-md"
-                        >
+            {
+                pills ? (
+                    <div className="shadow-md flex gap-2 w-full flex-wrap border-1 border-dark-blue/10 bg-white rounded-lg p-4">
+                        {
+                            visiblePills.map((pill, index) => (
+                                <span
+                                    key={index}
+                                    className="font-medium text-white px-4 py-1 bg-shifter/60 border-2 border-white/40 rounded-md"
+                                >
                             {pill
                                 .toLowerCase()
                                 .replace(/_/g, " ")
                                 .replace(/\b\w/g, char => char.toUpperCase())
                             }
                         </span>
-                    ))
-                }
+                            ))
+                        }
 
-                {pills.length > 4 && (
-                    <button
-                        onClick={() => setShowAll(prev => !prev)}
-                        className="p-2 rounded-sm underline hover:bg-shifter/10 hover:text-shifter cursor-pointer"
-                    >
-                        {showAll ? "Show less" : `Show ${pills.length - 4} more`}
-                    </button>
-                )}
-            </div>
+                        {pills.length > 4 && (
+                            <button
+                                onClick={() => setShowAll(prev => !prev)}
+                                className="p-2 rounded-sm underline hover:bg-shifter/10 hover:text-shifter cursor-pointer"
+                            >
+                                {showAll ? "Show less" : `Show ${pills.length - 4} more`}
+                            </button>
+                        )}
+                    </div>
+                ) : (
+                    <div className="flex gap-2 w-full flex-wrap border-1 border-dark-blue/10 bg-white rounded-lg p-4">
+                        {/* Skills pills skeleton */}
+                        {[...Array(4)].map((_, pillIndex) => (
+                            <div key={pillIndex} className="h-8 bg-gray-300 rounded-md w-20 animate-pulse"></div>
+                        ))}
+                        {/* Show more button skeleton */}
+                        <div className="h-8 bg-gray-300 rounded w-16 animate-pulse"></div>
+                    </div>
+                )
+            }
         </section>
     );
 }

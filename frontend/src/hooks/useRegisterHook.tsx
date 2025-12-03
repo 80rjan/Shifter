@@ -15,9 +15,6 @@ export function useRegisterHook() {
     const [showPassword, setShowPassword] = React.useState(false);
 
     useEffect(() => {
-        if (!email && !password && !passwordConfirmation)
-            return
-
         if (!email || !password || !passwordConfirmation) {
             setError("Please ensure all inputs are completed.");
         } else if (email && !isValidEmail(email)) {

@@ -6,10 +6,12 @@ import { useAuthContext } from "../context/AuthContext.tsx";
 // @ts-expect-error
 import Arrow from "../../public/Shifter-Arrow-White.png";
 import { sendEmailApi } from "../api/contactApi.ts";
+import {useUserContext} from "../context/UserContext.tsx";
 
 function Contact() {
     const { t } = useTranslation("contact");
-    const { user, accessToken } = useAuthContext();
+    const { accessToken } = useAuthContext();
+    const { user } = useUserContext();
     const [subject, setSubject] = React.useState("");
     const [message, setMessage] = React.useState("");
     const [loading, setLoading] = React.useState(false);
@@ -68,10 +70,10 @@ function Contact() {
                         <div className="grid grid-cols-2 gap-4 items-center">
                             <p className="text-black/40 text-xs col-span-2">{t("profileNotice")}</p>
                             <p className="font-light text-black-text/60 text-md whitespace-nowrap">
-                                Name: <span className="text-black-text font-normal">{user?.name}</span>
+                                {t("form.name")}: <span className="text-black-text font-normal">{user?.name}</span>
                             </p>
                             <p className="font-light text-black-text/60 text-md whitespace-nowrap">
-                                Email: <span className="text-black-text font-normal">{user?.email}</span>
+                                {t("form.email")}: <span className="text-black-text font-normal">{user?.email}</span>
                             </p>
                         </div>
 

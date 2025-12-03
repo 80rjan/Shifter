@@ -1,4 +1,5 @@
 import type {Difficulty} from "../types/Difficulty.tsx";
+import type {Language} from "../types/Language.tsx";
 
 export interface CoursePreview {
     id: number,
@@ -14,5 +15,7 @@ export interface CoursePreview {
     courseContentCount: number;
     courseLectureCount: number;
     averageRating: number;
+    urlSlug: string;
+    translatedLanguages: Language[];
 }
 

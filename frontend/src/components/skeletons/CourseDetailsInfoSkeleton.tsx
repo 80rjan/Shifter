@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 import ShifterArrow from "../../../public/Shifter-Arrow.png";
 
 function CourseDetailsInfoSkeleton() {
@@ -10,7 +12,7 @@ function CourseDetailsInfoSkeleton() {
                 <img src={ShifterArrow} alt="Shifter Arrow"
                      className="absolute opacity-10 h-150 w-120 rotate-50 -bottom-40 left-0"/>
 
-                <h2 className="text-5xl">What you'll learn</h2>
+                <div className="h-10 bg-gray-300 rounded w-1/3 animate-pulse"></div>
                 <div className="grid grid-cols-2 gap-y-8 gap-x-20">
                     {[...Array(10)].map((_, index) => (
                         <div className="flex items-center gap-4" key={index}>
@@ -23,7 +25,7 @@ function CourseDetailsInfoSkeleton() {
 
             {/*COURSE CONTENT*/}
             <section className="relative flex flex-col gap-12 text-left px-horizontal-lg py-vertical-md overflow-clip">
-                <h2 className="text-5xl">Course content</h2>
+                <div className="h-10 bg-gray-300 rounded w-1/3 animate-pulse"></div>
                 <div>
                     {[...Array(5)].map((_, index) => (
                         <div key={index} className={`border-1 border-black/20 ${index !== 4 ? "border-b-0" : ""}`}>
@@ -45,7 +47,7 @@ function CourseDetailsInfoSkeleton() {
 
             {/*DESCRIPTION*/}
             <section className="flex flex-col gap-12 text-left px-horizontal-lg py-vertical-md">
-                <h2 className="text-5xl">Course description</h2>
+                <div className="h-10 bg-gray-300 rounded w-1/3 animate-pulse"></div>
                 <div>
                     <div className="relative overflow-hidden">
                         <div className="space-y-4">

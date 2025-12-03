@@ -1,4 +1,4 @@
-import {Route, Routes, useLocation} from "react-router-dom";
+import {Route, Routes, useLocation, useNavigate, useParams} from "react-router-dom";
 import Home from "./pages/Home.tsx";
 import Navbar from "./layout/Navbar.tsx";
 import Login from "./pages/Login.tsx";
@@ -7,13 +7,12 @@ import Courses from "./pages/Courses.tsx";
 import {useEffect} from "react";
 import CourseDetails from "./pages/CourseDetails.tsx";
 import {ToastContainer} from 'react-toastify';
-import AppLoader from "./AppLoader.tsx";
 import Profile from "./pages/Profile.tsx";
 import Learn from "./pages/Learn.tsx";
 import PublicOnlyRoute from "./components/routeProtectors/PublicOnlyRoute.tsx";
 import UserOnlyRoute from "./components/routeProtectors/UserOnlyRoute.tsx";
 import {useAuthContext} from "./context/AuthContext.tsx";
-import AdminNavbar from "./admin/utils/AdminNavbar.tsx";
+import AdminNavbar from "./admin/layout/AdminNavbar.tsx";
 import Admin from "./admin/Admin.tsx";
 import AdminAddCourse from "./admin/pages/AdminAddCourse.tsx";
 import CourseLearn from "./pages/CourseLearn.tsx";
@@ -28,40 +27,53 @@ import FooterNew from "./layout/FooterNew.tsx";
 import FooterSmall from "./layout/FooterSmall.tsx";
 import FreeConsultation from "./pages/FreeConsultation.tsx";
 import LanguageToggle from "./layout/LanguageToggle.tsx";
+import AdminTranslateCourse from "./admin/pages/AdminTranslateCourse.tsx";
+import LoadingScreen from "./layout/LoadingScreen.tsx";
+import {createNewVerificationTokenApi} from "./api/verificationTokenApi.ts";
+import AppLoader from "./AppLoader.tsx";
+import {useUserContext} from "./context/UserContext.tsx";
+import i18n from "i18next";
+import {getLangFromPath} from "./utils/langUrl.ts";
+import AdminCourses from "./admin/pages/AdminCourses.tsx";
+import ComingSoon from "./pages/ComingSoon.tsx";
 
 function LayoutWrapper() {
+    const { accessToken } = useAuthContext();
+    const { user } = useUserContext();
     const location = useLocation();
+    const navigate = useNavigate()
+
+    const { lang: langPrefix } = useParams<{ lang: string }>(); // Use 'lang' from the parent route
+
+    const pathSegments = location.pathname.split('/');
+    const relativePath = `/${pathSegments.slice(2).join('/')}`;
+
     const hideLayout =
-        location.pathname === "/login" ||
-        location.pathname === "/register" ||
-        location.pathname === "/welcome" ||
-        location.pathname.startsWith("/learn/");
+        relativePath === "/login" ||
+        relativePath === "/register" ||
+        relativePath === "/welcome" ||
+        relativePath.startsWith("/learn/");
     const showSmallFooter =
-        location.pathname === "/profile" ||
-        location.pathname === "/courses" ||
-        location.pathname === "/learn" ||
-        location.pathname === "/mentoring" ||
-        location.pathname === "/consulting" ||
-        location.pathname === "/academies" ||
-        location.pathname === "/contact" ||
-        location.pathname === "/free-consultation";
-    const {user, authChecked} = useAuthContext();
+        relativePath === "/profile" ||
+        relativePath === "/courses" ||
+        relativePath === "/learn" ||
+        relativePath === "/mentoring" ||
+        relativePath === "/consulting" ||
+        relativePath === "/academies" ||
+        relativePath === "/contact" ||
+        relativePath === "/free-consultation";
 
-    if (!authChecked)
-        return null;
-
-    if (user?.isAdmin) {
-        return (
-            <>
-                <AdminNavbar/>
-                <Routes>
-                    <Route path="/" element={<Admin/>}/>
-                    <Route path="/add-course" element={<AdminAddCourse/>}/>
-                    <Route path="/analytics" element={<p>Analytics</p>}/>
-                </Routes>
-            </>
-        )
-    }
+    useEffect(() => {
+        if (user && !user.isProfileComplete && accessToken && !location.pathname.startsWith("/welcome")) {
+            createNewVerificationTokenApi(accessToken)
+                .then(token => {
+                    navigate(`/${langPrefix}/welcome?token=${token}`)
+                })
+                .catch(err => {
+                    console.error("Error creating a new verification token api: ", err)
+                })
+        }
+    }, [user, accessToken, navigate, relativePath, langPrefix, location.pathname])
 
 
     return (
@@ -79,12 +91,8 @@ function LayoutWrapper() {
                     </PublicOnlyRoute>
                 }/>
                 <Route path="/welcome" element={
-                    <PublicOnlyRoute>
-                        <Personalize/>
-                    </PublicOnlyRoute>
+                    <Personalize/>
                 }/>
-
-                <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler/>}/>
 
                 <Route path="/" element={<Home/>}/>
 
@@ -108,8 +116,8 @@ function LayoutWrapper() {
                     </UserOnlyRoute>
                 }/>
 
-                <Route path="/courses" element={<Courses/>}/>
-                <Route path="/courses/:courseId/:courseTitle" element={<CourseDetails/>}/>
+                <Route path="/courses" element={<ComingSoon />}/>
+                {/*<Route path="/courses/:courseId/:courseTitle" element={<CourseDetails/>}/>*/}
 
                 <Route path="/contact" element={
                     <UserOnlyRoute>
@@ -129,34 +137,105 @@ function LayoutWrapper() {
                     </UserOnlyRoute>
                 }/>
 
-                <Route path="/learn" element={
-                    <UserOnlyRoute>
-                        <Learn/>
-                    </UserOnlyRoute>
-                }/>
-                <Route path="/learn/:courseId/:courseTitle" element={
-                    <UserOnlyRoute>
-                        <CourseLearn/>
-                    </UserOnlyRoute>
-                }/>
+                {/*<Route path="/learn" element={*/}
+                {/*    <UserOnlyRoute>*/}
+                {/*        <Learn/>*/}
+                {/*    </UserOnlyRoute>*/}
+                {/*}/>*/}
+                {/*<Route path="/learn/:courseId/:courseTitle" element={*/}
+                {/*    <UserOnlyRoute>*/}
+                {/*        <CourseLearn/>*/}
+                {/*    </UserOnlyRoute>*/}
+                {/*}/>*/}
 
             </Routes>
-            {(!hideLayout) && showSmallFooter ? <FooterSmall/> : <FooterNew/>}
+            {(!hideLayout) && (showSmallFooter ? <FooterSmall/> : <FooterNew/>)}
         </>
     );
 }
 
 function ScrollToTop() {
-    const {pathname} = useLocation();
+    const location = useLocation();
+
+    // Get the current language prefix from the path (e.g., 'en' or 'mk')
+    const langPrefix = getLangFromPath(location.pathname);
+
+    // Get the path excluding the language prefix.
+    const contentPath = location.pathname.replace(new RegExp(`^/${langPrefix}`), '') || '/';
 
     useEffect(() => {
         window.scrollTo(0, 0);
-    }, [pathname]);
+    }, [contentPath]);
 
     return null;
 }
 
-function App() {
+const VALID_LANGS = ['en', 'mk'];
+
+export function UserRoutesWithLang() {
+    const { lang } = useParams<{ lang: string }>();
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const langUpper = lang?.toUpperCase();
+
+    useEffect(() => {
+        if (!lang || !VALID_LANGS.includes(lang.toLowerCase())) {
+            const defaultLang = i18n.language.toLowerCase() || 'en';
+            navigate(`/${defaultLang}`, { replace: true });
+            return;
+        }
+
+        if (langUpper && i18n.language !== langUpper) {
+            i18n.changeLanguage(langUpper);
+        }
+    }, [lang, langUpper, navigate, location.pathname]);
+
+    return <LayoutWrapper />;
+}
+
+export default function App() {
+    const { authChecked, accessToken } = useAuthContext();
+    const { user } = useUserContext()
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const urlLang = getLangFromPath(location.pathname);
+    const currentI18nLang = i18n.language.toLowerCase();
+
+    useEffect(() => {
+        if (!urlLang && location.pathname !== "/oauth2/redirect" && !location.pathname.startsWith("/admin")) {
+            const langToRedirect = currentI18nLang || 'en';
+            const newPath = `/${langToRedirect}${location.pathname === '/' ? '' : location.pathname}${location.search}`;
+            navigate(newPath, { replace: true });
+        }
+    }, [urlLang, currentI18nLang, location.pathname, navigate, location.search]);
+
+    useEffect(() => {
+        if (user?.isAdmin && !location.pathname.startsWith("/admin")) {
+            navigate("/admin", { replace: true });
+        }
+    }, [user, location.pathname, navigate]);
+
+
+    if (!authChecked || (accessToken && !user)) {
+        return <LoadingScreen />;
+    }
+
+    // if (user?.isAdmin) {
+    //     return (
+    //         <>
+    //             <AdminNavbar/>
+    //             <Routes>
+    //                 <Route path="/admin" element={<Admin/>}/>
+    //                 <Route path="/admin/courses" element={<AdminCourses />}/>
+    //                 <Route path="/admin/courses/add" element={<AdminAddCourse />}/>
+    //                 <Route path="/admin/courses/:courseId/translate" element={<AdminTranslateCourse />}/>
+    //             </Routes>
+    //         </>
+    //     );
+    // }
+
 
     return (
         <>
@@ -170,10 +249,14 @@ function App() {
                 closeOnClick
                 pauseOnHover
             />
-            <LayoutWrapper/>
+            <Routes>
+                <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler/>}/>
+
+                <Route path="/:lang/*" element={<UserRoutesWithLang/>}/>
+
+                {/* <Route path="*" element={ <RedirectToDefaultLang /> } /> */}
+            </Routes>
             <LanguageToggle/>
         </>
     );
 }
-
-export default App;

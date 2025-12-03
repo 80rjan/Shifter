@@ -18,11 +18,11 @@ public class UserMeetingInfoRequest {
 
     private String workPosition;
 
+    private String basicInfo;
+
     private String aboutCompany;
 
     private String challenges;
-
-    private String expectations;
 
     private String otherInfo;
 }

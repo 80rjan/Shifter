@@ -6,9 +6,8 @@ import com.shifterwebapp.shifter.enums.LoginProvider;
 import com.shifterwebapp.shifter.exception.InvalidVerificationTokenException;
 import com.shifterwebapp.shifter.external.email.EmailService;
 import com.shifterwebapp.shifter.user.User;
-import com.shifterwebapp.shifter.user.UserDto;
-import com.shifterwebapp.shifter.user.UserMapper;
-import com.shifterwebapp.shifter.user.UserRepository;
+import com.shifterwebapp.shifter.user.mapper.UserMapper;
+import com.shifterwebapp.shifter.user.repository.UserRepository;
 import com.shifterwebapp.shifter.user.service.UserService;
 import com.shifterwebapp.shifter.verificationtoken.VerificationToken;
 import com.shifterwebapp.shifter.verificationtoken.VerificationTokenRepository;
@@ -49,18 +48,19 @@ public class AuthService {
         String refreshToken = jwtService.generateRefreshToken(user);
 
         // Create secure HTTP-only cookie for refresh token
+        // TODO: change config here
         ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
-                .secure(true) // true if using HTTPS
+                .secure(false)           // true for prod
+                .sameSite("Lax")     // Strict for prod
                 .path("/")
                 .maxAge(Duration.ofDays(7))
-                .sameSite("Strict")
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
         AuthResponse authResponse = AuthResponse.builder()
                 .accessToken(accessToken)
-                .user(userMapper.toDto(user))
+                .user(userMapper.toDtoAuth(user))
                 .build();
 
         ObjectMapper mapper = new ObjectMapper();
@@ -69,7 +69,7 @@ public class AuthService {
     }
 
 
-    public void register(String email, String password) {
+    public void register(String email, String password, HttpServletResponse response) throws IOException {
         User user = userService.createInitialUser(email, password, LoginProvider.LOCAL);
 
         UUID token = verificationTokenService.generateNewToken(user);
@@ -77,27 +77,12 @@ public class AuthService {
         // TODO: CHANGE THE URL TO BE SHIFT-ER.COM NOT LOCALHOST
         String verificationUrl = "http://localhost:5173/welcome?token=" + token;
         emailService.sendVerificationToken(user.getEmail(), verificationUrl);
-    }
 
-    public String verify(String token) {
-        UUID uuid = UUID.fromString(token);
-        VerificationToken verificationToken = verificationTokenRepository.findById(uuid)
-                .orElseThrow(() -> new InvalidVerificationTokenException("Invalid or expired token"));
-
-        if (verificationToken.getExpiresAt().isBefore(Instant.now()))
-            throw new InvalidVerificationTokenException("Expired token");
-
-        User user = verificationToken.getUser();
-        user.setIsEnabled(true);
-        userRepository.save(user);
-
-        verificationTokenRepository.delete(verificationToken);
-
-        return user.getEmail();
+        sendTokens(response, user);
     }
 
     public void personalize(UserPersonalizationDto userPersonalizationDto, HttpServletResponse response) throws IOException {
-        User user = userService.createUser(userPersonalizationDto);
+        User user = userService.personalizeUser(userPersonalizationDto);
         sendTokens(response, user);
     }
 
@@ -164,7 +149,7 @@ public class AuthService {
 
         return AuthResponse.builder()
                 .accessToken(newAccessToken)
-                .user(userMapper.toDto(user))
+                .user(userMapper.toDtoAuth(user))
                 .build();
     }
 

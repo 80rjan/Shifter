@@ -1,9 +1,14 @@
 import React from "react";
 import type {UserPersonalization} from "../../models/javaObjects/UserPersonalization.tsx";
-import type {SliderProps} from "../../models/SliderProps.tsx";
+import {parseStringToAttributeReq} from "../../utils/parseStringToAttributeReq.ts";
 
-function PersonalizationSlider(sliderProps: SliderProps) {
-    const [allOptions] = React.useState<string[]>(sliderProps.options || []);
+function PersonalizationSlider({label, id, allOptions, setUser, user}: {
+    label: string;
+    id: string;
+    allOptions: string[];
+    setUser: React.Dispatch<React.SetStateAction<UserPersonalization>>;
+    user: UserPersonalization;
+}) {
     const [options, setOptions] = React.useState<string[]>(allOptions);
     const [filterText, setFilterText] = React.useState("");
 
@@ -11,20 +16,23 @@ function PersonalizationSlider(sliderProps: SliderProps) {
         const value = e.target.value;
         setFilterText(value);
         setOptions(allOptions.filter(option =>
-            option.toLowerCase().includes(value.toLowerCase())
+            parseStringToAttributeReq(option).value.toLowerCase().includes(value.toLowerCase())
         ));
     };
 
-    const handleOptionClick = (option: string) => {
-        sliderProps.setUser((prev: UserPersonalization) => {
-            const arr = prev[sliderProps.name] as string[] || [];
-            const newArr = arr.includes(option)
-                ? arr.filter(item => item !== option)
-                : [...arr, option];
+    const handleOptionClick = (attrId: number) => {
+        setUser((prev: UserPersonalization) => {
+            const set = new Set(prev.attributeIdList);
+            if (set.has(attrId)) {
+                set.delete(attrId);
+            } else {
+                set.add(attrId);
+            }
 
+            const newArr = Array.from(set);
             return {
                 ...prev,
-                [sliderProps.name]: newArr,
+                attributeIdList: newArr,
             };
         });
     };
@@ -32,8 +40,8 @@ function PersonalizationSlider(sliderProps: SliderProps) {
     return (
         <div className="w-full flex flex-col justify-center gap-4 px-6 py-1 items-start w-full">
             <div className="flex justify-between w-full flex-wrap gap-2">
-                <label htmlFor={sliderProps.id} className="text-shifter font-medium text-xl">
-                    {sliderProps.label}
+                <label htmlFor={id} className="text-shifter font-medium text-xl">
+                    {label}
                 </label>
                 <input
                     type={"search"}
@@ -46,20 +54,21 @@ function PersonalizationSlider(sliderProps: SliderProps) {
 
             <div className="relative custom-scrollbar flex gap-2 flex-wrap w-full max-h-[30vh] items-center overflow-y-auto">
                 {options.map((option, index) => {
-                    const isSelected = sliderProps.user[sliderProps.name]?.includes(option) || false;
+                    const id = parseStringToAttributeReq(option).id;
+                    const value = parseStringToAttributeReq(option).value;
+                    const isSelected = user.attributeIdList.includes(id) || false;
 
                     return (
                         <button
                             key={index}
-                            name={sliderProps.name}
-                            id={`${sliderProps.id}-${index}`}
+                            id={`${id}-${index}`}
                             className={`${isSelected ? "bg-shifter text-white shadow-black/20" : "bg-black/10 text-black shadow-shifter/20"} 
                             px-4 py-1 rounded-md transition-all duration-200 ease-in-out hover:shadow-md
                             focus:outline-none cursor-pointer whitespace-nowrap`}
-                            onClick={() => handleOptionClick(option)}
+                            onClick={() => handleOptionClick(id)}
                         >
                             {
-                                option
+                                value
                                     .toLowerCase()
                                     .replace(/_/g, " ")
                                     .replace(/\b\w/g, (c) => c.toUpperCase())

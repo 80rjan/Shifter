@@ -1,6 +1,6 @@
 import { ArrowBigUpDash, BookOpen, GraduationCap, Handshake } from "lucide-react";
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import {LocalizedLink} from "./links/LocalizedLink.tsx";
 
 function OurServices() {
     const { t } = useTranslation("home"); // assuming this JSON is in home.json
@@ -50,12 +50,14 @@ function OurServices() {
                                 strokeWidth={1.5}
                                 color={index === 0 ? "var(--color-white)" : "var(--color-black-text)"}
                             />
-                            <div className="flex flex-col gap-2 justify-between">
-                                <h2 className="text-2xl font-bold">{t(`${card.path}.title`)}</h2>
-                                <p className="text-lg font-light">{t(`${card.path}.description`)}</p>
-                                <Link to={t(`${card.path}.link`)} className="underline mt-4">
+                            <div className="flex flex-col justify-between h-full gap-4">
+                                <div className="flex flex-col gap-2">
+                                    <h2 className="text-2xl font-bold">{t(`${card.path}.title`)}</h2>
+                                    <p className="text-lg font-light">{t(`${card.path}.description`)}</p>
+                                </div>
+                                <LocalizedLink to={t(`${card.path}.link`)} className="underline ">
                                     {t("ourServices.discoverMore")}
-                                </Link>
+                                </LocalizedLink>
                             </div>
                         </div>
                     );

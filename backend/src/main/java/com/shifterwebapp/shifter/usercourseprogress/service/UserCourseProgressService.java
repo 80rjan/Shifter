@@ -46,12 +46,13 @@ public class UserCourseProgressService implements ImplUserCourseProgressService 
             throw new AccessDeniedException("User is not enrolled in the course with ID: " + courseId + " to update progress with ID: " + progressId);
         }
 
-        enrollmentService.updateEnrollmentStatusToCompleted(enrollmentId);
-
         UserCourseProgress userCourseProgress = userCourseProgressRepository.findById(progressId).orElseThrow();
         userCourseProgress.setCompleted(true);
         userCourseProgress.setCompletedAt(LocalDateTime.now());
         userCourseProgressRepository.save(userCourseProgress);
+        userCourseProgressRepository.flush();
+
+        enrollmentService.updateEnrollmentStatusToCompleted(enrollmentId);
 
         return userCourseProgress;
     }

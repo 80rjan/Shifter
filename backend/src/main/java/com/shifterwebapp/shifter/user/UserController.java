@@ -2,7 +2,10 @@ package com.shifterwebapp.shifter.user;
 
 import com.shifterwebapp.shifter.Validate;
 import com.shifterwebapp.shifter.auth.CustomAuthDetails;
+import com.shifterwebapp.shifter.enums.Language;
 import com.shifterwebapp.shifter.exception.ErrorResponse;
+import com.shifterwebapp.shifter.user.dto.UserDto;
+import com.shifterwebapp.shifter.user.dto.UserInfoDto;
 import com.shifterwebapp.shifter.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,20 +23,15 @@ public class UserController {
     private final Validate validate;
 
     @GetMapping("/me")
-    public ResponseEntity<?> getUser(Authentication authentication) {
+    public ResponseEntity<?> getUser(Authentication authentication, @RequestParam(defaultValue = "EN") Language language) {
         Long userId = validate.extractUserId(authentication);
 
-        return ResponseEntity.ok(userService.getUserById(userId));
+        return ResponseEntity.ok(userService.getUserById(userId, language));
     }
 
     @PutMapping("/favorite-course/{courseId}")
     public ResponseEntity<?> toggleFavoriteCourse(@PathVariable Integer courseId, Authentication authentication) {
-        validate.validateUserIsAuthenticated(authentication);
-        Object detailsObj = authentication.getDetails();
-        if (!(detailsObj instanceof CustomAuthDetails details)) {
-            return ResponseEntity.badRequest().body(new ErrorResponse("Invalid authentication details"));
-        }
-        Long userId = details.getUserId();
+        Long userId = validate.extractUserId(authentication);
 
         UserDto userDto = userService.toggleFavoriteCourse(userId, courseId);
         return ResponseEntity.ok(userDto);
@@ -41,40 +39,17 @@ public class UserController {
 
     @PutMapping("/update/info")
     public ResponseEntity<?> updateUser(Authentication authentication, @RequestBody UserInfoDto userInfoDto) {
-        validate.validateUserIsAuthenticated(authentication);
-        Object detailsObj = authentication.getDetails();
-        if (!(detailsObj instanceof CustomAuthDetails details)) {
-            return ResponseEntity.badRequest().body(new ErrorResponse("Invalid authentication details"));
-        }
-        Long userId = details.getUserId();
+        Long userId = validate.extractUserId(authentication);
 
         UserDto userDto = userService.updateUser(userId, userInfoDto);
         return ResponseEntity.ok(userDto);
     }
 
-    @PutMapping("/update/interests")
-    public ResponseEntity<?> updateInterests(Authentication authentication, @RequestBody List<String> interests) {
-        validate.validateUserIsAuthenticated(authentication);
-        Object detailsObj = authentication.getDetails();
-        if (!(detailsObj instanceof CustomAuthDetails details)) {
-            return ResponseEntity.badRequest().body(new ErrorResponse("Invalid authentication details"));
-        }
-        Long userId = details.getUserId();
+    @PutMapping("/update/attributes")
+    public ResponseEntity<?> updateAttributes(Authentication authentication, @RequestBody List<Long> attributeIdList) {
+        Long userId = validate.extractUserId(authentication);
 
-        UserDto userDto = userService.updateInterests(userId, interests);
-        return ResponseEntity.ok(userDto);
-    }
-
-    @PutMapping("/update/desired-skills")
-    public ResponseEntity<?> updateDesiredSkills(Authentication authentication, @RequestBody List<String> desiredSkills) {
-        validate.validateUserIsAuthenticated(authentication);
-        Object detailsObj = authentication.getDetails();
-        if (!(detailsObj instanceof CustomAuthDetails details)) {
-            return ResponseEntity.badRequest().body(new ErrorResponse("Invalid authentication details"));
-        }
-        Long userId = details.getUserId();
-
-        UserDto userDto = userService.updateDesiredSkills(userId, desiredSkills);
+        UserDto userDto = userService.updateAttribute(userId, attributeIdList);
         return ResponseEntity.ok(userDto);
     }
 }

@@ -1,14 +1,14 @@
 {
-  "welcomeBack": "Добредојдовте повторно!",
-  "subtitle": "Да ја отклучиме вашата следна деловна пресвртница!",
+  "welcomeBack": "Добредојдовте назад!",
+  "subtitle": "Продолжете да учите и да се надградувате.",
   "backToMain": "Назад кон главната страница",
   "emailLabel": "Емаил адреса",
   "emailPlaceholder": "ime@domen.com",
   "passwordLabel": "Лозинка",
   "passwordPlaceholder": "********",
   "logIn": "Најави се",
+  "loggingIn": "Те најавуваме...",
   "register": "Регистрирај се",
-  "loggingIn": "Се најавуваме...",
   "or": "или",
   "googleLogin": "Најави се со Google",
   "errors": {

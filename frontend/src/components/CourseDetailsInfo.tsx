@@ -8,15 +8,14 @@ import {
     Text,
     TvMinimalPlay
 } from "lucide-react"
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
-import ShifterArrow from "../../public/Shifter-Arrow.png";
 import {useState} from "react";
 import type {CourseDetail} from "../models/javaObjects/CourseDetail.tsx";
+import {useTranslation} from "react-i18next";
 
 function CourseDetailsInfo({ course }: { course: CourseDetail | null}) {
     const [showMore, setShowMore] = useState(false);
     const [openIndices, setOpenIndices] = useState<number[]>([]);
+    const { t } = useTranslation("courses");
 
     const snippetLength = 800;
     const description = course?.descriptionLong || "";
@@ -36,7 +35,7 @@ function CourseDetailsInfo({ course }: { course: CourseDetail | null}) {
         <>
             {/*WHAT WILL BE LEARNED*/}
             <section className="relative flex flex-col gap-12 text-left px-horizontal-lg py-vertical-md overflow-clip ">
-                <h2 className="text-5xl font-semibold">What you'll learn</h2>
+                <h2 className="text-5xl font-semibold">{t("courseDetails.whatYoullLearn")}</h2>
                 <div className="grid grid-cols-2 gap-y-4 gap-x-20">
                     {
                         course?.whatWillBeLearned.map((learning, index) => (
@@ -52,7 +51,7 @@ function CourseDetailsInfo({ course }: { course: CourseDetail | null}) {
             {/*COURSE CONTENT*/}
             <section
                 className="relative flex flex-col gap-12 text-left px-horizontal-lg py-vertical-md overflow-clip ">
-                <h2 className="text-5xl font-semibold">Course content</h2>
+                <h2 className="text-5xl font-semibold">{t("courseDetails.courseContent")}</h2>
                 <div>
                     {
                         course?.courseContents.map((content, index) => {
@@ -73,9 +72,9 @@ function CourseDetailsInfo({ course }: { course: CourseDetail | null}) {
                                         </div>
 
                                         <div className="flex gap-2 items-center text-black/80">
-                                            <span>{content.courseLectures.length} lectures</span>
+                                            <span>{content.courseLectures.length} {t("courseDetails.lectures")}</span>
                                             <span>•</span>
-                                            <span>{Math.round(content.courseLectures.reduce((sum, lecture) => sum + lecture.durationMinutes, 0))}min</span>
+                                            <span>{Math.round(content.courseLectures.reduce((sum, lecture) => sum + lecture.durationMinutes, 0))}{t("courseDetails.min")}</span>
                                         </div>
                                     </div>
 
@@ -99,7 +98,7 @@ function CourseDetailsInfo({ course }: { course: CourseDetail | null}) {
                                                                     <p className="font-light opacity-80">{lecture.description}</p>
                                                                 </div>
                                                             </div>
-                                                            <span>{lecture.durationMinutes}min</span>
+                                                            <span>{lecture.durationMinutes}{t("courseDetails.min")}</span>
                                                         </div>
                                                     )
                                                 })}
@@ -115,7 +114,7 @@ function CourseDetailsInfo({ course }: { course: CourseDetail | null}) {
 
             {/*DESCRIPTION*/}
             <section className="flex flex-col gap-12 text-left px-horizontal-lg py-vertical-md">
-                <h2 className="text-5xl font-semibold">Course description</h2>
+                <h2 className="text-5xl font-semibold">{t("courseDetails.courseDescription")}</h2>
 
                 <div>
                     <div className="relative overflow-hidden">
@@ -124,7 +123,7 @@ function CourseDetailsInfo({ course }: { course: CourseDetail | null}) {
                         </p>
 
                         {/* Show the fade overlay only when text is truncated */}
-                        {!showMore && (
+                        {(!showMore && description !== shortDescription) && (
                             <div
                                 className="pointer-events-none absolute bottom-0 left-0 w-full h-24
                    bg-gradient-to-t from-white to-transparent"
@@ -140,12 +139,12 @@ function CourseDetailsInfo({ course }: { course: CourseDetail | null}) {
                         >
                             {showMore ? (
                                 <>
-                                    Show less
+                                    {t("courseDetails.showLess")}
                                     <ChevronDown/>
                                 </>
                             ) : (
                                 <>
-                                    Show more
+                                    {t("courseDetails.showMore")}
                                     <ChevronUp/>
                                 </>
                             )}

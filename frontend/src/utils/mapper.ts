@@ -31,13 +31,13 @@ export function queryToPriceMapper(option: string): string {
 
 export function durationToQueryMapper(option: string): string {
     switch (option) {
-        case "< 3 hours":
+        case "< 3h":
             return "extraShort";
-        case "3-6 hours":
+        case "3h - 6h":
             return "short";
-        case "6-10 hours":
+        case "6h - 10h":
             return "medium";
-        case "10+ hours":
+        case "10h + ":
             return "long";
         default:
             return "";
@@ -47,14 +47,18 @@ export function durationToQueryMapper(option: string): string {
 export function queryToDurationMapper(option: string): string {
     switch (option) {
         case "extraShort":
-            return "< 3 hours";
+            return "< 3h";
         case "short":
-            return "3-6 hours";
+            return "3h - 6h";
         case "medium":
-            return "6-10 hours";
+            return "6h - 10h";
         case "long":
-            return "10+ hours";
+            return "10h + ";
         default:
             return "";
     }
+}
+
+export function indexToDifficultyMapper(index: number, arr: string[]): string {
+    return arr[index];
 }

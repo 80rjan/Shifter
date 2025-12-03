@@ -4,12 +4,12 @@ import ShifterArrow from "../../public/Shifter-Arrow-White.png";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import ShifterLogo from "../../public/Shifter-S2W-Transparent.png";
-import { Link } from "react-router-dom";
 import React from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useRegisterHook } from "../hooks/useRegisterHook.tsx";
 import GoogleLoginButton from "../components/GoogleLoginButton.tsx";
 import { useTranslation } from "react-i18next";
+import {LocalizedLink} from "../components/links/LocalizedLink.tsx";
 
 function Register() {
     const { t } = useTranslation("register");
@@ -44,12 +44,12 @@ function Register() {
             {/* RIGHT FORM CONTAINER */}
             <section className="relative flex flex-col justify-center items-center flex-1 px-horizontal-md">
                 <div className="absolute top-0 px-4 py-4 flex w-full justify-between items-center">
-                    <Link to={"/"} >
+                    <LocalizedLink to={"/"} >
                         <img src={ShifterLogo} alt="Shifter Logo" className="w-40 h-auto object-contain"/>
-                    </Link>
-                    <Link to={"/"} className="hover:bg-shifter/20 hover:text-shifter underline decoration-current font-semibold text-black/80 rounded-sm px-4 py-2">
+                    </LocalizedLink>
+                    <LocalizedLink to={"/"} className="hover:bg-shifter/20 hover:text-shifter underline decoration-current font-semibold text-black/80 rounded-sm px-4 py-2">
                         {t("backToMain")}
-                    </Link>
+                    </LocalizedLink>
                 </div>
 
                 {isSuccess ? (
@@ -108,12 +108,12 @@ function Register() {
                                 >
                                     {isLoading ? t("creatingAccount") : t("createAccount")}
                                 </button>
-                                <Link
+                                <LocalizedLink
                                     to="/login"
                                     className="hover:shadow-md hover:shadow-shifter/20 transition-all duration-200 ease-in-out cursor-pointer rounded-md text-shifter/80 w-1/3 py-1 bg-white border-3 border-shifter/20 font-medium whitespace-nowrap opacity-80"
                                 >
                                     {t("logIn")}
-                                </Link>
+                                </LocalizedLink>
                                 {isLoading && <div className="h-full loader"></div>}
                             </div>
                         </form>

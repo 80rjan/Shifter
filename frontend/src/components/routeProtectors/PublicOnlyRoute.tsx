@@ -1,15 +1,13 @@
 import type {JSX} from "react";
-import { useAuthContext } from "../../context/AuthContext.tsx";
 import { Navigate } from "react-router-dom";
+import {useUserContext} from "../../context/UserContext.tsx";
+import {useTranslation} from "react-i18next";
 
 const PublicOnlyRoute = ({ children }: { children: JSX.Element }) => {
-    const { user, authChecked } = useAuthContext();
+    const { user } = useUserContext();
+    const { i18n } = useTranslation();
 
-    if (!authChecked) {
-        return null;
-    }
-
-    if (user) return <Navigate to="/" replace />;
+    if (user) return <Navigate to={`/${i18n.language.toLowerCase()}`} replace />;
 
     return children;
 };

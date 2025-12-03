@@ -1,14 +1,14 @@
-import type {CourseContentFull} from "../../models/javaObjects/CourseContentFull.tsx";
+import type {CourseContentLearn} from "../../models/javaObjects/CourseContentLearn.tsx";
 import {useEffect, useState} from "react";
 import {ChevronDown, ClipboardList, File, ListChecks, Text, TvMinimalPlay} from "lucide-react";
-import type {CourseLectureFull} from "../../models/javaObjects/CourseLectureFull.tsx";
+import type {CourseLectureLearn} from "../../models/javaObjects/CourseLectureLearn.tsx";
 import {X} from "lucide-react";
 import CircularProgress from "../../assets/CircularProgress.tsx";
 
 function CourseContentSideNav({ activeLecture, setActiveLecture, courseContents, updateLecture, closeModal, progressPercentage }: {
-    activeLecture: CourseLectureFull,
-    setActiveLecture: (lecture: CourseLectureFull) => void,
-    courseContents: CourseContentFull[] | undefined,
+    activeLecture: CourseLectureLearn,
+    setActiveLecture: (lecture: CourseLectureLearn) => void,
+    courseContents: CourseContentLearn[] | undefined,
     updateLecture: (progressId: number, isComplete: boolean) => void,
     closeModal: () => void,
     progressPercentage: number

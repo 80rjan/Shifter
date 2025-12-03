@@ -1,27 +1,28 @@
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {useAuthContext} from "../context/AuthContext.tsx";
 import type {UserPersonalization} from "../models/javaObjects/UserPersonalization.tsx";
 import {useNavigate} from "react-router-dom";
 import PersonalizeStepOne from "../components/registerSteps/PersonalizeStepOne.tsx";
 import PersonalizationStepTwo from "../components/registerSteps/PersonalizationStepTwo.tsx";
-import PersonalizationStepThree from "../components/registerSteps/PersonalizationStepThree.tsx";
+import {verifyEmailApi} from "../api/verificationTokenApi.ts";
 
 export function usePersonalizeHook() {
-    const {verify, personalize} = useAuthContext();
-    const [verificationChecked, setVerificationChecked] = useState<boolean>(false);
+    const {verify, personalize, accessToken } = useAuthContext();
+    const verificationChecked = useRef(false);
     const [isVerified, setIsVerified] = useState(false);
+    const [isNewVerificationEmailSent, setIsNewVerificationEmailSent] = useState(false);
+    const [error, setError] = useState("");
+    const [showError, setShowError] = useState(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [activeStep, setActiveStep] = useState(0);
-    const [showError, setShowError] = useState(false);
-    const [error, setError] = useState("");
     const [direction, setDirection] = useState(0); // 1 for next, -1 for back
     const [user, setUser] = useState<UserPersonalization>({
         name: "",
         email: "",
         workPosition: "",
         companySize: "",
-        interests: [],
-        desiredSkills: [],
+        language: "EN",
+        attributeIdList: []
     });
     const navigate = useNavigate();
 
@@ -59,8 +60,7 @@ export function usePersonalizeHook() {
 
     const stepsContent = [
         <PersonalizeStepOne setUser={setUser} user={user} setError={setError}/>,
-        <PersonalizationStepTwo setUser={setUser} user={user} setError={setError}/>,
-        <PersonalizationStepThree setUser={setUser} user={user} setError={setError}/>
+        // <PersonalizationStepTwo setUser={setUser} user={user} setError={setError}/>
     ];
 
 
@@ -69,58 +69,78 @@ export function usePersonalizeHook() {
         const verificationToken = params.get("token");
 
         verify(verificationToken || "")
-            .then((userEmail) => {
-                setUser({
-                    ...user,
-                    email: userEmail,
-                })
+            .then(userMail => {
                 setIsVerified(true);
+                setUser(prev => ({
+                    ...prev,
+                    email: userMail
+                }))
             })
             .catch(err => {
                 setIsVerified(false);
-                setError("Verification failed. Please try again.");
-                setShowError(true);
                 console.error("Error verifying user " + err);
             })
-            .finally(() => setVerificationChecked(true))
+            .finally(() => verificationChecked.current = true)
     }
 
     const handlePersonalize = async () => {
         if (!isVerified) {
-            setError("Verification failed. Please try again.");
-            setShowError(true);
             return;
         }
+        if (error.length > 0) {
+            setShowError(true)
+            return;
+        }
+
         setIsLoading(true);
         personalize(user)
             .then(() => {
                 navigate("/");
             })
             .catch(err => {
-                setError("Personalization failed. Please try again.");
-                setShowError(true);
                 console.error("Error personalizing account for user: ", err);
             })
             .finally(() => setIsLoading(false));
     }
 
+    const sendNewVerificationEmail = async () => {
+        setIsLoading(true);
+
+        verifyEmailApi(accessToken || "")
+            .then(() => {
+                setIsNewVerificationEmailSent(true);
+            })
+            .catch(err => {
+                setIsNewVerificationEmailSent(false);
+                console.error("Error sending verification token to email ", err);
+            })
+            .finally(() => {
+                setIsLoading(false)
+            })
+    }
+
 
     useEffect(() => {
-        handleVerify()
+        if (!verificationChecked.current) {
+            handleVerify();
+            verificationChecked.current = true; // <-- SET REF HERE SYNCHRONOUSLY
+        }
     }, [])
 
     return {
+        error,
+        showError,
+        isNewVerificationEmailSent,
         verificationChecked,
         isVerified,
         isLoading,
         activeStep,
-        showError,
-        error,
         direction,
         variants,
         stepsContent,
         handleNext,
         handleBack,
-        handlePersonalize
+        handlePersonalize,
+        verifyEmail: sendNewVerificationEmail,
     }
 }

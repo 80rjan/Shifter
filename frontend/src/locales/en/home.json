@@ -1,8 +1,8 @@
 {
   "hero": {
     "label": "Shift 2 Win",
-    "title": "Simplify Your Growth Journey",
-    "description": "Expert guidance, practical courses, and group academies designed to help family-owned businesses thrive.",
+    "title": "Where Family Businesses Thrive",
+    "description": "Expert guidance, practical courses, and group academies designed for sustainable growth & success in family-owned businesses.",
     "cta": {
       "freeConsultation": "Book a Free Consultation",
       "contact": "Get In Touch"
@@ -17,7 +17,7 @@
         "label": "Mentoring Hours"
       },
       "yearsOfShifter": {
-        "value": 4,
+        "value": 5,
         "label": "Years of Shifter"
       }
     }
@@ -39,7 +39,7 @@
       },
       {
         "title": "Consulting",
-        "description": "Targeted consulting to solve specific challenges and deliver immediate results.",
+        "description": "Targeted consulting to solve specific challenges and deliver fast results.",
         "link": "/consulting"
       },
       {
@@ -50,38 +50,38 @@
     ]
   },
   "collaborationSteps": {
-    "heading": "How to Start Your Journey to <strong>Success</strong>",
+    "heading": "Your path to a <strong>more successful business</strong> starts here",
     "button": "Get Started",
     "step1": {
       "beforeConsultation": {
-        "title": "Schedule a Free Consultation",
-        "description": "Schedule a no-obligation consultation to discuss your challenges, goals, and expectations."
+        "title": "Book a Free Consultation",
+        "description": "Schedule a free consultation where you’ll share your challenges, goals, and expectations."
       },
       "afterConsultation": {
-        "title": "Request Continued Support",
-        "description": "Reach out to continue your journey with tailored guidance for your next business goals."
+        "title": "Contact Us",
+        "description": "Reach out to continue with tailored guidance and strategies for your business."
       }
     },
     "step2": {
-      "title": "Share Your Needs & Goals",
-      "description": "Provide clear insights about your business struggles and aspirations to shape the right strategy."
+      "title": "Share Your Challenges and Goals",
+      "description": "Provide clear information about your business challenges and goals so we can create the right strategy."
     },
     "step3": {
       "title": "Review Your Personalized Plan",
-      "description": "Receive a tailored roadmap with clear, actionable steps to help you achieve business success."
+      "description": "Receive a tailored roadmap with clear, actionable steps to achieve success in your business."
     },
     "step4": {
-      "title": "Start Implementing & Collaborating",
-      "description": "Apply expert guidance and proven strategies with continuous support throughout the process."
+      "title": "Start Implementation and Collaboration",
+      "description": "Apply expert advice and proven strategies with ongoing support throughout the process."
     }
   },
   "coursesCarousel": {
-    "heading": "Unlock Your Growth With <strong class='text-shifter'>E-Learning</strong>",
+    "heading": "Learn, Grow, and Succeed With <strong class='text-shifter'>E-Learning</strong>",
     "description": "Access expert-led courses designed to help you master business, strategy, and success - anytime, anywhere."
   },
   "shifterValues": {
     "heading": "Our Core <strong class='text-shifter'>Values</strong>",
-    "description": "Our SHIFT Values define our approach to mentoring and consulting. We focus on Sustainable Results, a Holistic Approach, In-depth Analysis, Fact-based Solutions, and Tailor-made Services—ensuring impactful and lasting success.",
+    "description": "Our SHIFT Values guide everything we do, shaping how we support family businesses across all programs and services. They give us a structured approach, turning clear insights into tangible, lasting results.",
     "valuesList": [
       "Sustainable Results",
       "Holistic Approach",

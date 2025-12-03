@@ -1,77 +1,51 @@
 import {useCourseStorage} from "../context/CourseStorage.ts";
 import Slider from "react-slick";
 import CourseCard from "./CourseCard.tsx";
-import {useAuthContext} from "../context/AuthContext.tsx";
-import {useEffect} from "react";
-import {fetchRecommendedCoursesApi} from "../api/courseApi.ts";
-import CourseCardSkeleton from "./skeletons/CourseCardSkeleton.tsx";
+import {useTranslation} from "react-i18next";
 
 function CoursesCarouselCourseDetails({courseId}: {
     courseId: number;
 }) {
-    const {recommendedCourses, setRecommendedCourses} = useCourseStorage();
-    const {accessToken} = useAuthContext();
+    const {recommendedCourses} = useCourseStorage();
+    const { t } = useTranslation("courses");
 
-    useEffect(() => {
-        const fetchRecommendedCourses = async () => {
-            const stored = sessionStorage.getItem("recommendedCourses");
-            if (stored) {
-                setRecommendedCourses(JSON.parse(stored));
-                return;
-            }
-
-            fetchRecommendedCoursesApi(accessToken || "")
-                .then(data => {
-                    setRecommendedCourses(data);
-                    sessionStorage.setItem("recommendedCourses", JSON.stringify(data));
-                })
-                .catch(err => {
-                    console.error("Error fetching recommended courses:", err);
-                });
-        }
-
-        if (!recommendedCourses) {
-            fetchRecommendedCourses();
-        }
-    }, []);
+    if (recommendedCourses!.length <= 1) // 1 because the course the user is curr on is in the recommended courses
+        return null;
 
     return (
         <section className="flex flex-col gap-12 text-left px-horizontal-lg py-vertical-md">
-            <h2 className="text-5xl font-semibold">People also bought</h2>
+            <h2 className="text-5xl font-semibold">{t("courseDetails.peopleAlsoBought")}</h2>
 
             <div className="relative mx-0 my-auto w-full p-0">
                 {
-                    recommendedCourses && recommendedCourses.filter(course => course.id !== courseId).length > 0 ? (
-                        recommendedCourses.filter(course => course.id !== courseId).length <= 3 ? (
-                            <div className="flex gap-4 justify-center items-center">
-                                {recommendedCourses
-                                    .filter(course => course.id !== courseId)
-                                    .map((course, index) => (
-                                    <div key={index} className="max-w-1/3">
-                                        <CourseCard card={course} key={index}/>
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <Slider {...settings}>
-                                {recommendedCourses
-                                    .filter(course => course.id !== courseId)
-                                    .map((course, index) => (
-                                    <div key={index}>
-                                        <CourseCard card={course}/>
-                                    </div>
-                                ))}
-                            </Slider>
-                        )
+                    recommendedCourses!.length <= 4 ? (
+                        <div className="flex gap-4 justify-center items-center">
+                            {recommendedCourses!
+                                .map((course, index) => {
+                                    if (course.id === courseId)
+                                        return null
+                                    return (
+                                        <div key={index} className="max-w-1/3">
+                                            <CourseCard card={course} key={index}/>
+                                        </div>
+                                    )
+                                })}
+                        </div>
                     ) : (
                         <Slider {...settings}>
-                            {[...Array(4)].map((_, index) => (
-                                <div key={index}>
-                                    <CourseCardSkeleton/>
-                                </div>
-                            ))}
+                            {recommendedCourses!
+                                .map((course, index) => {
+                                    if (course.id === courseId)
+                                        return null
+                                    return (
+                                        <div key={index}>
+                                            <CourseCard card={course}/>
+                                        </div>
+                                    )
+                                })}
                         </Slider>
-                    )}
+                    )
+                }
             </div>
         </section>
     )

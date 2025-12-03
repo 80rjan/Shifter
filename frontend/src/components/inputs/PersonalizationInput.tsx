@@ -29,6 +29,7 @@ function PersonalizationInput(inputProps: InputProps) {
             <div className="flex gap-2 w-full">
                 <div className="w-full">
                     <input
+                        required
                         id={inputProps.id}
                         type={!inputProps.name.includes("password") ? "text" : inputProps.showPassword ? "text" : "password"}
                         name={inputProps.name}

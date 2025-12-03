@@ -5,19 +5,24 @@ import HeroCourseDetails from "../components/HeroCourseDetails.tsx";
 import CourseDetailsInfo from "../components/CourseDetailsInfo.tsx";
 import CoursesCarouselCourseDetails from "../components/CoursesCarouselCourseDetails.tsx";
 import type {CourseDetail} from "../models/javaObjects/CourseDetail.tsx";
-import {useAuthContext} from "../context/AuthContext.tsx";
 import HeroCourseDetailsSkeleton from "../components/skeletons/HeroCourseDetailsSkeleton.tsx";
 import CourseDetailsInfoSkeleton from "../components/skeletons/CourseDetailsInfoSkeleton.tsx";
 import {useEnrollUserInCourse} from "../hooks/useEnrollUserInCourse.tsx";
+import {useTranslation} from "react-i18next";
+import type {Language} from "../models/types/Language.tsx";
+import CoursesCarouselCourseDetailsSkeleton from "../components/skeletons/CoursesCarouselCourseDetailsSkeleton.tsx";
 
 function CourseDetails() {
-    const { loading: authLoading } = useAuthContext();
     const [loading, setLoading] = useState<boolean>(true);
     const { courseId } = useParams<{ courseId: string; courseTitle: string }>();
     const [course, setCourse] = useState<CourseDetail>({
+        translatedLanguages: [],
+        urlSlug: "",
+        averageRating: 0,
         color: "",
         courseContentCount: 0,
         courseContents: [],
+        courseLectureCount: 0,
         description: "",
         descriptionLong: "",
         descriptionShort: "",
@@ -26,41 +31,39 @@ function CourseDetails() {
         id: 0,
         imageUrl: "",
         price: 0,
-        rating: 0,
-        ratingCount: 0,
         skillsGained: [],
         title: "",
         titleShort: "",
         topicsCovered: [],
         whatWillBeLearned: []
     });
-
-    const { enroll } = useEnrollUserInCourse(Number(courseId), course?.titleShort);
+    const { i18n } = useTranslation();
+    const { enroll } = useEnrollUserInCourse(Number(courseId), course?.urlSlug || "");
 
     useEffect(() => {
         setLoading(true);
 
-        fetchCourseDetailsApi(Number(courseId))
+        fetchCourseDetailsApi(Number(courseId), i18n.language as Language)
             .then(data => {
                 setCourse(data);
             })
             .catch(err => {
-                console.error("Error fetching javaObjects details: ", err);
+                console.error("Error fetching course details: ", err);
             })
             .finally(() => {
                 setLoading(false);
             })
 
-    }, [courseId])
+    }, [i18n.language, courseId])
 
     return (
         <main className="bg-beige text-black-text">
             {
-                (authLoading || loading) ?
+                loading ?
                     <>
                         <HeroCourseDetailsSkeleton />
                         <CourseDetailsInfoSkeleton />
-                        <CoursesCarouselCourseDetails />
+                        <CoursesCarouselCourseDetailsSkeleton />
                     </> :
                     <>
                         <HeroCourseDetails course={course} enrollUser={enroll}/>

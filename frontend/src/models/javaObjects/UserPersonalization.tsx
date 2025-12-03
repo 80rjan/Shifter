@@ -3,6 +3,6 @@ export interface UserPersonalization {
     email: string;
     companySize: string;
     workPosition: string;
-    interests: string[];
-    desiredSkills: string[];
+    language: string;
+    attributeIdList: number[];
 }

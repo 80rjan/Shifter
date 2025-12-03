@@ -1,25 +1,46 @@
 {
   "hero": {
-    "title": "Book Your Free Expert Session",
-    "description": "Talk to an expert about your business goals and challenges. Get a personalized program recommendation tailored to your needs."
+    "title": "Free Expert Session – 30min",
+    "description": "Talk to an expert who will help you turn your business challenges into a clear path for growth and development. Receive recommendations tailored to your needs and goals."
   },
   "nextSteps": {
-    "title": "Next Steps After Submission?",
+    "title": "What are the next steps after submitting the form?",
     "steps": [
-      {"title": "Your Expert is Assigned","description":"We schedule an expert for your session and send you a confirmation email with all the meeting details."},
-      {"title": "Expert Prepares for Your Session","description":"Your expert reviews the information you provided to create valuable insights and a strategy tailored to your situation."},
-      {"title": "Attend Your Personalized Session","description":"Join the session and receive actionable guidance along with a program or mentorship recommendation designed specifically for your goals."}
+      {
+        "title": "Your session is scheduled",
+        "description": "After selecting your time slot, the expert reserves that date for you, and you will receive a confirmation email with the session link."
+      },
+      {
+        "title": "The expert prepares for your session",
+        "description": "Your expert reviews the information you provided to prepare relevant advice and guidance tailored to your business."
+      },
+      {
+        "title": "Session with the expert",
+        "description": "The session lasts 30 minutes, during which we discuss your goals and challenges. After the call, you will receive a personalized proposal with the most suitable solutions—mentoring, consulting, and/or courses."
+      }
     ]
   },
   "form": {
-    "profileHint": "These values are automatically populated from your profile. If any of them are incorrect, please update them in the Profile page.",
+    "profileHint": "These details are automatically taken from your profile. If any of them are incorrect, you can update them on the Profile page.",
     "name": "Name",
     "email": "Email",
     "fields": {
-      "aboutCompany": {"label":"About your business","placeholder":"What you do, industry, customers"},
-      "challenges": {"label":"Your current challenges","placeholder":"E.g. sales, growth, team issues"},
-      "expectations": {"label":"What you want from the session","placeholder":"Advice, strategy, solutions"},
-      "otherInfo": {"label":"Anything else","placeholder":"Extra context or details"}
+      "basicInfo": {
+        "label": "Basic Information",
+        "placeholder": "Your business name and website link"
+      },
+      "aboutCompany": {
+        "label": "About Your Business",
+        "placeholder": "What you do, industry, clients"
+      },
+      "challenges": {
+        "label": "Your Current Challenges",
+        "placeholder": "For example: sales, growth, team issues"
+      },
+      "otherInfo": {
+        "label": "Additional Details (optional)",
+        "placeholder": "Any extra context or details"
+      }
     },
     "selectDate": "Select a date",
     "selectTime": "Select a time",
@@ -27,13 +48,14 @@
     "booking": "Booking..."
   },
   "confirmation": {
-    "title": "Your free consultation is scheduled! 🎉",
-    "description": "Completing the form was the <span class='font-semibold text-shifter'>first step toward progress and growth</span>. Check your <span class='font-semibold text-shifter'>email for the Zoom link.</span>"
+    "title": "Your Free Consultation Is Booked! 🎉",
+    "description": "Submitting the form was <span class='font-semibold text-shifter'>the first step toward progress and growth</span>. Check your <span class='font-semibold text-shifter'>email for the Zoom link.</span>"
   },
-  "optionalHint": "<sup>*</sup> These fields are optional. Filling them out helps us better understand your challenges and objectives, so we can prepare a more personalized session.",
+  "optionalHint": "<sup>*</sup> These fields are optional. Filling them in helps our experts better understand your challenges and goals so they can prepare a personalized session.",
   "errors": {
-    "selectDateTime": "Please select both date and time.",
-    "alreadyUsed": "We couldn’t schedule your meeting. It appears you’ve already used your free consultation. Feel free to get in touch with us through our Contact page for more options.",
-    "failedSchedule": "Failed to schedule the meeting. Please try again later or contact support."
+    "selectDateTime": "Please select both a date and a time.",
+    "alreadyUsed": "We couldn’t schedule your session. It appears you have already used your free consultation. Contact us through the Contact page for more options.",
+    "failedSchedule": "We couldn’t schedule your session. Please try again later or contact support.",
+    "completeAllInputs": "Please fill in all required fields so the expert can better prepare for your session."
   }
 }

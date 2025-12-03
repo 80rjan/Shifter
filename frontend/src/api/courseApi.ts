@@ -1,8 +1,9 @@
 import axios, {type AxiosResponse} from "axios";
 import type {CoursePreview} from "../models/javaObjects/CoursePreview.tsx";
 import type {CourseDetail} from "../models/javaObjects/CourseDetail.tsx";
-import type {CourseFull} from "../models/javaObjects/CourseFull.tsx";
+import type {CourseLearn} from "../models/javaObjects/CourseLearn.tsx";
 import type {CoursePreviewEnrolled} from "../models/javaObjects/CoursePreviewEnrolled.tsx";
+import type {Language} from "../models/types/Language.tsx";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
@@ -22,9 +23,10 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL;
 //
 //     return res.data;
 // }
-export const fetchCoursesApi = async (accessToken?: string, signal?: AbortSignal): Promise<CoursePreview[]> => {
+export const fetchCoursesApi = async (accessToken: string, language: Language, signal?: AbortSignal): Promise<CoursePreview[]> => {
+
     const res = await axios.get(
-        `${backendUrl}/api/courses`,
+        `${backendUrl}/api/courses?language=${language}`,
         {
             signal,
             headers: accessToken ? {Authorization: `Bearer ${accessToken}`} : undefined
@@ -35,8 +37,8 @@ export const fetchCoursesApi = async (accessToken?: string, signal?: AbortSignal
     return res.data;
 }
 
-export const fetchRecommendedCoursesApi = async (accessToken: string): Promise<CoursePreview[]> => {
-    const res = await axios.get(`${backendUrl}/api/courses/recommended`, {
+export const fetchRecommendedCoursesApi = async (accessToken: string, language: Language): Promise<CoursePreview[]> => {
+    const res = await axios.get(`${backendUrl}/api/courses/recommended?language=${language}`, {
         headers: {
             Authorization: `Bearer ${accessToken}`
         }
@@ -45,8 +47,8 @@ export const fetchRecommendedCoursesApi = async (accessToken: string): Promise<C
     return res.data;
 }
 
-export const fetchEnrolledCoursesApi = async (accessToken: string): Promise<CoursePreviewEnrolled[]> => {
-    const res = await axios.get(`${backendUrl}/api/courses/enrolled`, {
+export const fetchEnrolledCoursesApi = async (accessToken: string, language: Language): Promise<CoursePreviewEnrolled[]> => {
+    const res = await axios.get(`${backendUrl}/api/courses/enrolled?language=${language}`, {
         headers: {
             Authorization: `Bearer ${accessToken}`
         }
@@ -55,18 +57,18 @@ export const fetchEnrolledCoursesApi = async (accessToken: string): Promise<Cour
     return res.data;
 }
 
-export const fetchCourseDetailsApi = async (courseId: number, signal?: AbortSignal): Promise<CourseDetail> => {
+export const fetchCourseDetailsApi = async (courseId: number, language: Language, signal?: AbortSignal): Promise<CourseDetail> => {
     const res = await axios.get(
-        `${backendUrl}/api/courses/${courseId}`,
+        `${backendUrl}/api/courses/${courseId}?language=${language}`,
         {signal}
     );
 
     return res.data;
 }
 
-export const fetchCourseFullApi = async (courseId: number, accessToken: string): Promise<CourseFull> => {
+export const fetchEnrolledCourseLearnApi = async (courseId: number, accessToken: string, language: Language): Promise<CourseLearn> => {
     const res = await axios.get(
-        `${backendUrl}/api/courses/${courseId}/enrolled`, {
+        `${backendUrl}/api/courses/enrolled/${courseId}?language=${language}`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -75,13 +77,13 @@ export const fetchCourseFullApi = async (courseId: number, accessToken: string):
     return res.data;
 }
 
-export const fetchCoursesTopicsApi = async (): Promise<string[]> => {
-    const res = await axios.get(`${backendUrl}/api/courses/topics`);
+export const fetchCoursesTopicsApi = async (language: Language): Promise<string[]> => {
+    const res = await axios.get(`${backendUrl}/api/courses/topics?language=${language}`);
     return res.data;
 }
 
-export const fetchCoursesSkillsApi = async (): Promise<string[]> => {
-    const res = await axios.get(`${backendUrl}/api/courses/skills`);
+export const fetchCoursesSkillsApi = async (language: Language): Promise<string[]> => {
+    const res = await axios.get(`${backendUrl}/api/courses/skills?language=${language}`);
     return res.data;
 }
 

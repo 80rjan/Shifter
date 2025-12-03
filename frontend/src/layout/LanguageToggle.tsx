@@ -1,14 +1,30 @@
 import ReactCountryFlag from "react-country-flag";
-import { useState } from "react";
+import {useState} from "react";
 import i18n from "../i18n.ts";
+import {useLocation, useNavigate} from "react-router-dom";
 
 export default function LanguageToggle() {
     const [open, setOpen] = useState(false);
-    const [lang, setLang] = useState("en");
+    const location = useLocation();
+    const currentLangFromUrl = location.pathname.split("/")[1] === "mk" ? "MK" : "EN";
+    const [lang, setLang] = useState(currentLangFromUrl);
+    const navigate = useNavigate();
 
-    const handleLangChange = (lang: string) => {
-        setLang(lang);
-        i18n.changeLanguage(lang);
+    const handleLangChange = (newLang: string) => {
+        const newLangLower = newLang.toLowerCase();
+
+        i18n.changeLanguage(newLang);
+
+        const currentPath = location.pathname;
+        const queryParams = location.search;
+
+        const pathWithoutLang = currentPath.replace(/^\/(en|mk)/i, '');
+
+        const newPath = `/${newLangLower}${pathWithoutLang}${queryParams}`;
+
+        navigate(newPath);
+
+        setLang(newLang);
         setOpen(false);
     }
 
@@ -21,7 +37,7 @@ export default function LanguageToggle() {
                    bg-black/40 backdrop-blur-md border border-white/20 text-white
                    hover:bg-black/60 transition-all duration-200 ease-in-out cursor-pointer"
             >
-                {lang === "en" ? "EN" : "MK"}
+                {lang}
             </button>
 
             {/* Language List (UPWARD) */}
@@ -35,14 +51,14 @@ export default function LanguageToggle() {
                     "
                 >
                     <div
-                        onClick={() => { handleLangChange("mk") }}
+                        onClick={() => { handleLangChange("MK") }}
                         className="flex items-center gap-3 px-4 py-2 hover:bg-white/10 cursor-pointer"
                     >
                         <ReactCountryFlag countryCode="MK" svg style={{ width: "20px", height: "20px" }} />
                         <span>Македонски</span>
                     </div>
                     <div
-                        onClick={() => { handleLangChange("en") }}
+                        onClick={() => { handleLangChange("EN") }}
                         className="flex items-center gap-3 px-4 py-2 hover:bg-white/10 cursor-pointer"
                     >
                         <ReactCountryFlag countryCode="GB" svg style={{ width: "20px", height: "20px" }} />

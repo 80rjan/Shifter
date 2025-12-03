@@ -4,6 +4,8 @@ import {fetchCoursesApi, fetchEnrolledCoursesApi} from "../api/courseApi.ts";
 import {useAuthContext} from "../context/AuthContext.tsx";
 import {useCourseStorage} from "../context/CourseStorage.ts";
 import type {CoursePreviewEnrolled} from "../models/javaObjects/CoursePreviewEnrolled.tsx";
+import {useTranslation} from "react-i18next";
+import type {Language} from "../models/types/Language.tsx";
 
 export function useEnrolledCourses() {
     const {allCourses: allCoursesStorage, setAllCourses: setAllCoursesStorage} = useCourseStorage();
@@ -11,11 +13,12 @@ export function useEnrolledCourses() {
     const [enrolledCourses, setEnrolledCourses] = useState<CoursePreviewEnrolled[]>([]);
     const [allCourses, setAllCourses] = useState<CoursePreview[]>(allCoursesStorage || []);
     const [loading, setLoading] = useState<boolean>(true);
+    const { i18n } = useTranslation();
 
     useEffect(() => {
         setLoading(true);
         // Enrolled courses
-        fetchEnrolledCoursesApi(accessToken || "")
+        fetchEnrolledCoursesApi(accessToken || "", i18n.language as Language)
             .then(data => {
                 setEnrolledCourses(data);
             })
@@ -36,7 +39,7 @@ export function useEnrolledCourses() {
             return;
         }
 
-        fetchCoursesApi(accessToken || "")
+        fetchCoursesApi(accessToken || "", i18n.language as Language)
             .then(courses => {
                 setAllCoursesStorage(courses);
                 setAllCourses(courses);
@@ -45,7 +48,7 @@ export function useEnrolledCourses() {
             .catch(err => {
                 console.error("Failed to fetch courses:", err);
             })
-    }, [accessToken]);
+    }, [accessToken, i18n.language]);
 
     return {
         enrolledCourses,

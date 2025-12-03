@@ -1,0 +1,13 @@
+{
+  "new": "New",
+  "hours": "hours",
+  "modules": "modules",
+  "free": "Free",
+  "explore": "Explore",
+  "difficulty": {
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "expert": "Expert"
+  }
+}

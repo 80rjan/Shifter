@@ -15,6 +15,11 @@ import loginEN from "./locales/en/login.json";
 import registerEN from "./locales/en/register.json";
 import personalizeEN from "./locales/en/personalize.json";
 import coursesEN from "./locales/en/courses.json";
+import profileEN from "./locales/en/profile.json";
+import courseCardEN from "./locales/en/courseCard.json";
+import learnEn from "./locales/en/learn.json";
+import loadingEN from "./locales/en/loading.json";
+import comingSoonEN from "./locales/en/comingSoon.json";
 
 import homeMK from "./locales/mk/home.json";
 import navbarMK from "./locales/mk/navbar.json";
@@ -29,18 +34,23 @@ import loginMK from "./locales/mk/login.json";
 import registerMK from "./locales/mk/register.json";
 import personalizeMK from './locales/mk/personalize.json';
 import coursesMK from "./locales/mk/courses.json";
+import profileMK from "./locales/mk/profile.json";
+import CourseCardMK from "./locales/mk/courseCard.json"
+import learnMK from "./locales/mk/learn.json";
+import loadingMK from "./locales/mk/loading.json";
+import comingSoonMK from "./locales/mk/comingSoon.json";
 
 
 i18n
     .use(initReactI18next)
     .init({
-        lng: "en",
-        fallbackLng: "en",
+        lng: "EN",
+        fallbackLng: "EN",
         ns: ["home", "navbar", "footer", "contact", "freeConsultation", "mentoring", "consulting", "academies", "about",
-        "login", "register", "personalize", "courses"],
+        "login", "register", "personalize", "courses", "courseCard", "profile", "learn", "loading", "comingSoon"],
         defaultNS: "home",
         resources: {
-            en: {
+            EN: {
                 home: homeEN,
                 navbar: navbarEN,
                 footer: footerEN,
@@ -54,8 +64,13 @@ i18n
                 register: registerEN,
                 personalize: personalizeEN,
                 courses: coursesEN,
+                courseCard: courseCardEN,
+                profile: profileEN,
+                learn: learnEn,
+                loading: loadingEN,
+                comingSoon: comingSoonEN,
             },
-            mk: {
+            MK: {
                 home: homeMK,
                 navbar: navbarMK,
                 footer: footerMK,
@@ -69,6 +84,11 @@ i18n
                 register: registerMK,
                 personalize: personalizeMK,
                 courses: coursesMK,
+                courseCard: CourseCardMK,
+                profile: profileMK,
+                learn: learnMK,
+                loading: loadingMK,
+                comingSoon: comingSoonMK,
             }
         },
         interpolation: { escapeValue: false },

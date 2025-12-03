@@ -1,8 +1,10 @@
 package com.shifterwebapp.shifter.enrollment.service;
 
 import com.shifterwebapp.shifter.Validate;
+import com.shifterwebapp.shifter.attribute.Attribute;
 import com.shifterwebapp.shifter.course.Course;
-import com.shifterwebapp.shifter.course.CourseRepository;
+import com.shifterwebapp.shifter.course.repository.CourseRepository;
+import com.shifterwebapp.shifter.course.CourseTranslate;
 import com.shifterwebapp.shifter.courselecture.CourseLecture;
 import com.shifterwebapp.shifter.enrollment.Enrollment;
 import com.shifterwebapp.shifter.enrollment.EnrollmentDto;
@@ -17,12 +19,12 @@ import com.shifterwebapp.shifter.payment.service.PaymentService;
 import com.shifterwebapp.shifter.user.service.UserService;
 import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgress;
 import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgressRepository;
-import com.shifterwebapp.shifter.usercourseprogress.service.UserCourseProgressService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -116,7 +118,13 @@ public class EnrollmentService implements ImplEnrollmentService {
 
         userCourseProgressRepository.saveAll(progressList);
 
-        String courseTitleFormatted = course.getTitleShort()
+        CourseTranslate courseTranslate = course.getCourseTranslates()
+                .stream()
+                .filter(t -> t.getLanguage() == Language.EN)
+                .toList()
+                .get(0);
+        String courseTitleFormatted = courseTranslate
+                .getTitleShort()
                 .toLowerCase()
                 .trim()
                 .replaceAll("\\s+", "-")
@@ -124,8 +132,8 @@ public class EnrollmentService implements ImplEnrollmentService {
 
         emailService.sendCoursePurchaseConfirmation(
                 payment.getUser().getEmail(),
-                course.getTitle(),
-                course.getDescription(),
+                courseTranslate.getTitle(),
+                courseTranslate.getDescription(),
                 "http://localhost:5173/learn/" + course.getId() + "/" + courseTitleFormatted,
                 payment.getUser().getName()
         );
@@ -164,16 +172,23 @@ public class EnrollmentService implements ImplEnrollmentService {
 
         Enrollment enrollment = enrollmentRepository.findById(enrollmentId).orElseThrow();
 
+        System.out.println(allCompleted);
         if (allCompleted) {
+            System.out.println("UPDATING");
             enrollment.setEnrollmentStatus(EnrollmentStatus.COMPLETED);
             enrollment.setCompletedAt(LocalDate.now());
             enrollmentRepository.save(enrollment);
 
             Long userId = enrollment.getPayment().getUser().getId();
-            List<String> skillsGained = enrollment.getCourse().getSkillsGained();
+            List<Attribute> courseAttributes = enrollment.getCourse().getAttributes();
             userService.addPoints(userId, PointsConstants.BUY_COURSE);
-            userService.addSkills(userId, skillsGained);
-            userService.removeDesiredSkills(userId, skillsGained);
+            userService.addAttributes(
+                    userId,
+                    courseAttributes.stream()
+                            .filter(a -> a.getType().equals(AttributeType.SKILL))
+                            .map(Attribute::getId)
+                            .collect(Collectors.toList())
+                    );
         }
 
         return enrollmentMapper.toDto(enrollment);

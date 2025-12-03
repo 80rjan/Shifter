@@ -1,50 +1,50 @@
 import ReactDom from "react-dom";
-import {toEnumFormat} from "../utils/toEnumFormat.ts";
+import {fromEnumFormat, toEnumFormat} from "../utils/toEnumFormat.ts";
 import React, {useEffect} from "react";
-import {fetchCoursesSkillsApi, fetchCoursesTopicsApi, fetchRecommendedCoursesApi} from "../api/courseApi.ts";
+import {fetchCoursesTopicsApi, fetchRecommendedCoursesApi} from "../api/courseApi.ts";
 import {useAuthContext} from "../context/AuthContext.tsx";
 import {X} from "lucide-react";
 import ProfileModalAddSkillsInterestsSkeleton from "./skeletons/ProfileModalAddSkills&InterestsSkeleton.tsx";
-import {updateUserDesiredSkillsApi, updateUserInterestsApi} from "../api/userApi.ts";
+import {updateUserAttributesApi} from "../api/userApi.ts";
 import {useCourseStorage} from "../context/CourseStorage.ts";
+import {useTranslation} from "react-i18next";
+import type {Language} from "../models/types/Language.tsx";
+import {parseStringToAttributeReq} from "../utils/parseStringToAttributeReq.ts";
+import {useUserContext} from "../context/UserContext.tsx";
 
-function ProfileModalAddSkillsInterests({type, label, closeModal}: {
-    type: "desiredSkills" | "interests";
+function ProfileModalAddSkillsInterests({label, closeModal}: {
     label: string;
     closeModal: () => void;
 }) {
-    const {user, setUser, accessToken} = useAuthContext();
+    const {accessToken} = useAuthContext();
+    const { user, setUser } = useUserContext();
     const {setRecommendedCourses} = useCourseStorage();
+    const { i18n } = useTranslation();
+    const { t } = useTranslation("profile");
+    
     const [allOptions, setAllOptions] = React.useState<string[]>([]);
     const [options, setOptions] = React.useState<string[]>([]);
-    const [selected, setSelected] = React.useState<string[]>(user![type] || []);
+    const [selected, setSelected] = React.useState<string[]>([]);
     const [filterText, setFilterText] = React.useState("");
     const [loading, setLoading] = React.useState(false);
     const [componentRenderLoading, setComponentRenderLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
 
     useEffect(() => {
-        if (type === "desiredSkills") {
-            fetchCoursesSkillsApi()
-                .then(skills => {
-                    setAllOptions(skills);
-                    setOptions(skills);
-                })
-                .catch(err => {
-                    console.error("Failed to fetch javaObjects skills", err);
-                })
-                .finally(() => setComponentRenderLoading(false));
-        } else if (type === "interests") {
-            fetchCoursesTopicsApi()
-                .then(topics => {
-                    setAllOptions(topics);
-                    setOptions(topics);
-                })
-                .catch(err => {
-                    console.error("Failed to fetch javaObjects topics", err);
-                })
-                .finally(() => setComponentRenderLoading(false));
-        }
+        fetchCoursesTopicsApi(i18n.language as Language)
+            .then(topics => {
+                setAllOptions(topics);
+                setOptions(topics);
+                setSelected(topics.filter(topic => {
+                    return (
+                        user?.interests.includes(toEnumFormat(parseStringToAttributeReq(topic).value))
+                    )
+                }))
+            })
+            .catch(err => {
+                console.error("Failed to fetch course topics", err);
+            })
+            .finally(() => setComponentRenderLoading(false));
     }, []);
 
     useEffect(() => {
@@ -67,6 +67,7 @@ function ProfileModalAddSkillsInterests({type, label, closeModal}: {
     };
 
     const handleOptionClick = (option: string) => {
+
         setSelected((prev: string[]) => (
             prev.includes(option)
                 ? prev.filter(item => item !== option)
@@ -76,31 +77,32 @@ function ProfileModalAddSkillsInterests({type, label, closeModal}: {
 
     const handleSubmit = () => {
         if (selected.length === 0) {
-            setError("Help us tailor your experience — please select at least one option");
+            setError(t("error.selectAtLeastOne"));
             return;
         }
 
         setLoading(true)
-        const updateFn = type === "interests" ? updateUserInterestsApi : updateUserDesiredSkillsApi;
-        updateFn(selected, accessToken!)
+        const ids = selected.map(s => parseStringToAttributeReq(s).id)
+        const valuesEnum = selected.map(s => toEnumFormat(parseStringToAttributeReq(s).value))
+        updateUserAttributesApi(ids, accessToken!)
             .then(() => {
                 setUser(prev => ({
                     ...prev!,
-                    [type]: selected
+                    interests: valuesEnum
                 }))
 
-                fetchRecommendedCoursesApi(accessToken!)
+                fetchRecommendedCoursesApi(accessToken!, i18n.language as Language)
                     .then(courses => {
                         setRecommendedCourses(courses);
                     })
                     .catch(err => {
-                        console.error("Failed to fetch recommended courses after update", err);
+                        console.error("Failed to fetch recommended courses after user interests update", err);
                     })
 
                 closeModal();
             })
-            .catch(err => {
-                console.error("Failed to update user interests", err);
+            .catch(error => {
+                console.error("Failed to update user interests", error);
             })
             .finally(() => setLoading(false));
     }
@@ -130,7 +132,7 @@ function ProfileModalAddSkillsInterests({type, label, closeModal}: {
                         <input
                             type={"search"}
                             className="px-3 py-1 rounded-md border border-black/10 text-black text-md focus:outline-none focus:ring-2 focus:ring-shifter/60 transition-all"
-                            placeholder={`Search ${type === "interests" ? "interests" : "skills"}...`}
+                            placeholder={`Search interests...`}
                             value={filterText}
                             onChange={handleFilterChange}
                         />
@@ -138,20 +140,18 @@ function ProfileModalAddSkillsInterests({type, label, closeModal}: {
                 </div>
 
                 <div
-                    className="relative custom-scrollbar flex gap-2 flex-wrap w-full  items-center overflow-y-auto">
+                    className="relative custom-scrollbar flex gap-2 flex-wrap w-full items-center">
                     {options.map((option, index) => (
                         <button
                             key={index}
                             name={option}
-                            className={`${selected.includes(toEnumFormat(option)) ? "bg-shifter text-white shadow-black/20" : "bg-black/10 text-black shadow-shifter/20"} 
+                            className={`${selected.includes(option) ? "bg-shifter text-white shadow-black/20" : "bg-black/10 text-black shadow-shifter/20"} 
                             px-4 py-1 rounded-md transition-all duration-200 ease-in-out hover:shadow-md
                             focus:outline-none cursor-pointer whitespace-nowrap`}
                             onClick={() => handleOptionClick(option)}
                         >
                             {
-                                option
-                                    .toLowerCase()
-                                    .replace(/_/g, " ")
+                                fromEnumFormat(parseStringToAttributeReq(option).value)
                                     .replace(/\b\w/g, (c) => c.toUpperCase())
                             }
                         </button>

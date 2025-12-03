@@ -6,6 +6,8 @@ import {
 import {useEffect} from "react";
 import {fetchUserEnrollmentsApi} from "./api/enrollmentApi.ts";
 import {getFromSessionStorage, saveToSessionStorage} from "./utils/useSessionStorage.ts";
+import {useTranslation} from "react-i18next";
+import type {Language} from "./models/types/Language.tsx";
 
 function AppLoader() {
     const {accessToken, authChecked} = useAuthContext();
@@ -15,6 +17,17 @@ function AppLoader() {
         enrollments,
         setEnrollments
     } = useCourseStorage();
+    const { i18n } = useTranslation();
+
+    const fetchRecommendedCourses = async () => {
+        try {
+            // 💡 Call API with the current language
+            const recommended = await fetchRecommendedCoursesApi(accessToken || "", i18n.language as Language);
+            setRecommendedCourses(recommended);
+        } catch (err) {
+            console.error("Failed to fetch recommended courses on language change:", err);
+        }
+    }
 
     useEffect(() => {
         if (!authChecked) return;
@@ -26,8 +39,7 @@ function AppLoader() {
                 if (recommendedStored) {
                     setRecommendedCourses(recommendedStored);
                 } else {
-                    const recommended = await fetchRecommendedCoursesApi(accessToken || "");
-                    setRecommendedCourses(recommended);
+                    await fetchRecommendedCourses()
                 }
             } catch (err) {
                 console.error("Failed to fetch recommended courses:", err);
@@ -43,13 +55,18 @@ function AppLoader() {
                     setEnrollments(userEnrollments);
                 }
             } catch (err) {
-                console.error("Failed to fetch recommended courses:", err);
+                console.error("Failed to fetch user enrollments:", err);
             }
         };
 
 
         load();
     }, [authChecked, accessToken]);
+
+    useEffect(() => {
+        setRecommendedCourses([])
+        fetchRecommendedCourses()
+    }, [i18n.language])
 
     useEffect(() => {
         saveToSessionStorage("recommendedCourses", recommendedCourses);

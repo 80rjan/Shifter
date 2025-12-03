@@ -29,12 +29,14 @@ public class EmailService {
     private final JavaMailSender mailSender;
 
     @Value("${EMAIL_USERNAME}")
-    private String expertEmail;
+    private String shifterEmail;
+
+    private final String expertEmail = "aco@shift-er.com";
 
     public void contactExpert(String userEmail, ContactReq contactReq) {
         SimpleMailMessage message = new SimpleMailMessage();
 
-        message.setFrom(expertEmail);
+        message.setFrom(shifterEmail);
         message.setTo(expertEmail);
         message.setReplyTo(userEmail);
         message.setSubject("New Contact Message: " + contactReq.getSubject());
@@ -65,8 +67,7 @@ public class EmailService {
 
             helper.setTo(to);
             helper.setSubject("Welcome to " + courseName + "! Start Learning Now");
-            helper.setFrom(expertEmail);
-            helper.setReplyTo("support@shift-er.com");
+            helper.setFrom(shifterEmail);
 
             int currentYear = Year.now().getValue();
 
@@ -94,6 +95,7 @@ public class EmailService {
                     mailSender.send(mimeMessage);
                     return;
                 } catch (Exception e) {
+                    e.printStackTrace();
                     attempt++;
                     if (attempt >= maxRetries) {
                         throw new RuntimeException("Failed to send HTML email to " + to + " after " + attempt + " attempts", e);
@@ -117,8 +119,7 @@ public class EmailService {
 
             helper.setTo(to);
             helper.setSubject(subject);
-            helper.setFrom(expertEmail);
-            helper.setReplyTo("support@shift-er.com");
+            helper.setFrom(shifterEmail);
 
             String currentYear = String.valueOf(java.time.Year.now().getValue());
 
@@ -190,8 +191,7 @@ public class EmailService {
 
             helper.setTo(to);
             helper.setSubject(subject);
-            helper.setFrom(expertEmail);
-            helper.setReplyTo("support@shift-er.com");
+            helper.setFrom(shifterEmail);
 
             String currentYear = String.valueOf(Year.now().getValue());
 
@@ -237,17 +237,16 @@ public class EmailService {
 
         MimeMessage mimeMessage = mailSender.createMimeMessage();
 
-        String expertEmail = System.getProperty("EMAIL_USERNAME");
+        String shifterEmail = System.getProperty("EMAIL_USERNAME");
 
         String subject = "You Have an Upcoming Free Consultation Session - " + date + " at " + time;
 
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
-            helper.setTo(expertEmail); // Send to the expert's email
+            helper.setTo(shifterEmail); // Send to the expert's email
             helper.setSubject(subject);
-            helper.setFrom(expertEmail);
-            helper.setReplyTo("support@shift-er.com");
+            helper.setFrom(shifterEmail);
 
             String currentYear = String.valueOf(Year.now().getValue());
 
@@ -270,9 +269,9 @@ public class EmailService {
                     .replace("${workPosition}", userMeetingInfoRequest.getWorkPosition())
                     .replace("${userTimeZone}", userTimeZone)
                     // Using ternary operators directly for "N/A" fallback
+                    .replace("${basicInfo}", userMeetingInfoRequest.getBasicInfo() != null ? userMeetingInfoRequest.getBasicInfo() : "N/A")
                     .replace("${aboutCompany}", userMeetingInfoRequest.getAboutCompany() != null ? userMeetingInfoRequest.getAboutCompany() : "N/A")
                     .replace("${challenges}", userMeetingInfoRequest.getChallenges() != null ? userMeetingInfoRequest.getChallenges() : "N/A")
-                    .replace("${expectations}", userMeetingInfoRequest.getExpectations() != null ? userMeetingInfoRequest.getExpectations() : "N/A")
                     .replace("${otherInfo}", userMeetingInfoRequest.getOtherInfo() != null ? userMeetingInfoRequest.getOtherInfo() : "N/A")
                     .replace("${currentYear}", currentYear);
 
@@ -307,8 +306,7 @@ public class EmailService {
 
             helper.setTo(to);
             helper.setSubject("Your Shifter Account");
-            helper.setFrom(expertEmail);
-            helper.setReplyTo("support@shift-er.com");
+            helper.setFrom(shifterEmail);
 
             String htmlTemplate;
             try {

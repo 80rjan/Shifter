@@ -6,10 +6,12 @@ import {useAuthContext} from "../context/AuthContext.tsx";
 import Arrow from "../../public/Shifter-Arrow-White.png"
 import {sendEmailApi} from "../api/contactApi.ts";
 import { useTranslation } from "react-i18next";
+import {useUserContext} from "../context/UserContext.tsx";
 
 function Academies() {
     const {t} = useTranslation("academies");
-    const {user, accessToken} = useAuthContext();
+    const {accessToken} = useAuthContext();
+    const { user } = useUserContext();
     const [subject, setSubject] = React.useState("");
     const [message, setMessage] = React.useState("");
     const [loading, setLoading] = React.useState(false);

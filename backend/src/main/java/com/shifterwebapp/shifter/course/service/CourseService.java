@@ -1,36 +1,38 @@
 package com.shifterwebapp.shifter.course.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shifterwebapp.shifter.Validate;
+import com.shifterwebapp.shifter.attribute.Attribute;
+import com.shifterwebapp.shifter.attribute.AttributeTranslate;
+import com.shifterwebapp.shifter.attribute.repository.AttributeRepository;
+import com.shifterwebapp.shifter.attribute.service.AttributeService;
 import com.shifterwebapp.shifter.course.*;
-import com.shifterwebapp.shifter.course.dto.CourseDtoDetail;
-import com.shifterwebapp.shifter.course.dto.CourseDtoFull;
-import com.shifterwebapp.shifter.course.dto.CourseDtoPreview;
-import com.shifterwebapp.shifter.course.dto.CourseDtoPreviewEnrolled;
+import com.shifterwebapp.shifter.course.dto.*;
 import com.shifterwebapp.shifter.course.mapper.CourseMapper;
+import com.shifterwebapp.shifter.course.repository.CourseRepository;
 import com.shifterwebapp.shifter.coursecontent.CourseContent;
+import com.shifterwebapp.shifter.coursecontent.dto.CourseContentDtoTranslate;
+import com.shifterwebapp.shifter.coursecontent.CourseContentTranslate;
+import com.shifterwebapp.shifter.coursecontent.service.CourseContentService;
 import com.shifterwebapp.shifter.courselecture.CourseLecture;
+import com.shifterwebapp.shifter.courselecture.dto.CourseLectureDtoTranslate;
+import com.shifterwebapp.shifter.courselecture.CourseLectureTranslate;
+import com.shifterwebapp.shifter.courselecture.service.CourseLectureService;
 import com.shifterwebapp.shifter.enrollment.Enrollment;
 import com.shifterwebapp.shifter.enrollment.service.EnrollmentService;
+import com.shifterwebapp.shifter.enums.AttributeType;
+import com.shifterwebapp.shifter.enums.Language;
 import com.shifterwebapp.shifter.exception.AccessDeniedException;
 import com.shifterwebapp.shifter.external.PdfManipulationService;
 import com.shifterwebapp.shifter.external.upload.MetaInfo;
 import com.shifterwebapp.shifter.external.upload.S3Service;
 import com.shifterwebapp.shifter.external.upload.S3UploadResponse;
-import com.shifterwebapp.shifter.user.UserDto;
+import com.shifterwebapp.shifter.user.User;
 import com.shifterwebapp.shifter.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.commons.codec.language.bm.Lang;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -44,7 +46,6 @@ public class CourseService implements ImplCourseService {
     private final CourseRepository courseRepository;
     private final S3Service s3Service;
     private final PdfManipulationService pdfService;
-    private final CourseMapper courseMapper;
     private final UserService userService;
     private final Validate validate;
     private final EnrollmentService enrollmentService;
@@ -52,95 +53,28 @@ public class CourseService implements ImplCourseService {
 
 
     @Override
-    public Course createCourse(String courseJson) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Course course = objectMapper.readValue(courseJson, Course.class);
-
-        for (CourseContent content : course.getCourseContents()) {
-            content.setCourse(course);
-
-            for (CourseLecture lecture : content.getCourseLectures()) {
-                lecture.setCourseContent(content);
-            }
-        }
-
-        return courseRepository.save(course);
-    }
-
-    @Override
-    public void deleteCourseById(Long courseId) {
-        courseRepository.deleteById(courseId);
-    }
-
-    @Override
-    public Course updateCourseWithImagesAndFiles(Long courseId, List<S3UploadResponse> s3UploadResponses) {
+    public CourseDtoLearn getEnrolledCourseById(Long courseId, Long userId, Language language) {
         validate.validateCourseExists(courseId);
-        Course course = courseRepository.findById(courseId).orElseThrow();
-
-        for (S3UploadResponse s3UploadResponse : s3UploadResponses) {
-            if ("COURSE_IMAGE".equals(s3UploadResponse.getType())) {
-                course.setImageUrl(s3UploadResponse.getFileName());
-                continue;
-            }
-
-            MetaInfo meta = s3UploadResponse.getMeta();
-            Integer contentPosition = meta.getContentPosition();
-            Integer lecturePosition = meta.getLecturePosition();
-
-            if (contentPosition != null && lecturePosition != null) {
-                int contentIndex = contentPosition - 1;
-                int lectureIndex = lecturePosition - 1;
-
-                if (contentIndex >= 0 && contentIndex < course.getCourseContents().size()) {
-                    var courseContent = course.getCourseContents().get(contentIndex);
-                    if (lectureIndex >= 0 && lectureIndex < courseContent.getCourseLectures().size()) {
-                        CourseLecture courseLecture = courseContent.getCourseLectures().get(lectureIndex);
-
-                        courseLecture.setContentFileName(s3UploadResponse.getFileName());
-                    } else {
-                        // handle invalid lecture index
-                        System.err.println("Invalid lecture index: " + lectureIndex);
-                    }
-                } else {
-                    // handle invalid content index
-                    System.err.println("Invalid content index: " + contentIndex);
-                }
-            }
-        }
-        return courseRepository.save(course);
-    }
-
-    @Override
-    public Boolean lectureFileExistsInCourse(Long courseId, String fileName) {
-        return courseRepository.lectureFileExistsInCourse(courseId, fileName);
-    }
-
-    @Override
-    public CourseDtoFull getEnrolledCourseById(Long courseId, Long userId) {
-        validate.validateCourseExists(courseId);
-
-        boolean isUserEnrolled = enrollmentService.isUserEnrolledInCourse(userId, courseId);
-        if (!isUserEnrolled) {
-            throw new AccessDeniedException("User with ID " + userId + " is not enrolled in course with ID " + courseId + " and is therefore not authorized to access the full course with its content!");
-        }
 
         Enrollment enrollment = enrollmentService.getEnrollmentByUserAndCourse(userId, courseId);
         if (enrollment == null) {
             throw new AccessDeniedException("User with ID " + userId + " is not enrolled in course with ID " + courseId + " and is therefore not authorized to access the full course with its content!");
         }
+
         enrollmentService.updateEnrollmentStatusToActive(enrollment);
         Course course = courseRepository.findById(courseId).orElseThrow();
 
-        return courseDtoBuilder.getCourseDtoFull(course, enrollment);
+        return courseDtoBuilder.getCourseDtoLearn(course, enrollment, language);
     }
+
 
     public byte[] downloadCertificate(Long courseId, Long userId) throws Exception {
         validate.validateCourseExists(courseId);
         if (!enrollmentService.isUserEnrolledInCourse(userId, courseId))
             throw new AccessDeniedException("User with ID " + userId + " is not enrolled in course with ID " + courseId + " and is therefore not authorized to access the course certificate!");
 
-        String courseTitle = getCourseById(courseId).getTitleShort();
-        String userName = userService.getUserById(userId).getName();
+        String courseTitle = getCourseById(courseId, Language.EN).getTitleShort();
+        String userName = userService.getUserEntityById(userId).getName();
         LocalDate completedDate = enrollmentService.getEnrollmentByUserAndCourse(userId, courseId).getCompletedAt();
 
         // TODO: uncomment this and check if logic for date is okay
@@ -170,11 +104,12 @@ public class CourseService implements ImplCourseService {
     }
 
     @Override
-    public List<CourseDtoPreview> getAllCourses(List<Long> courseIds) {
+    public List<CourseDtoPreview> getAllCourses(List<Long> courseIds, Language language) {
         List<Course> courses = courseIds != null && !courseIds.isEmpty() ?
-                courseRepository.findCoursesByIdNotIn(courseIds) :
-                courseRepository.findAll();
-        return courseDtoBuilder.getCourseDtoPreview(courses);
+                courseRepository.findCoursesByIdNotInAndLanguage(courseIds, language) :
+                courseRepository.findCoursesByLanguage(language);
+
+        return courseDtoBuilder.getCourseDtoPreview(courses, language);
     }
 
 //    @Override
@@ -186,10 +121,8 @@ public class CourseService implements ImplCourseService {
 //    }
 
     @Override
-    public List<CourseDtoPreview> getRecommendedCourses(Long userId) {
-        UserDto user = userService.getUserById(userId);
-        List<String> skills = user.getSkills();
-        List<String> interests = user.getInterests();
+    public List<CourseDtoPreview> getRecommendedCourses(Long userId, Language language) {
+        User user = userService.getUserEntityById(userId);
 
         // get user enrollments
         List<Long> enrolledCourseIds = enrollmentService.getCourseIdsByUserEnrollments(userId);
@@ -200,17 +133,16 @@ public class CourseService implements ImplCourseService {
                 .filter(course -> !enrolledCourseIds.contains(course.getId()))
                 .toList();
 
+        List<Attribute> userAttributes = user.getAttributes().stream().filter(a -> a.getType().equals(AttributeType.TOPIC)).toList();
+
         List<ScoredCourse> scoredCourses = new ArrayList<>();
         for (Course course : courses) {
-            boolean matchesSkills = course.getSkillsGained().stream().anyMatch(skills::contains);
-            boolean matchesTopics = course.getTopicsCovered().stream().anyMatch(interests::contains);
+            List<Attribute> courseAttributes = course.getAttributes().stream().filter(a -> a.getType().equals(AttributeType.TOPIC)).toList();
 
-            int score = 0;
-            if (matchesSkills && matchesTopics) {
-                score += 2;
-            } else if (matchesSkills || matchesTopics) {
-                score += 1;
-            }
+            int score = courseAttributes.stream()
+                    .filter(userAttributes::contains)
+                    .toList()
+                    .size();
 
             scoredCourses.add(new ScoredCourse(course, score));
         }
@@ -222,47 +154,47 @@ public class CourseService implements ImplCourseService {
                 .subList(0, limit)
                 .stream()
                 .map(ScoredCourse::getCourse)
-                .map(courseDtoBuilder::getCourseDtoPreview)
+                .map(course -> courseDtoBuilder.getCourseDtoPreview(course, language))
                 .toList();
     }
 
     @Override
-    public List<CourseDtoPreviewEnrolled> getEnrolledCourses(Long userId) {
+    public List<CourseDtoPreviewEnrolled> getEnrolledCourses(Long userId, Language language) {
         List<Long> enrolledCourseIds = enrollmentService.getCourseIdsByUserEnrollments(userId);
         List<Course> courses = courseRepository.findAllById(enrolledCourseIds);
 
         if (courses.isEmpty()) {
             return new ArrayList<>();
         }
-        return courseDtoBuilder.getCourseDtoPreviewEnrolled(courses, userId);
+        return courseDtoBuilder.getCourseDtoPreviewEnrolled(courses, userId, language);
     }
 
 
     @Override
-    public List<CourseDtoPreview> getTopRatedCourses() {
+    public List<CourseDtoPreview> getTopRatedCourses(Language language) {
         List<Course> courses = courseRepository.findCoursesOrderedByRating();
         int limit = Math.min(5, courses.size());
         return courseDtoBuilder.getCourseDtoPreview(
-                courses
-                        .subList(0, limit)
+                courses.subList(0, limit),
+                language
         );
     }
 
     @Override
-    public List<CourseDtoPreview> getMostPopularCourses() {
+    public List<CourseDtoPreview> getMostPopularCourses(Language language) {
         List<Course> courses = courseRepository.findCoursesOrderedByPopularity();
         int limit = Math.min(5, courses.size());
         return courseDtoBuilder.getCourseDtoPreview(
-                courses
-                        .subList(0, limit)
+                courses.subList(0, limit),
+                language
         );
     }
 
     @Override
-    public CourseDtoDetail getCourseById(Long courseId) {
+    public CourseDtoDetail getCourseById(Long courseId, Language language) {
         validate.validateCourseExists(courseId);
         Course course = courseRepository.findById(courseId).orElseThrow();
-        return courseDtoBuilder.getCourseDtoDetail(course);
+        return courseDtoBuilder.getCourseDtoDetail(course, language);
     }
 
     @Override
@@ -272,14 +204,26 @@ public class CourseService implements ImplCourseService {
     }
 
     @Override
-    public List<String> getAllTopics() {
-        return courseRepository.getCourseTopics();
+    public Course getCourseEntityByLectureId(Long lectureId) {
+        validate.validateLectureExists(lectureId);
+
+        return courseRepository.findByLectureId(lectureId);
     }
 
     @Override
-    public List<String> getAllSkills() {
-        return courseRepository.getCourseSkills();
+    public List<String> getAllTopics(Language language) {
+        List<AttributeTranslate> translations = courseRepository.getCourseTopics(language);
+        return translations.stream()
+                .map(t -> t.getAttribute().getId() + "_" + t.getValue())
+                .toList();
     }
 
+    @Override
+    public List<String> getAllSkills(Language language) {
+        List<AttributeTranslate> translations = courseRepository.getCourseSkills(language);
+        return translations.stream()
+                .map(t -> t.getAttribute().getId() + "_" + t.getValue())
+                .toList();
+    }
 
 }

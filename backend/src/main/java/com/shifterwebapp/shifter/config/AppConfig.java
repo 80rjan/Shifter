@@ -1,8 +1,14 @@
 package com.shifterwebapp.shifter.config;
 
-import com.shifterwebapp.shifter.user.UserRepository;
+import com.shifterwebapp.shifter.user.repository.UserRepository;
+import jakarta.servlet.MultipartConfigElement;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.connector.Connector;
+import org.apache.coyote.http11.AbstractHttp11Protocol;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,12 +20,42 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.util.unit.DataSize;
+
 
 @Configuration
 @RequiredArgsConstructor
 public class AppConfig {
 
     private final UserRepository userRepository;
+
+    @Bean
+    public MultipartConfigElement multipartConfigElement() {
+        MultipartConfigFactory factory = new MultipartConfigFactory();
+
+        factory.setMaxFileSize(DataSize.ofMegabytes(50));
+
+        factory.setMaxRequestSize(DataSize.ofMegabytes(500));
+
+        return factory.createMultipartConfig();
+    }
+
+    @Bean
+    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> tomcatCustomizer() {
+        return (factory) -> {
+            factory.addConnectorCustomizers((Connector connector) -> {
+
+                org.apache.coyote.ProtocolHandler protocolHandler = connector.getProtocolHandler();
+
+                if (protocolHandler instanceof AbstractHttp11Protocol<?> abstractProtocol) {
+
+                    abstractProtocol.setMaxSwallowSize((int) DataSize.ofMegabytes(200).toBytes());
+
+//                     abstractProtocol.setMaxParts(50);
+                }
+            });
+        };
+    }
 
     @Bean
     public UserDetailsService userDetailsService() {

@@ -5,6 +5,8 @@ import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgress;
 import jakarta.persistence.*;
 import com.shifterwebapp.shifter.enums.ContentType;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -20,29 +22,22 @@ public class CourseLecture {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
-
-    @Column(columnDefinition = "text")
-    private String description;
-
     private Integer durationMinutes;
 
     private Integer position;
-
-    @Column(columnDefinition = "text")
-    private String contentText;
-
-    @Column(columnDefinition = "text")
-    private String contentFileName;
 
     @Enumerated(EnumType.STRING)
     private ContentType contentType;
 
     @ManyToOne
     @JoinColumn(name = "course_content_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private CourseContent courseContent;
 
     @OneToMany(mappedBy = "courseLecture", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserCourseProgress> userCourseProgressList;
+
+    @OneToMany(mappedBy = "courseLecture", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CourseLectureTranslate> courseLectureTranslates;
 }
 

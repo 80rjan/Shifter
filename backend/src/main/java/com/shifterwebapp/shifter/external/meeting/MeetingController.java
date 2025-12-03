@@ -1,8 +1,10 @@
 package com.shifterwebapp.shifter.external.meeting;
 
 import com.shifterwebapp.shifter.Validate;
+import com.shifterwebapp.shifter.enums.Language;
 import com.shifterwebapp.shifter.external.meeting.service.MeetingService;
-import com.shifterwebapp.shifter.user.UserDto;
+import com.shifterwebapp.shifter.user.User;
+import com.shifterwebapp.shifter.user.dto.UserDto;
 import com.shifterwebapp.shifter.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +43,7 @@ public class MeetingController {
             Authentication authentication
     ) {
         Long userId = validate.extractUserId(authentication);
-        UserDto user = userService.getUserById(userId);
+        User user = userService.getUserEntityById(userId);
         userMeetingInfoRequest.setEmail(user.getEmail());
         userMeetingInfoRequest.setName(user.getName());
         userMeetingInfoRequest.setCompanySize(user.getCompanySize());

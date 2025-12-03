@@ -4,35 +4,35 @@ import ShifterArrow from "../../public/Shifter-Arrow-White.png";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import ShifterLogo from "../../public/Shifter-S2W-Transparent.png";
-import {Link, useNavigate} from "react-router-dom";
 import { usePersonalizeHook } from "../hooks/usePersonalizeHook.tsx";
 import { Box, Step, StepLabel, Stepper } from "@mui/material";
 import { CustomStepperConnector, CustomStepperStepIcon } from "../components/registerSteps/CustomStepper.tsx";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import LoadingScreen from "../layout/LoadingScreen.tsx";
 
 function Personalize() {
     const { t } = useTranslation("personalize");
     const {
-        verificationChecked,
+        error,
+        showError,
+        isNewVerificationEmailSent,
         isVerified,
         isLoading,
         activeStep,
-        showError,
-        error,
         direction,
         variants,
         stepsContent,
         handleNext,
         handleBack,
-        handlePersonalize
+        handlePersonalize,
+        verifyEmail,
+        verificationChecked
     } = usePersonalizeHook();
-    const navigate = useNavigate();
 
-    if (!verificationChecked || !isVerified) {
-        navigate("/")
-        return undefined;
-    }
+    if (!verificationChecked.current)
+        return <LoadingScreen />
+
 
     return (
         <main className="flex font-montserrat h-screen bg-beige">
@@ -50,16 +50,13 @@ function Personalize() {
             {/* RIGHT FORM CONTAINER */}
             <section className="relative flex flex-col justify-center items-center flex-1 px-horizontal-md gap-6">
                 <div className="absolute top-0 px-4 py-4 flex w-full justify-between items-center">
-                    <Link to={"/"} >
+                    <div >
                         <img src={ShifterLogo} alt="Shifter Logo" className="w-40 h-auto object-contain"/>
-                    </Link>
-                    <Link to={"/"} className="hover:bg-shifter/20 hover:text-shifter underline decoration-current font-semibold text-black/80 rounded-sm px-4 py-2">
-                        {t("backToMain")}
-                    </Link>
+                    </div>
                 </div>
 
-                {isVerified ? (
-                    <div className="flex flex-col items-center justify-center">
+                {!isVerified ? (
+                    <div className="flex flex-col gap-8 items-center justify-center">
                         <div className="flex flex-col gap-4 bg-white rounded-2xl shadow-lg p-8 w-fit text-center">
                             <h2 className="text-2xl font-bold text-red">{t("verificationFailedTitle")}</h2>
                             <p className="font-medium text-black-text/80 max-w-xl mx-auto">
@@ -67,6 +64,20 @@ function Personalize() {
                                 <br/>
                                 {t("verificationFailedMessage2")}
                             </p>
+                        </div>
+                        <div className="flex gap-4 items-center">
+                            <button
+                                onClick={verifyEmail}
+                                className={`${isNewVerificationEmailSent ? "font-semibold border-0 text-xl" : "border-1 hover:shadow-md hover:bg-shifter hover:text-white cursor-pointer"} 
+                                transition-all duration-200 ease-in-out py-2 px-12 rounded-md border-shifter text-shifter`}
+                            >
+                                {
+                                    isNewVerificationEmailSent ?
+                                        t("verificationFailedButtonSuccess") :
+                                        isLoading ? t("verificationFailedButtonLoading") : t("verificationFailedButton")
+                                }
+                            </button>
+                            {isLoading && <div className="loader" />}
                         </div>
                     </div>
                 ) : (

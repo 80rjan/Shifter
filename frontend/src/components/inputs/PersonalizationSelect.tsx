@@ -1,28 +1,36 @@
 import type {UserPersonalization} from "../../models/javaObjects/UserPersonalization.tsx";
-import type {SelectProps} from "../../models/SelectProps.tsx";
 import {toEnumFormat} from "../../utils/toEnumFormat.ts";
+import React from "react";
 
-function PersonalizationSelect(selectProps: SelectProps) {
+function PersonalizationSelect({label, name, id, optionsShow, options, setUser, user}: {
+    label: string;
+    name: "companySize";
+    id: string;
+    optionsShow: string[];
+    options: readonly string[];
+    setUser: React.Dispatch<React.SetStateAction<UserPersonalization>>;
+    user: UserPersonalization;
+}) {
 
     return (
         <div
             className="w-full relative flex flex-col gap-1 px-6 py-1 border-2 border-shifter group focus-within:border-l-20 transition-all ease-in-out duration-300 items-start rounded-sm">
             <label
-                htmlFor={selectProps.id}
+                htmlFor={id}
                 className="text-shifter font-medium"
             >
-                {selectProps.label}
+                {label}
             </label>
             <div className="w-full">
                 <select
-                    id={selectProps.id}
-                    name={selectProps.name}
+                    id={id}
+                    name={name}
                     className="w-full focus:outline-none text-lg cursor-pointer"
-                    value={selectProps.user[selectProps.name] || ""}
+                    value={user[name] || ""}
                     onChange={e =>
-                        selectProps.setUser((prev: UserPersonalization) => ({
+                        setUser((prev: UserPersonalization) => ({
                             ...prev,
-                            [selectProps.name]: e.target.value
+                            [name]: e.target.value
                         }))
                     }
                 >
@@ -30,9 +38,9 @@ function PersonalizationSelect(selectProps: SelectProps) {
                         Select an option
                     </option>
                     {
-                        selectProps.options?.map((option, index) => (
-                            <option key={index} value={toEnumFormat(option)}>
-                                {option}
+                        optionsShow.map((o, index) => (
+                            <option key={index} value={toEnumFormat(options[index])}>
+                                {o}
                             </option>
                         ))
                     }

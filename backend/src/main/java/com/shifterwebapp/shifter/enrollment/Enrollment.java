@@ -25,11 +25,11 @@ public class Enrollment {
     @Enumerated(EnumType.STRING)
     private EnrollmentStatus enrollmentStatus;
 
-    private LocalDate date;
+    private LocalDate date;         // date bought
 
-    private LocalDate activatedAt;
+    private LocalDate activatedAt;  // date activated
 
-    private LocalDate completedAt;
+    private LocalDate completedAt;  // date completed
 
     @OneToOne(cascade = CascadeType.PERSIST, orphanRemoval = true)  // Persist ???? Orphan removal ????
     @JoinColumn(name = "payment_id")

@@ -22,15 +22,6 @@ export const registerApi = async (email: string, password: string): Promise<void
     );
 }
 
-export const verifyApi = async (token: string): Promise<string> => {
-    const res = await axios.post(`${backendUrl}/api/auth/verify`,
-        {token},
-        {withCredentials: true}
-    );
-
-    return res.data;
-}
-
 export const personalizeApi = async (user: UserPersonalization): Promise<{ user: User, accessToken: string }> => {
     const res = await axios.post(`${backendUrl}/api/auth/personalize`,
         user,

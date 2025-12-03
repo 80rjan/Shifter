@@ -1,0 +1,40 @@
+{
+  "myProfile": {
+    "title": "Мој Профил",
+    "fields": {
+      "name": "Име и Презиме",
+      "workPosition": "Работна Позиција",
+      "companySize": "Избери Големина на Компанија"
+    },
+    "fieldLabels": {
+      "name": "Име и Презиме",
+      "workPosition": "Работна Позиција",
+      "companySize": "Големина на Компанија"
+    },
+    "saveChanges": "Зачувај Промени",
+    "saving": "Се зачувува..."
+  },
+  "companySizeOptions": {
+    "freelance": "Фриленсер",
+    "micro": "Микро",
+    "small": "Мала",
+    "medium": "Средна",
+    "midMarket": "Среден Пазар",
+    "enterprise": "Голема Компанија",
+    "other": "Друго"
+  },
+  "skillsGained": {
+    "title": "Стекнати Вештини"
+  },
+  "interests": {
+    "title": "Интереси"
+  },
+  "logout": "Одјави се",
+  "modal": {
+    "chooseTopics": "Избери теми кои те интересираат"
+  },
+  "successfulUpdate": "Успешно ги ажуриравте вашите податоци!",
+  "error": {
+    "selectAtLeastOne": "Помогнете ни да го персонализираме вашето искуство — изберете најмалку една опција"
+  }
+}

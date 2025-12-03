@@ -1,7 +1,7 @@
 
 function ProfileSkeleton() {
     return (
-        <main className="grid grid-cols-4 gap-x-12 py-vertical-lg pt-30 px-horizontal-md bg-dark-blue/5">
+        <main className="grid grid-cols-4 gap-x-12 py-vertical-lg pt-30 px-horizontal-md bg-beige">
             <div className="col-span-1 flex flex-col gap-6">
                 {/* ProfileInfo Skeleton */}
                 <section className="border-1 border-dark-blue/10 flex flex-col gap-6 items-center justify-center bg-white w-full rounded-xl p-8">

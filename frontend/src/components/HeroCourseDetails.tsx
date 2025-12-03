@@ -1,37 +1,45 @@
 import type {CourseDetail} from "../models/javaObjects/CourseDetail.tsx";
 import React from "react";
 import {useCourseStorage} from "../context/CourseStorage.ts";
-import { Link } from "react-router-dom";
 import {toUrlFormat} from "../utils/toUrlFormat.ts";
+import {useTranslation} from "react-i18next";
+import {LocalizedLink} from "./links/LocalizedLink.tsx";
 
 function HeroCourseDetails({course, enrollUser}: { course: CourseDetail | null, enrollUser: () => Promise<void> }) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const {enrollments} = useCourseStorage();
+    const { t } = useTranslation("courses");
+
+    const tripleInfoArr = t("courseDetails.tripleInfo", { returnObjects: true }) as {
+        header: string,
+        description: string,
+        headerRating: string,
+        headerNew: string,
+        descriptionRating: string,
+        descriptionNew: string,
+    }[];
     const tripleInfo = [
         {
-            header: `${course?.courseContents && course.courseContents.length} Modules Total`,
+            header: `${course?.courseContents && course.courseContents.length} ${tripleInfoArr[0].header}`,
             description: course?.descriptionShort
         },
         {
-            header: `${course?.durationMinutes && (course.durationMinutes / 60).toFixed(1)} Hours Duration`,
-            description: 'Learn at your own pace with flexible timing, plus optional exercises and helpful templates.'
+            header: `${course?.durationMinutes && (course.durationMinutes / 60).toFixed(1)} ${tripleInfoArr[1].header}`,
+            description: tripleInfoArr[1].description
         },
         {
-            header: course?.ratingCount && course.ratingCount > 10
-                ? `${(course.rating || 0) / course.ratingCount} Rating`
-                : `New & Trending`,
-            description: course?.ratingCount && course.ratingCount > 10
-                ? 'Rated highly by learners for its practical insights and actionable strategies.'
-                : 'New to the platform, this javaObjects is growing quickly. Be among the first learners to benefit from its insights.'
+            header: course?.averageRating
+                ? `${course.averageRating.toFixed(1)} ${tripleInfoArr[2].headerRating}`
+                : tripleInfoArr[2].headerNew,
+            description: course?.averageRating
+                ? tripleInfoArr[2].descriptionRating
+                : tripleInfoArr[2].descriptionNew
         }
         ,
     ]
 
-    const bgColor = "bg-[var(--card-color)]";
-
     return (
         <div
-            style={{"--card-color": course?.color} as React.CSSProperties}
             className={`py-4 bg-shifter`}>
             {/*HEADER AND DESCRIPTION*/}
             <section
@@ -47,14 +55,14 @@ function HeroCourseDetails({course, enrollUser}: { course: CourseDetail | null, 
                                 isLoading ? (
                                     <div className="w-8 loader"></div>
                                 ) : (
-                                    <Link
+                                    <LocalizedLink
                                         to={`/learn/${course?.id}/${toUrlFormat(course?.titleShort || "")}`}
                                         className={`
                                             bg-shifter
                                             hover:shadow-lg hover:shadow-deep-green/50 transition-all duration-300 ease-in-out cursor-pointer
                                             shadow-md shadow-deep-green/30 text-white font-medium text-xl border-3 border-white/50 rounded-full px-14 py-2
                                         `}
-                                    >Go To Course</Link>
+                                    >{t("courseDetails.buttonEnrolled")}</LocalizedLink>
                                 )
                             }
                         </div>
@@ -62,7 +70,7 @@ function HeroCourseDetails({course, enrollUser}: { course: CourseDetail | null, 
                         <div
                             className="flex mt-12 gap-4 items-center bg-gray/60 backdrop-blur-lg border-3 border-black/5 px-2 py-1 w-fit rounded-full">
                             <span className="font-semibold text-xl px-8">
-                                {course?.price && course.price > 0 ? `$${course?.price}` : 'Free'}
+                                {course?.price && course.price > 0 ? `$${course?.price}` : t("courseDetails.free")}
                             </span>
                             {
                                 isLoading ? (
@@ -77,13 +85,13 @@ function HeroCourseDetails({course, enrollUser}: { course: CourseDetail | null, 
                                                 setIsLoading(true)
                                                 enrollUser()
                                                     .catch((error) => {
-                                                        console.error("Error enrolling user in javaObjects:", error);
+                                                        console.error("Error enrolling user in course:", error);
                                                     })
                                                     .finally(() => {
                                                         setIsLoading(false)
                                                     })
                                             }}
-                                    >Enroll Now</button>
+                                    >{t("courseDetails.buttonEnroll")}</button>
                                 )
                             }
                         </div>

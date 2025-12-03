@@ -6,6 +6,8 @@ import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgress;
 import jakarta.persistence.*;
 import com.shifterwebapp.shifter.enums.ContentType;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -21,8 +23,6 @@ public class CourseContent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
-
     private Integer position;
 
     @OneToMany(mappedBy = "courseContent", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -31,6 +31,10 @@ public class CourseContent {
 
     @ManyToOne
     @JoinColumn(name = "course_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Course course;
+
+    @OneToMany(mappedBy = "courseContent", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CourseContentTranslate> courseContentTranslates;
 }
 

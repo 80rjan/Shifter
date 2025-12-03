@@ -4,7 +4,7 @@
     "description": "<span class='font-semibold'>Shifter</span> is a center for business development and transformation, offering mentorship, consulting, academies, and e-learning for family businesses."
   },
   "stats": {
-    "clients": "Clients Empowered",
+    "clients": "Businesses Empowered",
     "hours": "Mentoring Hours",
     "years": "Years of Shifter"
   },
@@ -13,7 +13,7 @@
   },
   "reasons": [
     {
-      "title": "Tailored Strategies",
+      "title": "Tailored Solutions",
       "description": "Strategies and programs designed specifically for your business goals and challenges."
     },
     {
@@ -34,11 +34,52 @@
     }
   ],
   "about": {
-    "title": "About <span class='text-shifter font-black'>Shifter</span>",
-    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+    "aco": "Aco Gjorgjievski",
+    "founderAndCeo": "Founder & CEO",
+    "description": "Aco Gjorgjievski is the founder and CEO of Shifter. With over 30 years of professional experience, Aco spent 15 years at Nestlé, where he served as Executive Director (BEO) for the Adriatic region, covering seven markets, and was a member of the board for the EMENA region. Through these experiences, Aco gained deep knowledge and practical expertise in business and leadership development. In 2020, he founded Shifter with a clear mission: to share his expertise with family businesses in Macedonia and the region. The goal is to encourage sustainable growth, corporate structure, and help them reach their full potential.",
     "cta": "Book a Free Consultation"
   },
   "foundations": {
-    "title": "Our Foundations"
-  }
+    "title": "Our Foundations",
+    "purpose": {
+      "title": "Purpose",
+      "description": "To create positive change in the world of family entrepreneurship by empowering leaders to drive growth, inspire teams, strengthen culture, and achieve sustainable success."
+    },
+    "mission": {
+      "title": "Mission",
+      "description": "To empower family businesses to unlock their full potential and drive sustainable growth through mentorship, consulting, and digital learning programs, including online courses and academies."
+    },
+    "vision": {
+      "title": "Vision",
+      "description": "To become the leading center for business development, transformation, and continuous learning for family businesses in Europe."
+    }
+  },
+  "shiftBusinesses": "How We<br/><strong>SHIFT</strong><br/>Businesses",
+  "values": [
+    {
+      "char": "S",
+      "title": "Sustainable Results",
+      "description": "We create lasting impact and long-term growth."
+    },
+    {
+      "char": "H",
+      "title": "Holistic Approach",
+      "description": "We align people, strategy, and processes as one system."
+    },
+    {
+      "char": "I",
+      "title": "In-Depth Analysis",
+      "description": "We uncover real insights through deep analysis."
+    },
+    {
+      "char": "F",
+      "title": "Fact-Based Solutions",
+      "description": "Every decision is guided by data, not assumptions."
+    },
+    {
+      "char": "T",
+      "title": "Tailor-Made Services",
+      "description": "We craft strategies unique to each client."
+    }
+  ]
 }
