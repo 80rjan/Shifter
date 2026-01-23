@@ -1,8 +1,8 @@
 package com.shifterwebapp.shifter.external.upload;
 
 import com.shifterwebapp.shifter.Validate;
-import com.shifterwebapp.shifter.course.service.AdminCourseService;
-import com.shifterwebapp.shifter.course.service.CourseService;
+import com.shifterwebapp.shifter.course.course.service.AdminCourseService;
+import com.shifterwebapp.shifter.course.course.service.CourseService;
 import com.shifterwebapp.shifter.courselecture.CourseLectureTranslate;
 import com.shifterwebapp.shifter.courselecture.repository.CourseLectureTranslateRepository;
 import com.shifterwebapp.shifter.courselecture.service.CourseLectureService;

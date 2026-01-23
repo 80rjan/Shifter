@@ -41,12 +41,12 @@ function OurServices() {
                         <div
                             key={index}
                             className={`shadow-md shadow-black/20
-                            ${index === 0 ? "bg-shifter/100 -rotate-3" : "bg-black/10"}
+                            ${index === 0 ? "bg-shifter/100 rotate-on-scroll" : "bg-black/10"}
                             ${index === 0 ? "text-white" : "text-black-text"}
-                            flex flex-col gap-8 items-start text-left border-2 border-white/40 rounded-2xl p-8`}
+                            flex flex-col gap-4 items-start text-left border-2 border-white/40 rounded-2xl p-8`}
                         >
                             <CardIcon
-                                size={40}
+                                size={44}
                                 strokeWidth={1.5}
                                 color={index === 0 ? "var(--color-white)" : "var(--color-black-text)"}
                             />
@@ -55,7 +55,8 @@ function OurServices() {
                                     <h2 className="text-2xl font-bold">{t(`${card.path}.title`)}</h2>
                                     <p className="text-lg font-light">{t(`${card.path}.description`)}</p>
                                 </div>
-                                <LocalizedLink to={t(`${card.path}.link`)} className="underline ">
+                                <LocalizedLink to={t(`${card.path}.link`)}
+                                className={`font-medium underline hover:opacity-80 transition-opacity duration-200`}>
                                     {t("ourServices.discoverMore")}
                                 </LocalizedLink>
                             </div>

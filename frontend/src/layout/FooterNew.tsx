@@ -16,18 +16,18 @@ function FooterNew() {
     const { t } = useTranslation("footer");
 
     return (
-        <section className="relative flex flex-col gap-24 pt-top-nav-lg overflow-clip bg-beige">
+        <section className="relative flex flex-col gap-24 pt-top-nav-lg overflow-clip bg-main">
 
             {/* background circles */}
             <div className="absolute -bottom-150 -left-80 w-320 aspect-square bg-[radial-gradient(circle_at_center,rgba(0,140,194,0.4),transparent_70%)]"></div>
             <div className="absolute -bottom-150 -right-80 w-320 aspect-square bg-[radial-gradient(circle_at_center,rgba(0,140,194,0.4),transparent_70%)]"></div>
 
             {/* CTA */}
-            <section className="flex flex-col gap-6 z-1 text-black-text">
+            <section className="flex flex-col gap-6 z-1 text-black-text px-60">
                 <h2 className="text-5xl font-semibold leading-tight">
-                    {t("cta.title.part1")} <br /> {t("cta.title.part2")}
+                    {t("cta.title")}
                 </h2>
-                <p className="text-lg font-light">
+                <p className="text-xl opacity-80">
                     {t("cta.subtitle")}
                 </p>
                 <div className="mt-12 w-full flex justify-center">
@@ -35,7 +35,7 @@ function FooterNew() {
                         to={user?.hasUsedFreeConsultation ? "/contact" : "/free-consultation"}
                         className="hover:shadow-shifter/60 transition-all duration-200 ease-in-out cursor-pointer
                         flex items-center gap-2 w-fit shadow-md shadow-shifter/40 font-bold border-2 border-white/20
-                        bg-shifter py-3 px-8 rounded-full text-white group"
+                        bg-shifter py-3 px-8 rounded-lg text-white group"
                     >
                         {user?.hasUsedFreeConsultation
                             ? t("cta.button.contact")

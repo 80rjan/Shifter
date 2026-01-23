@@ -1,7 +1,7 @@
 package com.shifterwebapp.shifter.auth;
 
 import com.shifterwebapp.shifter.Validate;
-import com.shifterwebapp.shifter.user.service.UserService;
+import com.shifterwebapp.shifter.account.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

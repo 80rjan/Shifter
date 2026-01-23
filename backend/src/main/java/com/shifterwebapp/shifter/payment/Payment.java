@@ -3,12 +3,11 @@ package com.shifterwebapp.shifter.payment;
 import com.shifterwebapp.shifter.enrollment.Enrollment;
 import com.shifterwebapp.shifter.enums.PaymentMethod;
 import com.shifterwebapp.shifter.enums.PaymentStatus;
-import com.shifterwebapp.shifter.user.User;
+import com.shifterwebapp.shifter.account.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -23,7 +22,7 @@ public class Payment {
 
     private Double amount;
 
-    private LocalDate date;
+    private LocalDate paymentDate;
 
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
@@ -31,11 +30,7 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @OneToOne(mappedBy = "payment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "payment")
     private Enrollment enrollment;
 }
 

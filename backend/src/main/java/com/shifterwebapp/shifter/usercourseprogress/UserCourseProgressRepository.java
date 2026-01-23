@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UserCourseProgressRepository extends JpaRepository<UserCourseProgress, Long> {
 
-    @Query("select ucp.enrollment.course.id from UserCourseProgress ucp where ucp.id = :progressId")
+    @Query("select ucp.enrollment.courseVersion.course.id from UserCourseProgress ucp where ucp.id = :progressId")
     Long getCourseId(@Param("progressId") Long progressId);
 
     @Query("select ucp.enrollment.id from UserCourseProgress ucp where ucp.id = :progressId")

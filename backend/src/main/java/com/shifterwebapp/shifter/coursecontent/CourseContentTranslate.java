@@ -25,6 +25,5 @@ public class CourseContentTranslate {
 
     @ManyToOne
     @JoinColumn(name = "course_content_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private CourseContent courseContent;
 }

@@ -1,17 +1,18 @@
 package com.shifterwebapp.shifter.payment.service;
 
 import com.shifterwebapp.shifter.Validate;
-import com.shifterwebapp.shifter.course.Course;
-import com.shifterwebapp.shifter.course.repository.CourseRepository;
-import com.shifterwebapp.shifter.enrollment.EnrollmentRepository;
+import com.shifterwebapp.shifter.course.course.Course;
+import com.shifterwebapp.shifter.course.course.repository.CourseRepository;
+import com.shifterwebapp.shifter.enrollment.Enrollment;
+import com.shifterwebapp.shifter.enrollment.repository.EnrollmentRepository;
 import com.shifterwebapp.shifter.payment.Payment;
-import com.shifterwebapp.shifter.payment.PaymentDto;
-import com.shifterwebapp.shifter.payment.PaymentMapper;
-import com.shifterwebapp.shifter.payment.PaymentRepository;
+import com.shifterwebapp.shifter.payment.dto.PaymentDto;
+import com.shifterwebapp.shifter.payment.mapper.PaymentMapper;
+import com.shifterwebapp.shifter.payment.repository.PaymentRepository;
 import com.shifterwebapp.shifter.enums.PaymentMethod;
 import com.shifterwebapp.shifter.enums.PaymentStatus;
-import com.shifterwebapp.shifter.user.User;
-import com.shifterwebapp.shifter.user.repository.UserRepository;
+import com.shifterwebapp.shifter.account.user.User;
+import com.shifterwebapp.shifter.account.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +33,7 @@ public class PaymentService implements ImplPaymentService {
     @Override
     public List<PaymentDto> getPaymentsByUser(Long userId) {
         validate.validateUserExists(userId);
-        List<Payment> payments = paymentRepository.findPaymentByUser_Id(userId);
+        List<Payment> payments = paymentRepository.findPaymentByUser(userId);
         return paymentMapper.toDto(payments);
     }
 
@@ -70,17 +71,17 @@ public class PaymentService implements ImplPaymentService {
 
     @Override
     public Payment initiatePayment(Long userId, Long courseId, PaymentMethod paymentMethod) {
-        User user = userRepository.findById(userId).orElseThrow();
         Course course = courseRepository.findById(courseId).orElseThrow();
+        Enrollment enrollment = enrollmentRepository.findEnrollmentByUserAndCourse(userId, courseId);
 
         // PAYMENT CODE (CASYS) HERE !!!!!!!!!
 
         Payment payment = Payment.builder()
                 .amount(course.getPrice())
-                .date(LocalDate.now())
+                .paymentDate(LocalDate.now())
                 .paymentMethod(paymentMethod)
                 .paymentStatus(PaymentStatus.COMPLETED)
-                .user(user)
+                .enrollment(enrollment)
                 .build();
 
         return paymentRepository.save(payment);

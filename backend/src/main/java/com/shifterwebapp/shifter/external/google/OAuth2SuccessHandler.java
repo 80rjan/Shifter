@@ -2,8 +2,8 @@ package com.shifterwebapp.shifter.external.google;
 
 import com.shifterwebapp.shifter.config.JwtService;
 import com.shifterwebapp.shifter.enums.LoginProvider;
-import com.shifterwebapp.shifter.user.User;
-import com.shifterwebapp.shifter.user.service.UserService;
+import com.shifterwebapp.shifter.account.user.User;
+import com.shifterwebapp.shifter.account.user.service.UserService;
 import com.shifterwebapp.shifter.verificationtoken.service.VerificationTokenService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

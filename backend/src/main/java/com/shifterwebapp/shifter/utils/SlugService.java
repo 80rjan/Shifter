@@ -1,6 +1,6 @@
  package com.shifterwebapp.shifter.utils;
 
-import com.shifterwebapp.shifter.course.repository.CourseRepository;
+import com.shifterwebapp.shifter.course.course.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

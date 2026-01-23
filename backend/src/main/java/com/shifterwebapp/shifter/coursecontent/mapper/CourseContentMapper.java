@@ -19,32 +19,39 @@ import java.util.Optional;
 public abstract class CourseContentMapper {
 
     public abstract CourseContentDtoPreview toDtoPreview(CourseContent courseContent, @Context Language lang);
-
     public abstract List<CourseContentDtoPreview> toDtoPreview(List<CourseContent> courseContents, @Context Language lang);
 
-    public abstract CourseContentDtoLearn toDtoLearn(CourseContent courseContent, @Context Language lang);
-
-    public abstract List<CourseContentDtoLearn> toDtoLearn(List<CourseContent> courseContents, @Context Language lang);
+    public abstract CourseContentDtoLearn toDtoLearn(CourseContent courseContent, @Context Language lang, @Context Long userId);
+    public abstract List<CourseContentDtoLearn> toDtoLearn(List<CourseContent> courseContents, @Context Language lang, @Context Long userId);
 
     public abstract CourseContentDtoFull toDtoFull(CourseContent courseContent, @Context Language lang);
-
     public abstract List<CourseContentDtoFull> toDtoFull(List<CourseContent> courseContents, @Context Language lang);
 
     @AfterMapping
-    protected void applyTranslation(CourseContent courseContent, @MappingTarget Object dto, @Context Language lang) {
-        Optional<CourseContentTranslate> translationOpt = courseContent.getCourseContentTranslates().stream().filter(t -> t.getLanguage().equals(lang)).findFirst();
-        if (translationOpt.isEmpty()) {
-            return;
-        }
-        CourseContentTranslate t = translationOpt.get();
-        if (dto instanceof CourseContentDtoPreview d) {
-            d.setTitle(t.getTitle());
-        }
-        if (dto instanceof CourseContentDtoLearn d) {
-            d.setTitle(t.getTitle());
-        }
-        if (dto instanceof CourseContentDtoFull d) {
-            d.setTitle(t.getTitle());
-        }
+    protected void applyTranslationPreview(@MappingTarget CourseContentDtoPreview dto,
+                                           CourseContent courseContent,
+                                           @Context Language lang) {
+        getTranslation(courseContent, lang).ifPresent(t -> dto.setTitle(t.getTitle()));
+    }
+
+    @AfterMapping
+    protected void applyTranslationLearn(@MappingTarget CourseContentDtoLearn dto,
+                                         CourseContent courseContent,
+                                         @Context Language lang,
+                                         @Context Long userId) {
+        getTranslation(courseContent, lang).ifPresent(t -> dto.setTitle(t.getTitle()));
+    }
+
+    @AfterMapping
+    protected void applyTranslationFull(@MappingTarget CourseContentDtoFull dto,
+                                        CourseContent courseContent,
+                                        @Context Language lang) {
+        getTranslation(courseContent, lang).ifPresent(t -> dto.setTitle(t.getTitle()));
+    }
+
+    protected Optional<CourseContentTranslate> getTranslation(CourseContent courseContent, Language lang) {
+        return courseContent.getTranslations().stream()
+                .filter(t -> t.getLanguage().equals(lang))
+                .findFirst();
     }
 }

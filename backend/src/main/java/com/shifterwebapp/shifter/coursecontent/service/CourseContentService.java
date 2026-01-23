@@ -1,6 +1,7 @@
 package com.shifterwebapp.shifter.coursecontent.service;
 
-import com.shifterwebapp.shifter.course.Course;
+import com.shifterwebapp.shifter.course.course.Course;
+import com.shifterwebapp.shifter.course.courseversion.CourseVersion;
 import com.shifterwebapp.shifter.coursecontent.CourseContent;
 import com.shifterwebapp.shifter.coursecontent.CourseContentTranslate;
 import com.shifterwebapp.shifter.coursecontent.dto.CourseContentDtoBuilder;
@@ -23,10 +24,10 @@ public class CourseContentService implements ImplCourseContentService {
     private final CourseContentDtoBuilder courseContentDtoBuilder;
     private final CourseLectureService courseLectureService;
 
-    public CourseContent buildCourseContent(CourseContentDtoFull courseContentDtoFull, Course course, Language language) {
+    public CourseContent buildCourseContent(CourseContentDtoFull courseContentDtoFull, CourseVersion courseVersion, Language language) {
         CourseContent content = CourseContent.builder()
                 .position(courseContentDtoFull.getPosition())
-                .course(course)
+                .courseVersion(courseVersion)
                 .build();
 
         CourseContentTranslate contentTranslate = CourseContentTranslate.builder()
@@ -35,7 +36,7 @@ public class CourseContentService implements ImplCourseContentService {
                 .courseContent(content)
                 .build();
 
-        content.setCourseContentTranslates(List.of(contentTranslate));
+        content.setTranslations(List.of(contentTranslate));
 
         List<CourseLecture> lectureList = courseContentDtoFull.getCourseLectures().stream()
                 .map(lecture -> courseLectureService.buildCourseLecture(lecture, content, language))
@@ -50,7 +51,7 @@ public class CourseContentService implements ImplCourseContentService {
             Long courseId,
             Language language
             ) {
-        List<CourseContent> courseContents = courseContentRepository.getCourseContentByCourse_Id(courseId);
+        List<CourseContent> courseContents = courseContentRepository.getCourseContentByCourse(courseId);
         return courseContentDtoBuilder.getCourseContentDtoPreview(courseContents, language);
     }
 }

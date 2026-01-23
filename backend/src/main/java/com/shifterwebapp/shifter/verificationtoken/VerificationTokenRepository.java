@@ -1,6 +1,6 @@
 package com.shifterwebapp.shifter.verificationtoken;
 
-import com.shifterwebapp.shifter.user.User;
+import com.shifterwebapp.shifter.account.user.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

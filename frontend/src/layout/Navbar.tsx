@@ -12,8 +12,8 @@ function Navbar() {
 
     return (
         <nav
-            className="fixed top-2 z-50 w-11/12 left-1/2 -translate-x-1/2 flex items-center justify-between py-2 rounded-full
-            border-3 border-white/30 bg-black/50 backdrop-blur-md text-white font-light overflow-clip gap-20"
+            className="fixed top-2 z-50 w-11/12 left-1/2 -translate-x-1/2 flex items-center justify-between py-2 rounded-2xl
+            border-1 border-white/30 bg-black/50 backdrop-blur-md text-white font-light overflow-clip gap-20"
         >
             {/* Left nav links */}
             <div className={`flex w-40/100 justify-between text-md items-center
@@ -56,7 +56,7 @@ function Navbar() {
                     <LocalizedLink
                         to={`${user?.hasUsedFreeConsultation ? "/contact" : "/free-consultation"}`}
                         className={`hover:-translate-x-2 transition-all duration-200 ease-in-out cursor-pointer
-                                relative -mr-4 py-2 bg-shifter rounded-l-lg font-medium whitespace-nowrap
+                                relative -mr-4 py-2 bg-cta rounded-l-lg font-bold whitespace-nowrap
                                 shadow-md shadow-shifter/30 px-8 pr-10 ${user?.hasUsedFreeConsultation && "px-10 pr-12"}`}
                     >
                         {user?.hasUsedFreeConsultation ? t("contact") : t("freeConsultation")}

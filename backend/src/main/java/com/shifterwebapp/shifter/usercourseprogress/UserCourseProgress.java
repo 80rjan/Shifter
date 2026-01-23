@@ -28,13 +28,11 @@ public class UserCourseProgress {
     private LocalDateTime completedAt;
 
     @ManyToOne
-    @JoinColumn(name = "enrollment_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "enrollment_id", nullable = false)
     private Enrollment enrollment;
 
     @ManyToOne
-    @JoinColumn(name = "course_lecture_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "course_lecture_id", nullable = false)
     private CourseLecture courseLecture;
 
     public Long getCourseLectureId() {

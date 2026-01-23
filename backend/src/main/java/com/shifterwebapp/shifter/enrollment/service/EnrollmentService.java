@@ -2,21 +2,23 @@ package com.shifterwebapp.shifter.enrollment.service;
 
 import com.shifterwebapp.shifter.Validate;
 import com.shifterwebapp.shifter.attribute.Attribute;
-import com.shifterwebapp.shifter.course.Course;
-import com.shifterwebapp.shifter.course.repository.CourseRepository;
-import com.shifterwebapp.shifter.course.CourseTranslate;
+import com.shifterwebapp.shifter.course.course.Course;
+import com.shifterwebapp.shifter.course.course.repository.CourseRepository;
+import com.shifterwebapp.shifter.course.coursetranslate.CourseTranslate;
+import com.shifterwebapp.shifter.course.courseversion.CourseVersion;
+import com.shifterwebapp.shifter.course.courseversion.repository.CourseVersionRepository;
 import com.shifterwebapp.shifter.courselecture.CourseLecture;
 import com.shifterwebapp.shifter.enrollment.Enrollment;
-import com.shifterwebapp.shifter.enrollment.EnrollmentDto;
-import com.shifterwebapp.shifter.enrollment.EnrollmentMapper;
-import com.shifterwebapp.shifter.enrollment.EnrollmentRepository;
+import com.shifterwebapp.shifter.enrollment.dto.EnrollmentDto;
+import com.shifterwebapp.shifter.enrollment.mapper.EnrollmentMapper;
+import com.shifterwebapp.shifter.enrollment.repository.EnrollmentRepository;
 import com.shifterwebapp.shifter.enums.*;
 import com.shifterwebapp.shifter.exception.AlreadyEnrolledException;
 import com.shifterwebapp.shifter.exception.PaymentNotCompleteException;
 import com.shifterwebapp.shifter.external.email.EmailService;
 import com.shifterwebapp.shifter.payment.Payment;
 import com.shifterwebapp.shifter.payment.service.PaymentService;
-import com.shifterwebapp.shifter.user.service.UserService;
+import com.shifterwebapp.shifter.account.user.service.UserService;
 import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgress;
 import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgressRepository;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +40,7 @@ public class EnrollmentService implements ImplEnrollmentService {
     private final EnrollmentMapper enrollmentMapper;
     private final EmailService emailService;
     private final Validate validate;
+    private final CourseVersionRepository courseVersionRepository;
 
     @Override
     public EnrollmentDto getEnrollmentById(Long enrollmentId) {
@@ -92,18 +95,19 @@ public class EnrollmentService implements ImplEnrollmentService {
         }
 
         Course course = courseRepository.findById(courseId).orElseThrow();
+        CourseVersion courseVersion = courseVersionRepository.findByActiveTrueAndCourse_Id(courseId);
 
         Enrollment enrollment = Enrollment.builder()
                 .enrollmentStatus(EnrollmentStatus.PENDING)
-                .date(LocalDate.now())
+                .purchaseDate(LocalDate.now())
                 .payment(payment)
                 .review(null)
-                .course(course)
+                .courseVersion(courseVersion)
                 .build();
 
         enrollmentRepository.save(enrollment);
 
-        List<CourseLecture> courseLectures = course.getCourseContents().stream()
+        List<CourseLecture> courseLectures = courseVersion.getCourseContents().stream()
                 .flatMap(content -> content.getCourseLectures().stream())
                 .toList();
 
@@ -118,7 +122,7 @@ public class EnrollmentService implements ImplEnrollmentService {
 
         userCourseProgressRepository.saveAll(progressList);
 
-        CourseTranslate courseTranslate = course.getCourseTranslates()
+        CourseTranslate courseTranslate = course.getTranslations()
                 .stream()
                 .filter(t -> t.getLanguage() == Language.EN)
                 .toList()
@@ -131,11 +135,11 @@ public class EnrollmentService implements ImplEnrollmentService {
                 .replaceAll("-+", "-");
 
         emailService.sendCoursePurchaseConfirmation(
-                payment.getUser().getEmail(),
+                enrollment.getUser().getEmail(),
                 courseTranslate.getTitle(),
                 courseTranslate.getDescription(),
                 "http://localhost:5173/learn/" + course.getId() + "/" + courseTitleFormatted,
-                payment.getUser().getName()
+                enrollment.getUser().getName()
         );
 
         return enrollmentMapper.toDto(enrollment);
@@ -155,7 +159,7 @@ public class EnrollmentService implements ImplEnrollmentService {
 
         if (enrollment.getEnrollmentStatus() == EnrollmentStatus.PENDING) {
             enrollment.setEnrollmentStatus(EnrollmentStatus.ACTIVE);
-            enrollment.setActivatedAt(LocalDate.now());
+            enrollment.setActivationDate(LocalDate.now());
             enrollmentRepository.save(enrollment);
         }
 
@@ -176,11 +180,11 @@ public class EnrollmentService implements ImplEnrollmentService {
         if (allCompleted) {
             System.out.println("UPDATING");
             enrollment.setEnrollmentStatus(EnrollmentStatus.COMPLETED);
-            enrollment.setCompletedAt(LocalDate.now());
+            enrollment.setCompletionDate(LocalDate.now());
             enrollmentRepository.save(enrollment);
 
-            Long userId = enrollment.getPayment().getUser().getId();
-            List<Attribute> courseAttributes = enrollment.getCourse().getAttributes();
+            Long userId = enrollment.getUser().getId();
+            List<Attribute> courseAttributes = enrollment.getCourseVersion().getCourse().getAttributes();
             userService.addPoints(userId, PointsConstants.BUY_COURSE);
             userService.addAttributes(
                     userId,

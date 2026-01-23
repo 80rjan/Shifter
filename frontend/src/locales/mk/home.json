@@ -1,8 +1,8 @@
 {
   "hero": {
     "label": "Shift 2 Win",
-    "title": "Воведуваме нови хоризонти за растот на семејните бизниси",
-    "description": "Експертска поддршка, практични курсеви и групни академии дизајнирани за одржлив раст и успех",
+    "title": "Изгради одржлив раст со стратегии прилагодени на твојот бизнис.",
+    "description": "За <span class='shadow-md px-4 py-1 border-1 border-white/40 bg-white/25 text-white font-black rounded-full'>семејни бизниси</span> и <span class='shadow-md px-4 py-1 border-1 border-white/40 bg-white/25 text-white font-black rounded-full'>лидери</span> кои навигираат низ раст, транзиција или наследување и сакаат јасни применливи чекори - прилагодени за нивните потреби.",
     "cta": {
       "freeConsultation": "Закажи бесплатна консултација",
       "contact": "Контактирај не"
@@ -55,7 +55,7 @@
     "step1": {
       "beforeConsultation": {
         "title": "Закажи бесплатна консултација",
-        "description": "Закажете бесплатна консултација на која ќе ги споделите вашите предизвици, цели и очекувања."
+        "description": "Закажете бесплатна консултативна сесија за да дознаеме како може да ви помогнеме на вашиот бизнис."
       },
       "afterConsultation": {
         "title": "Контактирај не",
@@ -75,6 +75,44 @@
       "description": "Применете ги стручните совети и докажани стратегии со континуирана поддршка низ целиот процес."
     }
   },
+  "shifterDifferenceTable": {
+    "heading": {
+      "traditionalApproach": "Традиционален пристап",
+      "shifterApproach": "Со Shifter"
+    },
+    "rows": [
+      {
+        "challenge": "Правец на бизнисот",
+        "shifterApproach": "Кристално јасна стратегија",
+        "traditionalApproach": "Нејасен пат напред"
+      },
+      {
+        "challenge": "Решавање на проблеми",
+        "shifterApproach": "Длабока дијагноза, Трајни решенија",
+        "traditionalApproach": "Површни решенија"
+      },
+      {
+        "challenge": "Време до резултати",
+        "shifterApproach": "Брзо, со докажани методи",
+        "traditionalApproach": "Бавно, со повторни обиди и грешки"
+      },
+      {
+        "challenge": "Долгорочна одржливост",
+        "shifterApproach": "Трајни системи",
+        "traditionalApproach": "Брзи решенија"
+      },
+      {
+        "challenge": "Донесување одлуки",
+        "shifterApproach": "Факти и анализа",
+        "traditionalApproach": "Интуиција"
+      },
+      {
+        "challenge": "Траекторија на раст",
+        "shifterApproach": "Одржлив раст",
+        "traditionalApproach": "Непредвидливи резултати"
+      }
+    ]
+  },
   "coursesCarousel": {
     "heading": "Отклучи го твојот потенцијал преку <br/> <strong class='text-shifter'>онлајн курсеви</strong>",
     "description": "Пристапи до курсеви креирани од врвни експерти. Унапреди ги постоечките вештини и стекни се со нови знаења."
@@ -91,5 +129,4 @@
     ],
     "button": "Прочитај повеќе"
   }
-
 }

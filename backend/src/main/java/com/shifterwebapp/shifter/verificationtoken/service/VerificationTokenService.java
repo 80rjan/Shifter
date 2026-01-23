@@ -2,15 +2,13 @@ package com.shifterwebapp.shifter.verificationtoken.service;
 
 import com.shifterwebapp.shifter.Validate;
 import com.shifterwebapp.shifter.exception.InvalidVerificationTokenException;
-import com.shifterwebapp.shifter.user.User;
-import com.shifterwebapp.shifter.user.repository.UserRepository;
+import com.shifterwebapp.shifter.account.user.User;
+import com.shifterwebapp.shifter.account.user.repository.UserRepository;
 import com.shifterwebapp.shifter.verificationtoken.VerificationToken;
 import com.shifterwebapp.shifter.verificationtoken.VerificationTokenRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -63,7 +61,7 @@ public class VerificationTokenService implements ImplVerificationTokenService {
             throw new InvalidVerificationTokenException("Expired token");
 
         User user = verificationToken.getUser();
-        user.setIsEnabled(true);
+        user.setVerified(true);
         userRepository.save(user);
 
         verificationTokenRepository.delete(verificationToken);

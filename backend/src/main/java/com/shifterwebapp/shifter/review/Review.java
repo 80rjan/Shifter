@@ -24,10 +24,9 @@ public class Review {
 
     private String comment;
 
-    private LocalDate review_date;
+    private LocalDate reviewDate;
 
     @OneToOne
     @JoinColumn(name = "enrollment_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Enrollment enrollment;
 }

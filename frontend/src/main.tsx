@@ -3,6 +3,9 @@ import { createRoot } from 'react-dom/client'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import './global.css';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+import './animation.css';
 import App from './App.tsx'
 import {AuthProvider} from "./context/AuthContext.tsx";
 import {BrowserRouter} from "react-router-dom";

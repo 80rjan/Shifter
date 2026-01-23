@@ -3,13 +3,11 @@ package com.shifterwebapp.shifter.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shifterwebapp.shifter.config.JwtService;
 import com.shifterwebapp.shifter.enums.LoginProvider;
-import com.shifterwebapp.shifter.exception.InvalidVerificationTokenException;
 import com.shifterwebapp.shifter.external.email.EmailService;
-import com.shifterwebapp.shifter.user.User;
-import com.shifterwebapp.shifter.user.mapper.UserMapper;
-import com.shifterwebapp.shifter.user.repository.UserRepository;
-import com.shifterwebapp.shifter.user.service.UserService;
-import com.shifterwebapp.shifter.verificationtoken.VerificationToken;
+import com.shifterwebapp.shifter.account.user.User;
+import com.shifterwebapp.shifter.account.user.mapper.UserMapper;
+import com.shifterwebapp.shifter.account.user.repository.UserRepository;
+import com.shifterwebapp.shifter.account.user.service.UserService;
 import com.shifterwebapp.shifter.verificationtoken.VerificationTokenRepository;
 import com.shifterwebapp.shifter.verificationtoken.service.VerificationTokenService;
 import jakarta.servlet.http.Cookie;
@@ -27,7 +25,6 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.io.IOException;
 import java.time.Duration;
-import java.time.Instant;
 import java.util.UUID;
 
 @Service
@@ -113,14 +110,14 @@ public class AuthService {
 
         User user = userService.getUserEntityByEmail(request.getEmail());
 
-        if (user.getIsEnabled())
+        if (user.isVerified())
             sendTokens(response, user);
     }
 
     public void finalizeOAuthLogin(Long userId, HttpServletResponse response) throws IOException {
         User user = userService.getUserEntityById(userId);
 
-        if (user.getIsEnabled())
+        if (user.isVerified())
             sendTokens(response, user);
     }
 

@@ -38,7 +38,7 @@ public class CourseLectureService implements ImplCourseLectureService{
                 .courseLecture(lecture)
                 .build();
 
-        lecture.setCourseLectureTranslates(List.of(lectureTranslate));
+        lecture.setTranslations(List.of(lectureTranslate));
 
         return lecture;
     }

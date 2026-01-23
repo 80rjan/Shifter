@@ -11,7 +11,7 @@ public interface CourseLectureRepository extends JpaRepository<CourseLecture, Lo
     @Query("""
             SELECT cl.contentType
             FROM CourseLecture cl
-            JOIN cl.courseLectureTranslates clt
+            JOIN cl.translations clt
             WHERE cl.id = :lectureId
              AND clt.contentFileName = :fileName
              AND clt.language = :language
@@ -21,7 +21,7 @@ public interface CourseLectureRepository extends JpaRepository<CourseLecture, Lo
     @Query("""
         SELECT clt.contentFileName
         FROM CourseLecture cl
-        JOIN cl.courseLectureTranslates clt
+        JOIN cl.translations clt
         WHERE cl.id = :lectureId
         AND clt.language = :language
     """)

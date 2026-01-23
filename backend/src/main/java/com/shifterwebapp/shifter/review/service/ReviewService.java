@@ -1,7 +1,7 @@
 package com.shifterwebapp.shifter.review.service;
 
 import com.shifterwebapp.shifter.enrollment.Enrollment;
-import com.shifterwebapp.shifter.enrollment.EnrollmentRepository;
+import com.shifterwebapp.shifter.enrollment.repository.EnrollmentRepository;
 import com.shifterwebapp.shifter.enums.EnrollmentStatus;
 import com.shifterwebapp.shifter.exception.AccessDeniedException;
 import com.shifterwebapp.shifter.exception.ResourceNotFoundException;
@@ -85,7 +85,7 @@ public class ReviewService implements ImplReviewService {
                 .rating(reviewRequest.getRating())
                 .comment(reviewRequest.getComment())
                 .enrollment(enrollment)
-                .review_date(LocalDate.now())
+                .reviewDate(LocalDate.now())
                 .build();
 
         reviewRepository.save(review);
@@ -108,7 +108,7 @@ public class ReviewService implements ImplReviewService {
         Review review = reviewRepository.findReviewByEnrollment(enrollment.getId());
         review.setRating(reviewRequest.getRating());
         review.setComment(reviewRequest.getComment());
-        review.setReview_date(LocalDate.now());
+        review.setReviewDate(LocalDate.now());
 
         reviewRepository.save(review);
 

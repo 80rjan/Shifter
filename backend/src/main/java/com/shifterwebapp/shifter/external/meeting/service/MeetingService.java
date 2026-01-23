@@ -12,7 +12,7 @@ import com.shifterwebapp.shifter.external.meeting.UserMeetingInfoRequest;
 import com.shifterwebapp.shifter.external.meeting.ZoomMeetingRequest;
 import com.shifterwebapp.shifter.scheduledemail.ScheduledEmail;
 import com.shifterwebapp.shifter.scheduledemail.ScheduledEmailService;
-import com.shifterwebapp.shifter.user.service.UserService;
+import com.shifterwebapp.shifter.account.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

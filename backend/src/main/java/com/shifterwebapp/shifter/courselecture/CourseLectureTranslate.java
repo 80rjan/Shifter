@@ -34,6 +34,5 @@ public class CourseLectureTranslate {
 
     @ManyToOne
     @JoinColumn(name = "course_lecture_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private CourseLecture courseLecture;
 }

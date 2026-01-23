@@ -1,10 +1,8 @@
 package com.shifterwebapp.shifter.enrollment.service;
 
 import com.shifterwebapp.shifter.enrollment.Enrollment;
-import com.shifterwebapp.shifter.enrollment.EnrollmentDto;
-import com.shifterwebapp.shifter.enums.EnrollmentStatus;
+import com.shifterwebapp.shifter.enrollment.dto.EnrollmentDto;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface ImplEnrollmentService {

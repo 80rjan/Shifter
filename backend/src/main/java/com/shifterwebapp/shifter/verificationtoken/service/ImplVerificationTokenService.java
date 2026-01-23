@@ -1,6 +1,6 @@
 package com.shifterwebapp.shifter.verificationtoken.service;
 
-import com.shifterwebapp.shifter.user.User;
+import com.shifterwebapp.shifter.account.user.User;
 
 import java.util.UUID;
 

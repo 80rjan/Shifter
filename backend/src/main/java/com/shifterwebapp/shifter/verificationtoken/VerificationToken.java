@@ -1,6 +1,6 @@
 package com.shifterwebapp.shifter.verificationtoken;
 
-import com.shifterwebapp.shifter.user.User;
+import com.shifterwebapp.shifter.account.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,6 +1,7 @@
 package com.shifterwebapp.shifter.enrollment;
 
-import com.shifterwebapp.shifter.course.Course;
+import com.shifterwebapp.shifter.account.user.User;
+import com.shifterwebapp.shifter.course.courseversion.CourseVersion;
 import com.shifterwebapp.shifter.enums.EnrollmentStatus;
 import com.shifterwebapp.shifter.payment.Payment;
 import com.shifterwebapp.shifter.review.Review;
@@ -25,24 +26,30 @@ public class Enrollment {
     @Enumerated(EnumType.STRING)
     private EnrollmentStatus enrollmentStatus;
 
-    private LocalDate date;         // date bought
+    private LocalDate purchaseDate;                  // date purchased
 
-    private LocalDate activatedAt;  // date activated
+    private LocalDate activationDate;                  // date activated
 
-    private LocalDate completedAt;  // date completed
+    private LocalDate completionDate;                  // date completed
 
-    @OneToOne(cascade = CascadeType.PERSIST, orphanRemoval = true)  // Persist ???? Orphan removal ????
-    @JoinColumn(name = "payment_id")
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
+    // when enrollment is saved, payment is saved. Delete payment from db if payment=null
+    @JoinColumn(name = "payment_id")                // references payment.id
     private Payment payment;
 
     @OneToOne(mappedBy = "enrollment", cascade = CascadeType.ALL, orphanRemoval = true)
     private Review review;
 
     @ManyToOne
-    @JoinColumn(name = "course_id")
-    private Course course;
+    @JoinColumn(name = "course_version_id", nullable = false)                 // references courseVersion.id
+    private CourseVersion courseVersion;
 
     @OneToMany(mappedBy = "enrollment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserCourseProgress> userCourseProgressList;
+    private List<UserCourseProgress> userCourseProgress;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    // references user.id, no null to ensure enrollment always linked to a user
+    private User user;
 }
 

@@ -9,16 +9,16 @@ import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    @Query("select AVG(r.rating) from Review r where r.enrollment.course.id = :courseId")
+    @Query("select AVG(r.rating) from Review r where r.enrollment.courseVersion.course.id = :courseId")
     Double findAverageRatingByCourse(@Param("courseId") Long courseId);
 
-    @Query("select r from Review r where r.enrollment.course.id = :courseId")
+    @Query("select r from Review r where r.enrollment.courseVersion.course.id = :courseId")
     List<Review> findReviewsByCourse(@Param("courseId") Long courseId);
 
-    @Query("select r from Review r where r.enrollment.payment.user.id = :userId")
+    @Query("select r from Review r where r.enrollment.user.id = :userId")
     List<Review> findReviewsByUser(@Param("userId") Long userId);
 
-    @Query("select r from Review r where r.enrollment.payment.user.id = :userId and r.enrollment.course.id = :courseId")
+    @Query("select r from Review r where r.enrollment.user.id = :userId and r.enrollment.courseVersion.course.id = :courseId")
     Optional<Review> findReviewByUserAndCourse(@Param("userId") Long userId, @Param("courseId") Long courseId);
 
 
@@ -26,6 +26,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     Review findReviewByEnrollment(Long enrollmentId);
 
     @Query("select case when count(r) > 0 then true else false end" +
-            " from Review r where r.enrollment.payment.user.id = :userId and r.enrollment.course.id = :courseId")
+            " from Review r where r.enrollment.user.id = :userId and r.enrollment.courseVersion.course.id = :courseId")
     Boolean findHasBeenReviewedByUser(@Param("userId") Long userId, @Param("courseId") Long courseId);
 }

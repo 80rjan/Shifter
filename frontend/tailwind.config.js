@@ -40,6 +40,8 @@ export default {
                 gray: '#E5E7EB',
                 'black-text': '#333333',
                 'white-text': '#EEEEEE',
+                'warm': '#E67E50',
+                'secondary-warm': '#D4A373',
             },
             boxShadow: {
                 'up-sm': '0 -1px 2px 0 rgba(0, 0, 0, 0.05)',
@@ -55,5 +57,5 @@ export default {
             },
         },
     },
-    plugins: [],
+    plugins: []
 }

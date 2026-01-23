@@ -2,17 +2,14 @@ package com.shifterwebapp.shifter.verificationtoken;
 
 import com.shifterwebapp.shifter.Validate;
 import com.shifterwebapp.shifter.external.email.EmailService;
-import com.shifterwebapp.shifter.user.User;
-import com.shifterwebapp.shifter.user.service.UserService;
+import com.shifterwebapp.shifter.account.user.User;
+import com.shifterwebapp.shifter.account.user.service.UserService;
 import com.shifterwebapp.shifter.verificationtoken.service.VerificationTokenService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Map;
 import java.util.UUID;
 
 @RestController

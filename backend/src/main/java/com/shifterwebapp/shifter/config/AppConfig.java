@@ -1,6 +1,6 @@
 package com.shifterwebapp.shifter.config;
 
-import com.shifterwebapp.shifter.user.repository.UserRepository;
+import com.shifterwebapp.shifter.account.user.repository.UserRepository;
 import jakarta.servlet.MultipartConfigElement;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

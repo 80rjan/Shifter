@@ -1,8 +1,8 @@
 {
   "hero": {
     "label": "Shift 2 Win",
-    "title": "Where Family Businesses Thrive",
-    "description": "Expert guidance, practical courses, and group academies designed for sustainable growth & success in family-owned businesses.",
+    "title": "Build Sustainable Growth with Strategies that Fit Your Business.",
+    "description": "For <span class='shadow-md px-4 py-1 border-1 border-white/40 bg-white/25 text-white font-black rounded-full'>family businesses</span> and <span class='shadow-md px-4 py-1 border-1 border-white/40 bg-white/25 text-white font-black rounded-full'>leaders</span> navigating through growth, transitions, or succession who want clear actionable steps - tailored to their needs.",
     "cta": {
       "freeConsultation": "Book a Free Consultation",
       "contact": "Get In Touch"
@@ -55,7 +55,7 @@
     "step1": {
       "beforeConsultation": {
         "title": "Book a Free Consultation",
-        "description": "Schedule a free consultation where you’ll share your challenges, goals, and expectations."
+        "description": "Schedule a no-obligation consultation session to explore how we can help your business."
       },
       "afterConsultation": {
         "title": "Contact Us",
@@ -75,6 +75,44 @@
       "description": "Apply expert advice and proven strategies with ongoing support throughout the process."
     }
   },
+  "shifterDifferenceTable": {
+    "heading": {
+      "traditionalApproach": "Traditional Approach",
+      "shifterApproach": "With Shifter"
+    },
+    "rows": [
+      {
+        "challenge": "Business direction",
+        "shifterApproach": "Crystal-clear strategy",
+        "traditionalApproach": "Unclear path forward"
+      },
+      {
+        "challenge": "Problem solving",
+        "shifterApproach": "Deep diagnosis, Permanent solutions",
+        "traditionalApproach": "Surface solutions"
+      },
+      {
+        "challenge": "Implementation speed",
+        "shifterApproach": "Fast, proven methods",
+        "traditionalApproach": "Slow, trial-and-error"
+      },
+      {
+        "challenge": "Long-term sustainability",
+        "shifterApproach": "Lasting systems",
+        "traditionalApproach": "Quick fixes"
+      },
+      {
+        "challenge": "Data-driven decisions",
+        "shifterApproach": "Fact-based strategy",
+        "traditionalApproach": "Gut feeling"
+      },
+      {
+        "challenge": "Growth trajectory",
+        "shifterApproach": "Sustainable growth",
+        "traditionalApproach": "Unpredictable results"
+      }
+    ]
+  },
   "coursesCarousel": {
     "heading": "Learn, Grow, and Succeed With <strong class='text-shifter'>E-Learning</strong>",
     "description": "Access expert-led courses designed to help you master business, strategy, and success - anytime, anywhere."
@@ -91,5 +129,4 @@
     ],
     "button": "Read More"
   }
-
 }

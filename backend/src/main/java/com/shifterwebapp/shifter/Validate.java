@@ -2,16 +2,16 @@ package com.shifterwebapp.shifter;
 
 import com.shifterwebapp.shifter.attribute.repository.AttributeRepository;
 import com.shifterwebapp.shifter.auth.CustomAuthDetails;
-import com.shifterwebapp.shifter.course.repository.CourseRepository;
+import com.shifterwebapp.shifter.course.course.repository.CourseRepository;
 import com.shifterwebapp.shifter.courselecture.repository.CourseLectureRepository;
 import com.shifterwebapp.shifter.enums.Language;
 import com.shifterwebapp.shifter.exception.BadRequestException;
 import com.shifterwebapp.shifter.exception.ResourceNotFoundException;
 import com.shifterwebapp.shifter.exception.TranslationAlreadyExistsException;
 import com.shifterwebapp.shifter.exception.UnauthorizedException;
-import com.shifterwebapp.shifter.payment.PaymentRepository;
-import com.shifterwebapp.shifter.user.User;
-import com.shifterwebapp.shifter.user.repository.UserRepository;
+import com.shifterwebapp.shifter.payment.repository.PaymentRepository;
+import com.shifterwebapp.shifter.account.user.User;
+import com.shifterwebapp.shifter.account.user.repository.UserRepository;
 import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgressRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -59,12 +59,13 @@ public class Validate {
     }
 
 
+    // TODO: make this method work properly
     public void validateUserIsAdmin(Authentication authentication) {
         validateUserIsAuthenticated(authentication);
         Object detailsObj = authentication.getDetails();
         if (detailsObj instanceof CustomAuthDetails details) {
             Long userId = details.getUserId();
-            boolean isAdmin = userRepository.isAdmin(userId);
+            boolean isAdmin = false;
             if (!isAdmin) {
                 throw new UnauthorizedException("User is not an admin");
             }
@@ -74,7 +75,7 @@ public class Validate {
     }
 
     public void validateUserProfileNotComplete(User user) {
-        if (user.getIsProfileComplete())
+        if (user.isProfileComplete())
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     "User already completed profile and does not need verification token.");
     }

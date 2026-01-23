@@ -1,7 +1,7 @@
 package com.shifterwebapp.shifter.external.email;
 
 import com.shifterwebapp.shifter.Validate;
-import com.shifterwebapp.shifter.user.service.UserService;
+import com.shifterwebapp.shifter.account.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

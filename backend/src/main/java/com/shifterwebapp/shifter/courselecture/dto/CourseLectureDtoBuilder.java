@@ -32,15 +32,15 @@ public class CourseLectureDtoBuilder {
         return courseLectureDtoPreviewList;
     }
 
-    public CourseLectureDtoLearn getCourseLectureDtoLearn(CourseLecture courseLecture, Language language) {
-        CourseLectureDtoLearn courseLectureDtoLearn = courseLectureMapper.toDtoLearn(courseLecture, language);
+    public CourseLectureDtoLearn getCourseLectureDtoLearn(CourseLecture courseLecture, Language language, Long userId) {
+        CourseLectureDtoLearn courseLectureDtoLearn = courseLectureMapper.toDtoLearn(courseLecture, language, userId);
         return courseLectureDtoLearn;
     }
 
-    public List<CourseLectureDtoLearn> getCourseLectureDtoLearn(List<CourseLecture> courseLectures, Language language) {
+    public List<CourseLectureDtoLearn> getCourseLectureDtoLearn(List<CourseLecture> courseLectures, Language language, Long userId) {
         List<CourseLectureDtoLearn> courseLectureDtoLearnList = new ArrayList<>();
         for (CourseLecture courseLecture: courseLectures) {
-            CourseLectureDtoLearn dto = getCourseLectureDtoLearn(courseLecture, language);
+            CourseLectureDtoLearn dto = getCourseLectureDtoLearn(courseLecture, language, userId);
 
             courseLectureDtoLearnList.add(dto);
         }

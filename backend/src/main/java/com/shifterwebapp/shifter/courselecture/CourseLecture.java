@@ -31,13 +31,13 @@ public class CourseLecture {
 
     @ManyToOne
     @JoinColumn(name = "course_content_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private CourseContent courseContent;
 
-    @OneToMany(mappedBy = "courseLecture", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserCourseProgress> userCourseProgressList;
+    @OneToMany(mappedBy = "courseLecture", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<UserCourseProgress> userCourseProgress;
 
     @OneToMany(mappedBy = "courseLecture", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CourseLectureTranslate> courseLectureTranslates;
+    // when course lecture is deleted, translations are deleted. When translations are removed from the list, they are deleted.
+    private List<CourseLectureTranslate> translations;
 }
 

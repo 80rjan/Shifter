@@ -37,11 +37,11 @@ export default function CollaborationSteps() {
         <section className="relative bg-shifter text-white py-vertical-xl px-horizontal-md flex flex-col gap-between-md items-center">
             {/* Gradients */}
             <div className="absolute bottom-0 w-full h-[32%]" style={{
-                background: "linear-gradient(to bottom, rgba(248,246,245,0) 0%, rgba(248,246,245,0.1) 20%, rgba(248,246,245,0.9) 80%, rgba(248,246,245,1) 100%)",
+                background: "linear-gradient(to bottom, rgba(250,251,252,0) 0%, rgba(250,251,252,0.1) 20%, rgba(250,251,252,0.9) 80%, rgba(250,251,252,1) 100%)",
                 pointerEvents: "none",
             }} />
             <div className="absolute top-0 w-full h-[32%]" style={{
-                background: "linear-gradient(to top, rgba(248,246,245,0) 0%, rgba(248,246,245,0.1) 20%, rgba(248,246,245,0.9) 80%, rgba(248,246,245,1) 100%)",
+                background: "linear-gradient(to top, rgba(250,251,252,0) 0%, rgba(250,251,252,0.1) 20%, rgba(250,251,252,0.9) 80%, rgba(250,251,252,1) 100%)",
                 pointerEvents: "none",
             }} />
 
@@ -50,7 +50,7 @@ export default function CollaborationSteps() {
             <div className="relative flex w-full mt-4">
                 {/* LINE AND DOTS */}
                 <div className="absolute w-[104%] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 -rotate-16">
-                    <hr className="border-t-4 border-white rounded-full w-full absolute top-2" />
+                    <hr className="border-t-4 border-white rounded-full absolute top-2 horizonal-line-show" />
                     {[-0.2, 25, 50, 75, 99.8].map((percent, idx) => (
                         <div
                             key={idx}
@@ -71,7 +71,7 @@ export default function CollaborationSteps() {
                             <div className="flex justify-center items-center min-h-[3.5rem]">
                                 <h3 className="text-2xl font-semibold text-center">{step.title}</h3>
                             </div>
-                            <p className="font-light text-white/70">{step.description}</p>
+                            <p className=" text-white/70">{step.description}</p>
                         </div>
                     </section>
                 ))}

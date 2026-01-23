@@ -1,10 +1,9 @@
 package com.shifterwebapp.shifter.coursecontent;
 
-import com.shifterwebapp.shifter.course.Course;
+import com.shifterwebapp.shifter.course.course.Course;
+import com.shifterwebapp.shifter.course.courseversion.CourseVersion;
 import com.shifterwebapp.shifter.courselecture.CourseLecture;
-import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgress;
 import jakarta.persistence.*;
-import com.shifterwebapp.shifter.enums.ContentType;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -26,15 +25,16 @@ public class CourseContent {
     private Integer position;
 
     @OneToMany(mappedBy = "courseContent", cascade = CascadeType.ALL, orphanRemoval = true)
+    // when course content is deleted, lectures are deleted. When lectures are removed from the list, they are deleted.
     @OrderBy("position ASC")
     private List<CourseLecture> courseLectures;
 
     @ManyToOne
-    @JoinColumn(name = "course_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Course course;
+    @JoinColumn(name = "course_version_id")
+    private CourseVersion courseVersion;
 
     @OneToMany(mappedBy = "courseContent", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CourseContentTranslate> courseContentTranslates;
+    // when course content is deleted, translations are deleted. When translations are removed from the list, they are deleted.
+    private List<CourseContentTranslate> translations;
 }
 

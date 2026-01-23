@@ -17,9 +17,9 @@ public class AttributeTranslate {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private Language language; // EN, MK
+    private Language language;          // EN, MK
 
-    private String value; // "Leadership", "Маркетинг", etc.
+    private String value;               // "Leadership", "Маркетинг", etc.
 
     @ManyToOne
     @JoinColumn(name = "attribute_id")

@@ -1,0 +1,64 @@
+/* HTML: <div class="loader"></div> */
+.loader, .loader-white {
+    /*margin-left: 20px;*/
+    /*width: 40px;*/
+    aspect-ratio: 1;
+    display: grid;
+    border: 4px solid #0000;
+    border-radius: 50%;
+    animation: l15 1s infinite linear;
+}
+.loader-white {
+    border-right-color: var(--color-white);
+}
+.loader {
+    border-right-color: var(--color-shifter);
+}
+.loader::before,
+.loader::after,
+.loader-white::before,
+.loader-white::after {
+    content: "";
+    grid-area: 1/1;
+    margin: 2px;
+    border: inherit;
+    border-radius: 50%;
+    animation: l15 2s infinite;
+}
+.loader::after, .loader-white::after {
+    margin: 8px;
+    animation-duration: 3s;
+}
+@keyframes l15{
+    100%{transform: rotate(1turn)}
+}
+
+
+
+.rotate-on-scroll {
+    animation: RotateOnScroll;
+    animation-timeline: view();
+}
+
+@keyframes RotateOnScroll {
+    from {
+        transform: rotate(-6deg);
+    }
+    to {
+        transform: rotate(6deg);
+    }
+}
+
+.horizonal-line-show {
+    animation: WidenOnScroll;
+    animation-timeline: view();
+}
+
+@keyframes WidenOnScroll {
+    0%, 20% {
+        width: 0;
+    }
+    70%, 100% {
+        width: 100%;
+    }
+}
