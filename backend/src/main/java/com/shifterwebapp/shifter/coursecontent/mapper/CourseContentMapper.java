@@ -28,14 +28,14 @@ public abstract class CourseContentMapper {
     public abstract List<CourseContentDtoFull> toDtoFull(List<CourseContent> courseContents, @Context Language lang);
 
     @AfterMapping
-    protected void applyTranslationPreview(@MappingTarget CourseContentDtoPreview dto,
+    protected void enrichPreview(@MappingTarget CourseContentDtoPreview dto,
                                            CourseContent courseContent,
                                            @Context Language lang) {
         getTranslation(courseContent, lang).ifPresent(t -> dto.setTitle(t.getTitle()));
     }
 
     @AfterMapping
-    protected void applyTranslationLearn(@MappingTarget CourseContentDtoLearn dto,
+    protected void enrichLearn(@MappingTarget CourseContentDtoLearn dto,
                                          CourseContent courseContent,
                                          @Context Language lang,
                                          @Context Long userId) {
@@ -43,7 +43,7 @@ public abstract class CourseContentMapper {
     }
 
     @AfterMapping
-    protected void applyTranslationFull(@MappingTarget CourseContentDtoFull dto,
+    protected void enrichFull(@MappingTarget CourseContentDtoFull dto,
                                         CourseContent courseContent,
                                         @Context Language lang) {
         getTranslation(courseContent, lang).ifPresent(t -> dto.setTitle(t.getTitle()));

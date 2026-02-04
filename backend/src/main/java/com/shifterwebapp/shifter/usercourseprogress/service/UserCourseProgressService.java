@@ -26,7 +26,12 @@ public class UserCourseProgressService implements ImplUserCourseProgressService 
 
     @Override
     public List<UserCourseProgress> getUserCourseProgressByEnrollmentAndCompletedTrue(Long enrollmentId) {
-        return userCourseProgressRepository.findByEnrollmentIdAAndCompletedTrue(enrollmentId);
+        return userCourseProgressRepository.findByEnrollmentIdAndCompletedTrue(enrollmentId);
+    }
+
+    @Override
+    public List<UserCourseProgress> getUserCourseProgressByEnrollmentsAndCompletedTrue(List<Long> enrollmentIds) {
+        return userCourseProgressRepository.findByEnrollmentIdsAndCompletedTrue(enrollmentIds);
     }
 
     @Override

@@ -1,25 +1,21 @@
 package com.shifterwebapp.shifter.account.user.service;
 
 import com.shifterwebapp.shifter.Validate;
-import com.shifterwebapp.shifter.attribute.Attribute;
-import com.shifterwebapp.shifter.attribute.service.AttributeService;
+import com.shifterwebapp.shifter.tag.Tag;
+import com.shifterwebapp.shifter.tag.service.TagService;
 import com.shifterwebapp.shifter.auth.UserPersonalizationDto;
-import com.shifterwebapp.shifter.enums.AttributeType;
-import com.shifterwebapp.shifter.enums.CompanySize;
+import com.shifterwebapp.shifter.enums.TagType;
 import com.shifterwebapp.shifter.enums.Language;
 import com.shifterwebapp.shifter.enums.LoginProvider;
-import com.shifterwebapp.shifter.payment.Payment;
 import com.shifterwebapp.shifter.account.user.User;
 import com.shifterwebapp.shifter.account.user.dto.UserDto;
-import com.shifterwebapp.shifter.account.user.dto.UserDtoBuilder;
-import com.shifterwebapp.shifter.account.user.dto.UserInfoDto;
+import com.shifterwebapp.shifter.account.user.dto.PersonalizeUserReq;
 import com.shifterwebapp.shifter.account.user.mapper.UserMapper;
 import com.shifterwebapp.shifter.account.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -30,22 +26,15 @@ public class UserService implements ImplUserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final AttributeService attributeService;
+    private final TagService tagService;
     private final Validate validate;
     private final PasswordEncoder passwordEncoder;
-    private final UserDtoBuilder userDtoBuilder;
-
-    @Override
-    public List<UserDto> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        return userMapper.toDto(users);
-    }
 
     @Override
     public UserDto getUserById(Long userId, Language language) {
         validate.validateUserExists(userId);
         User user = userRepository.findById(userId).orElseThrow();
-        return userDtoBuilder.getUserDto(user, language);
+        return userMapper.toDto(user, language);
     }
 
     @Override
@@ -89,13 +78,6 @@ public class UserService implements ImplUserService {
                 .email(email)
                 .passwordHash(passwordEncoder.encode(password))
                 .loginProvider(loginProvider)
-                .profileComplete(false)
-                .usedFreeConsultation(false)
-                .points(0)
-                .favoriteCourseIds(new ArrayList<>())
-                .workPosition("")
-                .companySize(CompanySize.FREELANCE)
-                .verified(false)
                 .build();
 
         return userRepository.save(user);
@@ -113,7 +95,7 @@ public class UserService implements ImplUserService {
 
         // User only has interests in the beginning, no skills.
         // The filter is to filter out the topics (user interests) only, no skills
-        user.setAttributes(attributeService.getAttributeByIds(userPersonalizationDto.getAttributeIdList()).stream().filter(a -> a.getType().equals(AttributeType.TOPIC)).collect(Collectors.toList()));
+        user.setTags(tagService.getTagsByIds(userPersonalizationDto.getTagIdList()).stream().filter(a -> a.getType().equals(TagType.TOPIC)).collect(Collectors.toList()));
 
         return userRepository.save(user);
     }
@@ -121,86 +103,70 @@ public class UserService implements ImplUserService {
     @Override
     public void deleteUser(Long userId) {
         validate.validateUserExists(userId);
-        userRepository.deleteById(userId);
+        // Soft delete implementation (no data loss)
+
+        User user = userRepository.findById(userId).orElseThrow();
+        user.setDeleted(true);
+        user.setEmail("deleted_" + user.getEmail());
+        user.getMeetingEmailReminders().clear();
     }
 
     @Override
-    public UserDto updateUser(Long id, UserInfoDto userInfoDto) {
+    public UserDto updateUser(Long id, Language language, PersonalizeUserReq personalizeUserReq) {
         validate.validateUserExists(id);
         User user = userRepository.findById(id).orElseThrow();
 
-        if (userInfoDto.getName() != null) {
-            user.setName(userInfoDto.getName());
+        if (personalizeUserReq.getName() != null) {
+            user.setName(personalizeUserReq.getName());
         }
-        if (userInfoDto.getCompanySize() != null) {
-            user.setCompanySize(userInfoDto.getCompanySize());
+        if (personalizeUserReq.getCompanySize() != null) {
+            user.setCompanySize(personalizeUserReq.getCompanySize());
         }
-        if (userInfoDto.getWorkPosition() != null) {
-            user.setWorkPosition(userInfoDto.getWorkPosition());
+        if (personalizeUserReq.getWorkPosition() != null) {
+            user.setWorkPosition(personalizeUserReq.getWorkPosition());
         }
 
         userRepository.save(user);
-        return userMapper.toDto(user);
+        return userMapper.toDto(user, language);
     }
 
     @Override
-    public UserDto updateAttribute(Long id, List<Long> attributeIds) {
+    public UserDto updateTags(Long id, Language language, List<Long> tagIds) {
         validate.validateUserExists(id);
 
         User user = userRepository.findById(id).orElseThrow();
-        user.setAttributes(attributeService.getAttributeByIds(attributeIds));
+        user.setTags(tagService.getTagsByIds(tagIds));
 
         userRepository.save(user);
-        return userMapper.toDto(user);
-    }
-
-
-    @Override
-    public UserDto updateMail(Long userId, String newMail) {
-        validate.validateUserExists(userId);
-        User user = userRepository.findById(userId).orElseThrow();
-        user.setEmail(newMail);
-        userRepository.save(user);
-        return userMapper.toDto(user);
+        return userMapper.toDto(user, language);
     }
 
     @Override
-    public UserDto updatePassword(Long userId, String newPass) {
-        validate.validateUserExists(userId);
-        User user = userRepository.findById(userId).orElseThrow();
-        user.setPasswordHash(passwordEncoder.encode(newPass));
-        userRepository.save(user);
-        return userMapper.toDto(user);
-    }
-
-    @Override
-    public UserDto addAttributes(Long userId, List<Long> attributeIds) {
+    public void addTags(Long userId, Language language, List<Long> tagIds) {
         validate.validateUserExists(userId);
         User user = userRepository.findById(userId).orElseThrow();
 
-        // Get current attribute IDs
-        Set<Long> existingAttributeIds = user.getAttributes()
+        // Get current tag IDs
+        Set<Long> existingTagIds = user.getTags()
                 .stream()
-                .map(Attribute::getId)
+                .map(Tag::getId)
                 .collect(Collectors.toSet());
 
-        // Get new attributes and filter out those already present
-        List<Attribute> newAttributes = attributeService.getAttributeByIds(attributeIds)
+        // Get new tags and filter out those already present
+        List<Tag> newTags = tagService.getTagsByIds(tagIds)
                 .stream()
-                .filter(attr -> !existingAttributeIds.contains(attr.getId()))
+                .filter(tag -> !existingTagIds.contains(tag.getId()))
                 .toList();
 
         // Add only the new ones
-        user.getAttributes().addAll(newAttributes);
+        user.getTags().addAll(newTags);
 
         userRepository.save(user);
-
-        return userMapper.toDto(user);
     }
 
 
     @Override
-    public UserDto toggleFavoriteCourse(Long userId, Integer newFavoriteCourseId) {
+    public UserDto toggleFavoriteCourse(Long userId, Language language, Integer newFavoriteCourseId) {
         User user = getUserEntityById(userId);
 
         if (user.getFavoriteCourseIds().contains(newFavoriteCourseId)) {
@@ -209,49 +175,18 @@ public class UserService implements ImplUserService {
             user.getFavoriteCourseIds().add(newFavoriteCourseId);
         }
         userRepository.save(user);
-        return userMapper.toDto(user);
+        return userMapper.toDto(user, language);
     }
 
     @Override
-    public UserDto addPoints(Long userId, Integer newPointsAchieved) {
+    public void addPoints(Long userId, Integer newPointsAchieved) {
         validate.validateUserExists(userId);
         User user = userRepository.findById(userId).orElseThrow();
         Integer newPoints = user.getPoints() + newPointsAchieved;
         user.setPoints(newPoints);
         userRepository.save(user);
-        return userMapper.toDto(user);
     }
 
-
-    @Override
-    public UserDto removeAttribute(Long userId, Long attributeId) {
-        validate.validateUserExists(userId);
-        User user = userRepository.findById(userId).orElseThrow();
-        user.setAttributes(user.getAttributes().stream().filter(a -> !a.getId().equals(attributeId)).toList());
-
-        userRepository.save(user);
-        return userMapper.toDto(user);
-    }
-
-    @Override
-    public UserDto removeAttributes(Long userId, List<Long> attributeIds) {
-        validate.validateUserExists(userId);
-        User user = userRepository.findById(userId).orElseThrow();
-        user.setAttributes(user.getAttributes().stream().filter(a -> !attributeIds.contains(a.getId())).toList());
-
-        userRepository.save(user);
-        return userMapper.toDto(user);
-    }
-
-    @Override
-    public UserDto removePoints(Long userId, Integer removePointsAchieved) {
-        validate.validateUserExists(userId);
-        User user = userRepository.findById(userId).orElseThrow();
-        Integer newPoints = user.getPoints() - removePointsAchieved;
-        user.setPoints(newPoints);
-        userRepository.save(user);
-        return userMapper.toDto(user);
-    }
 
     @Override
     public void markUserAsUsedFreeConsultation(String email) {

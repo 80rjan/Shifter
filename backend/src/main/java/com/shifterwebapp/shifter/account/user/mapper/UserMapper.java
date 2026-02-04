@@ -3,27 +3,35 @@ package com.shifterwebapp.shifter.account.user.mapper;
 import com.shifterwebapp.shifter.account.user.User;
 import com.shifterwebapp.shifter.account.user.dto.UserDto;
 import com.shifterwebapp.shifter.account.user.dto.UserDtoAuth;
-import org.mapstruct.InheritInverseConfiguration;
-import org.mapstruct.Mapper;
+import com.shifterwebapp.shifter.enums.Language;
+import com.shifterwebapp.shifter.tag.service.TagService;
+import org.mapstruct.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface UserMapper {
+public abstract class UserMapper {
 
-    UserDto toDto(User user);
-    List<UserDto> toDto(List<User> users);
+    @Autowired
+    protected TagService tagService;
 
-    UserDtoAuth toDtoAuth(User user);
-    List<UserDtoAuth> toDtoAuth(List<User> users);
+    public abstract UserDto toDto(User user, @Context Language language);
 
-    @InheritInverseConfiguration
-    User toEntity(UserDto userDto);
-    @InheritInverseConfiguration
-    List<User> toEntity(List<UserDto> userDtos);
+    public abstract List<UserDto> toDto(List<User> users, @Context Language language);
 
-    @InheritInverseConfiguration
-    User toEntityAuth(UserDtoAuth userDtoAuth);
-    @InheritInverseConfiguration
-    List<User> toEntityAuth(List<UserDtoAuth> userDtoAuths);
+    public abstract UserDtoAuth toDtoAuth(User user);
+
+    public abstract List<UserDtoAuth> toDtoAuth(List<User> users);
+
+    @AfterMapping
+    protected void applySkillsAndInterests(@MappingTarget UserDto dto,
+                                           User user,
+                                           @Context Language language) {
+        List<String> skillsGained = tagService.getSkillsByUserId(user.getId(), language);
+        List<String> interests = tagService.getTopicsByUserId(user.getId(), language);
+
+        dto.setSkillsGained(skillsGained);
+        dto.setInterests(interests);
+    }
 }

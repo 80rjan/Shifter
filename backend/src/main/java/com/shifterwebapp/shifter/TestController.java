@@ -1,12 +1,17 @@
 package com.shifterwebapp.shifter;
 
 import com.shifterwebapp.shifter.external.email.EmailService;
+import com.zaxxer.hikari.HikariDataSource;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.sql.DataSource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -14,6 +19,9 @@ import java.util.List;
 public class TestController {
 
     private final EmailService emailService;
+
+    @Autowired
+    private DataSource dataSource;
 
     @GetMapping("/send-email")
     public void sendTestEmail() {
@@ -34,5 +42,17 @@ public class TestController {
         );
     }
 
+    @GetMapping("/pool-status")
+    public Map<String, Object> getPoolStatus() {
+        HikariDataSource hikariDataSource = (HikariDataSource) dataSource;
 
+        Map<String, Object> status = new HashMap<>();
+        status.put("poolName", hikariDataSource.getPoolName());
+        status.put("activeConnections", hikariDataSource.getHikariPoolMXBean().getActiveConnections());
+        status.put("idleConnections", hikariDataSource.getHikariPoolMXBean().getIdleConnections());
+        status.put("totalConnections", hikariDataSource.getHikariPoolMXBean().getTotalConnections());
+        status.put("threadsAwaitingConnection", hikariDataSource.getHikariPoolMXBean().getThreadsAwaitingConnection());
+
+        return status;
+    }
 }

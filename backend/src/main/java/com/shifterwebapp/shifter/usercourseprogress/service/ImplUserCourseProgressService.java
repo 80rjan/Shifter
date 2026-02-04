@@ -15,4 +15,5 @@ public interface ImplUserCourseProgressService {
 
     List<UserCourseProgress> getUserCourseProgressByEnrollment(Long enrollmentId);
     List<UserCourseProgress> getUserCourseProgressByEnrollmentAndCompletedTrue(Long enrollmentId);
+    List<UserCourseProgress> getUserCourseProgressByEnrollmentsAndCompletedTrue(List<Long> enrollmentId);
 }

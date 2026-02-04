@@ -1,7 +1,11 @@
 package com.shifterwebapp.shifter.account.expert;
 
 import com.shifterwebapp.shifter.account.Account;
+import com.shifterwebapp.shifter.course.course.Course;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,6 +22,9 @@ import java.util.List;
 @Getter
 @Setter
 public class Expert extends Account {
+
+    @ManyToMany(mappedBy = "experts")
+    private List<Course> courses;
 
     // USER DETAILS METHODS
     @Override

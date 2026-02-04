@@ -1,4 +1,4 @@
-import type {CourseDetail} from "../models/javaObjects/CourseDetail.tsx";
+import type {CourseDetail} from "../models/javaObjects/course/CourseDetail.tsx";
 import React from "react";
 import {useCourseStorage} from "../context/CourseStorage.ts";
 import {toUrlFormat} from "../utils/toUrlFormat.ts";

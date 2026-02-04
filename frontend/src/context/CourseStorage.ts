@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type {CoursePreview} from "../models/javaObjects/CoursePreview.tsx";
+import type {CoursePreview} from "../models/javaObjects/course/CoursePreview.tsx";
 import type {Enrollment} from "../models/javaObjects/Enrollment.tsx";
 
 

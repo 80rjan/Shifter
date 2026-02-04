@@ -10,18 +10,16 @@ import java.util.List;
 public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
 
     @Query("select e from Enrollment e where e.user.id = :userId")
-    List<Enrollment> findEnrollmentsByUser(@Param("userId") Long userId);
+    List<Enrollment> findByUserId(@Param("userId") Long userId);
 
     @Query("select e.courseVersion.course.id from Enrollment e where e.user.id = :userId")
-    List<Long> getCourseIdsByUserEnrollments(@Param("userId") Long userId);
+    List<Long> findEnrolledCourseIdsByUserId(@Param("userId") Long userId);
 
     @Query("select e from Enrollment e where e.courseVersion.course.id = :courseId")
-    List<Enrollment> findEnrollmentsByCourse(@Param("courseId") Long courseId);
+    List<Enrollment> findByCourseId(@Param("courseId") Long courseId);
 
-    @Query("select case when count(e) > 0 then true else false end" +
-            " from Enrollment e where e.user.id = :userId and e.courseVersion.course.id = :courseId")
-    Boolean findIsUserEnrolledInCourse(@Param("userId") Long userId, @Param("courseId") Long courseId);
+    boolean existsByUserIdAndCourseVersion_Course_Id(Long userId, Long courseId);
 
     @Query("select e from Enrollment e where e.user.id = :userId and e.courseVersion.course.id = :courseId")
-    Enrollment findEnrollmentByUserAndCourse(@Param("userId") Long userId, @Param("courseId") Long courseId);
+    Enrollment findByUserIdAndCourseId(@Param("userId") Long userId, @Param("courseId") Long courseId);
 }

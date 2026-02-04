@@ -15,5 +15,5 @@
   "googleLogin": "Sign in with Google",
   "verifyEmail": "Verify your email to continue",
   "verificationSent1": "A verification link has been sent to",
-  "verificationSent2": "Please check your inbox and click the link to activate your account."
+  "verificationSent2": "Please check your <strong>inbox or spam</strong> and click the link to activate your account."
 }

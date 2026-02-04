@@ -9,10 +9,10 @@ export default function CollaborationSteps() {
     const steps = [
         {
             number: '01',
-            title: user?.hasUsedFreeConsultation
+            title: user?.usedFreeConsultation
                 ? t("collaborationSteps.step1.afterConsultation.title")
                 : t("collaborationSteps.step1.beforeConsultation.title"),
-            description: user?.hasUsedFreeConsultation
+            description: user?.usedFreeConsultation
                 ? t("collaborationSteps.step1.afterConsultation.description")
                 : t("collaborationSteps.step1.beforeConsultation.description"),
         },
@@ -78,7 +78,7 @@ export default function CollaborationSteps() {
             </div>
 
             <LocalizedLink
-                to={user?.hasUsedFreeConsultation ? "/contact" : "/free-consultation"}
+                to={user?.usedFreeConsultation ? "/contact" : "/free-consultation"}
                 className="z-1 hover:shadow-white/60 transition-all duration-200 ease-in-out cursor-pointer
                 w-3/10 whitespace-nowrap py-2 bg-white text-xl text-black-text rounded-md font-semibold
                 shadow-md shadow-white/40 border-2 border-shifter/10">

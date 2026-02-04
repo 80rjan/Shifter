@@ -1,15 +1,12 @@
 package com.shifterwebapp.shifter.course.course;
 
-import com.shifterwebapp.shifter.attribute.Attribute;
+import com.shifterwebapp.shifter.account.expert.Expert;
+import com.shifterwebapp.shifter.tag.Tag;
 import com.shifterwebapp.shifter.course.coursetranslate.CourseTranslate;
 import com.shifterwebapp.shifter.course.courseversion.CourseVersion;
 import com.shifterwebapp.shifter.enums.Difficulty;
-import com.shifterwebapp.shifter.coursecontent.CourseContent;
-import com.shifterwebapp.shifter.enrollment.Enrollment;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -19,24 +16,33 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
+@Table(indexes = {
+        @Index(name = "idx_course_difficulty", columnList = "difficulty"),
+        @Index(name = "idx_course_price", columnList = "price"),
+        @Index(name = "idx_course_duration", columnList = "durationMinutes"),
+        @Index(name = "idx_course_price_difficulty_duration", columnList = "price, difficulty, durationMinutes")
+})
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "text")
+    @Column(columnDefinition = "text", nullable = false)
     private String imageUrl;
 
     private String color;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
 
+    @Column(nullable = false)
     private Integer durationMinutes;
 
+    @Column(nullable = false)
     private Double price;
 
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     // when course is saved, courseVersion is saved
     private List<CourseVersion> courseVersions;
 
@@ -46,11 +52,19 @@ public class Course {
 
     @ManyToMany
     @JoinTable(
-            name = "course_attribute",
+            name = "course_tag",
             joinColumns = @JoinColumn(name = "course_id"),
-            inverseJoinColumns = @JoinColumn(name = "attribute_id")
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    private List<Attribute> attributes;
+    private List<Tag> tags;
+
+    @ManyToMany
+    @JoinTable(
+            name = "expert_course",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "expert_id")
+    )
+    private List<Expert> experts;
 
 }
 

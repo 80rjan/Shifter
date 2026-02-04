@@ -1,6 +1,6 @@
 package com.shifterwebapp.shifter.course.course.repository;
 
-import com.shifterwebapp.shifter.attribute.AttributeTranslate;
+import com.shifterwebapp.shifter.tag.TagTranslate;
 import com.shifterwebapp.shifter.course.course.Course;
 import com.shifterwebapp.shifter.enums.Difficulty;
 import com.shifterwebapp.shifter.enums.Language;
@@ -71,24 +71,24 @@ public interface CourseRepository extends JpaRepository<Course, Long>, JpaSpecif
     @Query("""
                 select at
                 from Course c
-                join c.attributes a
+                join c.tags a
                 join a.translations at
                 where
-                    a.type = com.shifterwebapp.shifter.enums.AttributeType.TOPIC
+                    a.type = com.shifterwebapp.shifter.enums.TagType.TOPIC
                     and at.language = :language
             """)
-    List<AttributeTranslate> getCourseTopics(@Param("language") Language language);
+    List<TagTranslate> getCourseTopics(@Param("language") Language language);
 
     @Query("""
                 select at
                 from Course c
-                join c.attributes a
+                join c.tags a
                 join a.translations at
                 where
-                    a.type = com.shifterwebapp.shifter.enums.AttributeType.SKILL
+                    a.type = com.shifterwebapp.shifter.enums.TagType.SKILL
                     and at.language = :language
             """)
-    List<AttributeTranslate> getCourseSkills(@Param("language") Language language);
+    List<TagTranslate> getCourseSkills(@Param("language") Language language);
 
     @Query("""
         select ct.titleShort

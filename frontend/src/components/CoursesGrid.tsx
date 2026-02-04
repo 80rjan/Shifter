@@ -1,4 +1,4 @@
-import type {CoursePreview} from "../models/javaObjects/CoursePreview.tsx";
+import type {CoursePreview} from "../models/javaObjects/course/CoursePreview.tsx";
 import CourseCard from "./CourseCard.tsx";
 import {InputAdornment, TextField} from '@mui/material';
 import {Search} from 'lucide-react';

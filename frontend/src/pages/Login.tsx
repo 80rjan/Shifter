@@ -59,7 +59,7 @@ function Login() {
     };
 
     return (
-        <main className="flex font-montserrat h-screen bg-beige">
+        <main className="flex font-montserrat h-screen bg-main">
             {/* LEFT HEADER AND BACKGROUND */}
             <section className="relative bg-black w-[55%] overflow-hidden">
                 <div className="absolute w-full h-full bg-shifter/80 z-0 text-white px-20 flex flex-col gap-4 justify-center text-start">

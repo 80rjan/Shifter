@@ -18,7 +18,7 @@ public class ReviewDto {
 
     private String comment;
 
-    private LocalDate date;
+    private LocalDate reviewDate;
 
     private Integer enrollmentId;
 }

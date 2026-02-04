@@ -16,7 +16,7 @@ public interface CourseLectureRepository extends JpaRepository<CourseLecture, Lo
              AND clt.contentFileName = :fileName
              AND clt.language = :language
             """)
-    String getContentType(@Param("fileName") String fileName, @Param("lectureId") Long lectureId, @Param("language") Language language);
+    String findContentTypeByFileNameAndIdAndLanguage(@Param("fileName") String fileName, @Param("lectureId") Long lectureId, @Param("language") Language language);
 
     @Query("""
         SELECT clt.contentFileName
@@ -25,5 +25,5 @@ public interface CourseLectureRepository extends JpaRepository<CourseLecture, Lo
         WHERE cl.id = :lectureId
         AND clt.language = :language
     """)
-    String getFileName(@Param("lectureId") Long lectureId, @Param("language") Language language);
+    String findFileNameByIdAndLanguage(@Param("lectureId") Long lectureId, @Param("language") Language language);
 }

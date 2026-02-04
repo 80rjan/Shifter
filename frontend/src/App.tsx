@@ -3,19 +3,12 @@ import Home from "./pages/Home.tsx";
 import Navbar from "./layout/Navbar.tsx";
 import Login from "./pages/Login.tsx";
 import Register from "./pages/Register.tsx";
-import Courses from "./pages/Courses.tsx";
-import {useEffect} from "react";
-import CourseDetails from "./pages/CourseDetails.tsx";
+import {useEffect, useState} from "react";
 import {ToastContainer} from 'react-toastify';
 import Profile from "./pages/Profile.tsx";
-import Learn from "./pages/Learn.tsx";
 import PublicOnlyRoute from "./components/routeProtectors/PublicOnlyRoute.tsx";
 import UserOnlyRoute from "./components/routeProtectors/UserOnlyRoute.tsx";
 import {useAuthContext} from "./context/AuthContext.tsx";
-import AdminNavbar from "./admin/layout/AdminNavbar.tsx";
-import Admin from "./admin/Admin.tsx";
-import AdminAddCourse from "./admin/pages/AdminAddCourse.tsx";
-import CourseLearn from "./pages/CourseLearn.tsx";
 import About from "./pages/About.tsx";
 import Contact from "./pages/Contact.tsx";
 import Mentoring from "./pages/Mentoring.tsx";
@@ -27,23 +20,21 @@ import FooterNew from "./layout/FooterNew.tsx";
 import FooterSmall from "./layout/FooterSmall.tsx";
 import FreeConsultation from "./pages/FreeConsultation.tsx";
 import LanguageToggle from "./layout/LanguageToggle.tsx";
-import AdminTranslateCourse from "./admin/pages/AdminTranslateCourse.tsx";
 import LoadingScreen from "./layout/LoadingScreen.tsx";
 import {createNewVerificationTokenApi} from "./api/verificationTokenApi.ts";
 import AppLoader from "./AppLoader.tsx";
 import {useUserContext} from "./context/UserContext.tsx";
 import i18n from "i18next";
 import {getLangFromPath} from "./utils/langUrl.ts";
-import AdminCourses from "./admin/pages/AdminCourses.tsx";
 import ComingSoon from "./pages/ComingSoon.tsx";
 
 function LayoutWrapper() {
-    const { accessToken } = useAuthContext();
-    const { user } = useUserContext();
+    const {accessToken} = useAuthContext();
+    const {user} = useUserContext();
     const location = useLocation();
     const navigate = useNavigate()
 
-    const { lang: langPrefix } = useParams<{ lang: string }>(); // Use 'lang' from the parent route
+    const {lang: langPrefix} = useParams<{ lang: string }>(); // Use 'lang' from the parent route
 
     const pathSegments = location.pathname.split('/');
     const relativePath = `/${pathSegments.slice(2).join('/')}`;
@@ -63,18 +54,32 @@ function LayoutWrapper() {
         relativePath === "/contact" ||
         relativePath === "/free-consultation";
 
+    const [isRedirectingToWelcome, setIsRedirectingToWelcome] = useState(false);
+    // Redirect to personalize page (/welcome) if profile is incomplete
     useEffect(() => {
-        if (user && !user.isProfileComplete && accessToken && !location.pathname.startsWith("/welcome")) {
+        if (
+            user                                                                // user is loaded
+            && accessToken                                                      // user is authenticated
+            && !user.profileComplete                                            // profile is incomplete
+            && !location.pathname.includes(`/welcome`)              // not already on welcome page
+            && !location.pathname.startsWith(`/oauth2/redirect`)    // not on oauth2 redirect (to avoid redirect loop)
+        ) {
+            setIsRedirectingToWelcome(true);
+
             createNewVerificationTokenApi(accessToken)
                 .then(token => {
                     navigate(`/${langPrefix}/welcome?token=${token}`)
                 })
                 .catch(err => {
                     console.error("Error creating a new verification token api: ", err)
-                })
+                    setIsRedirectingToWelcome(false);
+                });
         }
     }, [user, accessToken, navigate, relativePath, langPrefix, location.pathname])
 
+    if (isRedirectingToWelcome) {
+        return <LoadingScreen/>;
+    }
 
     return (
         <>
@@ -116,7 +121,7 @@ function LayoutWrapper() {
                     </UserOnlyRoute>
                 }/>
 
-                <Route path="/courses" element={<ComingSoon />}/>
+                <Route path="/courses" element={<ComingSoon/>}/>
                 {/*<Route path="/courses/:courseId/:courseTitle" element={<CourseDetails/>}/>*/}
 
                 <Route path="/contact" element={
@@ -154,6 +159,7 @@ function LayoutWrapper() {
     );
 }
 
+// Function to scroll to top on route change, ignoring language prefix
 function ScrollToTop() {
     const location = useLocation();
 
@@ -173,16 +179,17 @@ function ScrollToTop() {
 const VALID_LANGS = ['en', 'mk'];
 
 export function UserRoutesWithLang() {
-    const { lang } = useParams<{ lang: string }>();
+    const {lang} = useParams<{ lang: string }>();
     const navigate = useNavigate();
     const location = useLocation();
 
     const langUpper = lang?.toUpperCase();
 
+    // Validate language and set i18n language when lang param changes
     useEffect(() => {
         if (!lang || !VALID_LANGS.includes(lang.toLowerCase())) {
             const defaultLang = i18n.language.toLowerCase() || 'en';
-            navigate(`/${defaultLang}`, { replace: true });
+            navigate(`/${defaultLang}`, {replace: true});
             return;
         }
 
@@ -191,35 +198,38 @@ export function UserRoutesWithLang() {
         }
     }, [lang, langUpper, navigate, location.pathname]);
 
-    return <LayoutWrapper />;
+    return <LayoutWrapper/>;
 }
 
 export default function App() {
-    const { authChecked, accessToken } = useAuthContext();
-    const { user } = useUserContext()
+    const {authChecked, accessToken} = useAuthContext();
+    const {user} = useUserContext()
     const location = useLocation();
     const navigate = useNavigate();
 
     const urlLang = getLangFromPath(location.pathname);
     const currentI18nLang = i18n.language.toLowerCase();
 
+    // Redirect to URL with language prefix if missing
     useEffect(() => {
         if (!urlLang && location.pathname !== "/oauth2/redirect" && !location.pathname.startsWith("/admin")) {
             const langToRedirect = currentI18nLang || 'en';
             const newPath = `/${langToRedirect}${location.pathname === '/' ? '' : location.pathname}${location.search}`;
-            navigate(newPath, { replace: true });
+            navigate(newPath, {replace: true});
         }
     }, [urlLang, currentI18nLang, location.pathname, navigate, location.search]);
 
-    useEffect(() => {
-        if (user?.isAdmin && !location.pathname.startsWith("/admin")) {
-            navigate("/admin", { replace: true });
-        }
-    }, [user, location.pathname, navigate]);
+    // // Redirect admin users to /admin
+    // useEffect(() => {
+    //     if (user?.isAdmin && !location.pathname.startsWith("/admin")) {
+    //         navigate("/admin", {replace: true});
+    //     }
+    // }, [user, location.pathname, navigate]);
 
 
+    // Show loading screen while auth status is being checked
     if (!authChecked || (accessToken && !user)) {
-        return <LoadingScreen />;
+        return <LoadingScreen/>;
     }
 
     // if (user?.isAdmin) {

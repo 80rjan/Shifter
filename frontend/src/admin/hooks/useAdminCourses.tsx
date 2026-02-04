@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import type {CoursePreview} from "../../models/javaObjects/CoursePreview.tsx";
+import type {CoursePreview} from "../../models/javaObjects/course/CoursePreview.tsx";
 import {fetchCoursesApi} from "../../api/courseApi.ts";
 import {useAuthContext} from "../../context/AuthContext.tsx";
 

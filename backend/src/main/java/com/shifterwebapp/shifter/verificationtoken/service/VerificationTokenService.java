@@ -55,7 +55,7 @@ public class VerificationTokenService implements ImplVerificationTokenService {
     public String verify(String token) {
         UUID uuid = UUID.fromString(token);
         VerificationToken verificationToken = verificationTokenRepository.findById(uuid)
-                .orElseThrow(() -> new InvalidVerificationTokenException("Invalid or expired token"));
+                .orElseThrow(() -> new InvalidVerificationTokenException("Invalid or already used token"));
 
         if (verificationToken.getExpiresAt().isBefore(Instant.now()))
             throw new InvalidVerificationTokenException("Expired token");

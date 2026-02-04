@@ -1,1 +1,0 @@
-export type AttributeType = "SKILL" | "TOPIC";

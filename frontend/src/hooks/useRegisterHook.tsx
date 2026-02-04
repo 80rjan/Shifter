@@ -54,7 +54,7 @@ export function useRegisterHook() {
             setIsSuccess(true);
         } catch (err) {
             console.error("Error checking email:", err);
-            setError("An unexpected error occurred. Please try again later or contact us contact us directly at support@shift-er.com");
+            setError("An unexpected error occurred. Please try again later or contact us contact us directly at support@mail.shift-er.com");
         } finally {
             setIsLoading(false);
         }

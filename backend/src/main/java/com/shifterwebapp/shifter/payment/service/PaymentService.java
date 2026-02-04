@@ -11,7 +11,6 @@ import com.shifterwebapp.shifter.payment.mapper.PaymentMapper;
 import com.shifterwebapp.shifter.payment.repository.PaymentRepository;
 import com.shifterwebapp.shifter.enums.PaymentMethod;
 import com.shifterwebapp.shifter.enums.PaymentStatus;
-import com.shifterwebapp.shifter.account.user.User;
 import com.shifterwebapp.shifter.account.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -72,7 +71,7 @@ public class PaymentService implements ImplPaymentService {
     @Override
     public Payment initiatePayment(Long userId, Long courseId, PaymentMethod paymentMethod) {
         Course course = courseRepository.findById(courseId).orElseThrow();
-        Enrollment enrollment = enrollmentRepository.findEnrollmentByUserAndCourse(userId, courseId);
+        Enrollment enrollment = enrollmentRepository.findByUserIdAndCourseId(userId, courseId);
 
         // PAYMENT CODE (CASYS) HERE !!!!!!!!!
 

@@ -4,5 +4,5 @@ export interface UserPersonalization {
     companySize: string;
     workPosition: string;
     language: string;
-    attributeIdList: number[];
+    tagIdList: number[];
 }

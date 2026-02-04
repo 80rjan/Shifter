@@ -1,7 +1,5 @@
 package com.shifterwebapp.shifter.auth;
 
-import com.shifterwebapp.shifter.attribute.Attribute;
-import com.shifterwebapp.shifter.attribute.dto.AttributeDto;
 import com.shifterwebapp.shifter.enums.CompanySize;
 import com.shifterwebapp.shifter.enums.Language;
 import jakarta.validation.constraints.NotBlank;
@@ -23,5 +21,5 @@ public class UserPersonalizationDto {
 
     private Language language;
 
-    private List<Long> attributeIdList;
+    private List<Long> tagIdList;
 }

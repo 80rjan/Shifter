@@ -5,7 +5,7 @@ export default function ComingSoon() {
     const { t } = useTranslation("comingSoon");
 
     return (
-        <main className="flex-1 flex flex-col items-center justify-center gap-12 bg-beige">
+        <main className="flex-1 flex flex-col items-center justify-center gap-12 bg-main">
             <section className="flex flex-col items-center gap-6 w-fit">
                 <h1 className="text-6xl text-shifter font-bold relative">
                     {t("courses.title")}

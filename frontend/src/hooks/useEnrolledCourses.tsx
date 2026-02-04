@@ -1,9 +1,9 @@
 import {useEffect, useState} from "react";
-import type {CoursePreview} from "../models/javaObjects/CoursePreview.tsx";
+import type {CoursePreview} from "../models/javaObjects/course/CoursePreview.tsx";
 import {fetchCoursesApi, fetchEnrolledCoursesApi} from "../api/courseApi.ts";
 import {useAuthContext} from "../context/AuthContext.tsx";
 import {useCourseStorage} from "../context/CourseStorage.ts";
-import type {CoursePreviewEnrolled} from "../models/javaObjects/CoursePreviewEnrolled.tsx";
+import type {CoursePreviewEnrolled} from "../models/javaObjects/course/CoursePreviewEnrolled.tsx";
 import {useTranslation} from "react-i18next";
 import type {Language} from "../models/types/Language.tsx";
 

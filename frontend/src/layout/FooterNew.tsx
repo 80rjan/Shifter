@@ -32,12 +32,12 @@ function FooterNew() {
                 </p>
                 <div className="mt-12 w-full flex justify-center">
                     <LocalizedLink
-                        to={user?.hasUsedFreeConsultation ? "/contact" : "/free-consultation"}
+                        to={user?.usedFreeConsultation ? "/contact" : "/free-consultation"}
                         className="hover:shadow-shifter/60 transition-all duration-200 ease-in-out cursor-pointer
                         flex items-center gap-2 w-fit shadow-md shadow-shifter/40 font-bold border-2 border-white/20
                         bg-shifter py-3 px-8 rounded-lg text-white group"
                     >
-                        {user?.hasUsedFreeConsultation
+                        {user?.usedFreeConsultation
                             ? t("cta.button.contact")
                             : t("cta.button.consultation")}
                         <ArrowRight size={20} strokeWidth={1.5}
@@ -49,7 +49,7 @@ function FooterNew() {
             {/* FOOTER */}
             <div className="p-4">
                 <footer className="flex flex-col gap-4 rounded-xl shadow-md
-                bg-beige/80 backdrop-blur-md text-black-text pt-12 pb-4 px-horizontal-sm">
+                bg-main/80 backdrop-blur-md text-black-text pt-12 pb-4 px-horizontal-sm">
 
                     <div className="flex justify-between">
                         <section className="flex flex-col justify-center gap-12 max-w-1/4">

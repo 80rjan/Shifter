@@ -22,7 +22,7 @@ export function usePersonalizeHook() {
         workPosition: "",
         companySize: "",
         language: "EN",
-        attributeIdList: []
+        tagIdList: []
     });
     const navigate = useNavigate();
 
@@ -125,7 +125,7 @@ export function usePersonalizeHook() {
             handleVerify();
             verificationChecked.current = true; // <-- SET REF HERE SYNCHRONOUSLY
         }
-    }, [])
+    }, [handleVerify])
 
     return {
         error,

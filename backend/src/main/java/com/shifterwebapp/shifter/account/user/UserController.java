@@ -3,7 +3,7 @@ package com.shifterwebapp.shifter.account.user;
 import com.shifterwebapp.shifter.Validate;
 import com.shifterwebapp.shifter.enums.Language;
 import com.shifterwebapp.shifter.account.user.dto.UserDto;
-import com.shifterwebapp.shifter.account.user.dto.UserInfoDto;
+import com.shifterwebapp.shifter.account.user.dto.PersonalizeUserReq;
 import com.shifterwebapp.shifter.account.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,26 +28,26 @@ public class UserController {
     }
 
     @PutMapping("/favorite-course/{courseId}")
-    public ResponseEntity<?> toggleFavoriteCourse(@PathVariable Integer courseId, Authentication authentication) {
+    public ResponseEntity<?> toggleFavoriteCourse(@PathVariable Integer courseId, Authentication authentication, @RequestParam(defaultValue = "EN") Language language) {
         Long userId = validate.extractUserId(authentication);
 
-        UserDto userDto = userService.toggleFavoriteCourse(userId, courseId);
+        UserDto userDto = userService.toggleFavoriteCourse(userId, language, courseId);
         return ResponseEntity.ok(userDto);
     }
 
     @PutMapping("/update/info")
-    public ResponseEntity<?> updateUser(Authentication authentication, @RequestBody UserInfoDto userInfoDto) {
+    public ResponseEntity<?> updateUser(Authentication authentication, @RequestParam(defaultValue = "EN") Language language, @RequestBody PersonalizeUserReq personalizeUserReq) {
         Long userId = validate.extractUserId(authentication);
 
-        UserDto userDto = userService.updateUser(userId, userInfoDto);
+        UserDto userDto = userService.updateUser(userId, language, personalizeUserReq);
         return ResponseEntity.ok(userDto);
     }
 
-    @PutMapping("/update/attributes")
-    public ResponseEntity<?> updateAttributes(Authentication authentication, @RequestBody List<Long> attributeIdList) {
+    @PutMapping("/update/tags")
+    public ResponseEntity<?> updateTags(Authentication authentication, @RequestParam(defaultValue = "EN") Language language, @RequestBody List<Long> tagIdList) {
         Long userId = validate.extractUserId(authentication);
 
-        UserDto userDto = userService.updateAttribute(userId, attributeIdList);
+        UserDto userDto = userService.updateTags(userId, language, tagIdList);
         return ResponseEntity.ok(userDto);
     }
 }

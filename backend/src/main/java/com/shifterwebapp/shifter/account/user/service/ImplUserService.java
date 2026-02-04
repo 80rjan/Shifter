@@ -3,15 +3,13 @@ package com.shifterwebapp.shifter.account.user.service;
 import com.shifterwebapp.shifter.auth.UserPersonalizationDto;
 import com.shifterwebapp.shifter.enums.Language;
 import com.shifterwebapp.shifter.enums.LoginProvider;
-import com.shifterwebapp.shifter.account.user.dto.UserInfoDto;
-import com.shifterwebapp.shifter.payment.Payment;
+import com.shifterwebapp.shifter.account.user.dto.PersonalizeUserReq;
 import com.shifterwebapp.shifter.account.user.User;
 import com.shifterwebapp.shifter.account.user.dto.UserDto;
 
 import java.util.List;
 
 public interface ImplUserService {
-    List<UserDto> getAllUsers();
     UserDto getUserById(Long id, Language language);
     User getUserEntityById(Long userId);
     User getUserEntityByEmail(String email);
@@ -24,18 +22,12 @@ public interface ImplUserService {
     User personalizeUser(UserPersonalizationDto userPersonalizationDto);
     void deleteUser(Long id);
 
-    UserDto updateAttribute(Long id, List<Long> attributeIds);
-    UserDto updateUser(Long id, UserInfoDto userInfoDto);
-    UserDto updateMail(Long id, String newMail);
-    UserDto updatePassword(Long id, String newPassHash);
+    UserDto updateTags(Long id, Language language, List<Long> tagIds);
+    UserDto updateUser(Long id, Language language, PersonalizeUserReq personalizeUserReq);
 
-    UserDto addAttributes(Long userId, List<Long> attributeIds);
-    UserDto toggleFavoriteCourse(Long userId, Integer newFavoriteCourseId);
-    UserDto addPoints(Long id, Integer newPointsAchieved);
-
-    UserDto removeAttribute(Long userId, Long attributeId);
-    UserDto removeAttributes(Long userId, List<Long> attributeIds);
-    UserDto removePoints(Long id, Integer removePointsAchieved);
+    void addTags(Long userId, Language language, List<Long> tagIds);
+    UserDto toggleFavoriteCourse(Long userId, Language language, Integer newFavoriteCourseId);
+    void addPoints(Long id, Integer newPointsAchieved);
 
     void markUserAsUsedFreeConsultation(String userEmail);
 }

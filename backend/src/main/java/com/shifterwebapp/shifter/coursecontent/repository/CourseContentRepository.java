@@ -10,7 +10,7 @@ import java.util.List;
 public interface CourseContentRepository extends JpaRepository<CourseContent, Long> {
 
     @Query("select c from CourseContent c where c.courseVersion.course.id = :courseId")
-    List<CourseContent> getCourseContentByCourse(@Param("courseId") Long courseId);
+    List<CourseContent> findByCourseId(@Param("courseId") Long courseId);
 
     @Query("SELECT c.courseVersion.course.id, COUNT(c) FROM CourseContent c GROUP BY c.courseVersion.course.id")
     List<Object[]> countCourseContentsPerCourse();

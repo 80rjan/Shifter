@@ -1,6 +1,6 @@
 import React from "react";
 import type {UserPersonalization} from "../../models/javaObjects/UserPersonalization.tsx";
-import {parseStringToAttributeReq} from "../../utils/parseStringToAttributeReq.ts";
+import {parseStringToTagReq} from "../../utils/parseStringToTagReq.ts";
 
 function PersonalizationSlider({label, id, allOptions, setUser, user}: {
     label: string;
@@ -16,13 +16,13 @@ function PersonalizationSlider({label, id, allOptions, setUser, user}: {
         const value = e.target.value;
         setFilterText(value);
         setOptions(allOptions.filter(option =>
-            parseStringToAttributeReq(option).value.toLowerCase().includes(value.toLowerCase())
+            parseStringToTagReq(option).value.toLowerCase().includes(value.toLowerCase())
         ));
     };
 
     const handleOptionClick = (attrId: number) => {
         setUser((prev: UserPersonalization) => {
-            const set = new Set(prev.attributeIdList);
+            const set = new Set(prev.tagIdList);
             if (set.has(attrId)) {
                 set.delete(attrId);
             } else {
@@ -32,7 +32,7 @@ function PersonalizationSlider({label, id, allOptions, setUser, user}: {
             const newArr = Array.from(set);
             return {
                 ...prev,
-                attributeIdList: newArr,
+                tagIdList: newArr,
             };
         });
     };
@@ -54,9 +54,9 @@ function PersonalizationSlider({label, id, allOptions, setUser, user}: {
 
             <div className="relative custom-scrollbar flex gap-2 flex-wrap w-full max-h-[30vh] items-center overflow-y-auto">
                 {options.map((option, index) => {
-                    const id = parseStringToAttributeReq(option).id;
-                    const value = parseStringToAttributeReq(option).value;
-                    const isSelected = user.attributeIdList.includes(id) || false;
+                    const id = parseStringToTagReq(option).id;
+                    const value = parseStringToTagReq(option).value;
+                    const isSelected = user.tagIdList.includes(id) || false;
 
                     return (
                         <button

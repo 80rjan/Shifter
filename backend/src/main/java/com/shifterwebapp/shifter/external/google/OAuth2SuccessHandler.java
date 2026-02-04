@@ -1,5 +1,6 @@
 package com.shifterwebapp.shifter.external.google;
 
+import com.shifterwebapp.shifter.account.user.repository.UserRepository;
 import com.shifterwebapp.shifter.config.JwtService;
 import com.shifterwebapp.shifter.enums.LoginProvider;
 import com.shifterwebapp.shifter.account.user.User;
@@ -30,10 +31,12 @@ import java.util.UUID;
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     private final UserService userService;
+    private final UserRepository userRepository;
     private final VerificationTokenService verificationTokenService;
     private final JwtService jwtService;
 
     // Frontend base URL where the final redirect must go
+    // TODO: Change to shifter url, not localhost
     private static final String FRONTEND_REDIRECT_BASE = "http://localhost:5173/oauth2/redirect";
 
     @Override
@@ -67,11 +70,14 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             // New user → create minimal account and generate verification token
             String randomPassword = UUID.randomUUID().toString() + UUID.randomUUID().toString();
             user = userService.createInitialUser(email, randomPassword, LoginProvider.GOOGLE);
+            user.setVerified(true);     // OAuth2 users are considered verified
+            userRepository.save(user);
             token = verificationTokenService.generateNewToken(user).toString();
             login = false;
         }
 
         assert email != null;
+        System.out.println("REDIRECTING");
         String redirectUrl = String.format("%s?token=%s&login=%s&email=%s",
                 FRONTEND_REDIRECT_BASE,
                 URLEncoder.encode(token, StandardCharsets.UTF_8),

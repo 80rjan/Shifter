@@ -5,7 +5,7 @@ import type {JSX, SetStateAction} from "react";
 import type {CourseTranslate} from "../../types/CourseTranslate.tsx";
 import AdminTranslateCourseDisabledInput from "./input/AdminTranslateCourseDisabledInput.tsx";
 import {capitalize} from "../../../utils/capitalize.ts";
-import {parseStringToAttributeReq} from "../../../utils/parseStringToAttributeReq.ts";
+import {parseStringToTagReq} from "../../../utils/parseStringToTagReq.ts";
 import AdminTranslateCourseInputPills from "./input/AdminTranslateCourseInputPills.tsx";
 
 function AdminTranslateCourseInfo({initCourse, course, setCourse, courseCard}: {
@@ -63,7 +63,7 @@ function AdminTranslateCourseInfo({initCourse, course, setCourse, courseCard}: {
                         label={"Topics Covered"}
                         translateFromList={initCourse.topicsCovered}
                         onChange={e => {
-                            const newTopicId = parseStringToAttributeReq(e.target.dataset.translateFrom!).id;
+                            const newTopicId = parseStringToTagReq(e.target.dataset.translateFrom!).id;
                             const newValue = e.target.value;
                             let found = false;
 
@@ -90,7 +90,7 @@ function AdminTranslateCourseInfo({initCourse, course, setCourse, courseCard}: {
                                 };
                             })
                         }}
-                        isAttributeEncoded={true}
+                        isTagEncoded={true}
                         display={"grid"}
                     />
 
@@ -122,7 +122,7 @@ function AdminTranslateCourseInfo({initCourse, course, setCourse, courseCard}: {
                         label={"Skills Gained"}
                         translateFromList={initCourse.skillsGained}
                         onChange={e => {
-                            const newSkillId = parseStringToAttributeReq(e.target.dataset.translateFrom!).id;
+                            const newSkillId = parseStringToTagReq(e.target.dataset.translateFrom!).id;
                             const newValue = e.target.value;
                             let found = false;
 
@@ -149,7 +149,7 @@ function AdminTranslateCourseInfo({initCourse, course, setCourse, courseCard}: {
                                 };
                             })
                         }}
-                        isAttributeEncoded={true}
+                        isTagEncoded={true}
                         display={"grid"}
                     />
 
@@ -180,7 +180,7 @@ function AdminTranslateCourseInfo({initCourse, course, setCourse, courseCard}: {
                             whatWillBeLearned: newLearnedArray
                         };
                     })}
-                    isAttributeEncoded={false}
+                    isTagEncoded={false}
                     display={"flex"}
                 />
                 <AdminAddCourseInputTextArea

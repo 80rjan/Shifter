@@ -1,6 +1,6 @@
 
 export interface UserCourseProgress {
     id: number;
-    completedAt: Date | null;
+    completedAt: string | null;
     completed: boolean;
 }

@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface CourseTranslateRepository extends JpaRepository<CourseTranslate, Long> {
 
-    public CourseTranslate getCourseTranslateByCourseIdAndLanguage(Long courseId, Language language);
+    CourseTranslate findByCourseIdAndLanguage(Long courseId, Language language);
 
     @Query("select ct.language from CourseTranslate ct where ct.course.id = :courseId")
-    public List<Language> getCourseLanguages(@Param("courseId") Long courseId);
+    List<Language> findByCourseId(@Param("courseId") Long courseId);
 }

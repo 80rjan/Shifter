@@ -1,5 +1,5 @@
 import axios from "axios";
-import type {Review} from "../models/Review.tsx";
+import type {Review} from "../models/javaObjects/Review.tsx";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error

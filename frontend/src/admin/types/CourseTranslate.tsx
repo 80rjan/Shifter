@@ -1,5 +1,5 @@
 import type {Language} from "../../models/types/Language.tsx";
-import type {AttributeReq} from "./AttributeReq.tsx";
+import type {TagReq} from "./TagReq.tsx";
 import type {CourseContentTranslate} from "./CourseContentTranslate.tsx";
 
 export interface CourseTranslate {
@@ -11,7 +11,7 @@ export interface CourseTranslate {
     description: string;
     descriptionLong: string;
     whatWillBeLearned: string[];
-    skillsGained: AttributeReq[];
-    topicsCovered: AttributeReq[];
+    skillsGained: TagReq[];
+    topicsCovered: TagReq[];
     courseContents: CourseContentTranslate[];
 }

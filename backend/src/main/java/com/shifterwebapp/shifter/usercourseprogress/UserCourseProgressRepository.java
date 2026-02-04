@@ -17,5 +17,8 @@ public interface UserCourseProgressRepository extends JpaRepository<UserCoursePr
     List<UserCourseProgress> findByEnrollmentId(@Param("enrollmentId") Long enrollmentId);
 
     @Query("select ucp from UserCourseProgress ucp where ucp.enrollment.id = :enrollmentId and ucp.completed = true")
-    List<UserCourseProgress> findByEnrollmentIdAAndCompletedTrue(@Param("enrollmentId") Long enrollmentId);
+    List<UserCourseProgress> findByEnrollmentIdAndCompletedTrue(@Param("enrollmentId") Long enrollmentId);
+
+    @Query("select ucp from UserCourseProgress ucp where ucp.enrollment.id in :enrollmentId and ucp.completed = true")
+    List<UserCourseProgress> findByEnrollmentIdsAndCompletedTrue(@Param("enrollmentId") List<Long> enrollmentIds);
 }

@@ -44,7 +44,7 @@ const About = () => {
 
 
     return (
-        <main className="relative bg-beige text-black-text">
+        <main className="relative bg-main text-black-text">
             {/*Hero Section*/}
             <section
                 className="relative py-vertical-lg pt-top-nav-lg px-horizontal-md flex flex-col items-center justify-center">
@@ -63,7 +63,7 @@ const About = () => {
                             <p className="font-light whitespace-nowrap">{t("stats.clients")}</p>
                         </div>
 
-                        <div className="w-px bg-beige/80"/>
+                        <div className="w-px bg-main/80"/>
 
                         <div>
                             <h2 className="text-3xl font-bold"><CountUp start={0} end={2000} duration={4}
@@ -71,7 +71,7 @@ const About = () => {
                             <p className="font-light whitespace-nowrap">{t("stats.hours")}</p>
                         </div>
 
-                        <div className="w-px bg-beige/80"/>
+                        <div className="w-px bg-main/80"/>
 
                         <div>
                             <h2 className="text-3xl font-bold"><CountUp start={0} end={5} duration={4} separator={"."}/>+

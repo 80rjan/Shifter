@@ -5,11 +5,11 @@ import {fetchCoursesTopicsApi, fetchRecommendedCoursesApi} from "../api/courseAp
 import {useAuthContext} from "../context/AuthContext.tsx";
 import {X} from "lucide-react";
 import ProfileModalAddSkillsInterestsSkeleton from "./skeletons/ProfileModalAddSkills&InterestsSkeleton.tsx";
-import {updateUserAttributesApi} from "../api/userApi.ts";
+import {updateUserTagsApi} from "../api/userApi.ts";
 import {useCourseStorage} from "../context/CourseStorage.ts";
 import {useTranslation} from "react-i18next";
 import type {Language} from "../models/types/Language.tsx";
-import {parseStringToAttributeReq} from "../utils/parseStringToAttributeReq.ts";
+import {parseStringToTagReq} from "../utils/parseStringToTagReq.ts";
 import {useUserContext} from "../context/UserContext.tsx";
 
 function ProfileModalAddSkillsInterests({label, closeModal}: {
@@ -37,7 +37,7 @@ function ProfileModalAddSkillsInterests({label, closeModal}: {
                 setOptions(topics);
                 setSelected(topics.filter(topic => {
                     return (
-                        user?.interests.includes(toEnumFormat(parseStringToAttributeReq(topic).value))
+                        user?.interests.includes(toEnumFormat(parseStringToTagReq(topic).value))
                     )
                 }))
             })
@@ -82,9 +82,9 @@ function ProfileModalAddSkillsInterests({label, closeModal}: {
         }
 
         setLoading(true)
-        const ids = selected.map(s => parseStringToAttributeReq(s).id)
-        const valuesEnum = selected.map(s => toEnumFormat(parseStringToAttributeReq(s).value))
-        updateUserAttributesApi(ids, accessToken!)
+        const ids = selected.map(s => parseStringToTagReq(s).id)
+        const valuesEnum = selected.map(s => toEnumFormat(parseStringToTagReq(s).value))
+        updateUserTagsApi(ids, accessToken!)
             .then(() => {
                 setUser(prev => ({
                     ...prev!,
@@ -151,7 +151,7 @@ function ProfileModalAddSkillsInterests({label, closeModal}: {
                             onClick={() => handleOptionClick(option)}
                         >
                             {
-                                fromEnumFormat(parseStringToAttributeReq(option).value)
+                                fromEnumFormat(parseStringToTagReq(option).value)
                                     .replace(/\b\w/g, (c) => c.toUpperCase())
                             }
                         </button>

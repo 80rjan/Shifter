@@ -43,7 +43,7 @@ export function LightBeams({tilt, beamCount, initialHeight, spikeMoveDown}: {
             <svg viewBox="0 0 1440 320" preserveAspectRatio="none" className="w-full h-full">
                 <defs>
                     <linearGradient id="grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="var(--color-beige)" />
+                        <stop offset="0%" stopColor="var(--color-main)" />
                         <stop offset="100%" stopColor="var(--color-shifter)" stopOpacity="0.8" />
                     </linearGradient>
                     <filter id="blur" x="-20%" y="-20%" width="140%" height="140%">

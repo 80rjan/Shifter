@@ -21,10 +21,22 @@ public class VerificationToken {
     private UUID token;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
-    private Instant createdAt = Instant.now();
+    @Column(nullable = false)
+    private Instant createdAt;
 
+    @Column(nullable = false)
     private Instant expiresAt;
+
+    @PrePersist
+    public void prePersist() {
+        if (token == null) {
+            token = UUID.randomUUID();
+        }
+        if (createdAt == null) {
+            createdAt = Instant.now();
+        }
+    }
 }

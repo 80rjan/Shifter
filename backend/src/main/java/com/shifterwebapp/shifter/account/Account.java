@@ -27,6 +27,7 @@ public abstract class Account implements UserDetails {
     @Enumerated(EnumType.STRING)
     protected LoginProvider loginProvider;
 
+    @Column(nullable = false)
     @JsonIgnore
     protected String passwordHash;    // SHOULD I USE JSON IGNORE HERE? OR IS IT ENOUGH TO NOT EXPOSE IT IN DTO?
 

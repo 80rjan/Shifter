@@ -30,10 +30,10 @@ export const updateUserApi = async (userInfo: {name: string, workPosition: strin
     )
 }
 
-export const updateUserAttributesApi = async (attributeIdList: number[], accessToken: string): Promise<void> => {
+export const updateUserTagsApi = async (tagIdList: number[], accessToken: string): Promise<void> => {
     await axios.put(
-        `${backendUrl}/api/users/update/attributes`,
-        attributeIdList,
+        `${backendUrl}/api/users/update/tags`,
+        tagIdList,
         {
             headers: {
                 Authorization: `Bearer ${accessToken}`,

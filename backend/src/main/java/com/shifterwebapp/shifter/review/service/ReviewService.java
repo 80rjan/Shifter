@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,14 +34,14 @@ public class ReviewService implements ImplReviewService {
     @Override
     public List<ReviewDto> getReviewsByCourse(Long courseId) {
         validate.validateCourseExists(courseId);
-        List<Review> reviews = reviewRepository.findReviewsByCourse(courseId);
+        List<Review> reviews = reviewRepository.findByCourseId(courseId);
         return reviewMapper.toDto(reviews);
     }
 
     @Override
     public List<ReviewDto> getReviewsByUser(Long userId) {
         validate.validateUserExists(userId);
-        List<Review> reviews = reviewRepository.findReviewsByUser(userId);
+        List<Review> reviews = reviewRepository.findByUserId(userId);
         return reviewMapper.toDto(reviews);
     }
 
@@ -47,7 +49,7 @@ public class ReviewService implements ImplReviewService {
     public ReviewDto getReviewByUserAndCourse(Long userId, Long courseId) {
         validate.validateCourseExists(courseId);
         validate.validateUserExists(userId);
-        Optional<Review> reviewOpt = reviewRepository.findReviewByUserAndCourse(userId, courseId);
+        Optional<Review> reviewOpt = reviewRepository.findByUserIdAndCourseId(userId, courseId);
         if (reviewOpt.isEmpty()) {
             throw new ResourceNotFoundException("Review not found for user with ID " + userId + " and course with ID " + courseId);
         }
@@ -58,22 +60,35 @@ public class ReviewService implements ImplReviewService {
     @Override
     public ReviewDto getReviewByEnrollment(Long enrollmentId) {
         validate.validateEnrollmentExists(enrollmentId);
-        Review review = reviewRepository.findReviewByEnrollment(enrollmentId);
+        Review review = reviewRepository.findByEnrollmentId(enrollmentId);
         return reviewMapper.toDto(review);
     }
 
     @Override
     public Double getAverageRatingByCourse(Long courseId) {
         validate.validateCourseExists(courseId);
-        Double avgRating = reviewRepository.findAverageRatingByCourse(courseId);
+        Double avgRating = reviewRepository.findAverageRatingByCourseId(courseId);
         return avgRating != null ? avgRating : 0f;
+    }
+
+    @Override
+    public Map<Long, Double> getAverageRatingByCourse(List<Long> courseIds) {
+//        validate.validateCourseExists(courseId);
+        return reviewRepository.findByCourseIdIn(courseIds)
+                .stream()
+                .collect(
+                        Collectors.groupingBy(
+                                r -> r.getEnrollment().getCourseVersion().getCourse().getId(),
+                                Collectors.averagingDouble(Review::getRating)
+                        )
+                );
     }
 
     @Override
     public ReviewDto writeReview(Long userId, Long courseId, ReviewRequest reviewRequest) {
         validate.validateCourseExists(courseId);
 
-        Enrollment enrollment = enrollmentRepository.findEnrollmentByUserAndCourse(userId, courseId);
+        Enrollment enrollment = enrollmentRepository.findByUserIdAndCourseId(userId, courseId);
         if (enrollment.getReview() != null) {
             throw new IllegalStateException("Review already submitted for course with ID " + courseId + "!");
         }
@@ -97,7 +112,7 @@ public class ReviewService implements ImplReviewService {
     public ReviewDto updateReview(Long userId, Long courseId, ReviewRequest reviewRequest) {
         validate.validateCourseExists(courseId);
 
-        Enrollment enrollment = enrollmentRepository.findEnrollmentByUserAndCourse(userId, courseId);
+        Enrollment enrollment = enrollmentRepository.findByUserIdAndCourseId(userId, courseId);
         if (enrollment.getReview() == null) {
             throw new IllegalStateException("Review hasn't been submitted for course with ID " + courseId + " so that it can be updated!");
         }
@@ -105,7 +120,7 @@ public class ReviewService implements ImplReviewService {
             throw new AccessDeniedException("Cannot review a course that has not been completed by user!");
         }
 
-        Review review = reviewRepository.findReviewByEnrollment(enrollment.getId());
+        Review review = reviewRepository.findByEnrollmentId(enrollment.getId());
         review.setRating(reviewRequest.getRating());
         review.setComment(reviewRequest.getComment());
         review.setReviewDate(LocalDate.now());
@@ -119,6 +134,6 @@ public class ReviewService implements ImplReviewService {
     public Boolean hasBeenReviewedByUser(Long userId, Long courseId) {
         validate.validateUserExists(userId);
         validate.validateCourseExists(courseId);
-        return reviewRepository.findHasBeenReviewedByUser(userId, courseId);
+        return reviewRepository.findHasBeenReviewedByUserIdAndCourseId(userId, courseId);
     }
 }

@@ -1,7 +1,5 @@
 package com.shifterwebapp.shifter.account.user.dto;
 
-import com.shifterwebapp.shifter.attribute.Attribute;
-import com.shifterwebapp.shifter.attribute.dto.AttributeDto;
 import com.shifterwebapp.shifter.enums.CompanySize;
 import lombok.AllArgsConstructor;
 import lombok.Data;

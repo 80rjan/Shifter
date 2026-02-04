@@ -1,7 +1,7 @@
 package com.shifterwebapp.shifter.enrollment.service;
 
 import com.shifterwebapp.shifter.Validate;
-import com.shifterwebapp.shifter.attribute.Attribute;
+import com.shifterwebapp.shifter.tag.Tag;
 import com.shifterwebapp.shifter.course.course.Course;
 import com.shifterwebapp.shifter.course.course.repository.CourseRepository;
 import com.shifterwebapp.shifter.course.coursetranslate.CourseTranslate;
@@ -52,21 +52,27 @@ public class EnrollmentService implements ImplEnrollmentService {
     @Override
     public List<EnrollmentDto> getEnrollmentsByUser(Long userId) {
         validate.validateUserExists(userId);
-        List<Enrollment> enrollment = enrollmentRepository.findEnrollmentsByUser(userId);
-        return enrollmentMapper.toDto(enrollment);
+        List<Enrollment> enrollments = enrollmentRepository.findByUserId(userId);
+        return enrollmentMapper.toDto(enrollments);
+    }
+
+    @Override
+    public List<Enrollment> getEnrollmentsEntityByUser(Long userId) {
+        validate.validateUserExists(userId);
+        return enrollmentRepository.findByUserId(userId);
     }
 
     @Override
     public List<Long> getCourseIdsByUserEnrollments(Long userId) {
         validate.validateUserExists(userId);
-        return enrollmentRepository.getCourseIdsByUserEnrollments(userId);
+        return enrollmentRepository.findEnrolledCourseIdsByUserId(userId);
     }
 
     @Override
     public List<EnrollmentDto> getEnrollmentsByCourse(Long courseId) {
         validate.validateCourseExists(courseId);
-        List<Enrollment> enrollment = enrollmentRepository.findEnrollmentsByCourse(courseId);
-        return enrollmentMapper.toDto(enrollment);
+        List<Enrollment> enrollments = enrollmentRepository.findByCourseId(courseId);
+        return enrollmentMapper.toDto(enrollments);
     }
 
     @Override
@@ -74,7 +80,7 @@ public class EnrollmentService implements ImplEnrollmentService {
         validate.validateUserExists(userId);
         validate.validateCourseExists(courseId);
 
-        return enrollmentRepository.findEnrollmentByUserAndCourse(userId, courseId);
+        return enrollmentRepository.findByUserIdAndCourseId(userId, courseId);
     }
 
 
@@ -83,7 +89,7 @@ public class EnrollmentService implements ImplEnrollmentService {
         validate.validateCourseExists(courseId);
         validate.validateUserExists(userId);
 
-        boolean isAlreadyEnrolled = enrollmentRepository.findIsUserEnrolledInCourse(userId, courseId);
+        boolean isAlreadyEnrolled = enrollmentRepository.existsByUserIdAndCourseVersion_Course_Id(userId, courseId);
         if (isAlreadyEnrolled) {
             throw new AlreadyEnrolledException("User with ID " + userId + " is already enrolled in course with ID " + courseId + "!");
         }
@@ -99,7 +105,6 @@ public class EnrollmentService implements ImplEnrollmentService {
 
         Enrollment enrollment = Enrollment.builder()
                 .enrollmentStatus(EnrollmentStatus.PENDING)
-                .purchaseDate(LocalDate.now())
                 .payment(payment)
                 .review(null)
                 .courseVersion(courseVersion)
@@ -150,7 +155,7 @@ public class EnrollmentService implements ImplEnrollmentService {
         validate.validateUserExists(userId);
         validate.validateCourseExists(courseId);
 
-        return enrollmentRepository.findIsUserEnrolledInCourse(userId, courseId);
+        return enrollmentRepository.existsByUserIdAndCourseVersion_Course_Id(userId, courseId);
     }
 
     @Override
@@ -184,13 +189,14 @@ public class EnrollmentService implements ImplEnrollmentService {
             enrollmentRepository.save(enrollment);
 
             Long userId = enrollment.getUser().getId();
-            List<Attribute> courseAttributes = enrollment.getCourseVersion().getCourse().getAttributes();
+            List<Tag> courseTags = enrollment.getCourseVersion().getCourse().getTags();
             userService.addPoints(userId, PointsConstants.BUY_COURSE);
-            userService.addAttributes(
+            userService.addTags(
                     userId,
-                    courseAttributes.stream()
-                            .filter(a -> a.getType().equals(AttributeType.SKILL))
-                            .map(Attribute::getId)
+                    Language.EN,
+                    courseTags.stream()
+                            .filter(a -> a.getType().equals(TagType.SKILL))
+                            .map(Tag::getId)
                             .collect(Collectors.toList())
                     );
         }

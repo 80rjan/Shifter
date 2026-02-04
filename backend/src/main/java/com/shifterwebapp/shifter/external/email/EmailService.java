@@ -30,8 +30,8 @@ public class EmailService {
 
     @Value("${EMAIL_USERNAME}")
     private String shifterEmail;
-
-    private final String expertEmail = "aco@shift-er.com";
+    // TODO: change to expert email
+    private final String expertEmail = "contact@mail.shift-er.com";
 
     public void contactExpert(String userEmail, ContactReq contactReq) {
         SimpleMailMessage message = new SimpleMailMessage();

@@ -36,9 +36,9 @@ public abstract class CourseLectureMapper {
     public abstract List<CourseLectureDtoFull> toDtoFull(List<CourseLecture> courseLectures, @Context Language lang);
 
     @AfterMapping
-    protected void applyTranslationPreview(CourseLecture courseLecture,
-                                           @MappingTarget CourseLectureDtoPreview dto,
-                                           @Context Language lang) {
+    protected void enrichPreview(CourseLecture courseLecture,
+                                 @MappingTarget CourseLectureDtoPreview dto,
+                                 @Context Language lang) {
         getTranslation(courseLecture, lang).ifPresent(t -> {
             dto.setTitle(t.getTitle());
             dto.setDescription(t.getDescription());
@@ -46,14 +46,15 @@ public abstract class CourseLectureMapper {
     }
 
     @AfterMapping
-    protected void applyTranslationLearn(CourseLecture courseLecture,
-                                         @MappingTarget CourseLectureDtoLearn dto,
-                                         @Context Language lang,
-                                         @Context Long userId) {
+    protected void enrichLearn(CourseLecture courseLecture,
+                               @MappingTarget CourseLectureDtoLearn dto,
+                               @Context Language lang,
+                               @Context Long userId) {
         getTranslation(courseLecture, lang).ifPresent(t -> {
             dto.setTitle(t.getTitle());
             dto.setDescription(t.getDescription());
             dto.setContentText(t.getContentText());
+            dto.setContentFileName(t.getContentFileName());
         });
 
         getUserProgress(courseLecture, userId).ifPresent(progress ->
@@ -62,13 +63,14 @@ public abstract class CourseLectureMapper {
     }
 
     @AfterMapping
-    protected void applyTranslationFull(CourseLecture courseLecture,
-                                        @MappingTarget CourseLectureDtoFull dto,
-                                        @Context Language lang) {
+    protected void enrichFull(CourseLecture courseLecture,
+                               @MappingTarget CourseLectureDtoFull dto,
+                               @Context Language lang) {
         getTranslation(courseLecture, lang).ifPresent(t -> {
             dto.setTitle(t.getTitle());
             dto.setDescription(t.getDescription());
             dto.setContentText(t.getContentText());
+            dto.setContentFileName(t.getContentFileName());
         });
     }
 

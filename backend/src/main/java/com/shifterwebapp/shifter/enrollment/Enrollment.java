@@ -18,6 +18,21 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_enrollment_user_course_version",
+                        columnNames = {"user_id", "course_version_id"}        // each user can have only one enrollment per course version
+                )
+        },
+        indexes = {
+                @Index(name = "idx_enrollment_user_id", columnList = "user_id"),
+                @Index(name = "idx_enrollment_course_version_id", columnList = "course_version_id"),
+                @Index(name = "idx_enrollment_enrollment_status", columnList = "enrollmentStatus"),
+                @Index(name = "idx_enrollment_user_status", columnList = "user_id, enrollmentStatus"),
+                @Index(name = "idx_enrollment_user_purchase", columnList = "user_id, purchaseDate DESC")
+        }
+)
 public class Enrollment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,15 +41,16 @@ public class Enrollment {
     @Enumerated(EnumType.STRING)
     private EnrollmentStatus enrollmentStatus;
 
-    private LocalDate purchaseDate;                  // date purchased
+    private LocalDate enrollmentDate;                  // date enrolled
+
+    private LocalDate purchaseDate;                    // date purchased
 
     private LocalDate activationDate;                  // date activated
 
     private LocalDate completionDate;                  // date completed
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "enrollment", orphanRemoval = true)
     // when enrollment is saved, payment is saved. Delete payment from db if payment=null
-    @JoinColumn(name = "payment_id")                // references payment.id
     private Payment payment;
 
     @OneToOne(mappedBy = "enrollment", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -44,12 +60,17 @@ public class Enrollment {
     @JoinColumn(name = "course_version_id", nullable = false)                 // references courseVersion.id
     private CourseVersion courseVersion;
 
-    @OneToMany(mappedBy = "enrollment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserCourseProgress> userCourseProgress;
+    @OneToMany(mappedBy = "enrollment", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
+    private List<UserCourseProgress> userCourseProgresses;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     // references user.id, no null to ensure enrollment always linked to a user
     private User user;
+
+    @PrePersist
+    protected void onCreate() {
+        this.enrollmentDate = LocalDate.now();
+    }
 }
 

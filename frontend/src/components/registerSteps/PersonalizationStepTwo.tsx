@@ -33,12 +33,12 @@ function PersonalizationStepTwo({setUser, user, setError}: {
     }, [i18n.language]);
 
     useEffect(() => {
-        if (user.attributeIdList.length === 0) {
+        if (user.tagIdList.length === 0) {
             setError(t("stepTwo.errorNoInterest"));
         } else {
             setError("");
         }
-    }, [user.attributeIdList, i18n.language]);
+    }, [user.tagIdList, i18n.language]);
 
 
     return (

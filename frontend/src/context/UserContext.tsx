@@ -39,7 +39,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
     const useFreeConsultation = () => {
         if (user) {
-            setUser({...user, hasUsedFreeConsultation: true});
+            setUser({...user, usedFreeConsultation: true});
         }
     }
 

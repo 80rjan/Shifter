@@ -1,5 +1,5 @@
 import { Mail, MapPin } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useAuthContext } from "../context/AuthContext.tsx";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
@@ -7,13 +7,19 @@ import Arrow from "../../public/Shifter-Arrow-White.png";
 import { sendEmailApi } from "../api/contactApi.ts";
 import { useTranslation } from "react-i18next";
 import {useUserContext} from "../context/UserContext.tsx";
+import type {ConsultingMessageState} from "../models/state/EmailMessageState.tsx";
+import {PillsInputContactForm} from "../components/inputs/PillsInputContactForm.tsx";
+import {TextInputContactForm} from "../components/inputs/TextInputContactForm.tsx";
 
 function Consulting() {
     const { t } = useTranslation("consulting");
     const { accessToken } = useAuthContext();
     const { user } = useUserContext();
-    const [subject, setSubject] = useState("");
-    const [message, setMessage] = useState("");
+    const [fields, setFields] = React.useState<ConsultingMessageState>({
+        challenges: [],
+        business: "",
+        position: "",
+    });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [isMessageSent, setIsMessageSent] = useState(false);
@@ -21,8 +27,25 @@ function Consulting() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
+        if (fields.challenges.length === 0) {
+            setError(t("challengesRequired"));
+            return;
+        }
+
+        const message = `
+        Business name: ${fields.business}
+        
+        Business size: ${user?.companySize || "Not provided"}
+        
+        Position in the business: ${fields.position}
+        
+        Current challenges: ${fields.challenges.join(", ")}
+        `;
+
+        const subject = `Consulting Inquiry from ${user?.name} (${user?.email})`;
+
         setLoading(true);
-        sendEmailApi(accessToken || "", "Consulting Inquiry - " + subject, message)
+        sendEmailApi(accessToken || "", subject, message)
             .then(() => {
                 setIsMessageSent(true);
                 setError("");
@@ -35,7 +58,7 @@ function Consulting() {
     }
 
     return (
-        <main className="bg-gradient-to-b from-shifter via-shifter/20 via-40% to-beige">
+        <main className="bg-gradient-to-b from-shifter via-shifter/20 via-40% to-main">
             {/*Hero*/}
             <section className="flex flex-col items-center gap-4 w-full pb-60 pt-top-nav-lg px-horizontal-lg text-white-text">
                 <h1 className="text-5xl font-bold">{t("heroTitle")}</h1>
@@ -82,20 +105,39 @@ function Consulting() {
 
                         <form onSubmit={handleSubmit} className="flex flex-col gap-4 items-start">
                             <div className="flex flex-col gap-4 items-center w-full">
-                                <TextInput
-                                    label={t("subjectLabel")}
-                                    name="subject"
-                                    placeholder={t("subjectPlaceholder")}
+                                <TextInputContactForm
+                                    label={t("businessLabel")}
+                                    name="business"
+                                    placeholder={t("businessPlaceholder")}
                                     rows={1}
-                                    onChange={(e) => setSubject(e.target.value)}
+                                    onChange={(e) => setFields({...fields, business: e.target.value})}
                                 />
-                                <TextInput
-                                    label={t("messageLabel")}
-                                    name="message"
-                                    placeholder={t("messagePlaceholder")}
-                                    rows={8}
-                                    onChange={(e) => setMessage(e.target.value)}
+                                <TextInputContactForm
+                                    label={t("positionLabel")}
+                                    name="position"
+                                    placeholder={t("positionPlaceholder")}
+                                    rows={1}
+                                    onChange={(e) => setFields({...fields, position: e.target.value})}
                                 />
+                                <PillsInputContactForm
+                                    label={t("challengesLabel")}
+                                    onChange={(values) => setFields({...fields, challenges: values})}
+                                    options={t("challengeOptions", {returnObjects: true}) as string[]}
+                                />
+                                {/*<TextInputContactForm*/}
+                                {/*    label={t("aboutLabel")}*/}
+                                {/*    name="about"*/}
+                                {/*    placeholder={t("aboutPlaceholder")}*/}
+                                {/*    rows={6}*/}
+                                {/*    onChange={(e) => setFields({...fields, about: e.target.value})}*/}
+                                {/*/>*/}
+                                {/*<TextInputContactForm*/}
+                                {/*    label={t("expectationsLabel")}*/}
+                                {/*    name="expectations"*/}
+                                {/*    placeholder={t("expectationsPlaceholder")}*/}
+                                {/*    rows={6}*/}
+                                {/*    onChange={(e) => setFields({...fields, expectations: e.target.value})}*/}
+                                {/*/>*/}
                                 {error && <p className="text-red-500 text-md font-medium text-center">{error}</p>}
                             </div>
 
@@ -121,28 +163,6 @@ function Consulting() {
                 </div>
             </section>
         </main>
-    );
-}
-
-function TextInput({ label, name, placeholder, rows, onChange }: {
-    label: string;
-    name: string;
-    placeholder: string;
-    rows: number;
-    onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-}) {
-    return (
-        <label className="w-full flex flex-col items-start gap-2">
-            <span className="text-black/40 font-semibold text-md peer-focused:text-shifter">{label}</span>
-            <textarea
-                required
-                onChange={onChange}
-                rows={rows}
-                name={name}
-                className="peer w-full bg-dark-blue/5 border-1 border-black/10 py-1 px-2 rounded-sm resize-none min-h-fit custom-scrollbar focus:outline-none focus:border-shifter/40 focus:border-2"
-                placeholder={placeholder}
-            />
-        </label>
     );
 }
 

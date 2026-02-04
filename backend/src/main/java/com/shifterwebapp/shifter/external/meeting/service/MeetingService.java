@@ -2,6 +2,7 @@ package com.shifterwebapp.shifter.external.meeting.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.api.services.calendar.model.FreeBusyResponse;
+import com.shifterwebapp.shifter.account.user.User;
 import com.shifterwebapp.shifter.exception.AccessDeniedException;
 import com.shifterwebapp.shifter.exception.TimeSlotUnavailableException;
 import com.shifterwebapp.shifter.external.email.EmailService;
@@ -10,8 +11,8 @@ import com.shifterwebapp.shifter.external.google.GoogleCalendarService;
 import com.shifterwebapp.shifter.external.meeting.MeetingUtils;
 import com.shifterwebapp.shifter.external.meeting.UserMeetingInfoRequest;
 import com.shifterwebapp.shifter.external.meeting.ZoomMeetingRequest;
-import com.shifterwebapp.shifter.scheduledemail.ScheduledEmail;
-import com.shifterwebapp.shifter.scheduledemail.ScheduledEmailService;
+import com.shifterwebapp.shifter.scheduledemail.MeetingEmailReminder;
+import com.shifterwebapp.shifter.scheduledemail.MeetingEmailReminderService;
 import com.shifterwebapp.shifter.account.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ import java.util.Map;
 public class MeetingService implements ImplMeetingService {
 
     private final GoogleCalendarService googleCalendarService;
-    private final ScheduledEmailService scheduledEmailService;
+    private final MeetingEmailReminderService meetingEmailReminderService;
     private final UserService userService;
     private final ZoomService zoomService;
     private final EmailService emailService;
@@ -75,6 +76,8 @@ public class MeetingService implements ImplMeetingService {
         if (userService.getUserHasUsedFreeConsultation(userEmail)) {
             throw new AccessDeniedException("User has already used free consultation");
         }
+
+        User user = userService.getUserEntityByEmail(userEmail);
 
         ZonedDateTime[] expertTimes = meetingUtils.getExpertStartEnd(userDate, userTime, userTimeZone, 30);
         ZonedDateTime startExpert = expertTimes[0];
@@ -128,23 +131,23 @@ public class MeetingService implements ImplMeetingService {
                     .withMinute(0)
                     .withSecond(0)
                     .toLocalDateTime();
-            scheduledEmailService.saveScheduledEmail(
-                    ScheduledEmail.builder()
-                            .recipientEmail(userEmail)
-                            .meetingDateTime(LocalDateTime.parse(userDate + "T" + userTime))
-                            .scheduledDateTime(scheduledDayBefore)
-                            .zoomLink(meetingLink)
+            meetingEmailReminderService.saveScheduledEmail(
+                    MeetingEmailReminder.builder()
+                            .user(user)
+                            .meetingAt(LocalDateTime.parse(userDate + "T" + userTime))
+                            .scheduledAt(scheduledDayBefore)
+                            .meetingLink(meetingLink)
                             .sent(false)
                             .build()
             );
 
             LocalDateTime scheduledOnDay = startExpert.minusHours(2).toLocalDateTime(); // 2 hours before
-            scheduledEmailService.saveScheduledEmail(
-                    ScheduledEmail.builder()
-                            .recipientEmail(userEmail)
-                            .meetingDateTime(LocalDateTime.parse(userDate + "T" + userTime))
-                            .scheduledDateTime(scheduledOnDay)
-                            .zoomLink(meetingLink)
+            meetingEmailReminderService.saveScheduledEmail(
+                    MeetingEmailReminder.builder()
+                            .user(user)
+                            .meetingAt(LocalDateTime.parse(userDate + "T" + userTime))
+                            .scheduledAt(scheduledOnDay)
+                            .meetingLink(meetingLink)
                             .sent(false)
                             .build()
             );

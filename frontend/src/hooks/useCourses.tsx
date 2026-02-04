@@ -5,7 +5,7 @@ import {useAuthContext} from "../context/AuthContext.tsx";
 import {useUserContext} from "../context/UserContext.tsx";
 import {useCourseStorage} from "../context/CourseStorage.ts";
 import {useEffect, useMemo, useState} from "react";
-import type {CoursePreview} from "../models/javaObjects/CoursePreview.tsx";
+import type {CoursePreview} from "../models/javaObjects/course/CoursePreview.tsx";
 import type {FilterParams} from "../models/FilterParams.tsx";
 import {fetchCoursesApi} from "../api/courseApi.ts";
 import {getFromSessionStorage, saveToSessionStorage} from "../utils/useSessionStorage.ts";
@@ -160,12 +160,12 @@ export function useCourses() {
 
         if (filters.showOnlyFavoriteCourses) {
             filteredCourses = filteredCourses.filter(course =>
-                user?.favoriteCourses.includes(course.id)
+                user?.favoriteCourseIds.includes(course.id)
             );
         }
 
         setCourses(filteredCourses);
-    }, [allCourses, filters, user?.favoriteCourses]);
+    }, [allCourses, filters, user?.favoriteCourseIds]);
 
     useEffect(() => {
         const noFiltersApplied = Object.keys(filters).length === 0;

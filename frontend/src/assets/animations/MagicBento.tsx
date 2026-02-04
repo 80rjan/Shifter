@@ -494,7 +494,7 @@ const MagicBento: React.FC<BentoProps> = ({
     const isMobile = useMobileDetection();
     const shouldDisableAnimations = disableAnimations || isMobile;
 
-    const baseBackgroundColor = "var(--color-beige)"; // White color for the cards
+    const baseBackgroundColor = "var(--color-main)"; // White color for the cards
     const textColor = "#060010"; // Dark color for the text
 
     const { t } = useTranslation("about");
@@ -532,6 +532,11 @@ const MagicBento: React.FC<BentoProps> = ({
             --white: #f8f8f8;
             --shifter: var(--color-shifter);
           }
+          
+          .card {
+              box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1),
+                          0 2px 4px -2px rgba(0,0,0,0.1);
+            }
           
           .card-responsive {
             grid-template-columns: 1fr;

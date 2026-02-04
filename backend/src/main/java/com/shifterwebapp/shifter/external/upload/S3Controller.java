@@ -47,7 +47,7 @@ public class S3Controller {
             throw new AccessDeniedException("You do not have access to this course content.");
         }
 
-        CourseLectureTranslate lectureTranslate = courseLectureTranslateRepository.findByCourseLectureIdAndLanguage(lectureId, language);
+        CourseLectureTranslate lectureTranslate = courseLectureTranslateRepository.findByIdAndLanguage(lectureId, language);
 
         if (lectureTranslate == null) {
             throw new ResourceNotFoundException("Translation of lecture with it " + lectureId + " not found!");

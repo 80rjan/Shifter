@@ -1,6 +1,6 @@
 package com.shifterwebapp.shifter;
 
-import com.shifterwebapp.shifter.attribute.repository.AttributeRepository;
+import com.shifterwebapp.shifter.tag.repository.TagRepository;
 import com.shifterwebapp.shifter.auth.CustomAuthDetails;
 import com.shifterwebapp.shifter.course.course.repository.CourseRepository;
 import com.shifterwebapp.shifter.courselecture.repository.CourseLectureRepository;
@@ -27,7 +27,7 @@ public class Validate {
     private final CourseRepository courseRepository;
     private final UserCourseProgressRepository userCourseProgressRepository;
     private final PaymentRepository paymentRepository;
-    private final AttributeRepository attributeRepository;
+    private final TagRepository tagRepository;
     private final CourseLectureRepository courseLectureRepository;
 
     public void validateUserExists(Long userId) {
@@ -111,9 +111,9 @@ public class Validate {
         }
     }
 
-    public void validateAttributeExists(Long attributeId) {
-        if (!attributeRepository.existsById(attributeId)) {
-            throw new ResourceNotFoundException("Attribute with ID " + attributeId + " not found!");
+    public void validateTagExists(Long tagId) {
+        if (!tagRepository.existsById(tagId)) {
+            throw new ResourceNotFoundException("Tag with ID " + tagId + " not found!");
         }
     }
 

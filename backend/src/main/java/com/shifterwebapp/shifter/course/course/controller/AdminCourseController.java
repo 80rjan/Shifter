@@ -3,7 +3,7 @@ package com.shifterwebapp.shifter.course.course.controller;
 import com.shifterwebapp.shifter.Validate;
 import com.shifterwebapp.shifter.course.course.Course;
 import com.shifterwebapp.shifter.course.course.dto.CourseDtoFull;
-import com.shifterwebapp.shifter.course.coursetranslate.dto.CourseDtoTranslate;
+import com.shifterwebapp.shifter.course.coursetranslate.dto.CourseTranslateReq;
 import com.shifterwebapp.shifter.course.course.service.AdminCourseService;
 import com.shifterwebapp.shifter.course.courseversion.CourseVersion;
 import com.shifterwebapp.shifter.enums.Language;
@@ -32,11 +32,12 @@ public class AdminCourseController {
     @GetMapping("/{courseId}")
     public ResponseEntity<CourseDtoFull> getFullCourse(
             @PathVariable("courseId") Long courseId,
-            Authentication authentication
+            Authentication authentication,
+            @RequestParam(defaultValue = "EN") Language language
     ) {
         validate.validateUserIsAdmin(authentication);
 
-        CourseDtoFull dto = adminCourseService.getFullCourse(courseId);
+        CourseDtoFull dto = adminCourseService.getFullCourse(courseId, language);
         return ResponseEntity.ok(dto);
     }
 
@@ -52,10 +53,10 @@ public class AdminCourseController {
 
 
     @PostMapping("/translate")
-    public ResponseEntity<Long> translateCourse(@RequestBody CourseDtoTranslate courseDtoTranslate, Authentication authentication) {
+    public ResponseEntity<Long> translateCourse(@RequestBody CourseTranslateReq courseTranslateReq, Authentication authentication) {
         validate.validateUserIsAdmin(authentication);
 
-        Course course = adminCourseService.translateCourse(courseDtoTranslate);
+        Course course = adminCourseService.translateCourse(courseTranslateReq);
         Long courseId = course.getId();
 
         return ResponseEntity.ok(courseId);

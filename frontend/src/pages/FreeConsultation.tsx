@@ -42,7 +42,7 @@ function FreeConsultation() {
                 setError("");
 
                 if (user)
-                    setUser({...user, hasUsedFreeConsultation: true})
+                    setUser({...user, usedFreeConsultation: true})
             })
             .catch(error => {
                 console.error("Error scheduling meeting:", error);
@@ -68,7 +68,7 @@ function FreeConsultation() {
     const steps = t("nextSteps.steps", { returnObjects: true }) as { title: string; description: string }[];
 
     return (
-        <main className="bg-gradient-to-b from-shifter via-shifter/20 via-40% to-beige">
+        <main className="bg-gradient-to-b from-shifter via-shifter/20 via-40% to-main">
             {/*Hero*/}
             <section className="flex flex-col items-center gap-4 w-full pb-60 pt-top-nav-lg px-horizontal-lg text-white-text">
                 <h1 className="text-5xl font-bold">{t("hero.title")}</h1>

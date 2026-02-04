@@ -16,24 +16,33 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_course_content_course_version_position",
+                        columnNames = {"course_version_id", "position"}        // each course version can have only one content with the same position
+                )
+        }
+)
 public class CourseContent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private Integer position;
 
-    @OneToMany(mappedBy = "courseContent", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "courseContent", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     // when course content is deleted, lectures are deleted. When lectures are removed from the list, they are deleted.
     @OrderBy("position ASC")
     private List<CourseLecture> courseLectures;
 
     @ManyToOne
-    @JoinColumn(name = "course_version_id")
+    @JoinColumn(name = "course_version_id", nullable = false)
     private CourseVersion courseVersion;
 
-    @OneToMany(mappedBy = "courseContent", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "courseContent", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     // when course content is deleted, translations are deleted. When translations are removed from the list, they are deleted.
     private List<CourseContentTranslate> translations;
 }

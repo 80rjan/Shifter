@@ -17,7 +17,7 @@ function Navbar() {
         >
             {/* Left nav links */}
             <div className={`flex w-40/100 justify-between text-md items-center
-                                pl-10 ${user?.hasUsedFreeConsultation && "pl-12"}`}>
+                                pl-10 ${user?.usedFreeConsultation && "pl-12"}`}>
                 {/* Link group */}
                 <NavbarLink to="/courses" label={t("courses")}/>
                 <NavbarLink to="/mentoring" label={t("mentoring")}/>
@@ -54,12 +54,12 @@ function Navbar() {
                         </LocalizedLink>
                     }
                     <LocalizedLink
-                        to={`${user?.hasUsedFreeConsultation ? "/contact" : "/free-consultation"}`}
+                        to={`${user?.usedFreeConsultation ? "/contact" : "/free-consultation"}`}
                         className={`hover:-translate-x-2 transition-all duration-200 ease-in-out cursor-pointer
                                 relative -mr-4 py-2 bg-cta rounded-l-lg font-bold whitespace-nowrap
-                                shadow-md shadow-shifter/30 px-8 pr-10 ${user?.hasUsedFreeConsultation && "px-10 pr-12"}`}
+                                shadow-md shadow-shifter/30 px-8 pr-10 ${user?.usedFreeConsultation && "px-10 pr-12"}`}
                     >
-                        {user?.hasUsedFreeConsultation ? t("contact") : t("freeConsultation")}
+                        {user?.usedFreeConsultation ? t("contact") : t("freeConsultation")}
                     </LocalizedLink>
                 </div>
             </div>

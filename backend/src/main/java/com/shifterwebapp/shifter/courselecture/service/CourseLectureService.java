@@ -45,6 +45,6 @@ public class CourseLectureService implements ImplCourseLectureService{
 
     @Override
     public CourseLectureTranslate getByCourseLectureIdAndLanguage(Long lectureId, Language language) {
-        return courseLectureTranslateRepository.findByCourseLectureIdAndLanguage(lectureId, language);
+        return courseLectureTranslateRepository.findByIdAndLanguage(lectureId, language);
     }
 }

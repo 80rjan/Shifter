@@ -35,7 +35,7 @@ function Personalize() {
 
 
     return (
-        <main className="flex font-montserrat h-screen bg-beige">
+        <main className="flex font-montserrat h-screen bg-main">
 
             {/* LEFT HEADER AND BACKGROUND */}
             <section className="relative bg-black w-[55%] overflow-hidden">

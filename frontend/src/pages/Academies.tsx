@@ -7,35 +7,59 @@ import Arrow from "../../public/Shifter-Arrow-White.png"
 import {sendEmailApi} from "../api/contactApi.ts";
 import { useTranslation } from "react-i18next";
 import {useUserContext} from "../context/UserContext.tsx";
+import type {AcademiesMessageState} from "../models/state/EmailMessageState.tsx";
+import {TextInputContactForm} from "../components/inputs/TextInputContactForm.tsx";
+import {PillsInputContactForm} from "../components/inputs/PillsInputContactForm.tsx";
+import {RadioInputContactForm} from "../components/inputs/RadioInputContactForm.tsx";
 
 function Academies() {
     const {t} = useTranslation("academies");
     const {accessToken} = useAuthContext();
     const { user } = useUserContext();
-    const [subject, setSubject] = React.useState("");
-    const [message, setMessage] = React.useState("");
+    const [fields, setFields] = React.useState<AcademiesMessageState>({
+        business: "",
+        departments: [],
+        areaOfInterest: [],
+        participants: "",
+        urgency: ""
+    });
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState("");
     const [isMessageSent, setIsMessageSent] = React.useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        const message = `
+        Business size: ${user?.companySize || "Not provided"}
+        
+        Business name: ${fields.business}
+        
+        Departments/Teams that should participate in the academy training: ${fields.departments.join(", ")}
+        
+        Training areas of interest: ${fields.areaOfInterest.join(", ")}
+        
+        Participants: ${fields.participants}
+        
+        Urgency: ${fields.urgency}
+        `;
+
+        const subject = `Academy Inquiry from ${user?.name} (${user?.email})`;
 
         setLoading(true);
-        sendEmailApi(accessToken || "", "Academies Inquiry - " + subject, message)
+        sendEmailApi(accessToken || "", subject, message)
             .then(() => {
                 setIsMessageSent(true);
                 setError("")
             })
             .catch((err) => {
                 setError(t("emailError"));
-                console.error("Error sending email for academies inquiry:", err);
+                console.error("Error sending email for academy inquiry:", err);
             })
             .finally(() => setLoading(false));
     }
 
     return (
-        <main className="bg-gradient-to-b from-shifter via-shifter/20 via-40% to-beige">
+        <main className="bg-gradient-to-b from-shifter via-shifter/20 via-40% to-main">
             {/*Hero*/}
             <section className="flex flex-col items-center gap-4 w-full pb-60 pt-top-nav-lg px-horizontal-lg
                 text-white-text">
@@ -88,19 +112,34 @@ function Academies() {
                             onSubmit={handleSubmit}
                             className="flex flex-col gap-4 items-start">
                             <div className="flex flex-col gap-4 items-center w-full">
-                                <TextInput
-                                    label={t("subjectLabel")}
-                                    name="subject"
-                                    placeholder={t("subjectPlaceholder")}
+                                <TextInputContactForm
+                                    label={t("businessLabel")}
+                                    name="business"
+                                    placeholder={t("businessPlaceholder")}
                                     rows={1}
-                                    onChange={(e) => setSubject(e.target.value)}
+                                    onChange={(e) => setFields({...fields, business: e.target.value})}
                                 />
-                                <TextInput
-                                    label={t("messageLabel")}
-                                    name="message"
-                                    placeholder={t("messagePlaceholder")}
-                                    rows={8}
-                                    onChange={(e) => setMessage(e.target.value)}
+                                <PillsInputContactForm
+                                    label={t("departmentsLabel")}
+                                    onChange={(values) => setFields({...fields, departments: values})}
+                                    options={t("departmentOptions", {returnObjects: true}) as string[]}
+                                />
+                                <PillsInputContactForm
+                                    label={t("areaOfInterestLabel")}
+                                    onChange={(values) => setFields({...fields, areaOfInterest: values})}
+                                    options={t("areaOfInterestOptions", {returnObjects: true}) as string[]}
+                                />
+                                <RadioInputContactForm
+                                    label={t("numberOfParticipantsLabel")}
+                                    name={"areaOfInterest"}
+                                    onChange={(value) => setFields({...fields, participants: value})}
+                                    options={t("numberOfParticipantsOptions", {returnObjects: true}) as string[]}
+                                />
+                                <RadioInputContactForm
+                                    label={t("urgencyLabel")}
+                                    name={"urgency"}
+                                    onChange={(value) => setFields({...fields, urgency: value})}
+                                    options={t("urgencyOptions", {returnObjects: true}) as string[]}
                                 />
                                 {
                                     error && (
@@ -136,31 +175,6 @@ function Academies() {
                 </div>
             </section>
         </main>
-    )
-}
-
-
-function TextInput({label, name, placeholder, rows, onChange}: {
-    label: string;
-    name: string;
-    placeholder: string;
-    rows: number;
-    onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-}) {
-    return (
-        <label className="w-full flex flex-col items-start gap-2">
-            <span className="text-black/40 font-semibold text-md peer-focused:text-shifter">{label}</span>
-            <textarea
-                required
-                onChange={onChange}
-                rows={rows}
-                name={name}
-                className="peer w-full bg-dark-blue/5 border-1 border-black/10 py-1 px-2 rounded-sm
-                resize-none min-h-fit custom-scrollbar
-                focus:outline-none focus:border-shifter/40 focus:border-2"
-                placeholder={placeholder}
-            />
-        </label>
     )
 }
 

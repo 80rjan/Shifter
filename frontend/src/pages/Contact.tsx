@@ -35,7 +35,7 @@ function Contact() {
     };
 
     return (
-        <main className="bg-gradient-to-b from-shifter via-shifter/20 via-40% to-beige">
+        <main className="bg-gradient-to-b from-shifter via-shifter/20 via-40% to-main">
             {/* Hero */}
             <section className="flex flex-col items-center gap-4 w-full pb-60 pt-top-nav-lg px-horizontal-lg text-white-text">
                 <h1 className="text-5xl font-bold">{t("hero.title")}</h1>

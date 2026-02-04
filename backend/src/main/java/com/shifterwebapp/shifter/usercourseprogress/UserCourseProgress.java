@@ -17,14 +17,28 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @ToString
+// TODO: add indexes when creating admin dashboard to track user progress efficiently
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_progress_enrollment_lecture",
+                        columnNames = {"enrollment_id", "course_lecture_id"}    // each enrollment can have only one progress record per lecture
+                )
+        },
+        indexes = {
+                @Index(name = "idx_progress_enrollment_completed", columnList = "enrollment_id, completed")
+        }
+)
 public class UserCourseProgress {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private boolean completed;
 
+    @Column(nullable = false)
     private LocalDateTime completedAt;
 
     @ManyToOne

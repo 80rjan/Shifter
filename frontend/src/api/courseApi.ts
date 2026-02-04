@@ -1,8 +1,8 @@
 import axios, {type AxiosResponse} from "axios";
-import type {CoursePreview} from "../models/javaObjects/CoursePreview.tsx";
-import type {CourseDetail} from "../models/javaObjects/CourseDetail.tsx";
-import type {CourseLearn} from "../models/javaObjects/CourseLearn.tsx";
-import type {CoursePreviewEnrolled} from "../models/javaObjects/CoursePreviewEnrolled.tsx";
+import type {CoursePreview} from "../models/javaObjects/course/CoursePreview.tsx";
+import type {CourseDetail} from "../models/javaObjects/course/CourseDetail.tsx";
+import type {CourseLearn} from "../models/javaObjects/course/CourseLearn.tsx";
+import type {CoursePreviewEnrolled} from "../models/javaObjects/course/CoursePreviewEnrolled.tsx";
 import type {Language} from "../models/types/Language.tsx";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

@@ -15,22 +15,28 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 @Entity
+// TODO: add more indexes when creating admin dashboard features
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private Double amount;
 
+    @Column(nullable = false)
     private LocalDate paymentDate;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
 
-    @OneToOne(mappedBy = "payment")
+    @OneToOne
+    @JoinColumn(name = "enrollment_id", nullable = false, unique = true)                // references enrollment.id
     private Enrollment enrollment;
 }
 

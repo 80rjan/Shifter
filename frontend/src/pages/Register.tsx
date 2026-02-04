@@ -30,7 +30,7 @@ function Register() {
     } = useRegisterHook();
 
     return (
-        <main className="flex font-montserrat h-screen bg-beige">
+        <main className="flex font-montserrat h-screen bg-main">
             {/* LEFT HEADER AND BACKGROUND */}
             <section className="relative bg-black w-[55%] overflow-hidden">
                 <div className="absolute w-full h-full bg-shifter/80 z-0 text-white px-16 flex flex-col gap-4 justify-center text-start">
@@ -57,7 +57,7 @@ function Register() {
                         <div className="flex flex-col gap-4 bg-white rounded-2xl shadow-lg p-8 w-fit text-center">
                             <h2 className="text-2xl font-bold text-shifter">{t("verifyEmail")}</h2>
                             <p className="font-medium text-black-text/80 max-w-xl mx-auto">
-                                {t("verificationSent1")} <span className='font-semibold text-shifter'>{email}</span> {t("verificationSent2")}
+                                {t("verificationSent1")} <span className='font-semibold text-shifter'>{email}</span> <span dangerouslySetInnerHTML={{ __html: t("verificationSent2") }}/>
                             </p>
                         </div>
                     </div>

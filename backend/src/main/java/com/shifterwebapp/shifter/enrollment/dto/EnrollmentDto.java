@@ -16,12 +16,12 @@ public class EnrollmentDto {
 
     private EnrollmentStatus enrollmentStatus;
 
-    private LocalDate purchasedAt;
-    private LocalDate activatedAt;
-    private LocalDate completedAt;
+    private LocalDate purchaseDate;
+    private LocalDate activationDate;
+    private LocalDate completionDate;
 
     private Long courseVersionId;
 
-    private List<UserCourseProgressDto> userCourseProgress;
+    private Integer percentCompleted;
 }
 

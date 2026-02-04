@@ -4,6 +4,7 @@ import com.shifterwebapp.shifter.review.ReviewDto;
 import com.shifterwebapp.shifter.review.ReviewRequest;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ImplReviewService {
     ReviewDto getReviewById(Long id);
@@ -12,6 +13,7 @@ public interface ImplReviewService {
     ReviewDto getReviewByUserAndCourse(Long userId, Long courseId);
     ReviewDto getReviewByEnrollment(Long enrollmentId);
     Double getAverageRatingByCourse(Long courseId);
+    Map<Long, Double> getAverageRatingByCourse(List<Long> courseIds);
 
     ReviewDto writeReview(Long userId, Long courseId, ReviewRequest reviewRequest);
 

@@ -15,18 +15,23 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 @Entity
+@Table(indexes = {
+        @Index(name = "idx_review_date", columnList = "reviewDate DESC")
+})
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private Integer rating;
 
     private String comment;
 
+    @Column(nullable = false)
     private LocalDate reviewDate;
 
     @OneToOne
-    @JoinColumn(name = "enrollment_id")
+    @JoinColumn(name = "enrollment_id", unique = true)
     private Enrollment enrollment;
 }

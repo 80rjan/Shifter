@@ -1,21 +1,27 @@
 package com.shifterwebapp.shifter.course.course.service;
 
 import com.shifterwebapp.shifter.Validate;
-import com.shifterwebapp.shifter.attribute.Attribute;
-import com.shifterwebapp.shifter.attribute.AttributeTranslate;
-import com.shifterwebapp.shifter.course.*;
+import com.shifterwebapp.shifter.course.course.mapper.CourseMapper;
+import com.shifterwebapp.shifter.course.courseversion.CourseVersion;
+import com.shifterwebapp.shifter.course.courseversion.service.CourseVersionService;
+import com.shifterwebapp.shifter.review.service.ReviewService;
+import com.shifterwebapp.shifter.tag.Tag;
+import com.shifterwebapp.shifter.tag.TagTranslate;
 import com.shifterwebapp.shifter.course.course.Course;
 import com.shifterwebapp.shifter.course.course.dto.*;
 import com.shifterwebapp.shifter.course.course.repository.CourseRepository;
 import com.shifterwebapp.shifter.enrollment.Enrollment;
 import com.shifterwebapp.shifter.enrollment.service.EnrollmentService;
-import com.shifterwebapp.shifter.enums.AttributeType;
+import com.shifterwebapp.shifter.enums.TagType;
 import com.shifterwebapp.shifter.enums.Language;
 import com.shifterwebapp.shifter.exception.AccessDeniedException;
 import com.shifterwebapp.shifter.external.PdfManipulationService;
 import com.shifterwebapp.shifter.external.upload.S3Service;
 import com.shifterwebapp.shifter.account.user.User;
 import com.shifterwebapp.shifter.account.user.service.UserService;
+import com.shifterwebapp.shifter.tag.service.TagService;
+import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgress;
+import com.shifterwebapp.shifter.usercourseprogress.service.UserCourseProgressService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +31,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,8 +45,13 @@ public class CourseService implements ImplCourseService {
     private final UserService userService;
     private final Validate validate;
     private final EnrollmentService enrollmentService;
-    private final CourseDtoBuilder courseDtoBuilder;
+    private final CourseMapper courseMapper;
+    private final UserCourseProgressService userCourseProgressService;
+    private final ReviewService reviewService;
+    private final CourseVersionService courseVersionService;
+    private final TagService tagService;
 
+    private record ScoredCourse(Course course, int score) {}
 
     @Override
     public CourseDtoLearn getEnrolledCourseById(Long courseId, Long userId, Language language) {
@@ -51,7 +65,7 @@ public class CourseService implements ImplCourseService {
         enrollmentService.updateEnrollmentStatusToActive(enrollment);
         Course course = courseRepository.findById(courseId).orElseThrow();
 
-        return courseDtoBuilder.getCourseDtoLearn(course, enrollment, language);
+        return courseMapper.toDtoLearn(course, language, enrollment);
     }
 
 
@@ -96,7 +110,13 @@ public class CourseService implements ImplCourseService {
                 courseRepository.findCoursesByIdNotInAndLanguage(courseIds, language) :
                 courseRepository.findCoursesByLanguage(language);
 
-        return courseDtoBuilder.getCourseDtoPreview(courses, language);
+        return courseMapper.toDtoPreview(
+                courses,
+                language,
+                reviewService.getAverageRatingByCourse(courseIds),
+                courseVersionService.getActiveByCourseIds(courseIds),
+                tagService.getTagsByCourseIdsAndLanguage(courseIds, language)
+                );
     }
 
 //    @Override
@@ -120,60 +140,117 @@ public class CourseService implements ImplCourseService {
                 .filter(course -> !enrolledCourseIds.contains(course.getId()))
                 .toList();
 
-        List<Attribute> userAttributes = user.getAttributes().stream().filter(a -> a.getType().equals(AttributeType.TOPIC)).toList();
+        List<Tag> userTags = user.getTags().stream().filter(a -> a.getType().equals(TagType.TOPIC)).toList();
 
         List<ScoredCourse> scoredCourses = new ArrayList<>();
         for (Course course : courses) {
-            List<Attribute> courseAttributes = course.getAttributes().stream().filter(a -> a.getType().equals(AttributeType.TOPIC)).toList();
+            List<Tag> courseTags = course.getTags().stream().filter(a -> a.getType().equals(TagType.TOPIC)).toList();
 
-            int score = courseAttributes.stream()
-                    .filter(userAttributes::contains)
+            int score = courseTags.stream()
+                    .filter(userTags::contains)
                     .toList()
                     .size();
 
             scoredCourses.add(new ScoredCourse(course, score));
         }
 
-        scoredCourses.sort((a, b) -> Integer.compare(b.getScore(), a.getScore()));  // descending order
+        scoredCourses.sort((a, b) -> Integer.compare(b.score(), a.score()));  // descending order
 
         int limit = Math.min(5, scoredCourses.size());
-        return scoredCourses
-                .subList(0, limit)
+        scoredCourses = scoredCourses.subList(0, limit);
+
+        List<Long> courseIds =  scoredCourses
                 .stream()
-                .map(ScoredCourse::getCourse)
-                .map(course -> courseDtoBuilder.getCourseDtoPreview(course, language))
+                .map(sc -> sc.course().getId())
                 .toList();
+
+        return courseMapper.toDtoPreview(
+                scoredCourses.stream().map(ScoredCourse::course).toList(),
+                language,
+                reviewService.getAverageRatingByCourse(courseIds),
+                courseVersionService.getActiveByCourseIds(courseIds),
+                tagService.getTagsByCourseIdsAndLanguage(courseIds, language)
+        );
     }
 
     @Override
     public List<CourseDtoPreviewEnrolled> getEnrolledCourses(Long userId, Language language) {
-        List<Long> enrolledCourseIds = enrollmentService.getCourseIdsByUserEnrollments(userId);
-        List<Course> courses = courseRepository.findAllById(enrolledCourseIds);
+        List<Enrollment> enrollments = enrollmentService.getEnrollmentsEntityByUser(userId);    // batch fetch enrollments
 
-        if (courses.isEmpty()) {
+        if (enrollments.isEmpty()) {
             return new ArrayList<>();
         }
-        return courseDtoBuilder.getCourseDtoPreviewEnrolled(courses, userId, language);
+
+        List<Course> courses = enrollments.stream()
+                .map(Enrollment::getCourseVersion)
+                .map(CourseVersion::getCourse)
+                .toList();
+
+        List<Long> enrollmentIds = enrollments.stream()
+                .map(Enrollment::getId)
+                .toList();
+        Map<Long, List<UserCourseProgress>> progressMap = userCourseProgressService
+                .getUserCourseProgressByEnrollmentsAndCompletedTrue(enrollmentIds)  // batch fetch progress
+                .stream()
+                .collect(Collectors.groupingBy(ucp -> ucp.getEnrollment().getId()));
+
+        Map<Long, Enrollment> enrollmentMap = enrollments.stream()
+                .collect(Collectors.toMap(e -> e.getCourseVersion().getCourse().getId(), Function.identity()));
+
+        List<Long> courseIds = courses.stream()
+                .map(Course::getId)
+                .toList();;
+
+        return courseMapper.toDtoPreviewEnrolled(
+                courses,
+                language,
+                enrollmentMap,
+                progressMap,
+                reviewService.getAverageRatingByCourse(courseIds),
+                courseVersionService.getActiveByCourseIds(courseIds),
+                tagService.getTagsByCourseIdsAndLanguage(courseIds, language)
+        );
     }
+
 
 
     @Override
     public List<CourseDtoPreview> getTopRatedCourses(Language language) {
         List<Course> courses = courseRepository.findCoursesOrderedByRating();
+
         int limit = Math.min(5, courses.size());
-        return courseDtoBuilder.getCourseDtoPreview(
-                courses.subList(0, limit),
-                language
+        courses = courses.subList(0, limit);
+
+        List<Long> courseIds = courses.stream()
+                .map(Course::getId)
+                .toList();
+
+        return courseMapper.toDtoPreview(
+                courses,
+                language,
+                reviewService.getAverageRatingByCourse(courseIds),
+                courseVersionService.getActiveByCourseIds(courseIds),
+                tagService.getTagsByCourseIdsAndLanguage(courseIds, language)
         );
     }
 
     @Override
     public List<CourseDtoPreview> getMostPopularCourses(Language language) {
         List<Course> courses = courseRepository.findCoursesOrderedByPopularity();
+
         int limit = Math.min(5, courses.size());
-        return courseDtoBuilder.getCourseDtoPreview(
-                courses.subList(0, limit),
-                language
+        courses = courses.subList(0, limit);
+
+        List<Long> courseIds = courses.stream()
+                .map(Course::getId)
+                .toList();
+
+        return courseMapper.toDtoPreview(
+                courses,
+                language,
+                reviewService.getAverageRatingByCourse(courseIds),
+                courseVersionService.getActiveByCourseIds(courseIds),
+                tagService.getTagsByCourseIdsAndLanguage(courseIds, language)
         );
     }
 
@@ -181,7 +258,7 @@ public class CourseService implements ImplCourseService {
     public CourseDtoDetail getCourseById(Long courseId, Language language) {
         validate.validateCourseExists(courseId);
         Course course = courseRepository.findById(courseId).orElseThrow();
-        return courseDtoBuilder.getCourseDtoDetail(course, language);
+        return courseMapper.toDtoDetail(course, language);
     }
 
     @Override
@@ -199,17 +276,17 @@ public class CourseService implements ImplCourseService {
 
     @Override
     public List<String> getAllTopics(Language language) {
-        List<AttributeTranslate> translations = courseRepository.getCourseTopics(language);
+        List<TagTranslate> translations = courseRepository.getCourseTopics(language);
         return translations.stream()
-                .map(t -> t.getAttribute().getId() + "_" + t.getValue())
+                .map(t -> t.getTag().getId() + "_" + t.getValue())
                 .toList();
     }
 
     @Override
     public List<String> getAllSkills(Language language) {
-        List<AttributeTranslate> translations = courseRepository.getCourseSkills(language);
+        List<TagTranslate> translations = courseRepository.getCourseSkills(language);
         return translations.stream()
-                .map(t -> t.getAttribute().getId() + "_" + t.getValue())
+                .map(t -> t.getTag().getId() + "_" + t.getValue())
                 .toList();
     }
 

@@ -9,7 +9,7 @@ import {
     TvMinimalPlay
 } from "lucide-react"
 import {useState} from "react";
-import type {CourseDetail} from "../models/javaObjects/CourseDetail.tsx";
+import type {CourseDetail} from "../models/javaObjects/course/CourseDetail.tsx";
 import {useTranslation} from "react-i18next";
 
 function CourseDetailsInfo({ course }: { course: CourseDetail | null}) {

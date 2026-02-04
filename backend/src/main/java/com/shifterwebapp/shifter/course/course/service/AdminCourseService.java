@@ -1,29 +1,30 @@
 package com.shifterwebapp.shifter.course.course.service;
 
 import com.shifterwebapp.shifter.Validate;
-import com.shifterwebapp.shifter.attribute.Attribute;
-import com.shifterwebapp.shifter.attribute.service.AttributeService;
+import com.shifterwebapp.shifter.course.course.mapper.CourseMapper;
+import com.shifterwebapp.shifter.course.coursetranslate.dto.CourseTranslateReq;
+import com.shifterwebapp.shifter.tag.Tag;
+import com.shifterwebapp.shifter.tag.service.TagService;
 import com.shifterwebapp.shifter.course.course.Course;
 import com.shifterwebapp.shifter.course.coursetranslate.CourseTranslate;
-import com.shifterwebapp.shifter.course.course.dto.CourseDtoBuilder;
 import com.shifterwebapp.shifter.course.course.dto.CourseDtoFull;
-import com.shifterwebapp.shifter.course.coursetranslate.dto.CourseDtoTranslate;
 import com.shifterwebapp.shifter.course.course.repository.CourseRepository;
 import com.shifterwebapp.shifter.course.courseversion.CourseVersion;
 import com.shifterwebapp.shifter.course.courseversion.repository.CourseVersionRepository;
 import com.shifterwebapp.shifter.coursecontent.CourseContent;
 import com.shifterwebapp.shifter.coursecontent.CourseContentTranslate;
-import com.shifterwebapp.shifter.coursecontent.dto.CourseContentDtoTranslate;
+import com.shifterwebapp.shifter.coursecontent.dto.CourseContentTranslateReq;
 import com.shifterwebapp.shifter.coursecontent.service.CourseContentService;
 import com.shifterwebapp.shifter.courselecture.CourseLecture;
 import com.shifterwebapp.shifter.courselecture.CourseLectureTranslate;
 import com.shifterwebapp.shifter.courselecture.dto.CourseLectureDtoFull;
-import com.shifterwebapp.shifter.courselecture.dto.CourseLectureDtoTranslate;
+import com.shifterwebapp.shifter.courselecture.dto.CourseLectureTranslateReq;
 import com.shifterwebapp.shifter.courselecture.service.CourseLectureService;
-import com.shifterwebapp.shifter.enums.AttributeType;
+import com.shifterwebapp.shifter.enums.TagType;
 import com.shifterwebapp.shifter.enums.Language;
 import com.shifterwebapp.shifter.external.upload.MetaInfo;
 import com.shifterwebapp.shifter.external.upload.S3UploadResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,21 +38,22 @@ public class AdminCourseService implements ImplAdminCourseService{
     private final CourseRepository courseRepository;
     private final CourseVersionRepository courseVersionRepository;
     private final Validate validate;
-    private final CourseDtoBuilder courseDtoBuilder;
     private final CourseContentService courseContentService;
-    private final AttributeService attributeService;
+    private final TagService tagService;
     private final CourseLectureService courseLectureService;
+    private final CourseMapper courseMapper;
 
     @Override
-    public CourseDtoFull getFullCourse(Long courseId) {
+    public CourseDtoFull getFullCourse(Long courseId, Language language) {
         validate.validateCourseExists(courseId);
 
         Course course = courseRepository.findById(courseId).orElseThrow();
 
-        return courseDtoBuilder.getCourseDtoFull(course);
+        return courseMapper.toDtoFull(course, language);
     }
 
 
+    @Transactional
     @Override
     public CourseVersion createCourse(CourseDtoFull courseDtoFull) {
         Language language = courseDtoFull.getLanguage();
@@ -71,7 +73,7 @@ public class AdminCourseService implements ImplAdminCourseService{
         CourseVersion courseVersion = CourseVersion.builder()
                 .versionNumber(newVersionNumber)
                 .active(true)
-                .createdAt(java.time.LocalDate.now())
+                .creationDate(java.time.LocalDate.now())
                 .course(course)
                 .build();
 
@@ -81,20 +83,21 @@ public class AdminCourseService implements ImplAdminCourseService{
 
         courseVersion.setCourseContents(contentList);
 
-        List<Attribute> skillAttributes =  attributeService.processRawAttributes(
-                courseDtoFull.getSkillsGained(), AttributeType.SKILL, language
+        List<Tag> skillTags =  tagService.processRawTags(
+                courseDtoFull.getSkillsGained(), TagType.SKILL, language
         );
-        List<Attribute> topicAttributes = attributeService.processRawAttributes(
-                courseDtoFull.getTopicsCovered(), AttributeType.TOPIC, language
+        List<Tag> topicTags = tagService.processRawTags(
+                courseDtoFull.getTopicsCovered(), TagType.TOPIC, language
         );
 
-        List<Attribute> attributeList = new ArrayList<>(skillAttributes);
-        attributeList.addAll(topicAttributes);
+        List<Tag> tagList = new ArrayList<>(skillTags);
+        tagList.addAll(topicTags);
 
-        course.setAttributes(attributeList);
+        course.setTags(tagList);
 
         return courseVersionRepository.save(courseVersion);
     }
+
     private Course buildCourse(CourseDtoFull courseDtoFull, Language language) {
 
         int durationMinutes = courseDtoFull.getCourseContents().stream()
@@ -126,28 +129,29 @@ public class AdminCourseService implements ImplAdminCourseService{
     }
 
 
+    @Transactional
     @Override
-    public Course translateCourse(CourseDtoTranslate courseDtoTranslate) {
-        validate.validateCourseExists(courseDtoTranslate.getId());
+    public Course translateCourse(CourseTranslateReq courseTranslateReq) {
+        validate.validateCourseExists(courseTranslateReq.getId());
         // TODO: remove the comment bellow for checking weather a course already has a translation in a language
-//        validate.validateCourseTranslation(courseDtoTranslate.getId(), courseDtoTranslate.getLanguage());
+//        validate.validateCourseTranslation(courseTranslateReq.getId(), courseTranslateReq.getLanguage());
 
-        CourseVersion courseVersion = courseVersionRepository.findByActiveTrueAndCourse_Id(courseDtoTranslate.getId());
-        Course course = courseRepository.findById(courseDtoTranslate.getId()).orElseThrow();
-        addCourseTranslation(course, courseDtoTranslate);
-        translateContents(courseVersion, courseDtoTranslate.getCourseContents(), courseDtoTranslate.getLanguage());
+        CourseVersion courseVersion = courseVersionRepository.findByActiveTrueAndCourse_Id(courseTranslateReq.getId());
+        Course course = courseRepository.findById(courseTranslateReq.getId()).orElseThrow();
+        addCourseTranslation(course, courseTranslateReq);
+        translateContents(courseVersion, courseTranslateReq.getCourseContents(), courseTranslateReq.getLanguage());
 
-        attributeService.processExistingAttributes(
-                courseDtoTranslate.getSkillsGained(), AttributeType.SKILL, courseDtoTranslate.getLanguage()
+        tagService.processExistingTags(
+                courseTranslateReq.getSkillsGained(), TagType.SKILL, courseTranslateReq.getLanguage()
         );
-        attributeService.processExistingAttributes(
-                courseDtoTranslate.getTopicsCovered(), AttributeType.TOPIC, courseDtoTranslate.getLanguage()
+        tagService.processExistingTags(
+                courseTranslateReq.getTopicsCovered(), TagType.TOPIC, courseTranslateReq.getLanguage()
         );
 
         return courseRepository.save(course);
     }
 
-    private void addCourseTranslation(Course course, CourseDtoTranslate dto) {
+    private void addCourseTranslation(Course course, CourseTranslateReq dto) {
         CourseTranslate translation = CourseTranslate.builder()
                 .language(dto.getLanguage())
                 .titleShort(dto.getTitleShort())
@@ -162,9 +166,9 @@ public class AdminCourseService implements ImplAdminCourseService{
         course.getTranslations().add(translation);
     }
 
-    private void translateContents(CourseVersion courseVersion, List<CourseContentDtoTranslate> contentDtos, Language language) {
+    private void translateContents(CourseVersion courseVersion, List<CourseContentTranslateReq> contentDtos, Language language) {
         for (CourseContent content : courseVersion.getCourseContents()) {
-            CourseContentDtoTranslate contentDto = contentDtos.stream()
+            CourseContentTranslateReq contentDto = contentDtos.stream()
                     .filter(ct -> ct.getId().equals(content.getId()))
                     .findFirst()
                     .orElseThrow(() -> new RuntimeException(
@@ -175,7 +179,7 @@ public class AdminCourseService implements ImplAdminCourseService{
         }
     }
 
-    private void addContentTranslation(CourseContent content, CourseContentDtoTranslate contentDto, Language language) {
+    private void addContentTranslation(CourseContent content, CourseContentTranslateReq contentDto, Language language) {
         CourseContentTranslate contentTranslate = CourseContentTranslate.builder()
                 .title(contentDto.getTitle())
                 .language(language)
@@ -186,9 +190,9 @@ public class AdminCourseService implements ImplAdminCourseService{
         translateLectures(content, contentDto.getCourseLectures(), language);
     }
 
-    private void translateLectures(CourseContent content, List<CourseLectureDtoTranslate> lectureDtos, Language language) {
+    private void translateLectures(CourseContent content, List<CourseLectureTranslateReq> lectureDtos, Language language) {
         for (CourseLecture lecture : content.getCourseLectures()) {
-            CourseLectureDtoTranslate lectureDto = lectureDtos.stream()
+            CourseLectureTranslateReq lectureDto = lectureDtos.stream()
                     .filter(ld -> ld.getId().equals(lecture.getId()))
                     .findFirst()
                     .orElseThrow(() -> new RuntimeException(

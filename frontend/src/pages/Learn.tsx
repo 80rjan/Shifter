@@ -96,8 +96,8 @@ function Learn() {
                 return (
                     <>
                         {
-                            allCourses.filter(course => user?.favoriteCourses.includes(course.id)).length > 0 ?
-                                allCourses?.filter(course => user?.favoriteCourses.includes(course.id)).map((course, index) => (
+                            allCourses.filter(course => user?.favoriteCourseIds.includes(course.id)).length > 0 ?
+                                allCourses?.filter(course => user?.favoriteCourseIds.includes(course.id)).map((course, index) => (
                                     <CourseCardLearnDashboard course={course} key={index}
                                                               markCourseAsRated={(rating) => {
                                                                   console.log(rating)
@@ -138,7 +138,7 @@ function Learn() {
                     </ul>
                 </section>
             </div>
-            <div className="flex-1 bg-beige">
+            <div className="flex-1 bg-main">
                 <section className="grid grid-cols-4 gap-x-4 gap-y-8 px-horizontal-md py-vertical-md items-stretch ">
                     {
                         loading ?

@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import HeroCourseDetails from "../components/HeroCourseDetails.tsx";
 import CourseDetailsInfo from "../components/CourseDetailsInfo.tsx";
 import CoursesCarouselCourseDetails from "../components/CoursesCarouselCourseDetails.tsx";
-import type {CourseDetail} from "../models/javaObjects/CourseDetail.tsx";
+import type {CourseDetail} from "../models/javaObjects/course/CourseDetail.tsx";
 import HeroCourseDetailsSkeleton from "../components/skeletons/HeroCourseDetailsSkeleton.tsx";
 import CourseDetailsInfoSkeleton from "../components/skeletons/CourseDetailsInfoSkeleton.tsx";
 import {useEnrollUserInCourse} from "../hooks/useEnrollUserInCourse.tsx";
@@ -57,7 +57,7 @@ function CourseDetails() {
     }, [i18n.language, courseId])
 
     return (
-        <main className="bg-beige text-black-text">
+        <main className="bg-main text-black-text">
             {
                 loading ?
                     <>

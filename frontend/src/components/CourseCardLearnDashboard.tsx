@@ -1,9 +1,9 @@
-import type {CoursePreviewEnrolled} from "../models/javaObjects/CoursePreviewEnrolled.tsx";
+import type {CoursePreviewEnrolled} from "../models/javaObjects/course/CoursePreviewEnrolled.tsx";
 import React from "react";
 import StarFilled from "../assets/icons/StarFilled.tsx";
 import StarOutline from "../assets/icons/StarOutline.tsx";
 import ModalReviewCourse from "./ModalReviewCourse.tsx";
-import type {CoursePreview} from "../models/javaObjects/CoursePreview.tsx";
+import type {CoursePreview} from "../models/javaObjects/course/CoursePreview.tsx";
 import {LocalizedLink} from "./links/LocalizedLink.tsx";
 import {fromEnumFormat} from "../utils/toEnumFormat.ts";
 

@@ -2,7 +2,7 @@ import React from "react";
 import StarFilled from "../assets/icons/StarFilled.tsx";
 import {hexToRgb} from "../utils/hexToRGB.ts";
 import {useNavigate} from "react-router-dom";
-import type {CoursePreview} from "../models/javaObjects/CoursePreview.tsx";
+import type {CoursePreview} from "../models/javaObjects/course/CoursePreview.tsx";
 import HeartOutline from "../assets/icons/HeartOutline.tsx";
 import HeartFill from "../assets/icons/HeartFill.tsx";
 import {useAuthContext} from "../context/AuthContext.tsx";
@@ -34,9 +34,9 @@ function CourseCard({card}: { card: CoursePreview }) {
 
             return {
                 ...prevUser,
-                favoriteCourses: prevUser.favoriteCourses.includes(card.id)
-                    ? prevUser.favoriteCourses.filter((courseId) => courseId !== card.id)
-                    : [...prevUser.favoriteCourses, card.id]
+                favoriteCourseIds: prevUser.favoriteCourseIds.includes(card.id)
+                    ? prevUser.favoriteCourseIds.filter((courseId) => courseId !== card.id)
+                    : [...prevUser.favoriteCourseIds, card.id]
             };
         });
 
@@ -50,9 +50,9 @@ function CourseCard({card}: { card: CoursePreview }) {
                         if (!prevUser) return prevUser;
                         return {
                             ...prevUser,
-                            favoriteCourses: prevUser.favoriteCourses.includes(card.id)
-                                ? prevUser.favoriteCourses.filter((courseId) => courseId !== card.id)
-                                : [...prevUser.favoriteCourses, card.id]
+                            favoriteCourseIds: prevUser.favoriteCourseIds.includes(card.id)
+                                ? prevUser.favoriteCourseIds.filter((courseId) => courseId !== card.id)
+                                : [...prevUser.favoriteCourseIds, card.id]
                         };
                     });
 
@@ -137,7 +137,7 @@ function CourseCard({card}: { card: CoursePreview }) {
                         onMouseEnter={() => setIsHoveredHeart(true)}
                         onMouseLeave={() => setIsHoveredHeart(false)}
                     >
-                        {(user?.favoriteCourses ?? []).includes(card.id)
+                        {(user?.favoriteCourseIds ?? []).includes(card.id)
                             ? <HeartFill className="w-6 h-auto text-red"/>
                             : !isHoveredHeart
                                 ? <HeartOutline strokeWidth={2} className="w-6 h-auto text-black/60"/>

@@ -8,6 +8,7 @@ import java.util.List;
 public interface ImplEnrollmentService {
     EnrollmentDto getEnrollmentById(Long enrollmentId);
     List<EnrollmentDto> getEnrollmentsByUser(Long userId);
+    List<Enrollment> getEnrollmentsEntityByUser(Long userId);
     List<Long> getCourseIdsByUserEnrollments(Long userId);
     List<EnrollmentDto> getEnrollmentsByCourse(Long courseId);
     Enrollment getEnrollmentByUserAndCourse(Long userId, Long courseId);

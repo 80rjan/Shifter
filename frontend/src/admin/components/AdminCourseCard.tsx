@@ -1,6 +1,6 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import type {CoursePreview} from "../../models/javaObjects/CoursePreview.tsx";
+import type {CoursePreview} from "../../models/javaObjects/course/CoursePreview.tsx";
 import {fromEnumFormat} from "../../utils/toEnumFormat.ts";
 import StarFilled from "../../assets/icons/StarFilled.tsx";
 import {capitalize} from "../../utils/capitalize.ts";

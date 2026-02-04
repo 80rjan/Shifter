@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from "react";
-import type {CourseLearn} from "../models/javaObjects/CourseLearn.tsx";
+import type {CourseLearn} from "../models/javaObjects/course/CourseLearn.tsx";
 import type {CourseLectureLearn} from "../models/javaObjects/CourseLectureLearn.tsx";
 import {fetchCourseCertificateApi, fetchEnrolledCourseLearnApi} from "../api/courseApi.ts";
 import {fetchPresignedUrlApi} from "../api/s3Api.ts";

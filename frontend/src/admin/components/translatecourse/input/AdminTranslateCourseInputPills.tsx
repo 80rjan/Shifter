@@ -1,12 +1,12 @@
 import React from "react";
 import InitialValueForTranslation from "./InitialValueForTranslation.tsx";
-import {parseStringToAttributeReq} from "../../../../utils/parseStringToAttributeReq.ts";
+import {parseStringToTagReq} from "../../../../utils/parseStringToTagReq.ts";
 
-function InputPills({label, onChange, translateFromList, isAttributeEncoded, display}: {
+function InputPills({label, onChange, translateFromList, isTagEncoded, display}: {
     label: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>, index: number) => void;
     translateFromList: string[];
-    isAttributeEncoded: boolean;
+    isTagEncoded: boolean;
     display: "flex" | "grid"
 }) {
     return (
@@ -31,8 +31,8 @@ function InputPills({label, onChange, translateFromList, isAttributeEncoded, dis
                             />
                             <InitialValueForTranslation
                                 value={
-                                    isAttributeEncoded ?
-                                        parseStringToAttributeReq(str).value :
+                                    isTagEncoded ?
+                                        parseStringToTagReq(str).value :
                                         str
                                 }
                             />

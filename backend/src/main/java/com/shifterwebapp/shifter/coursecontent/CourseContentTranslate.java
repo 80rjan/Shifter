@@ -12,6 +12,13 @@ import org.hibernate.annotations.OnDeleteAction;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_course_content_translate_course_content_language",
+                        columnNames = {"course_content_id", "language"}        // each course content can have only one translation per language
+                )
+        })
 public class CourseContentTranslate {
 
     @Id
@@ -24,6 +31,6 @@ public class CourseContentTranslate {
     private Language language;
 
     @ManyToOne
-    @JoinColumn(name = "course_content_id")
+    @JoinColumn(name = "course_content_id", nullable = false)
     private CourseContent courseContent;
 }

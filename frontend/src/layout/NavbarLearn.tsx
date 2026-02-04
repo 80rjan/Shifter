@@ -9,7 +9,7 @@ import StarOutline from "../assets/icons/StarOutline.tsx";
 import {useState} from "react";
 import ModalReviewCourse from "../components/ModalReviewCourse.tsx";
 import {LocalizedLink} from "../components/links/LocalizedLink.tsx";
-import type {CourseLearn} from "../models/javaObjects/CourseLearn.tsx";
+import type {CourseLearn} from "../models/javaObjects/course/CourseLearn.tsx";
 
 function NavbarLearn({course, markCourseAsRated}: {
     course: CourseLearn,

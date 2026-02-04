@@ -1,12 +1,11 @@
 package com.shifterwebapp.shifter.coursecontent.service;
 
-import com.shifterwebapp.shifter.course.course.Course;
 import com.shifterwebapp.shifter.course.courseversion.CourseVersion;
 import com.shifterwebapp.shifter.coursecontent.CourseContent;
 import com.shifterwebapp.shifter.coursecontent.CourseContentTranslate;
-import com.shifterwebapp.shifter.coursecontent.dto.CourseContentDtoBuilder;
 import com.shifterwebapp.shifter.coursecontent.dto.CourseContentDtoFull;
 import com.shifterwebapp.shifter.coursecontent.dto.CourseContentDtoPreview;
+import com.shifterwebapp.shifter.coursecontent.mapper.CourseContentMapper;
 import com.shifterwebapp.shifter.coursecontent.repository.CourseContentRepository;
 import com.shifterwebapp.shifter.courselecture.CourseLecture;
 import com.shifterwebapp.shifter.courselecture.service.CourseLectureService;
@@ -21,9 +20,10 @@ import java.util.List;
 public class CourseContentService implements ImplCourseContentService {
 
     private final CourseContentRepository courseContentRepository;
-    private final CourseContentDtoBuilder courseContentDtoBuilder;
     private final CourseLectureService courseLectureService;
+    private final CourseContentMapper courseContentMapper;
 
+    @Override
     public CourseContent buildCourseContent(CourseContentDtoFull courseContentDtoFull, CourseVersion courseVersion, Language language) {
         CourseContent content = CourseContent.builder()
                 .position(courseContentDtoFull.getPosition())
@@ -51,7 +51,7 @@ public class CourseContentService implements ImplCourseContentService {
             Long courseId,
             Language language
             ) {
-        List<CourseContent> courseContents = courseContentRepository.getCourseContentByCourse(courseId);
-        return courseContentDtoBuilder.getCourseContentDtoPreview(courseContents, language);
+        List<CourseContent> courseContents = courseContentRepository.findByCourseId(courseId);
+        return courseContentMapper.toDtoPreview(courseContents, language);
     }
 }
