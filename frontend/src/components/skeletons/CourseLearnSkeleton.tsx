@@ -6,7 +6,7 @@ function CourseLearnSkeleton() {
                 {/* Video player skeleton */}
                 <div className="w-full h-96 bg-gray-300 animate-pulse"></div>
 
-                <div className="flex flex-col gap-4 flex-grow py-vertical-md px-horizontal-sm text-left text-black-text">
+                <div className="flex flex-col gap-4 flex-grow py-vertical px-horizontal text-left text-black-text">
                     {/* Title skeleton */}
                     <div className="h-10 bg-gray-300 rounded w-3/4 animate-pulse"></div>
 

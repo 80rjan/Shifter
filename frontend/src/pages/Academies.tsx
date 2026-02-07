@@ -61,14 +61,14 @@ function Academies() {
     return (
         <main className="bg-gradient-to-b from-shifter via-shifter/20 via-40% to-main">
             {/*Hero*/}
-            <section className="flex flex-col items-center gap-4 w-full pb-60 pt-top-nav-lg px-horizontal-lg
+            <section className="flex flex-col items-center gap-4 w-full pb-60 pt-nav-top px-horizontal
                 text-white-text">
                 <h1 className="text-5xl font-bold" dangerouslySetInnerHTML={{__html: t("heroTitle")}}/>
                 <p className="text-xl font-light" dangerouslySetInnerHTML={{__html: t("heroDescription")}}/>
             </section>
 
             {/*Contact Form*/}
-            <section className=" flex items-center justify-center w-full px-horizontal-lg">
+            <section className=" flex items-center justify-center w-full px-horizontal">
                 <div className="relative -top-40 grid grid-cols-3 gap-x-20 rounded-lg bg-white p-4
                     shadow-md shadow-black/10">
 

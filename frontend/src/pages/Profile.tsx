@@ -19,7 +19,7 @@ function Profile() {
     }
 
     return (
-        <main className="grid grid-cols-4 gap-x-12 py-vertical-lg pt-top-nav-lg px-horizontal-md bg-main flex-1">
+        <main className="grid grid-cols-4 gap-x-12 py-vertical pt-nav-top px-horizontal bg-main flex-1">
             <div className="col-span-1 flex flex-col gap-6">
                 <ProfileInfo/>
                 {/*{*/}

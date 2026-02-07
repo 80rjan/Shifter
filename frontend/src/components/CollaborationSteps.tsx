@@ -34,7 +34,7 @@ export default function CollaborationSteps() {
     ];
 
     return (
-        <section className="relative bg-shifter text-white py-vertical-xl px-horizontal-md flex flex-col gap-between-md items-center">
+        <section className="relative bg-shifter text-white py-vertical px-horizontal flex flex-col gap-between items-center">
             {/* Gradients */}
             <div className="absolute bottom-0 w-full h-[32%]" style={{
                 background: "linear-gradient(to bottom, rgba(250,251,252,0) 0%, rgba(250,251,252,0.1) 20%, rgba(250,251,252,0.9) 80%, rgba(250,251,252,1) 100%)",

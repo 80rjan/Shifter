@@ -7,7 +7,7 @@ function ShifterValues() {
     const values = t("shifterValues.valuesList", { returnObjects: true }) as string[];
 
     return (
-        <section className="flex px-horizontal-md py-vertical-lg gap-20">
+        <section className="flex px-horizontal py-vertical gap-20">
             <div className="flex flex-col gap-12 w-1/2">
                 <div className="flex flex-col gap-8 text-left">
                     <h2 className="text-5xl" dangerouslySetInnerHTML={{ __html: t("shifterValues.heading") }} />

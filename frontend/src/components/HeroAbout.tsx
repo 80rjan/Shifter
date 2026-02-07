@@ -5,7 +5,7 @@ import {LocalizedLink} from "./links/LocalizedLink.tsx";
 function HeroAbout() {
 
     return (
-        <section className="grid grid-cols-2 gap-x-20 px-horizontal-md py-vertical-lg pt-top-nav-md rounded-3xl bg-dark-blue/5
+        <section className="grid grid-cols-2 gap-x-20 px-horizontal py-vertical pt-nav-top rounded-3xl bg-dark-blue/5
                 shadow-md shadow-black/20">
 
             <div className="col-start-1 col-span-1 flex flex-col text-left gap-12

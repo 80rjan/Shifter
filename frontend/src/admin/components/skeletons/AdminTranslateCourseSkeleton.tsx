@@ -1,6 +1,6 @@
 function AdminTranslateCourseSkeleton() {
     return (
-        <main className="flex flex-col gap-12 px-horizontal-md py-vertical-md">
+        <main className="flex flex-col gap-12 px-horizontal py-vertical">
             {/* AdminTranslateCourseInfo skeleton */}
             <section className="flex flex-col gap-8">
                 {/* Course card and form fields side by side */}

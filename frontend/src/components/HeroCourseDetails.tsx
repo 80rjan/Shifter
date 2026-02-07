@@ -43,7 +43,7 @@ function HeroCourseDetails({course, enrollUser}: { course: CourseDetail | null, 
             className={`py-4 bg-shifter`}>
             {/*HEADER AND DESCRIPTION*/}
             <section
-                className="flex flex-col items-center gap-8 bg-white mx-6 px-horizontal-lg pb-12 pt-40 rounded-xl shadow-lg shadow-black/20 text-black-text">
+                className="flex flex-col items-center gap-8 bg-white mx-6 px-horizontal pb-12 pt-40 rounded-xl shadow-lg shadow-black/20 text-black-text">
                 <h1 className="text-5xl font-semibold">{course?.title}</h1>
                 <p>{course?.description}</p>
                 {

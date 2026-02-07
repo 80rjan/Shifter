@@ -13,7 +13,7 @@ function CoursesCarouselCourseDetails({courseId}: {
         return null;
 
     return (
-        <section className="flex flex-col gap-12 text-left px-horizontal-lg py-vertical-md">
+        <section className="flex flex-col gap-12 text-left px-horizontal py-vertical">
             <h2 className="text-5xl font-semibold">{t("courseDetails.peopleAlsoBought")}</h2>
 
             <div className="relative mx-0 my-auto w-full p-0">

@@ -16,7 +16,7 @@ function FooterNew() {
     const { t } = useTranslation("footer");
 
     return (
-        <section className="relative flex flex-col gap-24 pt-top-nav-lg overflow-clip bg-main">
+        <section className="relative flex flex-col gap-24 pt-nav-top overflow-clip bg-main">
 
             {/* background circles */}
             <div className="absolute -bottom-150 -left-80 w-320 aspect-square bg-[radial-gradient(circle_at_center,rgba(0,140,194,0.4),transparent_70%)]"></div>
@@ -49,7 +49,7 @@ function FooterNew() {
             {/* FOOTER */}
             <div className="p-4">
                 <footer className="flex flex-col gap-4 rounded-xl shadow-md
-                bg-main/80 backdrop-blur-md text-black-text pt-12 pb-4 px-horizontal-sm">
+                bg-main/80 backdrop-blur-md text-black-text pt-12 pb-4 px-horizontal">
 
                     <div className="flex justify-between">
                         <section className="flex flex-col justify-center gap-12 max-w-1/4">

@@ -34,7 +34,7 @@ function CourseDetailsInfo({ course }: { course: CourseDetail | null}) {
     return (
         <>
             {/*WHAT WILL BE LEARNED*/}
-            <section className="relative flex flex-col gap-12 text-left px-horizontal-lg py-vertical-md overflow-clip ">
+            <section className="relative flex flex-col gap-12 text-left px-horizontal py-vertical overflow-clip ">
                 <h2 className="text-5xl font-semibold">{t("courseDetails.whatYoullLearn")}</h2>
                 <div className="grid grid-cols-2 gap-y-4 gap-x-20">
                     {
@@ -50,7 +50,7 @@ function CourseDetailsInfo({ course }: { course: CourseDetail | null}) {
 
             {/*COURSE CONTENT*/}
             <section
-                className="relative flex flex-col gap-12 text-left px-horizontal-lg py-vertical-md overflow-clip ">
+                className="relative flex flex-col gap-12 text-left px-horizontal py-vertical overflow-clip ">
                 <h2 className="text-5xl font-semibold">{t("courseDetails.courseContent")}</h2>
                 <div>
                     {
@@ -113,7 +113,7 @@ function CourseDetailsInfo({ course }: { course: CourseDetail | null}) {
             </section>
 
             {/*DESCRIPTION*/}
-            <section className="flex flex-col gap-12 text-left px-horizontal-lg py-vertical-md">
+            <section className="flex flex-col gap-12 text-left px-horizontal py-vertical">
                 <h2 className="text-5xl font-semibold">{t("courseDetails.courseDescription")}</h2>
 
                 <div>

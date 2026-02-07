@@ -72,7 +72,7 @@ function Login() {
             </section>
 
             {/* RIGHT FORM CONTAINER */}
-            <section className="relative flex flex-col justify-center items-center flex-1 px-horizontal-md">
+            <section className="relative flex flex-col justify-center items-center flex-1 px-horizontal">
                 <div className="absolute top-0 px-4 py-4 flex w-full justify-between items-center">
                     <LocalizedLink to={"/"}>
                         <img src={ShifterLogo} alt="Shifter Logo" className="w-40 h-auto object-contain" />

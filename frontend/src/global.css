@@ -1,26 +1,6 @@
 @import "tailwindcss";
 
 @theme {
-    --spacing-horizontal-xl: 12rem;
-    --spacing-horizontal-lg: 10rem;
-    --spacing-horizontal-md: 7rem;
-    --spacing-horizontal-sm: 4rem;
-
-    --spacing-vertical-xl: 5rem;
-    --spacing-vertical-lg: 3rem;
-    --spacing-vertical-md: 2rem;
-    --spacing-vertical-sm: 1rem;
-
-    --spacing-top-nav-xl: 9rem;
-    --spacing-top-nav-lg: 8rem;
-    --spacing-top-nav-md: 7rem;
-    --spacing-top-nav-sm: 6rem;
-
-    --spacing-between-lg: 6rem;
-    --spacing-between-md: 4rem;
-    --spacing-between-sm: 2rem;
-
-
     --color-beige: #FAF7F2; /* or F5F1E8, FAF7F2 */
     --color-main: #FAFBFC;
     --color-accent: #F0F7FA;
@@ -55,6 +35,58 @@
     --font-montserrat-medium: 'Montserrat', sans-serif;
     --font-montserrat-semibold: 'Montserrat', sans-serif;
     --font-montserrat-bold: 'Montserrat', sans-serif;
+
+
+    /* mobiles */
+    --spacing-horizontal: 1rem;
+    --spacing-vertical: 1rem;
+    --spacing-nav-top: 7rem;
+    --spacing-between: 2rem;
+}
+
+@media (min-width: 640px) {         /* sm breakpoint (large phones in landscape & small tablets) */
+    :root {
+        --spacing-horizontal: 2rem;
+        --spacing-vertical: 1.5rem;
+        --spacing-nav-top: 7rem;
+        --spacing-between: 3rem;
+    }
+}
+
+@media (min-width: 768px) {     /* md breakpoint (tablets) */
+    :root {
+        --spacing-horizontal: 3rem;
+        --spacing-vertical: 2rem;
+        --spacing-nav-top: 7rem;
+        --spacing-between: 4rem;
+    }
+}
+
+@media (min-width: 1024px) {    /* lg breakpoint (tablets in landscape & small laptops) */
+    :root {
+        --spacing-horizontal: 4rem;
+        --spacing-vertical: 2rem;
+        --spacing-nav-top: 8rem;
+        --spacing-between: 5rem;
+    }
+}
+
+@media (min-width: 1280px) {    /* xl breakpoint (laptops & desktops) */
+    :root {
+        --spacing-horizontal: 7rem;
+        --spacing-vertical: 2rem;
+        --spacing-nav-top: 12rem;
+        --spacing-between: 5rem;
+    }
+}
+
+@media (min-width: 1536px) {    /* xxl breakpoint (large desktops) */
+    :root {
+        --spacing-horizontal: 12rem;
+        --spacing-vertical: 3rem;
+        --spacing-nav-top: 16rem;
+        --spacing-between: 6rem;
+    }
 }
 
 @font-face {
@@ -124,10 +156,12 @@ body {
     margin: 0;
     display: flex;
     flex-direction: column;
-    /*width: 100vw;*/
     place-items: center;
-    /*min-width: 320px;*/
+
+    overflow-x: hidden;
     min-height: 100vh;
+    max-width: 100vw;
+    width: 100%;
 }
 
 /* Customize scrollbar for Webkit browsers (Chrome, Safari, Edge) */

@@ -20,7 +20,7 @@ function CoursesCarouselHome() {
 
     return (
         <section
-            className="relative flex flex-col items-center gap-between-md py-vertical-lg px-horizontal-lg overflow-clip">
+            className="relative flex flex-col items-center gap-between py-vertical px-horizontal overflow-clip">
 
             {/* TEXT */}
             <div className="text-center flex flex-col gap-4 text-black-text">

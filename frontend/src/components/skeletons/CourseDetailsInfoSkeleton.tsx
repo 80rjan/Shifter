@@ -6,7 +6,7 @@ function CourseDetailsInfoSkeleton() {
     return (
         <>
             {/*WHAT WILL BE LEARNED*/}
-            <section className="relative flex flex-col gap-12 text-left px-horizontal-lg py-vertical-md overflow-clip">
+            <section className="relative flex flex-col gap-12 text-left px-horizontal py-vertical overflow-clip">
                 <img src={ShifterArrow} alt="Shifter Arrow"
                      className="absolute opacity-10 h-150 w-120 -rotate-130 -top-40 right-0"/>
                 <img src={ShifterArrow} alt="Shifter Arrow"
@@ -24,7 +24,7 @@ function CourseDetailsInfoSkeleton() {
             </section>
 
             {/*COURSE CONTENT*/}
-            <section className="relative flex flex-col gap-12 text-left px-horizontal-lg py-vertical-md overflow-clip">
+            <section className="relative flex flex-col gap-12 text-left px-horizontal py-vertical overflow-clip">
                 <div className="h-10 bg-gray-300 rounded w-1/3 animate-pulse"></div>
                 <div>
                     {[...Array(5)].map((_, index) => (
@@ -46,7 +46,7 @@ function CourseDetailsInfoSkeleton() {
             </section>
 
             {/*DESCRIPTION*/}
-            <section className="flex flex-col gap-12 text-left px-horizontal-lg py-vertical-md">
+            <section className="flex flex-col gap-12 text-left px-horizontal py-vertical">
                 <div className="h-10 bg-gray-300 rounded w-1/3 animate-pulse"></div>
                 <div>
                     <div className="relative overflow-hidden">

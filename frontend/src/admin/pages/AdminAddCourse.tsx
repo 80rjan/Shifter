@@ -16,7 +16,7 @@ function AdminAddCourse() {
     } = useAdminAddCourse();
 
     return (
-        <main className="flex flex-col gap-12 px-horizontal-md py-vertical-md">
+        <main className="flex flex-col gap-12 px-horizontal py-vertical">
             <AdminAddCourseInfo
                 course={course}
                 setCourse={setCourse}

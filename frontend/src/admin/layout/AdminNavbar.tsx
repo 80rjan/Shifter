@@ -9,7 +9,7 @@ function AdminNavbar() {
     const {logout} = useAuthContext();
 
     return (
-        <nav className="flex items-center justify-between px-horizontal-sm py-2 z-10 shadow-md shadow-black/10">
+        <nav className="flex items-center justify-between px-horizontal py-2 z-10 shadow-md shadow-black/10">
             <Link to="/">
                 <img
                     src={logo} alt="Shifter Logo"

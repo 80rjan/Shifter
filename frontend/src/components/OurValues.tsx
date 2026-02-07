@@ -6,7 +6,7 @@ export default function OurValues() {
     const values = t("values", { returnObjects: true }) as {char: string, title: string, description: string}[]
 
     return (
-        <section className="relative flex items-center overflow-clip py-vertical-lg">
+        <section className="relative flex items-center overflow-clip py-vertical">
             <div className="absolute left-0 rounded-full w-6/10 min-h-full aspect-square bg-shifter"/>
             <div className="absolute left-0 w-1/4 h-full aspect-square bg-shifter"/>
 
@@ -14,7 +14,7 @@ export default function OurValues() {
                 <h2 className="text-6xl text-left text-white-text leading-tight"
                     dangerouslySetInnerHTML={{ __html: t("shiftBusinesses") }}></h2>
             </div>
-            <div className="flex flex-col gap-10 z-1 pr-horizontal-md">
+            <div className="flex flex-col gap-10 z-1 pr-horizontal">
                 {
                     values.map((value, index) => (
                         <div key={index}

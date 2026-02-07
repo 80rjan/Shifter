@@ -35,7 +35,7 @@ function RoadmapAI() {
 
 
     return (
-        <section className="relative overflow-clip px-horizontal-md py-vertical-md flex flex-col items-center text-black gap-12">
+        <section className="relative overflow-clip px-horizontal py-vertical flex flex-col items-center text-black gap-12">
             <img src={ShifterArrow} alt="Shifter Arrow"
                  className="absolute opacity-10 h-180 w-130 rotate-45 -top-20 right-30"/>
             <img src={ShifterArrow} alt="Shifter Arrow"

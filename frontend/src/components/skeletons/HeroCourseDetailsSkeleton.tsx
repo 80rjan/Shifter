@@ -3,7 +3,7 @@ function HeroCourseDetailsSkeleton() {
     return (
         <div className="bg-shifter py-4">
             {/*HEADER AND DESCRIPTION*/}
-            <section className="flex flex-col items-center gap-8 bg-white mx-6 px-horizontal-lg pb-12 pt-40 rounded-xl shadow-lg shadow-black/20">
+            <section className="flex flex-col items-center gap-8 bg-white mx-6 px-horizontal pb-12 pt-40 rounded-xl shadow-lg shadow-black/20">
                 {/* Title */}
                 <div className="h-12 bg-gray-300 rounded w-120 animate-pulse"></div>
 

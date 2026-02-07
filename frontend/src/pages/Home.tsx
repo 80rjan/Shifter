@@ -9,14 +9,12 @@ function Home() {
 
     return (
         <main className="bg-main">
-            <div className="px-4 py-vertical-sm">
-                <HeroHome/>
-            </div>
-            <OurServices />
+            <HeroHome/>
+            <OurServices/>
             <CollaborationSteps/>
             {/*<CoursesCarouselHome/>*/}
-            <ShifterDifferenceTable />
-            <AcoSection />
+            <ShifterDifferenceTable/>
+            <AcoSection/>
         </main>
     )
 }

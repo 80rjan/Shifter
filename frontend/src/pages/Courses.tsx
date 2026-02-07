@@ -23,11 +23,11 @@ function Courses() {
 
     return (
         <main className="font-montserrat bg-white">
-            <section className="relative flex flex-col items-center justify-center py-vertical-lg pt-top-nav-md gap-4 px-horizontal-lg shadow-sm">
+            <section className="relative flex flex-col items-center justify-center py-vertical pt-nav-top gap-4 px-horizontal shadow-sm">
                 <img
                     src={ShifterRocket}
                     alt={t("rocketAlt")}
-                    className="absolute top-top-nav-sm left-20 rotate-45 w-16 h-auto"
+                    className="absolute top-nav-top left-20 rotate-45 w-16 h-auto"
                 />
                 <h1 className="text-6xl">
                     {t("title")}

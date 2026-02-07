@@ -18,7 +18,7 @@ export default function ShifterDifferenceTable() {
     }) as DifferenceRow[];
 
     return (
-        <section className="px-horizontal-md py-vertical-md">
+        <section className="px-horizontal py-vertical">
             <div className="relative">
                 <div className="absolute h-full w-1/3 bg-cta/10 rounded-md right-1/2 translate-x-1/2 top-0 shadow-xl z-1"/>
 

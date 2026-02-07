@@ -116,7 +116,7 @@ function Learn() {
         <main className="flex flex-col flex-1 gap-0 ">
             <div className="bg-black">
                 <section className="relative border-b-2 border-white/40 overflow-clip
-            bg-shifter/90 shadow-md text-white px-horizontal-md w-full flex flex-col gap-between-sm text-left pt-top-nav-lg">
+            bg-shifter/90 shadow-md text-white px-horizontal w-full flex flex-col gap-between text-left pt-nav-top">
 
                     <img
                         src={ShifterArrow}
@@ -139,7 +139,7 @@ function Learn() {
                 </section>
             </div>
             <div className="flex-1 bg-main">
-                <section className="grid grid-cols-4 gap-x-4 gap-y-8 px-horizontal-md py-vertical-md items-stretch ">
+                <section className="grid grid-cols-4 gap-x-4 gap-y-8 px-horizontal py-vertical items-stretch ">
                     {
                         loading ?
                             new Array(8).fill(0).map((_, index) => (

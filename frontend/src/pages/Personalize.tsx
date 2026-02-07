@@ -48,7 +48,7 @@ function Personalize() {
             </section>
 
             {/* RIGHT FORM CONTAINER */}
-            <section className="relative flex flex-col justify-center items-center flex-1 px-horizontal-md gap-6">
+            <section className="relative flex flex-col justify-center items-center flex-1 px-horizontal gap-6">
                 <div className="absolute top-0 px-4 py-4 flex w-full justify-between items-center">
                     <div >
                         <img src={ShifterLogo} alt="Shifter Logo" className="w-40 h-auto object-contain"/>

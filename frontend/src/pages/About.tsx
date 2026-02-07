@@ -47,7 +47,7 @@ const About = () => {
         <main className="relative bg-main text-black-text">
             {/*Hero Section*/}
             <section
-                className="relative py-vertical-lg pt-top-nav-lg px-horizontal-md flex flex-col items-center justify-center">
+                className="relative py-vertical pt-nav-top px-horizontal flex flex-col items-center justify-center">
                 <LightBeams tilt={-50} beamCount={120} initialHeight={120 + Math.random() * 80} spikeMoveDown={40}/>
 
                 <div className="flex flex-col items-center gap-20 z-1">
@@ -91,7 +91,7 @@ const About = () => {
             </section>
 
             {/*Why Choose Us*/}
-            <section className="grid grid-cols-3 grid-rows-2 px-horizontal-md py-vertical-lg gap-20">
+            <section className="grid grid-cols-3 grid-rows-2 px-horizontal py-vertical gap-20">
                 <div className="col-span-1 flex flex-col">
                     <h2 className="text-5xl font-medium text-left "
                         dangerouslySetInnerHTML={{__html: t("whyChoose.title")}}/>
@@ -112,7 +112,7 @@ const About = () => {
             <AcoSection />
 
             {/*Mission, Vision & Purpose*/}
-            <section className="flex flex-col gap-12 px-horizontal-md py-vertical-lg ">
+            <section className="flex flex-col gap-12 px-horizontal py-vertical ">
                 {/*<h2 className="text-5xl font-medium">{t("foundations.title")}</h2>*/}
                 <MagicBento
                     textAutoHide={true}

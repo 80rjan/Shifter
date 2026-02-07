@@ -3,7 +3,7 @@ import CourseCardSkeleton from "./CourseCardSkeleton.tsx";
 
 function CoursesCarouselCourseDetailsSkeleton() {
     return (
-        <section className="flex flex-col gap-12 text-left px-horizontal-lg py-vertical-md">
+        <section className="flex flex-col gap-12 text-left px-horizontal py-vertical">
             {/* Title skeleton */}
             <div className="h-10 bg-gray-300 rounded w-1/3 animate-pulse"></div>
 

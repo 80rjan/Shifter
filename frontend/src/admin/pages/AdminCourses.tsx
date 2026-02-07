@@ -9,7 +9,7 @@ export default function AdminCourses() {
     } = useAdminCourses();
 
     return (
-        <main className="grid grid-cols-3 gap-12 px-horizontal-md py-vertical-md">
+        <main className="grid grid-cols-3 gap-12 px-horizontal py-vertical">
             {loading ? (
                 Array.from({ length: 20 }).map((_, i) => (
                     <CourseCardSkeleton key={i} />

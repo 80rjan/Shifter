@@ -6,7 +6,7 @@ export default function AcoSection() {
     const {t} = useTranslation("about");
 
     return (
-        <section className="grid grid-cols-2 gap-x-40 px-horizontal-md py-vertical-lg ">
+        <section className="grid grid-cols-2 gap-x-40 px-horizontal py-vertical ">
             <div className="col-start-1 col-span-1 flex flex-col text-left gap-12">
                 <div className="flex flex-col gap-20">
                     <div className="flex flex-col gap-6">

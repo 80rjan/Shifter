@@ -8,24 +8,10 @@ export default {
         extend: {
             spacing: {
                 // Map your spacing variables as custom spacing tokens
-                'horizontal-xl': '12rem',
-                'horizontal-lg': '10rem',
-                'horizontal-md': '7rem',
-                'horizontal-sm': '4rem',
-
-                'vertical-xl': '5rem',
-                'vertical-lg': '3rem',
-                'vertical-md': '2rem',
-                'vertical-sm': '1rem',
-
-                'top-nav-xl': '9rem',
-                'top-nav-lg': '8rem',
-                'top-nav-md': '7rem',
-                'top-nav-sm': '6rem',
-
-                'between-lg': '3rem',
-                'between-md': '2rem',
-                'between-sm': '1rem',
+                'horizontal': 'var(--spacing-horizontal)',
+                'vertical': 'var(--spacing-vertical)',
+                'nav-top': 'var(--spacing-nav-top)',
+                'between': 'var(--spacing-between)',
             },
             colors: {
                 beige: '#F0CFB5',

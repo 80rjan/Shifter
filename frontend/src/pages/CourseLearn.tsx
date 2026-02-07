@@ -106,7 +106,7 @@ function CourseLearn() {
                                 )
                             }
                             <div
-                                className="flex flex-col gap-4 flex-grow py-vertical-md px-horizontal-sm text-left text-black-text">
+                                className="flex flex-col gap-4 flex-grow py-vertical px-horizontal text-left text-black-text">
                                 <h1 className="text-4xl font-semibold">{activeLecture?.title}</h1>
                                 <p className="text-lg leading-loose">{activeLecture?.contentText}</p>
                                 {
@@ -130,7 +130,7 @@ function CourseLearn() {
                                 }
                             </div>
 
-                            <div className="px-horizontal-sm py-vertical-md w-full flex justify-between items-center">
+                            <div className="px-horizontal py-vertical w-full flex justify-between items-center">
                                 {
                                     firstLectureId !== activeLecture?.id && (
                                         <button

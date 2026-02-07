@@ -25,7 +25,7 @@ function OurServices() {
     ];
 
     return (
-        <section className="grid grid-cols-3 gap-20 justify-between py-vertical-sm pt-top-nav-lg px-horizontal-md">
+        <section className="grid grid-cols-3 gap-20 justify-between py-vertical pt-nav-top px-horizontal">
 
             {/* TEXT */}
             <div className="col-span-1 col-start-1 flex flex-col gap-6 text-black-text text-left w-full">

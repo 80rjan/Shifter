@@ -28,7 +28,7 @@ function AdminTranslateCourse() {
     }
 
     return (
-        <main className="flex flex-col gap-12 px-horizontal-md py-vertical-md">
+        <main className="flex flex-col gap-12 px-horizontal py-vertical">
             <AdminTranslateCourseInfo
                 initCourse={courseFull}
                 course={courseTranslate}
