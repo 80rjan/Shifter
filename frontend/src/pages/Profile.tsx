@@ -19,8 +19,13 @@ function Profile() {
     }
 
     return (
-        <main className="grid grid-cols-4 gap-x-12 py-vertical pt-nav-top px-horizontal bg-main flex-1">
-            <div className="col-span-1 flex flex-col gap-6">
+        <main className="flex flex-col gap-6 py-vertical pt-nav-top px-horizontal bg-main flex-1
+            sm:gap-8
+            md:gap-10
+            lg:grid lg:grid-cols-4 lg:gap-x-12">
+            <div className="flex flex-col gap-4
+                sm:gap-5
+                lg:col-span-1 lg:gap-6">
                 <ProfileInfo/>
                 {/*{*/}
                 {/*    user && (user.skillsGained || []).length > 0 &&*/}
@@ -37,13 +42,14 @@ function Profile() {
                 <button
                     onClick={logout}
                     className="hover:border-white/40 hover:bg-red hover:text-white hover:shadow-lg hover:shadow-red/50 transition-all duration-200 ease-in-out cursor-pointer
-                    py-2 rounded-sm border-2 border-red/40 text-red/80 font-semibold"
+                    py-2 rounded-sm border-2 border-red/40 text-red/80 font-semibold text-sm
+                    sm:text-base"
                 >
                     {t("logout")}
                 </button>
             </div>
 
-            <div className="col-span-3">
+            <div className="lg:col-span-3">
                 <ProfileMyProfile/>
             </div>
 

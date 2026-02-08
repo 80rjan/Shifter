@@ -53,11 +53,17 @@ function ProfileMyProfile() {
     ];
 
     return (
-        <section className="flex flex-col gap-4 items-start">
-            <h2 className="text-3xl font-semibold">{t("myProfile.title")}</h2>
+        <section className="flex flex-col gap-3 items-start
+            sm:gap-4">
+            <h2 className="text-2xl font-semibold
+                sm:text-2xl
+                md:text-3xl">{t("myProfile.title")}</h2>
             <form
                 onSubmit={handleSubmit}
-                className="shadow-md flex flex-col gap-4 px-24 py-6 border-1 border-dark-blue/10 bg-white rounded-lg w-full "
+                className="shadow-md flex flex-col gap-3 px-4 py-4 border-1 border-dark-blue/10 bg-white rounded-lg w-full
+                    sm:gap-4 sm:px-8 sm:py-5
+                    md:px-12 md:py-6
+                    lg:px-24"
             >
                 <Input
                     name={"name"}
@@ -74,12 +80,14 @@ function ProfileMyProfile() {
                     label={t("myProfile.fieldLabels.workPosition")}
                 />
                 <label className="w-full flex flex-col items-start gap-1">
-                    <span className="text-black/40 font-medium text-md peer-focused:text-shifter">
+                    <span className="text-black/40 font-medium text-sm peer-focused:text-shifter
+                        sm:text-md">
                         {t("myProfile.fieldLabels.companySize")}
                     </span>
                     <select
                         className="hover:border-1 hover:border-shifter focus:outline-none focus:border-2 focus:border-shifter
-                    border-1 border-black/40 rounded-sm py-2 px-4 text-lg text-black w-full cursor-pointer"
+                        border-1 border-black/40 rounded-sm py-1.5 px-3 text-base text-black w-full cursor-pointer
+                            sm:py-2 sm:px-4 sm:text-lg"
                         name={"companySize"}
                         value={formData.companySize}
                         onChange={e =>
@@ -95,18 +103,21 @@ function ProfileMyProfile() {
                     </select>
                 </label>
 
-                <div className="flex gap-4 items-center mt-2">
+                <div className="flex flex-col gap-3 items-center mt-2
+                    sm:flex-row sm:gap-4">
                     <button
                         className="hover:shadow-shifter/40 transition-all duration-300 ease-in-out cursor-pointer
                         shadow-md shadow-shifter/20
-                        bg-shifter px-12 py-2 w-fit text-white rounded-sm font-semibold border-2 border-white/40"
+                        bg-shifter px-8 py-2 w-full text-white rounded-sm font-semibold border-2 border-white/40 text-sm
+                            sm:px-12 sm:w-fit sm:text-base"
                         type="submit"
                     >
                         {loading ? t("myProfile.saving") : t("myProfile.saveChanges")}
                     </button>
                     {loading && <div className="h-full loader"></div>}
                     {
-                        success && <p className="text-shifter font-bold">{t("successfulUpdate")}</p>
+                        success && <p className="text-shifter font-bold text-sm
+                            sm:text-base">{t("successfulUpdate")}</p>
                     }
                 </div>
             </form>
@@ -135,10 +146,12 @@ function Input({
 }) {
     return (
         <label className="w-full flex flex-col items-start gap-1">
-            <span className="text-black/40 font-medium text-md peer-focused:text-shifter">{label}</span>
+            <span className="text-black/40 font-medium text-sm peer-focused:text-shifter
+                sm:text-md">{label}</span>
             <input
                 className="hover:border-1 hover:border-shifter focus:outline-none focus:border-2 focus:border-shifter
-                border-1 border-black/40 rounded-sm py-2 px-4 text-lg text-black w-full"
+                border-1 border-black/40 rounded-sm py-1.5 px-3 text-base text-black w-full
+                    sm:py-2 sm:px-4 sm:text-lg"
                 value={value}
                 onChange={e => func(prev => ({...prev, [name]: e.target.value}))}
                 name={name}

@@ -27,7 +27,7 @@ export default function ComingSoon() {
                 <LocalizedLink
                     to='/'
                     className="hover:shadow-black/20 transition-all duration-300 ease-in-out cursor-pointer
-                        rounded-full text-shifter px-8 sm:px-10 md:px-12 py-2 font-bold border-2 border-shifter/20
+                        rounded-lg text-shifter px-8 sm:px-10 md:px-12 py-2 font-bold border-2 border-shifter/20
                         w-full sm:w-fit shadow-md shadow-black/10 text-center text-sm sm:text-base"
                 >
                     {t("courses.homePage")}
@@ -35,7 +35,7 @@ export default function ComingSoon() {
                 <LocalizedLink
                     to='/contact'
                     className="hover:shadow-shifter/40 transition-all duration-300 ease-in-out cursor-pointer
-                        rounded-full text-white px-8 sm:px-10 md:px-12 py-2 bg-shifter font-bold border-2 border-white/40
+                        rounded-lg text-white px-8 sm:px-10 md:px-12 py-2 bg-shifter font-bold border-2 border-white/40
                         w-full sm:w-fit shadow-md shadow-shifter/20 text-center text-sm sm:text-base"
                 >
                     {t("courses.contact")}

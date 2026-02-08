@@ -19,7 +19,7 @@ export function PillsInputContactForm({label, onChange, options}: {
 
     return (
         <div className="w-full flex flex-col items-start gap-2">
-            <span className="text-black/40 font-semibold text-md">{label}</span>
+            <span className="text-black/40 font-semibold text-md peer-focused:text-shifter text-left">{label}</span>
             <div className="w-full flex flex-wrap gap-2">
                 {options.map(option => (
                     <button

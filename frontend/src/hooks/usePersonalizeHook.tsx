@@ -3,7 +3,6 @@ import {useAuthContext} from "../context/AuthContext.tsx";
 import type {UserPersonalization} from "../models/javaObjects/UserPersonalization.tsx";
 import {useNavigate} from "react-router-dom";
 import PersonalizeStepOne from "../components/registerSteps/PersonalizeStepOne.tsx";
-import PersonalizationStepTwo from "../components/registerSteps/PersonalizationStepTwo.tsx";
 import {verifyEmailApi} from "../api/verificationTokenApi.ts";
 
 export function usePersonalizeHook() {

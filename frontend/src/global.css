@@ -142,7 +142,7 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background: var(--color-white);
+    background: var(--color-main);
     width: 100%;
     margin: 0 0;
     padding: 0;

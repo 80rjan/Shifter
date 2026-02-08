@@ -10,7 +10,7 @@ export default function FooterSmall() {
     const {t} = useTranslation("footer");
 
     return (
-        <footer className="flex flex-col sm:flex-row justify-between items-center gap-6 sm:gap-4 px-horizontal py-4 bg-main">
+        <footer className="flex flex-col sm:flex-row justify-between items-center gap-6 sm:gap-4 px-horizontal py-4 bg-main mt-auto">
             <LocalizedLink to="/">
                 <img src={ShifterLogo} alt="Shifter - Business Consulting, Mentoring & Online Courses Logo"
                      className="h-8 md:h-10"

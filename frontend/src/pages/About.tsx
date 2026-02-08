@@ -41,89 +41,178 @@ const About = () => {
         }
     ];
 
-
-
     return (
         <main className="relative bg-main text-black-text">
             {/*Hero Section*/}
-            <section
-                className="relative py-vertical pt-nav-top px-horizontal flex flex-col items-center justify-center">
-                <LightBeams tilt={-50} beamCount={120} initialHeight={120 + Math.random() * 80} spikeMoveDown={40}/>
+            <section className="relative py-vertical pt-nav-top px-horizontal">
+                <div className="max-w-screen-2xl mx-auto flex flex-col items-center justify-center">
+                    <LightBeams tilt={-50} beamCount={240} initialHeight={120 + Math.random() * 80} spikeMoveDown={40}/>
 
-                <div className="flex flex-col items-center gap-20 z-1">
-                    <div className="flex flex-col  gap-4 max-w-3/4">
-                        <h1 className="text-7xl font-semibold" dangerouslySetInnerHTML={{__html: t("hero.title")}}/>
-                        <p className="text-xl font-light" dangerouslySetInnerHTML={{__html: t("hero.description")}}/>
+                    <div className="flex flex-col items-center gap-10 z-10
+                        sm:gap-12
+                        md:gap-16
+                        lg:gap-20">
+                        <div className="flex flex-col gap-3 w-full text-center
+                            sm:gap-4
+                            md:max-w-[90%]
+                            lg:max-w-[75%]">
+                            <h1 className="text-3xl font-semibold
+                                sm:text-4xl
+                                md:text-5xl
+                                lg:text-6xl
+                                xl:text-7xl
+                                2xl:text-8xl"
+                                dangerouslySetInnerHTML={{__html: t("hero.title")}}/>
+                            <p className="text-sm font-light
+                                sm:text-base
+                                md:text-lg
+                                lg:text-xl
+                                xl:text-xl
+                                2xl:text-2xl"
+                               dangerouslySetInnerHTML={{__html: t("hero.description")}}/>
+                        </div>
+
+                        <div className="flex flex-col gap-6 items-center w-full
+                            sm:flex-row sm:justify-evenly sm:items-stretch">
+                            <div className="text-center">
+                                <h2 className="text-2xl font-bold
+                                    sm:text-3xl
+                                    md:text-4xl
+                                    lg:text-3xl
+                                    xl:text-4xl">
+                                    <CountUp start={0} end={250} duration={4} separator={"."}/>+
+                                </h2>
+                                <p className="font-light whitespace-nowrap text-sm
+                                    sm:text-base
+                                    md:text-lg
+                                    lg:text-base">
+                                    {t("stats.clients")}
+                                </p>
+                            </div>
+
+                            <div className="hidden sm:block w-px bg-main/80"/>
+
+                            <div className="text-center">
+                                <h2 className="text-2xl font-bold
+                                    sm:text-3xl
+                                    md:text-4xl
+                                    lg:text-3xl
+                                    xl:text-4xl">
+                                    <CountUp start={0} end={2000} duration={4} separator={"."}/>+
+                                </h2>
+                                <p className="font-light whitespace-nowrap text-sm
+                                    sm:text-base
+                                    md:text-lg
+                                    lg:text-base">
+                                    {t("stats.hours")}
+                                </p>
+                            </div>
+
+                            <div className="hidden sm:block w-px bg-main/80"/>
+
+                            <div className="text-center">
+                                <h2 className="text-2xl font-bold
+                                    sm:text-3xl
+                                    md:text-4xl
+                                    lg:text-3xl
+                                    xl:text-4xl">
+                                    <CountUp start={0} end={5} duration={4} separator={"."}/>+
+                                </h2>
+                                <p className="font-light whitespace-nowrap text-sm
+                                    sm:text-base
+                                    md:text-lg
+                                    lg:text-base">
+                                    {t("stats.years")}
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="flex justify-evenly items-stretch w-full">
-                        <div>
-                            <h2 className="text-3xl font-bold"><CountUp start={0} end={250} duration={4}
-                                                                        separator={"."}/>+</h2>
-                            <p className="font-light whitespace-nowrap">{t("stats.clients")}</p>
-                        </div>
-
-                        <div className="w-px bg-main/80"/>
-
-                        <div>
-                            <h2 className="text-3xl font-bold"><CountUp start={0} end={2000} duration={4}
-                                                                        separator={"."}/>+</h2>
-                            <p className="font-light whitespace-nowrap">{t("stats.hours")}</p>
-                        </div>
-
-                        <div className="w-px bg-main/80"/>
-
-                        <div>
-                            <h2 className="text-3xl font-bold"><CountUp start={0} end={5} duration={4} separator={"."}/>+
-                            </h2>
-                            <p className="font-light whitespace-nowrap">{t("stats.years")}</p>
-                        </div>
-                    </div>
+                    <div
+                        className="absolute bottom-0 w-full h-[30%]"
+                        style={{
+                            background: "linear-gradient(to bottom, rgba(248,248,248,0) 0%, rgba(248,248,248,1) 100%)",
+                            pointerEvents: "none"
+                        }}
+                    />
                 </div>
-
-                <div
-                    className="absolute bottom-0 w-full h-3/10"
-                    style={{
-                        background: "linear-gradient(to bottom, rgba(248,248,248,0) 0%, rgba(248,248,248,1) 100%)",
-                        pointerEvents: "none"
-                    }}
-                />
             </section>
 
             {/*Why Choose Us*/}
-            <section className="grid grid-cols-3 grid-rows-2 px-horizontal py-vertical gap-20">
-                <div className="col-span-1 flex flex-col">
-                    <h2 className="text-5xl font-medium text-left "
-                        dangerouslySetInnerHTML={{__html: t("whyChoose.title")}}/>
-                </div>
+            <section className="px-horizontal py-vertical">
+                <div className="max-w-screen-2xl mx-auto grid grid-cols-1 gap-8
+                    sm:grid-cols-2 sm:gap-10
+                    md:gap-12
+                    lg:grid-cols-3 lg:grid-rows-2 lg:gap-16
+                    xl:gap-20">
 
-                {reasons.map((reason, index) => (
-                    <article key={index} className="col-span-1 flex flex-col gap-6 items-center">
-                        {reason.icon}
-                        <div className="flex flex-col gap-2 items-center">
-                            <h3 className="text-3xl font-bold">{reason.title}</h3>
-                            <p className="text-black-text/60">{reason.description}</p>
-                        </div>
-                    </article>
-                ))}
+                    <div className="flex flex-col text-center
+                        sm:col-span-2 sm:text-left
+                        lg:col-span-1">
+                        <h2 className="text-3xl font-medium
+                            sm:text-4xl
+                            md:text-5xl
+                            lg:text-4xl
+                            xl:text-5xl
+                            2xl:text-6xl"
+                            dangerouslySetInnerHTML={{__html: t("whyChoose.title")}}/>
+                    </div>
+
+                    {reasons.map((reason, index) => (
+                        <article key={index} className="flex flex-col gap-4 items-center text-center
+                            sm:col-span-1 sm:gap-5
+                            md:gap-6
+                            lg:gap-6
+                            xl:gap-6">
+                            <div className="[&>svg]:w-12 [&>svg]:h-12
+                                sm:[&>svg]:w-14 sm:[&>svg]:h-14
+                                md:[&>svg]:w-16 md:[&>svg]:h-16
+                                lg:[&>svg]:w-16 lg:[&>svg]:h-16
+                                xl:[&>svg]:w-18 xl:[&>svg]:h-18">
+                                {reason.icon}
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <h3 className="text-xl font-bold
+                                    sm:text-2xl
+                                    md:text-3xl
+                                    lg:text-2xl
+                                    xl:text-3xl
+                                    2xl:text-4xl">
+                                    {reason.title}
+                                </h3>
+                                <p className="text-sm text-black-text/60
+                                    sm:text-base
+                                    md:text-lg
+                                    lg:text-base
+                                    xl:text-lg
+                                    2xl:text-xl">
+                                    {reason.description}
+                                </p>
+                            </div>
+                        </article>
+                    ))}
+                </div>
             </section>
 
             {/*About Aco Section*/}
             <AcoSection />
 
             {/*Mission, Vision & Purpose*/}
-            <section className="flex flex-col gap-12 px-horizontal py-vertical ">
-                {/*<h2 className="text-5xl font-medium">{t("foundations.title")}</h2>*/}
-                <MagicBento
-                    textAutoHide={true}
-                    enableStars={false}
-                    enableSpotlight={true}
-                    enableBorderGlow={true}
-                    enableTilt={true}
-                    enableMagnetism={true}
-                    clickEffect={false}
-                    spotlightRadius={300}
-                />
+            <section className="px-horizontal py-vertical">
+                <div className="max-w-screen-2xl mx-auto flex flex-col gap-8
+                    sm:gap-10
+                    md:gap-12">
+                    <MagicBento
+                        textAutoHide={true}
+                        enableStars={false}
+                        enableSpotlight={true}
+                        enableBorderGlow={true}
+                        enableTilt={true}
+                        enableMagnetism={true}
+                        clickEffect={false}
+                        spotlightRadius={300}
+                    />
+                </div>
             </section>
 
             {/*Values*/}
