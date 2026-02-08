@@ -2,7 +2,7 @@
   "hero": {
     "label": "Shift 2 Win",
     "title": "Build Sustainable Growth with Strategies that Fit Your Business.",
-    "description": "For <span class='shadow-md px-4 py-2/3 xl:px-4 xl:py-1 border-1 border-white/40 bg-white/25 text-white font-black rounded-full'>family businesses</span> and <span class='shadow-md px-4 py-2/3 xl:px-4 xl:py-1 border-1 border-white/40 bg-white/25 text-white font-black rounded-full'>leaders</span> navigating through growth, transitions, or succession who want clear actionable steps - tailored to their needs.",
+    "description": "For <span class='shadow-md px-4 py-0.5 sm:py-0.75 md:py-1 border-1 border-white/40 bg-white/25 text-white font-black rounded-full'>family businesses</span> and <span class='shadow-md px-4 py-0.5 sm:py-0.75 md:py-1 border-1 border-white/40 bg-white/25 text-white font-black rounded-full'>leaders</span> navigating through growth, transitions, or succession who want clear actionable steps - tailored to their needs.",
     "cta": {
       "freeConsultation": "Book a Free Consultation",
       "contact": "Get In Touch"
@@ -50,7 +50,7 @@
     ]
   },
   "collaborationSteps": {
-    "heading": "Your path to a <strong>more successful business</strong> starts here",
+    "heading": "Your path to a more <strong class='font-bold'>successful business</strong> starts here",
     "button": "Get Started",
     "step1": {
       "beforeConsultation": {
@@ -78,7 +78,10 @@
   "shifterDifferenceTable": {
     "heading": {
       "traditionalApproach": "Traditional Approach",
-      "shifterApproach": "With Shifter"
+      "shifterApproach": "With Shifter",
+      "withShifter": "With Shifter",
+      "withoutShifter": "Without",
+      "theShifterDifference": "The Shifter Difference"
     },
     "rows": [
       {

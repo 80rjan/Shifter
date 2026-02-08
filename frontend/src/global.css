@@ -39,7 +39,7 @@
 
     /* mobiles */
     --spacing-horizontal: 1rem;
-    --spacing-vertical: 3rem;
+    --spacing-vertical: 2.5rem;
     --spacing-nav-top: 7rem;
     --spacing-between: 2rem;
 }
@@ -47,7 +47,7 @@
 @media (min-width: 640px) {         /* sm breakpoint (large phones in landscape & small tablets) */
     :root {
         --spacing-horizontal: 2rem;
-        --spacing-vertical: 2rem;
+        --spacing-vertical: 3rem;
         --spacing-nav-top: 7rem;
         --spacing-between: 3rem;
     }
@@ -56,7 +56,7 @@
 @media (min-width: 768px) {     /* md breakpoint (tablets) */
     :root {
         --spacing-horizontal: 3rem;
-        --spacing-vertical: 2rem;
+        --spacing-vertical: 3rem;
         --spacing-nav-top: 7rem;
         --spacing-between: 4rem;
     }
@@ -156,7 +156,7 @@
 /*}*/
 
 body {
-    background: #EEE;
+    background: var(--color-main);
     margin: 0;
     display: flex;
     flex-direction: column;

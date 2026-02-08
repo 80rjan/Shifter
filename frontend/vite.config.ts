@@ -10,7 +10,7 @@ export default defineConfig({
         tailwindcss(),
     ],
     build: {
-        outDir: '../docs'  // relative to frontend/, outputs to root/dist
+        outDir: '../docs'
     },
     base: '/Shifter/'
 })

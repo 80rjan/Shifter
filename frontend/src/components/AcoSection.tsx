@@ -1,18 +1,12 @@
 import {useTranslation} from "react-i18next";
-import {LocalizedLink} from "./links/LocalizedLink.tsx";
-import {ArrowRight} from "lucide-react";
 
 export default function AcoSection() {
     const {t} = useTranslation("about");
 
     return (
         <section className="px-horizontal py-vertical">
-            <div className="max-w-screen-2xl mx-auto grid grid-cols-1 gap-8
-                sm:gap-10
-                md:gap-12
-                lg:grid-cols-2 lg:gap-20
-                xl:gap-32
-                2xl:gap-40">
+            <div className="max-w-screen-2xl mx-auto grid grid-cols-1 gap-between
+                lg:grid-cols-2">
 
                 {/* Text Content */}
                 <div className="flex flex-col text-left gap-8
@@ -27,15 +21,15 @@ export default function AcoSection() {
                         <div className="flex flex-col gap-4
                             sm:gap-5
                             md:gap-6">
-                            <div className="flex flex-col gap-2">
-                                <h2 className="text-3xl font-semibold
-                                    sm:text-4xl
-                                    md:text-5xl
-                                    lg:text-4xl
+                            <div className="flex flex-col gap-1">
+                                <h2 className="text-2xl font-bold
+                                    sm:text-3xl
+                                    md:text-4xl
+                                    lg:text-5xl
                                     xl:text-5xl
                                     2xl:text-6xl"
                                     dangerouslySetInnerHTML={{__html: t("about.aco")}}/>
-                                <p className="text-lg
+                                <p className="text-lg font-medium
                                     sm:text-xl
                                     md:text-2xl
                                     lg:text-xl
@@ -43,33 +37,33 @@ export default function AcoSection() {
                                     2xl:text-3xl"
                                    dangerouslySetInnerHTML={{__html: t("about.founderAndCeo")}}/>
                             </div>
-                            <p className="text-sm
+                            <p className="text-base leading-relaxed
                                 sm:text-base
                                 md:text-lg
-                                lg:text-base
-                                xl:text-lg
+                                lg:text-lg
+                                xl:text-xl
                                 2xl:text-xl"
                                dangerouslySetInnerHTML={{__html: t("about.description")}}/>
                         </div>
 
-                        <LocalizedLink to={"/free-consultation"}
-                                       className="hover:shadow-shifter/60 shadow-shifter/40 transition-all duration-250 ease-in-out
-                                       shadow-md border-2 border-white/40 flex gap-3 items-center justify-center text-white bg-shifter px-6 py-2
-                                        w-full rounded-md group font-medium text-sm
-                                        sm:gap-4 sm:px-8 sm:py-3 sm:text-base sm:justify-start sm:w-fit
-                                        md:text-lg
-                                        lg:text-base
-                                        xl:text-lg
-                                        2xl:text-xl">
-                            {t("about.cta")}
-                            <ArrowRight className="w-4 h-4
-                                sm:w-5 sm:h-5
-                                md:w-6 md:h-6
-                                lg:w-5 lg:h-5
-                                xl:w-6 xl:h-6
-                                group-hover:translate-x-1 transition-all duration-250 ease-in-out"
-                                        strokeWidth={1.5}/>
-                        </LocalizedLink>
+                        {/*<LocalizedLink to={"/free-consultation"}*/}
+                        {/*               className="hover:shadow-shifter/60 shadow-shifter/40 transition-all duration-250 ease-in-out*/}
+                        {/*               shadow-md border-2 border-white/40 flex gap-3 items-center justify-center text-white bg-shifter px-6 py-2*/}
+                        {/*                w-full rounded-md group font-medium text-sm*/}
+                        {/*                sm:gap-4 sm:px-8 sm:py-3 sm:text-base sm:justify-start sm:w-fit*/}
+                        {/*                md:text-lg*/}
+                        {/*                lg:text-base*/}
+                        {/*                xl:text-lg*/}
+                        {/*                2xl:text-xl">*/}
+                        {/*    {t("about.cta")}*/}
+                        {/*    <ArrowRight className="w-4 h-4*/}
+                        {/*        sm:w-5 sm:h-5*/}
+                        {/*        md:w-6 md:h-6*/}
+                        {/*        lg:w-5 lg:h-5*/}
+                        {/*        xl:w-6 xl:h-6*/}
+                        {/*        group-hover:translate-x-1 transition-all duration-250 ease-in-out"*/}
+                        {/*                strokeWidth={1.5}/>*/}
+                        {/*</LocalizedLink>*/}
                     </div>
                 </div>
 

@@ -26,26 +26,25 @@ function OurServices() {
 
     return (
         <section className="px-horizontal py-vertical">
-            <div className="flex flex-col gap-8 max-w-screen-2xl mx-auto
-                lg:grid lg:grid-cols-3 lg:gap-12 xl:gap-24">
+            <div className="flex flex-col gap-between max-w-screen-2xl mx-auto
+                lg:grid lg:grid-cols-3 ">
 
                 {/* TEXT */}
                 <div className="flex flex-col gap-2 text-black-text text-left
                     md:gap-4
                     lg:col-span-1">
-                    <h2 className="text-3xl font-bold
-                        sm:text-4xl
-                        md:text-5xl
+                    <h2 className="text-2xl font-bold
+                        sm:text-3xl
+                        md:text-4xl
                         lg:text-5xl
-                        xl:text-6xl
-                        2xl:text-7xl">
+                        xl:text-5xl
+                        2xl:text-6xl">
                         {t("ourServices.heading")}
                     </h2>
-                    <p className="text-sm font-light opacity-80
-                        sm:text-base
+                    <p className="text-base font-light
+                        sm:text-lg
                         md:text-xl
-                        lg:text-xl
-                        xl:text-2xl
+                        lg:text-2xl
                         2xl:text-3xl">
                         {t("ourServices.description")}
                     </p>
@@ -86,20 +85,20 @@ function OurServices() {
                                     md:gap-4
                                     2xl:gap-5">
                                     <div className="flex flex-col gap-2">
-                                        <h3 className="text-xl font-bold
-                                            sm:text-xl
-                                            md:text-2xl
-                                            lg:text-2xl
-                                            xl:text-2xl
-                                            2xl:text-3xl">
+                                        <h3 className="text-xl font-semibold
+                                            sm:text-2xl
+                                            md:text-3xl
+                                            lg:text-3xl
+                                            xl:text-3xl
+                                            2xl:text-4xl">
                                             {t(`${card.path}.title`)}
                                         </h3>
-                                        <p className="text-sm font-light
+                                        <p className="text-base font-light
                                             sm:text-base
-                                            md:text-base
-                                            lg:text-lg
-                                            xl:text-lg
-                                            2xl:text-xl">
+                                            md:text-lg
+                                            lg:text-xl
+                                            xl:text-xl
+                                            2xl:text-3xl">
                                             {t(`${card.path}.description`)}
                                         </p>
                                     </div>
@@ -108,8 +107,8 @@ function OurServices() {
                                         className="font-medium underline hover:opacity-80 transition-opacity duration-200 text-sm
                                             sm:text-sm
                                             md:text-base
-                                            lg:text-base
-                                            xl:text-base
+                                            lg:text-lg
+                                            xl:text-lg
                                             2xl:text-lg">
                                         {t("ourServices.discoverMore")}
                                     </LocalizedLink>

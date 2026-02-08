@@ -2,7 +2,7 @@
   "hero": {
     "label": "Shift 2 Win",
     "title": "Изгради одржлив раст со стратегии прилагодени на твојот бизнис.",
-    "description": "За <span class='shadow-md px-4 py-1 border-1 border-white/40 bg-white/25 text-white font-black rounded-full'>семејни бизниси</span> и <span class='shadow-md px-4 py-1 border-1 border-white/40 bg-white/25 text-white font-black rounded-full'>лидери</span> кои навигираат низ раст, транзиција или наследување и сакаат јасни применливи чекори - прилагодени за нивните потреби.",
+    "description": "За <span class='shadow-md px-4 py-0.5 sm:py-0.75 md:py-1 border-1 border-white/40 bg-white/25 text-white font-black rounded-full'>семејни бизниси</span> и <span class='shadow-md px-4 py-0.5 sm:py-0.75 md:py-1 border-1 border-white/40 bg-white/25 text-white font-black rounded-full'>лидери</span> кои навигираат низ раст, транзиција или наследување и сакаат јасни применливи чекори - прилагодени за нивните потреби.",
     "cta": {
       "freeConsultation": "Закажи бесплатна консултација",
       "contact": "Контактирај не"
@@ -50,7 +50,7 @@
     ]
   },
   "collaborationSteps": {
-    "heading": "Вашиот пат до <strong>поуспешен бизнис</strong> започнува тука",
+    "heading": "Вашиот пат до <strong class='font-bold'>поуспешен бизнис</strong> започнува тука",
     "button": "Започни сега",
     "step1": {
       "beforeConsultation": {
@@ -78,7 +78,10 @@
   "shifterDifferenceTable": {
     "heading": {
       "traditionalApproach": "Традиционален пристап",
-      "shifterApproach": "Со Shifter"
+      "shifterApproach": "Без Shifter",
+      "withShifter": "Без Shifter",
+      "withoutShifter": "Без",
+      "theShifterDifference": "Зашто Shifter?"
     },
     "rows": [
       {

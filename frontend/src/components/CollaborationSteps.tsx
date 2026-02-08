@@ -35,10 +35,7 @@ export default function CollaborationSteps() {
 
     return (
         <section className="relative bg-shifter text-white py-vertical px-horizontal">
-            <div className="max-w-screen-2xl mx-auto flex flex-col gap-8 items-center
-                sm:gap-10
-                md:gap-12
-                lg:gap-between">
+            <div className="max-w-screen-2xl mx-auto flex flex-col gap-between items-center">
 
                 {/* Gradients */}
                 <div className="absolute top-0 w-full h-[30%] sm:h-[25%]" style={{
@@ -51,12 +48,12 @@ export default function CollaborationSteps() {
                 }} />
 
                 {/* Heading */}
-                <h2 className="text-3xl font-light z-1 text-center
-                    sm:text-4xl
-                    md:text-5xl
+                <h2 className="text-2xl font-light z-1 text-center
+                    sm:text-3xl
+                    md:text-4xl
                     lg:text-5xl
-                    xl:text-6xl
-                    2xl:text-7xl"
+                    xl:text-5xl
+                    2xl:text-6xl"
                     dangerouslySetInnerHTML={{ __html: t("collaborationSteps.heading") }} />
 
                 {/* Steps - Mobile: Vertical, Desktop: Horizontal with line */}
@@ -68,24 +65,24 @@ export default function CollaborationSteps() {
                         {steps.map((step, i) => (
                             <div
                                 key={i}
-                                className="flex flex-col gap-3 border-l-4 border-white/60 pl-6
-                                    sm:gap-4 sm:pl-8
+                                className="flex flex-col gap-2 border-l-4 border-white/60 pl-6
+                                    sm:pl-8
                                     md:pl-10"
                             >
-                                <strong className="text-3xl font-bold text-white/60
-                                    sm:text-4xl
-                                    md:text-5xl">
+                                <strong className="text-2xl font-bold text-white/60
+                                    sm:text-3xl
+                                    md:text-4xl">
                                     {step.number}
                                 </strong>
-                                <div className="flex flex-col gap-2">
+                                <div className="flex flex-col gap-1">
                                     <h3 className="text-xl font-semibold
                                         sm:text-2xl
                                         md:text-3xl">
                                         {step.title}
                                     </h3>
-                                    <p className="text-sm text-white/70
-                                        sm:text-base
-                                        md:text-lg">
+                                    <p className="text-base text-white/70
+                                        sm:text-lg
+                                        md:text-xl">
                                         {step.description}
                                     </p>
                                 </div>

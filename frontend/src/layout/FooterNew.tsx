@@ -43,12 +43,12 @@ function FooterNew() {
                     2xl:text-6xl">
                     {t("cta.title")}
                 </h2>
-                <p className="text-sm opacity-80
-                    sm:text-base
-                    md:text-lg
-                    lg:text-xl
-                    xl:text-xl
-                    2xl:text-2xl">
+                <p className="text-base opacity-80
+                    sm:text-lg
+                    md:text-xl
+                    lg:text-2xl
+                    xl:text-2xl
+                    2xl:text-3xl">
                     {t("cta.subtitle")}
                 </p>
                 <div className="mt-4 w-full flex justify-center
@@ -59,12 +59,12 @@ function FooterNew() {
                         to={user?.usedFreeConsultation ? "/contact" : "/free-consultation"}
                         className="hover:shadow-shifter/60 transition-all duration-200 ease-in-out cursor-pointer
                         flex items-center justify-center gap-2 shadow-md shadow-shifter/40 border-2 border-white/20
-                        bg-shifter py-2 px-6 rounded-lg text-white group text-xs font-semibold w-full
-                        sm:w-fit sm:px-8 sm:text-sm
-                        md:text-base
-                        lg:text-lg
-                        xl:text-lg
-                        2xl:text-xl"
+                        bg-shifter py-2 px-6 rounded-lg text-white group text-sm font-semibold w-full
+                        sm:w-fit sm:px-8 sm:text-base
+                        md:text-lg
+                        lg:text-xl
+                        xl:text-xl
+                        2xl:text-2xl"
                     >
                         {user?.usedFreeConsultation
                             ? t("cta.button.contact")
