@@ -1,6 +1,5 @@
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
+
 import logo from "../../../public/Shifter-S2W-White-Transparent.png";
 import NavbarLink from "../links/NavbarLink.tsx";
 import {LocalizedLink} from "../links/LocalizedLink.tsx";

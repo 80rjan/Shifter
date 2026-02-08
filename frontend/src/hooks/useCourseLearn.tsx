@@ -184,7 +184,7 @@ export function useCourseLearn(courseId: number, accessToken: string) {
                             userCourseProgress: {
                                 ...lecture.userCourseProgress,
                                 completed: isComplete,
-                                completedAt: isComplete ? new Date() : null,
+                                completedAt: isComplete ? new Date().toISOString() : null,
                             },
                         }
                         : lecture

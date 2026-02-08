@@ -30,7 +30,7 @@ function Input({label, name, value, type, onChange, width, disabled, translateFr
                 hover:file:bg-black/20
                 ${type === "file" ? "cursor-pointer" : ""}`}
             />
-            <InitialValueForTranslation value={translateFrom}/>
+            <InitialValueForTranslation value={translateFrom.toString()}/>
         </div>
     )
 }

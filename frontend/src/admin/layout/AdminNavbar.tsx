@@ -1,6 +1,5 @@
 import {Link} from "react-router-dom";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
+
 import logo from "../../../public/Shifter-S2W-Transparent.png"
 import {useAuthContext} from "../../context/AuthContext.tsx";
 import AdminNavbarLink from "../components/AdminNavbarLink.tsx";

@@ -3,6 +3,7 @@ import type {UserPersonalization} from "../../models/javaObjects/UserPersonaliza
 import PersonalizationSlider from "../inputs/PersonalizationSlider.tsx";
 import {fetchCoursesSkillsApi} from "../../api/courseApi.ts";
 import {useTranslation} from "react-i18next";
+import type {Language} from "../../models/types/Language.tsx";
 
 function PersonalizationStepThree({setUser, user, setError}: {
     setUser: React.Dispatch<React.SetStateAction<UserPersonalization>>,
@@ -10,12 +11,12 @@ function PersonalizationStepThree({setUser, user, setError}: {
     setError: React.Dispatch<React.SetStateAction<string>>,
 }){
     const [skills, setSkills] = React.useState<string[]>([]);
-    const { t } = useTranslation("personalize");
+    const { i18n, t } = useTranslation("personalize");
 
     useEffect(() => {
         const fetchSkills = async () => {
             try {
-                const skillsData = await fetchCoursesSkillsApi();
+                const skillsData = await fetchCoursesSkillsApi(i18n.language as Language);
                 setSkills(skillsData);
             } catch (err) {
                 console.error("Failed to fetch skills", err);
@@ -26,12 +27,12 @@ function PersonalizationStepThree({setUser, user, setError}: {
     }, []);
 
     useEffect(() => {
-        if (user.desiredSkills.length === 0) {
+        if (user.tagIdList.length === 0) {
             setError(t("stepThree.errorNoSkill"));
         } else {
             setError("");
         }
-    }, [user.desiredSkills]);
+    }, [user.tagIdList]);
 
     return (
         <section
@@ -40,9 +41,8 @@ function PersonalizationStepThree({setUser, user, setError}: {
                 skills.length > 0 &&
                 <PersonalizationSlider
                     label={t("stepThree.desiredSkills")}
-                    name={"desiredSkills"}
                     id={"desired-skills"}
-                    options={skills}
+                    allOptions={skills}
                     setUser={setUser}
                     user={user}
                 />

@@ -4,8 +4,7 @@ import {fetchExpertFreeTimeSlotsApi, scheduleMeetingApi} from "../api/meetingApi
 import type {UserMeetingInfoRequest} from "../models/UserMeetingInfoRequest.tsx";
 import { useTranslation } from "react-i18next";
 import {useUserContext} from "../context/UserContext.tsx";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
+
 import Arrow from "../../public/Shifter-Arrow-White.png";
 
 function FreeConsultation() {

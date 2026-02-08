@@ -2,8 +2,7 @@ import {useEnrolledCourses} from "../hooks/useEnrolledCourses.tsx";
 import {useState} from "react";
 import CourseCardLearnDashboard from "../components/CourseCardLearnDashboard.tsx";
 import CourseCardEnrolledSkeleton from "../components/skeletons/CourseCardEnrolledSkeleton.tsx";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
+
 import ShifterArrow from "../../public/Shifter-Arrow-White.png";
 import {useUserContext} from "../context/UserContext.tsx";
 import {useTranslation} from "react-i18next";

@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
+
 import ShifterArrow from "../../../public/Shifter-Arrow.png";
 
 function CourseDetailsInfoSkeleton() {

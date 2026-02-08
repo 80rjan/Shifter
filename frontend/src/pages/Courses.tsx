@@ -1,8 +1,7 @@
 import { useTranslation } from "react-i18next";
 import CoursesFilters from "../components/CoursesFilters.tsx";
 import CoursesGrid from "../components/CoursesGrid.tsx";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
+
 import ShifterRocket from "../../public/Rocket-Blue-Fire.png";
 import CoursesFiltersSkeleton from "../components/skeletons/CoursesFiltersSkeleton.tsx";
 import CoursesGridSkeleton from "../components/skeletons/CoursesGridSkeleton.tsx";

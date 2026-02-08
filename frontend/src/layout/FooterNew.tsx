@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
+
 import ShifterLogo from "../../public/Shifter-S2W-Transparent.png";
 import {useAuthContext} from "../context/AuthContext.tsx";
 import LinkedIn from "../assets/icons/LinkedIn.tsx";

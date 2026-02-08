@@ -47,7 +47,7 @@ function HeroCourseDetails({course, enrollUser}: { course: CourseDetail | null, 
                 <h1 className="text-5xl font-semibold">{course?.title}</h1>
                 <p>{course?.description}</p>
                 {
-                    enrollments && enrollments.some(enrollment => enrollment.courseId === course?.id) ?
+                    enrollments && enrollments.some(enrollment => enrollment.courseVersionId === course?.id) ?
                         <div
                             className="flex mt-12 gap-4 items-center bg-gray/60 backdrop-blur-lg border-3 border-black/5 px-2 py-1 w-fit rounded-full">
 

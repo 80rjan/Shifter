@@ -2,7 +2,6 @@ import {useAdminTranslateCourse} from "../hooks/useAdminTranslateCourse.tsx";
 import AdminTranslateCourseInfo from "../components/translatecourse/AdminTranslateCourseInfo.tsx";
 import AdminTranslateCourseContent from "../components/translatecourse/AdminTranslateCourseContent.tsx";
 import AdminTranslateCourseSkeleton from "../components/skeletons/AdminTranslateCourseSkeleton.tsx";
-import {useEffect} from "react";
 
 function AdminTranslateCourse() {
     const {

@@ -1,8 +1,6 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
+
 import ShifterArrow from "../../public/Shifter-Arrow-White.png";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
+
 import ShifterLogo from "../../public/Shifter-S2W-Transparent.png";
 import { usePersonalizeHook } from "../hooks/usePersonalizeHook.tsx";
 import { Box, Step, StepLabel, Stepper } from "@mui/material";

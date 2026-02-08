@@ -1,6 +1,5 @@
 import {Check, X} from "lucide-react";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
+
 import logo from "../../public/Shifter-Transparent.png"
 import {useTranslation} from "react-i18next";
 

@@ -5,8 +5,7 @@ import type {CourseLearn} from "../models/javaObjects/course/CourseLearn.tsx";
 import type {CoursePreviewEnrolled} from "../models/javaObjects/course/CoursePreviewEnrolled.tsx";
 import type {Language} from "../models/types/Language.tsx";
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
+
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 // export const fetchCoursesApi = async (accessToken?: string, params?: FilterParams, signal?: AbortSignal): Promise<CoursePreview[]> => {

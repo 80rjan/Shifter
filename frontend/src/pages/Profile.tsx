@@ -1,17 +1,14 @@
 import ProfileInfo from "../components/ProfileInfo.tsx";
-import ProfileSkillsInterests from "../components/ProfileSkills&Interests.tsx";
 import {useAuthContext} from "../context/AuthContext.tsx";
 import ProfileMyProfile from "../components/ProfileMyProfile.tsx";
 import ProfileSkeleton from "../components/skeletons/ProfileSkeleton.tsx";
-import React from "react";
-import ProfileModalAddSkillsInterests from "../components/ProfileModalAddSkills&Interests.tsx";
 import {useTranslation} from "react-i18next";
 import {useUserContext} from "../context/UserContext.tsx";
 
 function Profile() {
     const {logout} = useAuthContext();
-    const {user, isUserLoading} = useUserContext();
-    const [showModalInterests, setShowModalInterests] = React.useState(false);
+    const {isUserLoading} = useUserContext();
+    // const [showModalInterests, setShowModalInterests] = useState(false);
     const {t} = useTranslation("profile");
 
     if (isUserLoading) {

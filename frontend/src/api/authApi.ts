@@ -2,8 +2,7 @@ import axios from "axios";
 import type {UserPersonalization} from "../models/javaObjects/UserPersonalization.tsx";
 import type {User} from "../models/javaObjects/User.tsx";
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
+
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export const refreshAccessTokenApi = async (): Promise<{ user: User, accessToken: string }> => {

@@ -1,8 +1,7 @@
 import axios from "axios";
 import type {CourseFull} from "../types/CourseFull.tsx";
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
+
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export const createCourseApi = async (course: CourseFull, accessToken?: string): Promise<number> => {

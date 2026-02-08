@@ -1,13 +1,10 @@
 import Slider from 'react-slick';
 import CourseCard from "./CourseCard.tsx";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
+
 import 'slick-carousel/slick/slick.css';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
+
 import 'slick-carousel/slick/slick-theme.css';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
+
 import "../slick-custom.css";
 
 import { useCourseStorage } from "../context/CourseStorage.ts";

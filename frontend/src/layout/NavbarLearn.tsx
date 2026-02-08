@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
+
 import logo from "../../public/Shifter-S2W-White-Transparent.png";
 import {useLocation} from "react-router-dom";
 import {fromUrlFormat} from "../utils/toUrlFormat.ts";

@@ -1,6 +1,5 @@
 import { useState } from 'react';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
+
 import logo from "../../public/Shifter-S2W-White-Transparent.png"
 import NavbarLink from "../components/links/NavbarLink.tsx";
 import {useTranslation} from "react-i18next";
