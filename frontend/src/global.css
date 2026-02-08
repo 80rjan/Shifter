@@ -39,7 +39,7 @@
 
     /* mobiles */
     --spacing-horizontal: 1rem;
-    --spacing-vertical: 1rem;
+    --spacing-vertical: 3rem;
     --spacing-nav-top: 7rem;
     --spacing-between: 2rem;
 }
@@ -47,7 +47,7 @@
 @media (min-width: 640px) {         /* sm breakpoint (large phones in landscape & small tablets) */
     :root {
         --spacing-horizontal: 2rem;
-        --spacing-vertical: 1.5rem;
+        --spacing-vertical: 2rem;
         --spacing-nav-top: 7rem;
         --spacing-between: 3rem;
     }
@@ -65,7 +65,7 @@
 @media (min-width: 1024px) {    /* lg breakpoint (tablets in landscape & small laptops) */
     :root {
         --spacing-horizontal: 4rem;
-        --spacing-vertical: 2rem;
+        --spacing-vertical: 3rem;
         --spacing-nav-top: 8rem;
         --spacing-between: 5rem;
     }
@@ -74,7 +74,7 @@
 @media (min-width: 1280px) {    /* xl breakpoint (laptops & desktops) */
     :root {
         --spacing-horizontal: 7rem;
-        --spacing-vertical: 2rem;
+        --spacing-vertical: 4rem;
         --spacing-nav-top: 12rem;
         --spacing-between: 5rem;
     }
@@ -83,7 +83,7 @@
 @media (min-width: 1536px) {    /* xxl breakpoint (large desktops) */
     :root {
         --spacing-horizontal: 12rem;
-        --spacing-vertical: 3rem;
+        --spacing-vertical: 5rem;
         --spacing-nav-top: 16rem;
         --spacing-between: 6rem;
     }
@@ -150,6 +150,10 @@
     font-family: 'Nunito', sans-serif;
     /*@apply font-sans;*/
 }
+
+/*html {*/
+/*    overflow-x:hidden;*/
+/*}*/
 
 body {
     background: #EEE;

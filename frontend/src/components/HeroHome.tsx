@@ -9,7 +9,7 @@ function HeroHome() {
     const {t} = useTranslation("home");
 
     return (
-        <section className="px-4 py-vertical">
+        <section className="px-2 py-vertical pt-6 lg:pt-8">
             <div className="relative">
 
                 <div className="relative flex flex-col items-center rounded-xl shadow-lg shadow-black/20
@@ -23,10 +23,11 @@ function HeroHome() {
                         rotation={0}
                     />
 
-                    <div className="flex flex-col gap-12 justify-center items-center z-1">
-                        <header className="flex flex-col gap-8 items-center justify-center text-white-text px-horizontal
+                    <div className="flex flex-col gap-10 justify-center items-center z-1 max-w-screen-2xl mx-auto">
+                        <header className="flex flex-col gap-4 items-center justify-center text-white-text px-horizontal
                                 md:gap-10
-                                xl:gap-16">
+                                xl:gap-16
+                                2xl:px-0">
                             {/* <div className="border-1 border-white/40
                                     bg-black/10 rounded-full py-1 px-8 font-medium text-md  shadow-sm">
                                         {t("hero.label")}
@@ -39,24 +40,25 @@ function HeroHome() {
                             2xl:text-8xl">
                                 {t("hero.title")}
                             </h1>
-                            <p className="text-sm font-medium leading-relaxed max-w-full
-                            sm:text-base sm:max-w-9/10
+                            <p className="text-xs font-medium leading-relaxed max-w-full
+                            sm:text-sm sm:max-w-9/10
                             md:text-lg
                             lg:text-2xl
                             xl:text-2xl xl:max-w-8/10
                             2xl:text-3xl"
                                dangerouslySetInnerHTML={{__html: t("hero.description")}}/>
                         </header>
-                        {/*<LocalizedLink*/}
-                        {/*    to={user?.hasUsedFreeConsultation ? "/contact" : "/free-consultation"}*/}
-                        {/*    className="hover:shadow-white/60 transition-all duration-300 ease-in-out cursor-pointer*/}
-                        {/*    rounded-full text-black/90 px-12 py-3 bg-white font-bold border-2 border-black/20*/}
-                        {/*    w-fit shadow-md shadow-white/40">*/}
-                        {/*    {user?.hasUsedFreeConsultation ?*/}
-                        {/*        t("hero.cta.contact") :*/}
-                        {/*        t("hero.cta.freeConsultation")*/}
-                        {/*    }*/}
-                        {/*</LocalizedLink>*/}
+                        <LocalizedLink
+                            to={user?.usedFreeConsultation ? "/contact" : "/free-consultation"}
+                            className="text-xs lg:hidden md:text-sm sm:px-8 md:px-12 sm:py-3/2 md:py-2
+                            hover:shadow-white/60 transition-all duration-300 ease-in-out cursor-pointer
+                            rounded-lg text-black/90 px-4 py-1 bg-white font-semibold sm:font-bold border-2 border-black/20
+                            w-fit shadow-md shadow-white/40">
+                            {user?.usedFreeConsultation ?
+                                t("hero.cta.contact") :
+                                t("hero.cta.freeConsultation")
+                            }
+                        </LocalizedLink>
                     </div>
                 </div>
 
@@ -66,7 +68,7 @@ function HeroHome() {
                  md:px-12
                  lg:px-16
                  xl:py-4 xl:px-24 xl:w-9/10
-                 2xl:py-6 2xl:px-32">
+                 2xl:py-6 2xl:px-32 2xl:w-8/10">
                     <div className="text-white text-center max-w-1/3">
                         <h3 className="text-xl font-black
                         sm:text-2xl

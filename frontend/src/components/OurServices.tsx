@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import {LocalizedLink} from "./links/LocalizedLink.tsx";
 
 function OurServices() {
-    const { t } = useTranslation("home"); // assuming this JSON is in home.json
+    const { t } = useTranslation("home");
 
     const cardContent = [
         {
@@ -25,44 +25,99 @@ function OurServices() {
     ];
 
     return (
-        <section className="grid grid-cols-3 gap-20 justify-between py-vertical pt-nav-top px-horizontal">
+        <section className="px-horizontal py-vertical">
+            <div className="flex flex-col gap-8 max-w-screen-2xl mx-auto
+                lg:grid lg:grid-cols-3 lg:gap-12 xl:gap-24">
 
-            {/* TEXT */}
-            <div className="col-span-1 col-start-1 flex flex-col gap-6 text-black-text text-left w-full">
-                <h2 className="text-5xl font-bold">{t("ourServices.heading")}</h2>
-                <p className="text-xl font-light opacity-80">{t("ourServices.description")}</p>
-            </div>
+                {/* TEXT */}
+                <div className="flex flex-col gap-2 text-black-text text-left
+                    md:gap-4
+                    lg:col-span-1">
+                    <h2 className="text-3xl font-bold
+                        sm:text-4xl
+                        md:text-5xl
+                        lg:text-5xl
+                        xl:text-6xl
+                        2xl:text-7xl">
+                        {t("ourServices.heading")}
+                    </h2>
+                    <p className="text-sm font-light opacity-80
+                        sm:text-base
+                        md:text-xl
+                        lg:text-xl
+                        xl:text-2xl
+                        2xl:text-3xl">
+                        {t("ourServices.description")}
+                    </p>
+                </div>
 
-            {/* CARDS */}
-            <div className="col-span-2 col-start-2 grid grid-cols-2 grid-rows-2 gap-8">
-                {cardContent.map((card, index) => {
-                    const CardIcon = card.icon;
-                    return (
-                        <div
-                            key={index}
-                            className={`shadow-md shadow-black/20
-                            ${index === 0 ? "bg-shifter/100 rotate-on-scroll" : "bg-black/10"}
-                            ${index === 0 ? "text-white" : "text-black-text"}
-                            flex flex-col gap-4 items-start text-left border-2 border-white/40 rounded-2xl p-8`}
-                        >
-                            <CardIcon
-                                size={44}
-                                strokeWidth={1.5}
-                                color={index === 0 ? "var(--color-white)" : "var(--color-black-text)"}
-                            />
-                            <div className="flex flex-col justify-between h-full gap-4">
-                                <div className="flex flex-col gap-2">
-                                    <h2 className="text-2xl font-bold">{t(`${card.path}.title`)}</h2>
-                                    <p className="text-lg font-light">{t(`${card.path}.description`)}</p>
+                {/* CARDS */}
+                <div className="grid grid-cols-1 gap-4
+                    sm:grid-cols-2 sm:gap-6
+                    md:gap-6
+                    lg:col-span-2 lg:grid-cols-2 lg:grid-rows-2 lg:gap-4
+                    xl:gap-6
+                    2xl:gap-8">
+                    {cardContent.map((card, index) => {
+                        const CardIcon = card.icon;
+                        return (
+                            <div
+                                key={index}
+                                className={`shadow-md shadow-black/20
+                                ${index === 0 ? "bg-shifter/100 rotate-on-scroll" : "bg-black/10"}
+                                ${index === 0 ? "text-white" : "text-black-text"}
+                                flex flex-col gap-3 items-start text-left border-2 border-white/40 rounded-2xl p-6
+                                md:gap-4 md:p-7
+                                lg:p-8
+                                xl:p-8
+                                2xl:p-10 2xl:gap-5`}
+                            >
+                                <CardIcon
+                                    className="w-8 h-8
+                                        sm:w-9 sm:h-9
+                                        md:w-10 md:h-10
+                                        lg:w-11 lg:h-11
+                                        xl:w-11 xl:h-11
+                                        2xl:w-12 2xl:h-12"
+                                    strokeWidth={1.5}
+                                    color={index === 0 ? "var(--color-white)" : "var(--color-black-text)"}
+                                />
+                                <div className="flex flex-col justify-between h-full gap-3
+                                    md:gap-4
+                                    2xl:gap-5">
+                                    <div className="flex flex-col gap-2">
+                                        <h3 className="text-xl font-bold
+                                            sm:text-xl
+                                            md:text-2xl
+                                            lg:text-2xl
+                                            xl:text-2xl
+                                            2xl:text-3xl">
+                                            {t(`${card.path}.title`)}
+                                        </h3>
+                                        <p className="text-sm font-light
+                                            sm:text-base
+                                            md:text-base
+                                            lg:text-lg
+                                            xl:text-lg
+                                            2xl:text-xl">
+                                            {t(`${card.path}.description`)}
+                                        </p>
+                                    </div>
+                                    <LocalizedLink
+                                        to={t(`${card.path}.link`)}
+                                        className="font-medium underline hover:opacity-80 transition-opacity duration-200 text-sm
+                                            sm:text-sm
+                                            md:text-base
+                                            lg:text-base
+                                            xl:text-base
+                                            2xl:text-lg">
+                                        {t("ourServices.discoverMore")}
+                                    </LocalizedLink>
                                 </div>
-                                <LocalizedLink to={t(`${card.path}.link`)}
-                                className={`font-medium underline hover:opacity-80 transition-opacity duration-200`}>
-                                    {t("ourServices.discoverMore")}
-                                </LocalizedLink>
                             </div>
-                        </div>
-                    );
-                })}
+                        );
+                    })}
+                </div>
             </div>
         </section>
     );

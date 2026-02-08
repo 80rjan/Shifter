@@ -42,7 +42,7 @@
 
 @keyframes RotateOnScroll {
     from {
-        transform: rotate(-6deg);
+        transform: rotate(-8deg);
     }
     to {
         transform: rotate(6deg);

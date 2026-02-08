@@ -27,7 +27,7 @@ function Navbar() {
                 </div>
 
                 {/* Centered Logo */}
-                <div className="flex justify-center items-center xl:px-20">
+                <div className="flex justify-center items-center xl:px-20 2xl:px-32">
                     <LocalizedLink to="/">
                         <img src={logo} alt="Shifter Logo" className="h-12 2xl:h-16"/>
                     </LocalizedLink>
