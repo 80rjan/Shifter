@@ -12,5 +12,5 @@ export default defineConfig({
     build: {
         outDir: '../docs'
     },
-    base: '/Shifter/'
+    // base: '/Shifter/'
 })

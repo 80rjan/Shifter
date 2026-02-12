@@ -27,7 +27,7 @@ import java.util.List;
         indexes = {
         @Index(name = "idx_course_version_course_id", columnList = "course_id"),
         @Index(name = "idx_course_version_active", columnList = "active"),
-        @Index(name = "idx_course_version_course_active", columnList = "course, active")
+        @Index(name = "idx_course_version_course_active", columnList = "course_id, active")
 })
 public class CourseVersion {
 

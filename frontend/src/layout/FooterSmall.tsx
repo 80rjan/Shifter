@@ -1,7 +1,7 @@
 
 import ShifterLogo from "../../public/Shifter-S2W-Transparent.png";
 import NavbarLink from "../components/links/NavbarLink.tsx";
-import {Instagram, Linkedin} from "lucide-react";
+import {Linkedin} from "lucide-react";
 import {useTranslation} from "react-i18next";
 import {LocalizedLink} from "../components/links/LocalizedLink.tsx";
 
@@ -24,9 +24,8 @@ export default function FooterSmall() {
             </div>
 
             <div className="flex gap-3 sm:gap-4 items-center">
-                {/* TODO: change these footer links to original links*/}
                 <a
-                    href="http://www.google.com"
+                    href="https://www.linkedin.com/company/shift-er"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:bg-shifter/15 duration-300 ease-in-out
@@ -35,15 +34,15 @@ export default function FooterSmall() {
                     <Linkedin className="w-4 h-4 md:w-5 md:h-5" color="var(--color-shifter)"/>
                 </a>
 
-                <a
-                    href="http://www.google.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:bg-shifter/15 duration-300 ease-in-out
-                    bg-shifter/10 h-fit p-2 md:p-3 rounded-full"
-                >
-                    <Instagram className="w-4 h-4 md:w-5 md:h-5" color="var(--color-shifter)"/>
-                </a>
+                {/*<a*/}
+                {/*    href="http://www.google.com"*/}
+                {/*    target="_blank"*/}
+                {/*    rel="noopener noreferrer"*/}
+                {/*    className="hover:bg-shifter/15 duration-300 ease-in-out*/}
+                {/*    bg-shifter/10 h-fit p-2 md:p-3 rounded-full"*/}
+                {/*>*/}
+                {/*    <Instagram className="w-4 h-4 md:w-5 md:h-5" color="var(--color-shifter)"/>*/}
+                {/*</a>*/}
             </div>
         </footer>
     )

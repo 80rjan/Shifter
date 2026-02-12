@@ -43,7 +43,7 @@ function Navbar() {
                         <LocalizedLink
                             to="/profile"
                             className="hover:bg-shifter transition-all duration-200 ease-in-out cursor-pointer
-                    aspect-square rounded-full border-2 border-white/20 p-3 bg-shifter/40 text-white font-bold flex items-center justify-center"
+                            w-10 h-10 2xl:w-12 2xl:h-12 rounded-full border-2 border-white/20 bg-shifter/40 text-white font-bold flex items-center justify-center"
                         >
                             {user.name.split(" ")[0].charAt(0).toUpperCase()}
                         </LocalizedLink>

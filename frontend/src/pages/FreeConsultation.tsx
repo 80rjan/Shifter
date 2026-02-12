@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import {useUserContext} from "../context/UserContext.tsx";
 
 import Arrow from "../../public/Shifter-Arrow-White.png";
+import {TextInputContactForm} from "../components/inputs/TextInputContactForm.tsx";
 
 function FreeConsultation() {
     const { t } = useTranslation("freeConsultation");
@@ -70,34 +71,40 @@ function FreeConsultation() {
     const steps = t("nextSteps.steps", { returnObjects: true }) as { title: string; description: string }[];
 
     return (
-        <main className="bg-gradient-to-b from-shifter via-shifter/20 via-40% to-main">
+        <main className="flex flex-col gap-between bg-gradient-to-b from-shifter via-shifter/20 via-40% to-main">
             {/*Hero*/}
             <section
-                className="flex flex-col items-center gap-2 w-full pb-[calc(5rem+2rem)] pt-nav-top px-horizontal text-white-text text-center max-w-screen-2xl mx-auto
-                    sm:gap-3 sm:pb-[calc(7rem+3rem)]
-                    md:gap-4 md:pb-[calc(9rem+4rem)]
-                    lg:pb-[calc(10rem+6rem)]">
+                className="flex flex-col items-center gap-2 w-full  pt-nav-top px-horizontal text-white-text text-center max-w-screen-2xl mx-auto
+                    sm:gap-3
+                    md:gap-4
+                    ">
                 <h1 className="text-3xl font-bold
                     sm:text-4xl
-                    md:text-5xl">{t("hero.title")}</h1>
+                    md:text-5xl
+                    lg:text-5xl
+                    xl:text-6xl
+                    2xl:text-7xl">{t("hero.title")}</h1>
                 <p className="text-base font-light
                     sm:text-lg
-                    md:text-xl">{t("hero.description")}</p>
+                    md:text-xl
+                    lg:text-xl
+                    xl:text-2xl
+                    2xl:text-3xl">{t("hero.description")}</p>
             </section>
 
             {/*Contact Form*/}
-            <section className="flex items-center justify-center w-full px-horizontal">
+            <section className="flex items-center justify-center w-full px-horizontal pb-vertical">
                 <div
-                    className="relative -top-[5rem] flex flex-col gap-6 rounded-lg bg-white p-4 shadow-md shadow-black/10 w-full max-w-screen-2xl mx-auto
-                        sm:-top-[7rem] sm:p-6
-                        md:-top-[9rem] md:gap-8
-                        lg:-top-[10rem] lg:grid lg:grid-cols-3 lg:gap-x-12 lg:p-4
+                    className="relative flex flex-col gap-8 rounded-lg bg-white p-4 shadow-md shadow-black/10 w-full max-w-screen-2xl mx-auto
+                        sm:gap-10 sm:p-6
+                        md:gap-12
+                        lg:grid lg:grid-cols-3 lg:gap-x-12
                         xl:gap-x-20">
 
                     {/*Contact Info*/}
                     <div
-                        className="border-1 border-white/40 relative overflow-clip flex flex-col gap-4 py-6 px-6 rounded-lg bg-shifter text-white
-                            sm:gap-6 sm:py-8 sm:px-4
+                        className="border-1 border-white/40 relative overflow-clip flex flex-col gap-5 py-8 px-6 rounded-lg bg-shifter text-white
+                            sm:gap-6 sm:py-10 sm:px-8
                             lg:col-span-1 lg:gap-8">
                         <h2 className="text-left text-xl font-semibold
                             sm:text-2xl">{t("nextSteps.title")}</h2>
@@ -122,34 +129,40 @@ function FreeConsultation() {
 
 
                     {/*Form*/}
-                    <div className="flex flex-col gap-3 flex-1
-                        sm:gap-4
-                        lg:col-span-2 lg:py-4">
-                        <div className="flex flex-col gap-2
-                            sm:grid sm:grid-cols-2 sm:gap-4 sm:items-center">
-                            <p className="text-black/40 text-xs col-span-2">{t("form.profileHint")}</p>
-                            <p className="font-light text-black-text/60 text-sm
-                                sm:text-md sm:whitespace-nowrap">
+                    <div className="flex flex-col gap-6 flex-1
+                        sm:gap-7
+                        lg:col-span-2 lg:py-6">
+                        <div className="flex flex-col gap-3
+                            sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-2 sm:items-center">
+                            <p className="text-black/40 text-xs col-span-2 mb-1
+                                md:text-sm
+                                2xl:text-base">{t("form.profileHint")}</p>
+                            <p className="font-light text-black-text/60 text-sm leading-relaxed
+                                sm:text-md sm:whitespace-nowrap
+                                md:text-base
+                                2xl:text-lg">
                                 {t("form.name")}: <span className="text-black-text font-normal">{user?.name}</span>
                             </p>
-                            <p className="font-light text-black-text/60 text-sm
-                                sm:text-md sm:whitespace-nowrap">
+                            <p className="font-light text-black-text/60 text-sm leading-relaxed
+                                sm:text-md sm:whitespace-nowrap
+                                md:text-base
+                                2xl:text-lg">
                                 {t("form.email")}: <span className="text-black-text font-normal">{user?.email}</span>
                             </p>
                         </div>
 
-                        <hr className="border-t-1 border-black/20 rounded-full"/>
+                        <hr className="border-t-1 border-black/20 rounded-full my-2"/>
 
                         <form onSubmit={handleScheduleMeeting} className="flex flex-col gap-6 items-start
-                            sm:gap-8
-                            lg:gap-12">
-                            <div className="flex flex-col gap-3 items-center w-full
-                                sm:gap-4">
+                            sm:gap-7">
+                            <div className="flex flex-col gap-7 items-center w-full
+                                sm:gap-8">
                                 {["basicInfo", "aboutCompany","challenges","otherInfo"].map(field => (
-                                    <TextInput
+                                    <TextInputContactForm
                                         key={field}
                                         label={t(`form.fields.${field}.label`)}
                                         name={field}
+                                        rows={2}
                                         placeholder={t(`form.fields.${field}.placeholder`)}
                                         onChange={(e) => setUserMeetingInfo({...userMeetingInfo, [field]: e.target.value})}
                                     />
@@ -184,23 +197,27 @@ function FreeConsultation() {
                                     )}
                                 </div>
 
-                                {error && <p className="text-red-500 text-sm font-medium text-center
+                                {error && <p className="text-red-500 text-sm font-medium text-center mt-2
                                     sm:text-md">{error}</p>}
                             </div>
 
-                            {meetingScheduled ? (
-                                <div className="text-center w-full">
-                                    <h2 className="text-lg font-bold text-shifter mb-2
-                                        sm:text-xl">{t("confirmation.title")}</h2>
-                                    <p className="text-sm font-medium text-black/80 max-w-xl mx-auto
-                                        sm:text-md" dangerouslySetInnerHTML={{__html: t("confirmation.description")}}/>
+                            {!meetingScheduled ? (
+                                <div className="text-center w-full mt-4">
+                                    <h2 className="text-lg font-bold text-shifter mb-3
+                                        sm:text-xl
+                                        md:text-2xl">{t("confirmation.title")}</h2>
+                                    <p className="text-sm font-medium text-black/80 max-w-xl mx-auto leading-relaxed
+                                        sm:text-base
+                                        md:text-lg" dangerouslySetInnerHTML={{__html: t("confirmation.description")}}/>
                                 </div>
                             ) : (
-                                <div className="flex flex-col items-center gap-4 w-full
-                                    sm:flex-row sm:w-auto sm:gap-6">
+                                <div className="flex flex-col items-center gap-4 w-full mt-6
+                                    sm:flex-row sm:gap-6">
                                     <button
-                                        className="hover:shadow-shifter/40 transition-all duration-300 ease-in-out disabled:cursor-not-allowed disabled:opacity-60 shadow-md shadow-shifter/20 bg-shifter text-white py-2 px-6 rounded-md cursor-pointer w-full text-sm
-                                            sm:w-auto sm:text-base"
+                                        className="hover:shadow-shifter/60 transition-all duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-60 shadow-md shadow-shifter/40 bg-shifter text-white rounded-md cursor-pointer w-full
+                                        text-sm font-medium py-2.5
+                                        md:text-base
+                                        2xl:text-lg 2xl:py-3"
                                         disabled={loadingSubmitForm}
                                         type="submit"
                                     >
@@ -217,29 +234,12 @@ function FreeConsultation() {
     )
 }
 
-function TextInput({label, name, placeholder, onChange}: {
-    label:string,
-    name:string,
-    placeholder:string,
-    onChange:(e:React.ChangeEvent<HTMLTextAreaElement>)=>void,
-}) {
-    return (
-        <label className="w-full flex flex-col items-start gap-1 text-black-text
-            sm:gap-2">
-            <span className="text-black/40 font-semibold text-sm peer-focused:text-shifter
-                sm:text-md">
-                {label}
-            </span>
-            <textarea rows={2} name={name} onChange={onChange} placeholder={placeholder} className="peer w-full bg-dark-blue/5 border-1 border-black/10 py-1 px-2 rounded-sm resize-none min-h-fit custom-scrollbar focus:outline-none focus:border-shifter/40 focus:border-2 text-sm
-                sm:text-base"/>
-        </label>
-    )
-}
-
 function SelectInput({value, onChange, firstOption, options, isDisabled}: {value:string,onChange:(e:React.ChangeEvent<HTMLSelectElement>)=>void,firstOption:string,options:string[],isDisabled?:boolean}) {
     return (
-        <select required className={`disabled:opacity-20 disabled:cursor-not-allowed bg-dark-blue/5 border-1 border-black/10 py-1 px-4 rounded-sm ${value ? "text-black-text" : "text-black/40"} resize-none overflow-hidden min-h-fit cursor-pointer w-full text-sm
-            sm:w-auto sm:text-base`} disabled={isDisabled} value={value} onChange={onChange}>
+        <select required className={`disabled:opacity-20 disabled:cursor-not-allowed bg-dark-blue/5 border-1 border-black/10 py-1 px-4 rounded-sm ${value ? "text-black-text" : "text-black-text/60"} 
+                        resize-none overflow-hidden min-h-fit cursor-pointer w-full text-sm
+                        sm:w-auto 
+                        md:text-base`} disabled={isDisabled} value={value} onChange={onChange}>
             <option value="" className="text-black/40">{firstOption}</option>
             {options?.map(option => <option key={option} value={option} className="text-black-text">{option}</option>)}
         </select>
@@ -255,9 +255,13 @@ function Step({title, description, isLast}: {title:string,description:string,isL
             <div className="pb-6 text-left
                 sm:pb-8">
                 <h3 className="text-sm font-semibold text-white
-                    sm:text-md">{title}</h3>
-                <p className="text-xs text-white/60 font-light
-                    sm:text-sm">{description}</p>
+                    sm:text-md
+                    md:text-lg
+                    2xl:text-xl">{title}</h3>
+                <p className="text-sm text-white/60 font-light
+                    sm:text-md
+                    md:text-lg
+                    2xl:text-xl">{description}</p>
             </div>
         </li>
     )

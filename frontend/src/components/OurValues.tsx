@@ -38,19 +38,23 @@ export default function OurValues() {
                 <div className="grid grid-cols-1 gap-6
                     sm:grid-cols-2 sm:gap-8
                     md:gap-10
-                    lg:grid-cols-3 lg:gap-8
+                    lg:grid-cols-6 lg:gap-8
                     xl:gap-10
                     2xl:gap-12">
                     {values.map((value, index) => (
                         <article key={index}
-                                 className="flex flex-col gap-4 items-center text-center p-6 rounded-2xl
+                                 className={`
+                                     flex flex-col gap-4 items-center text-center p-6 rounded-2xl
                                      bg-white/10 backdrop-blur-sm border-2 border-white/20
                                      hover:bg-white/15 transition-all duration-300
                                      shadow-md hover:shadow-lg hover:-translate-y-1
                                      sm:gap-5 sm:p-7
                                      md:gap-6 md:p-8
-                                     lg:p-8
-                                     xl:p-10">
+                                     lg:p-8 lg:col-span-2
+                                     xl:p-10
+                                     ${index === values.length - 1 ? 'sm:col-span-2 sm:justify-self-center sm:w-[calc(50%-1rem)] md:w-[calc(50%-1.25rem)] lg:w-auto lg:col-span-2' : ''}
+                                     ${index === values.length - 2 ? 'lg:col-start-2' : ''}
+                                 `}>
 
                             {/* Character Badge */}
                             <div className="w-16 h-16 flex items-center justify-center rounded-full

@@ -12,8 +12,8 @@
   "form": {
     "name": "Name",
     "email": "Email",
-    "subject": "Your Subject",
-    "subjectPlaceholder": "Enter the subject of your message",
+    "subject": "Reason for Contacting Us",
+    "subjectPlaceholder": "e.g., Partnership inquiry, General question, Support needed...",
     "message": "Message",
     "messagePlaceholder": "Write your message here...",
     "sendingError": "We’re experiencing a temporary issue with our mail service. Please try again shortly or contact us directly at contact@mail.shift-er.com",

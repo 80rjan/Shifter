@@ -34,16 +34,16 @@ function AppLoader() {
 
         const load = async () => {
             // Recommended Courses
-            try {
-                const recommendedStored = getFromSessionStorage<typeof recommendedCourses>("recommendedCourses");
-                if (recommendedStored) {
-                    setRecommendedCourses(recommendedStored);
-                } else {
-                    await fetchRecommendedCourses()
-                }
-            } catch (err) {
-                console.error("Failed to fetch recommended courses:", err);
-            }
+            // try {
+            //     const recommendedStored = getFromSessionStorage<typeof recommendedCourses>("recommendedCourses");
+            //     if (recommendedStored) {
+            //         setRecommendedCourses(recommendedStored);
+            //     } else {
+            //         await fetchRecommendedCourses()
+            //     }
+            // } catch (err) {
+            //     console.error("Failed to fetch recommended courses:", err);
+            // }
 
             // Enrollments
             try {

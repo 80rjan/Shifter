@@ -41,7 +41,7 @@
     --spacing-horizontal: 1rem;
     --spacing-vertical: 2.5rem;
     --spacing-nav-top: 7rem;
-    --spacing-between: 2rem;
+    --spacing-between: 3rem;
 }
 
 @media (min-width: 640px) {         /* sm breakpoint (large phones in landscape & small tablets) */
@@ -75,8 +75,8 @@
     :root {
         --spacing-horizontal: 7rem;
         --spacing-vertical: 4rem;
-        --spacing-nav-top: 12rem;
-        --spacing-between: 5rem;
+        --spacing-nav-top: 10rem;
+        --spacing-between: 6rem;
     }
 }
 
@@ -85,7 +85,7 @@
         --spacing-horizontal: 12rem;
         --spacing-vertical: 5rem;
         --spacing-nav-top: 16rem;
-        --spacing-between: 6rem;
+        --spacing-between: 7rem;
     }
 }
 

@@ -20,86 +20,75 @@ export default function ShifterDifferenceTable() {
             <div className="relative max-w-screen-2xl mx-auto flex flex-col gap-12
                 lg:gap-16">
 
-                {/* MOBILE & TABLET: Card Layout */}
-                <div className="lg:hidden flex flex-col gap-between">
+                {/* MOBILE & TABLET: Modern Card Layout */}
+                <div className="lg:hidden flex flex-col gap-10 sm:gap-12 md:gap-16">
 
-                    {/* Section Header - Mobile Only */}
-                    <header className="text-center">
-                        <h2 className="text-2xl font-bold text-black-text
-                            sm:text-3xl
-                            md:text-4xl">
+                    {/* Section Header */}
+                    <header className="text-center flex flex-col items-center gap-4">
+                        {/*<img src={logo} alt="Shifter Logo" className="h-12 sm:h-14 md:h-16 object-contain"/>*/}
+                        <h2 className="text-2xl font-bold text-black-text sm:text-3xl md:text-4xl">
                             {t("shifterDifferenceTable.heading.theShifterDifference")}
                         </h2>
                     </header>
 
-                    <div className="flex flex-col gap-8
-                         sm:gap-10
-                         md:gap-12">
+                    {/* Cards Container */}
+                    <div className="flex flex-col gap-6 sm:gap-8 md:gap-10">
                         {rows.map((row, i) => (
-                            <article key={i} className="flex flex-col gap-6
-                            sm:gap-6">
+                            <article key={i} className="relative overflow-hidden rounded-2xl border border-black/10
+                                shadow-lg bg-white">
 
-                                {/* Challenge Title with accent */}
-                                <div className="flex items-center gap-3
-                                sm:gap-4">
-                                    <div className="w-1 h-12 bg-cta rounded-full
-                                    sm:h-14
-                                    md:h-16"/>
-                                    <h3 className="text-xl font-bold text-black-text
-                                    sm:text-2xl
-                                    md:text-3xl">
+                                {/* Challenge Header */}
+                                <div className="bg-gradient-to-r from-cta/10 to-cta/5 px-6 py-5
+                                    sm:px-7 sm:py-6 md:px-8 md:py-7 border-b border-cta/20">
+                                    <h3 className="text-xl font-bold text-black-text sm:text-2xl md:text-3xl">
                                         {row.challenge}
                                     </h3>
                                 </div>
 
-                                {/* Comparison Grid */}
-                                <div className="grid grid-cols-1 gap-4
-                                sm:grid-cols-2 sm:gap-4">
+                                {/* Comparison Content */}
+                                <div className="flex flex-col sm:flex-row">
 
-                                    {/* Shifter Approach */}
-                                    <div className="relative p-5 rounded-2xl bg-gradient-to-br from-cta/15 to-cta/5
-                                    border-2 border-cta/30 shadow-md
-                                    sm:p-6
-                                    md:p-8">
-                                        {/* Badge */}
-                                        <div className="absolute -top-3 left-4 bg-cta text-white px-3 py-1 rounded-full
-                                        text-xs font-bold uppercase shadow-md
-                                        sm:px-4
-                                        md:text-sm">
-                                            ✓ {t("shifterDifferenceTable.heading.withShifter")}
+                                    {/* Shifter Approach - Left/Top */}
+                                    <div className="flex-1 p-6 sm:p-7 md:p-8 bg-cta/5 sm:border-r sm:border-cta/10">
+                                        <div className="flex items-center gap-2 mb-4 sm:mb-5">
+                                            <div className="w-6 h-6 rounded-full bg-cta/20 flex items-center justify-center
+                                                sm:w-7 sm:h-7 flex-shrink-0">
+                                                <Check color="var(--color-cta)" className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={3}/>
+                                            </div>
+                                            <span className="text-xs font-bold text-cta uppercase tracking-wide
+                                                sm:text-sm
+                                                md:text-base">
+                                                {t("shifterDifferenceTable.heading.withShifter")}
+                                            </span>
                                         </div>
-
-                                        <div className="flex h-full justify-center items-center">
-                                        <p className="text-base font-semibold text-black-text
-                                            sm:text-lg
-                                            md:text-xl">
+                                        <p className="text-lg font-semibold text-black-text leading-relaxed
+                                            sm:text-xl md:text-2xl md:leading-relaxed">
                                             {row.shifterApproach}
                                         </p>
-                                        </div>
                                     </div>
 
-                                    {/* Without Shifter */}
-                                    <div className="relative p-5 rounded-2xl bg-black/5
-                                    border-2 border-black/10
-                                    sm:p-6
-                                    md:p-8">
-                                        {/* Badge */}
-                                        <div className="absolute -top-3 left-4 bg-black/20 text-black/60 px-3 py-1 rounded-full
-                                        text-xs font-bold uppercase
-                                        sm:px-4
-                                        md:text-sm">
-                                            ✗ {t("shifterDifferenceTable.heading.withoutShifter")}
+                                    {/* Traditional Approach - Right/Bottom */}
+                                    <div className="flex-1 p-6 sm:p-7 md:p-8 bg-black/[0.02]">
+                                        <div className="flex items-center gap-2 mb-4 sm:mb-5">
+                                            <div className="w-6 h-6 rounded-full bg-black/10 flex items-center justify-center
+                                                sm:w-7 sm:h-7 flex-shrink-0">
+                                                <X color="var(--color-black)" className="w-3.5 h-3.5 opacity-40 sm:w-4 sm:h-4" strokeWidth={3}/>
+                                            </div>
+                                            <span className="text-xs font-bold text-black/40 uppercase tracking-wide
+                                                sm:text-sm
+                                                md:text-base">
+                                                {t("shifterDifferenceTable.heading.withoutShifter")}
+                                            </span>
                                         </div>
-
-                                        <div className="flex h-full justify-center items-center">
-                                        <p className="text-base font-medium text-black/60 vertical-align-center
-                                            sm:text-lg
-                                            md:text-xl">
+                                        <p className="text-lg font-medium text-black/60 leading-relaxed
+                                            sm:text-xl md:text-2xl md:leading-relaxed">
                                             {row.traditionalApproach}
                                         </p>
-                                        </div>
                                     </div>
                                 </div>
+
+                                {/* Accent Bar */}
+                                <div className="h-1 bg-gradient-to-r from-cta via-cta/80 to-cta/50"/>
                             </article>
                         ))}
                     </div>

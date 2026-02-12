@@ -8,10 +8,9 @@
   "autoFilledNote": "These values are automatically populated from your profile. If any of them are incorrect, please update them in the Profile page.",
   "name": "Name",
   "email": "Email",
+  "workPosition": "Work Position",
   "businessLabel": "Business Name",
   "businessPlaceholder": "Your business name",
-  "positionLabel": "Position",
-  "positionPlaceholder": "Your position in the business",
   "challengesLabel": "What challenges are you currently facing?",
   "challengeOptions": [
     "Generational Transition & Succession",

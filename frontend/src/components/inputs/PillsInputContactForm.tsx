@@ -18,27 +18,34 @@ export function PillsInputContactForm({label, onChange, options}: {
     };
 
     return (
-        <div className="w-full flex flex-col items-start gap-2">
-            <span className="text-black/40 font-semibold text-md peer-focused:text-shifter text-left">{label}</span>
-            <div className="w-full flex flex-wrap gap-2">
+        <div className="w-full flex flex-col items-start gap-3">
+            <span className="text-black-text/60 font-semibold text-base peer-focused:text-shifter text-left
+                  md:text-lg
+                  2xl:text-xl">{label}</span>
+            <div className="w-full flex flex-wrap gap-3
+                sm:gap-3">
                 {options.map(option => (
                     <button
                         key={option}
                         type="button"
                         onClick={() => togglePill(option)}
                         className={`
-                            px-4 py-1.5 rounded-md text-sm font-medium transition-all ease-in-out duration-200 cursor-pointer hover:scale-105
+                            px-5 py-2.5 rounded-md font-medium transition-all ease-in-out duration-200 cursor-pointer hover:scale-105
+                            flex items-center gap-2
+                            text-base
+                            md:text-lg
+                            2xl:text-xl
                             ${selectedPills.includes(option)
                             ? 'bg-shifter text-white shadow-md'
                             : 'bg-white border-1 border-black/20 text-black/70 hover:border-shifter/40 hover:text-shifter'
                         }
                         `}
                     >
-                        {option}
+                        <span>{option}</span>
                         {
                             selectedPills.includes(option) ?
-                                <Minus className="inline-block ml-2" size={14} strokeWidth={2} /> :
-                                <Plus className="inline-block ml-2" size={14} strokeWidth={2} />
+                                <Minus className="flex-shrink-0" size={14} strokeWidth={2} /> :
+                                <Plus className="flex-shrink-0" size={14} strokeWidth={2} />
                         }
                     </button>
                 ))}
