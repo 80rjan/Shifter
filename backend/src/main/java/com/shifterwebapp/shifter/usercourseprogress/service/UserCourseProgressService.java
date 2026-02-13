@@ -7,6 +7,7 @@ import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgress;
 import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgressRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,26 +21,31 @@ public class UserCourseProgressService implements ImplUserCourseProgressService 
     private final Validate validate;
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserCourseProgress> getUserCourseProgressByEnrollment(Long enrollmentId) {
         return userCourseProgressRepository.findByEnrollmentId(enrollmentId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserCourseProgress> getUserCourseProgressByEnrollmentAndCompletedTrue(Long enrollmentId) {
         return userCourseProgressRepository.findByEnrollmentIdAndCompletedTrue(enrollmentId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserCourseProgress> getUserCourseProgressByEnrollmentsAndCompletedTrue(List<Long> enrollmentIds) {
         return userCourseProgressRepository.findByEnrollmentIdsAndCompletedTrue(enrollmentIds);
     }
 
     @Override
+    @Transactional
     public List<UserCourseProgress> saveAllUserCourseProgress(List<UserCourseProgress> userCourseProgresses) {
         return userCourseProgressRepository.saveAll(userCourseProgresses);
     }
 
     @Override
+    @Transactional
     public UserCourseProgress completeUserCourseProgress(Long progressId, Long userId) {
         validate.validateUserCourseProgressExists(progressId);
 
@@ -63,6 +69,7 @@ public class UserCourseProgressService implements ImplUserCourseProgressService 
     }
 
     @Override
+    @Transactional
     public UserCourseProgress uncompleteUserCourseProgress(Long progressId, Long userId) {
         validate.validateUserCourseProgressExists(progressId);
 

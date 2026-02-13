@@ -15,6 +15,7 @@ import com.shifterwebapp.shifter.account.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -30,6 +31,7 @@ public class UserService implements ImplUserService {
     private final Validate validate;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional(readOnly = true)
     @Override
     public UserDto getUserById(Long userId, Language language) {
         validate.validateUserExists(userId);
@@ -37,24 +39,28 @@ public class UserService implements ImplUserService {
         return userMapper.toDto(user, language);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public User getUserEntityById(Long userId) {
         validate.validateUserExists(userId);
         return userRepository.findById(userId).orElseThrow();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public User getUserEntityByEmail(String email) {
         validate.validateUserExists(email);
         return userRepository.findByEmail(email).orElseThrow();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public String getUserEmailById(Long userId) {
         validate.validateUserExists(userId);
         return userRepository.getUserEmailById(userId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Boolean getUserHasUsedFreeConsultation(String userEmail) {
         validate.validateUserExists(userEmail);
@@ -62,11 +68,13 @@ public class UserService implements ImplUserService {
         return user.getUsedFreeConsultation();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Boolean existsUserByEmail(String email) {
         return userRepository.existsUserByEmail(email);
     }
 
+    @Transactional
     @Override
     public User createInitialUser(String email, String password, LoginProvider loginProvider) {
         if (userRepository.existsUserByEmail(email)) {
@@ -83,6 +91,7 @@ public class UserService implements ImplUserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     @Override
     public User personalizeUser(UserPersonalizationDto userPersonalizationDto) {
         validate.validateUserExists(userPersonalizationDto.getEmail());
@@ -100,6 +109,7 @@ public class UserService implements ImplUserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     @Override
     public void deleteUser(Long userId) {
         validate.validateUserExists(userId);
@@ -111,6 +121,7 @@ public class UserService implements ImplUserService {
         user.getMeetingEmailReminders().clear();
     }
 
+    @Transactional
     @Override
     public UserDto updateUser(Long id, Language language, PersonalizeUserReq personalizeUserReq) {
         validate.validateUserExists(id);
@@ -130,6 +141,7 @@ public class UserService implements ImplUserService {
         return userMapper.toDto(user, language);
     }
 
+    @Transactional
     @Override
     public UserDto updateTags(Long id, Language language, List<Long> tagIds) {
         validate.validateUserExists(id);
@@ -141,6 +153,7 @@ public class UserService implements ImplUserService {
         return userMapper.toDto(user, language);
     }
 
+    @Transactional
     @Override
     public void addTags(Long userId, Language language, List<Long> tagIds) {
         validate.validateUserExists(userId);
@@ -165,6 +178,7 @@ public class UserService implements ImplUserService {
     }
 
 
+    @Transactional
     @Override
     public UserDto toggleFavoriteCourse(Long userId, Language language, Integer newFavoriteCourseId) {
         User user = getUserEntityById(userId);
@@ -178,6 +192,7 @@ public class UserService implements ImplUserService {
         return userMapper.toDto(user, language);
     }
 
+    @Transactional
     @Override
     public void addPoints(Long userId, Integer newPointsAchieved) {
         validate.validateUserExists(userId);
@@ -188,6 +203,7 @@ public class UserService implements ImplUserService {
     }
 
 
+    @Transactional
     @Override
     public void markUserAsUsedFreeConsultation(String email) {
         validate.validateUserExists(email);

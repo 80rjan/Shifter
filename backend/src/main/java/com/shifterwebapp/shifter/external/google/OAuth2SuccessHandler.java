@@ -10,6 +10,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -30,14 +31,16 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
+    //TODO: Authorize shift-er.com in google cloud console
+
     private final UserService userService;
     private final UserRepository userRepository;
     private final VerificationTokenService verificationTokenService;
     private final JwtService jwtService;
 
-    // Frontend base URL where the final redirect must go
-    // TODO: Change to shifter url, not localhost
-    private static final String FRONTEND_REDIRECT_BASE = "http://localhost:5173/oauth2/redirect";
+    // Frontend base URL from environment variable
+    @Value("${frontend.url}")
+    private String frontendUrl;
 
     @Override
     public void onAuthenticationSuccess(
@@ -77,9 +80,8 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         }
 
         assert email != null;
-        System.out.println("REDIRECTING");
-        String redirectUrl = String.format("%s?token=%s&login=%s&email=%s",
-                FRONTEND_REDIRECT_BASE,
+        String redirectUrl = String.format("%s/oauth2/redirect?token=%s&login=%s&email=%s",
+                frontendUrl,
                 URLEncoder.encode(token, StandardCharsets.UTF_8),
                 login,
                 URLEncoder.encode(email, StandardCharsets.UTF_8));

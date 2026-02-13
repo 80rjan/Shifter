@@ -24,6 +24,7 @@ import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgress;
 import com.shifterwebapp.shifter.usercourseprogress.service.UserCourseProgressService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.InputStream;
 import java.time.LocalDate;
@@ -53,6 +54,7 @@ public class CourseService implements ImplCourseService {
 
     private record ScoredCourse(Course course, int score) {}
 
+    @Transactional(readOnly = true)
     @Override
     public CourseDtoLearn getEnrolledCourseById(Long courseId, Long userId, Language language) {
         validate.validateCourseExists(courseId);
@@ -68,7 +70,7 @@ public class CourseService implements ImplCourseService {
         return courseMapper.toDtoLearn(course, language, enrollment);
     }
 
-
+    @Transactional(readOnly = true)
     public byte[] downloadCertificate(Long courseId, Long userId) throws Exception {
         validate.validateCourseExists(courseId);
         if (!enrollmentService.isUserEnrolledInCourse(userId, courseId))
@@ -104,6 +106,7 @@ public class CourseService implements ImplCourseService {
         }
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<CourseDtoPreview> getAllCourses(List<Long> courseIds, Language language) {
         List<Course> courses = courseIds != null && !courseIds.isEmpty() ?
@@ -127,6 +130,7 @@ public class CourseService implements ImplCourseService {
 //        return courseMapperPreview.toDto(courses);
 //    }
 
+    @Transactional(readOnly = true)
     @Override
     public List<CourseDtoPreview> getRecommendedCourses(Long userId, Language language) {
         User user = userService.getUserEntityById(userId);
@@ -173,6 +177,7 @@ public class CourseService implements ImplCourseService {
         );
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<CourseDtoPreviewEnrolled> getEnrolledCourses(Long userId, Language language) {
         List<Enrollment> enrollments = enrollmentService.getEnrollmentsEntityByUser(userId);    // batch fetch enrollments
@@ -213,7 +218,7 @@ public class CourseService implements ImplCourseService {
     }
 
 
-
+    @Transactional(readOnly = true)
     @Override
     public List<CourseDtoPreview> getTopRatedCourses(Language language) {
         List<Course> courses = courseRepository.findCoursesOrderedByRating();
@@ -234,6 +239,7 @@ public class CourseService implements ImplCourseService {
         );
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<CourseDtoPreview> getMostPopularCourses(Language language) {
         List<Course> courses = courseRepository.findCoursesOrderedByPopularity();
@@ -254,6 +260,7 @@ public class CourseService implements ImplCourseService {
         );
     }
 
+    @Transactional(readOnly = true)
     @Override
     public CourseDtoDetail getCourseById(Long courseId, Language language) {
         validate.validateCourseExists(courseId);
@@ -261,12 +268,14 @@ public class CourseService implements ImplCourseService {
         return courseMapper.toDtoDetail(course, language);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Course getCourseEntityById(Long courseId) {
         validate.validateCourseExists(courseId);
         return courseRepository.findById(courseId).orElseThrow();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Course getCourseEntityByLectureId(Long lectureId) {
         validate.validateLectureExists(lectureId);
@@ -274,6 +283,7 @@ public class CourseService implements ImplCourseService {
         return courseRepository.findByLectureId(lectureId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<String> getAllTopics(Language language) {
         List<TagTranslate> translations = courseRepository.getCourseTopics(language);
@@ -282,6 +292,7 @@ public class CourseService implements ImplCourseService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<String> getAllSkills(Language language) {
         List<TagTranslate> translations = courseRepository.getCourseSkills(language);

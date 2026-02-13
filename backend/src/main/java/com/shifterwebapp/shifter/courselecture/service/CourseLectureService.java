@@ -10,6 +10,7 @@ import com.shifterwebapp.shifter.courselecture.repository.CourseLectureTranslate
 import com.shifterwebapp.shifter.enums.Language;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class CourseLectureService implements ImplCourseLectureService{
     private final CourseLectureRepository courseLectureRepository;
     private final CourseLectureTranslateRepository courseLectureTranslateRepository;
 
+    // No transactional needed here because this is a builder method
     public CourseLecture buildCourseLecture(CourseLectureDtoFull courseLectureDtoFull, CourseContent courseContent, Language language) {
         CourseLecture lecture = CourseLecture.builder()
                 .durationMinutes(courseLectureDtoFull.getDurationMinutes())
@@ -44,6 +46,7 @@ public class CourseLectureService implements ImplCourseLectureService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CourseLectureTranslate getByCourseLectureIdAndLanguage(Long lectureId, Language language) {
         return courseLectureTranslateRepository.findByIdAndLanguage(lectureId, language);
     }

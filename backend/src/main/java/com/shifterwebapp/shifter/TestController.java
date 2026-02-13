@@ -4,6 +4,7 @@ import com.shifterwebapp.shifter.external.email.EmailService;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,9 @@ public class TestController {
     @Autowired
     private DataSource dataSource;
 
+    @Value("${frontend.url}")
+    private String frontendUrl;
+
     @GetMapping("/send-email")
     public void sendTestEmail() {
         emailService.sendCoursePurchaseConfirmation(
@@ -38,7 +42,7 @@ public class TestController {
     public void sendVerificationEmail() {
         emailService.sendVerificationToken(
                 "borjangjorgjievski1@gmail.com",
-                "https://localhost:5173"
+                frontendUrl
         );
     }
 

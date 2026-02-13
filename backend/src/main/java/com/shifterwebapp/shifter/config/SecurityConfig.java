@@ -2,6 +2,7 @@ package com.shifterwebapp.shifter.config;
 
 import com.shifterwebapp.shifter.external.google.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +19,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
+import java.util.List;
+
 
 @Configuration
 @EnableWebSecurity
@@ -28,6 +32,13 @@ public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
     private final AuthenticationEntryPoint authenticationEntryPoint;
     private final OAuth2SuccessHandler oauth2SuccessHandler;
+
+    // Inject allowed origins from environment variables
+    @Value("${cors.allowed-origins}")
+    private String allowedOrigins;
+
+    @Value("${frontend.url}")
+    private String frontendUrl;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -48,9 +59,8 @@ public class SecurityConfig {
                         .authenticationEntryPoint(authenticationEntryPoint)
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        // Use the custom handler instead of defaultSuccessUrl()
                         .successHandler(oauth2SuccessHandler)
-                        .failureUrl("http://localhost:5173/login?error")
+                        .failureUrl(frontendUrl + "/login?error")
                 )
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
@@ -61,16 +71,31 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOriginPattern("http://localhost:*");
+
+        // Parse comma-separated origins from environment variable
+        List<String> origins = Arrays.asList(allowedOrigins.split(","));
+        config.setAllowedOrigins(origins);
+
+        // Allowed headers
         config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
+
+        // Allowed methods
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+
+        // Allow credentials (important for cookies/auth)
         config.setAllowCredentials(true);
-        config.addExposedHeader(HttpHeaders.CONTENT_DISPOSITION);
+
+        // Expose headers that frontend might need
+        config.setExposedHeaders(Arrays.asList(
+                HttpHeaders.CONTENT_DISPOSITION,
+                HttpHeaders.AUTHORIZATION
+        ));
+
+        // Cache preflight response for 1 hour
+        config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
     }
-
-
 }

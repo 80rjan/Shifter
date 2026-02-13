@@ -14,6 +14,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +22,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.io.IOException;
@@ -40,16 +42,23 @@ public class AuthService {
     private final VerificationTokenRepository verificationTokenRepository;
     private final UserRepository userRepository;
 
+    @Value("${frontend.url}")
+    private String frontendUrl;
+
+    @Value("${cookie.secure}")
+    private boolean cookieSecure;
+
+    @Value("${cookie.same-site}")
+    private String cookieSameSite;
+
     private void sendTokens(HttpServletResponse response, User user) throws IOException {
         String accessToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
-        // Create secure HTTP-only cookie for refresh token
-        // TODO: change config here
         ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
-                .secure(false)           // true for prod
-                .sameSite("Lax")     // Strict for prod
+                .secure(cookieSecure)
+                .sameSite(cookieSameSite)
                 .path("/")
                 .maxAge(Duration.ofDays(7))
                 .build();
@@ -65,24 +74,25 @@ public class AuthService {
         mapper.writeValue(response.getOutputStream(), authResponse);
     }
 
-
+    @Transactional
     public void register(String email, String password, HttpServletResponse response) throws IOException {
         User user = userService.createInitialUser(email, password, LoginProvider.LOCAL);
 
         UUID token = verificationTokenService.generateNewToken(user);
 
-        // TODO: CHANGE THE URL TO BE SHIFT-ER.COM NOT LOCALHOST
-        String verificationUrl = "http://localhost:5173/welcome?token=" + token;
+        String verificationUrl = frontendUrl + "/welcome?token=" + token;
         emailService.sendVerificationToken(user.getEmail(), verificationUrl);
 
         sendTokens(response, user);
     }
 
+    @Transactional
     public void personalize(UserPersonalizationDto userPersonalizationDto, HttpServletResponse response) throws IOException {
         User user = userService.personalizeUser(userPersonalizationDto);
         sendTokens(response, user);
     }
 
+    @Transactional(readOnly = true)
     public void authenticate(LoginDto request, HttpServletResponse response) throws IOException {
         Optional<User> userOptional = userRepository.findByEmail(request.getEmail());
 
@@ -114,6 +124,7 @@ public class AuthService {
             sendTokens(response, user);
     }
 
+    @Transactional(readOnly = true)
     public void finalizeOAuthLogin(Long userId, HttpServletResponse response) throws IOException {
         User user = userService.getUserEntityById(userId);
 
@@ -121,6 +132,7 @@ public class AuthService {
             sendTokens(response, user);
     }
 
+    @Transactional(readOnly = true)
     public AuthResponse refreshToken(HttpServletRequest request) {
         String refreshToken = null;
         if (request.getCookies() != null) {
@@ -162,6 +174,7 @@ public class AuthService {
         response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
 
+    @Transactional(readOnly = true)
     public boolean checkEmail(String email) {
         return userService.existsUserByEmail(email);
     }

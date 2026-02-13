@@ -9,6 +9,7 @@ import com.shifterwebapp.shifter.review.*;
 import com.shifterwebapp.shifter.Validate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,12 +27,14 @@ public class ReviewService implements ImplReviewService {
     private final EnrollmentRepository enrollmentRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public ReviewDto getReviewById(Long id) {
         Review review = reviewRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Review with id " + id + " not found"));
         return reviewMapper.toDto(review);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ReviewDto> getReviewsByCourse(Long courseId) {
         validate.validateCourseExists(courseId);
         List<Review> reviews = reviewRepository.findByCourseId(courseId);
@@ -39,6 +42,7 @@ public class ReviewService implements ImplReviewService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ReviewDto> getReviewsByUser(Long userId) {
         validate.validateUserExists(userId);
         List<Review> reviews = reviewRepository.findByUserId(userId);
@@ -46,6 +50,7 @@ public class ReviewService implements ImplReviewService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ReviewDto getReviewByUserAndCourse(Long userId, Long courseId) {
         validate.validateCourseExists(courseId);
         validate.validateUserExists(userId);
@@ -58,6 +63,7 @@ public class ReviewService implements ImplReviewService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ReviewDto getReviewByEnrollment(Long enrollmentId) {
         validate.validateEnrollmentExists(enrollmentId);
         Review review = reviewRepository.findByEnrollmentId(enrollmentId);
@@ -65,6 +71,7 @@ public class ReviewService implements ImplReviewService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Double getAverageRatingByCourse(Long courseId) {
         validate.validateCourseExists(courseId);
         Double avgRating = reviewRepository.findAverageRatingByCourseId(courseId);
@@ -72,6 +79,7 @@ public class ReviewService implements ImplReviewService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Map<Long, Double> getAverageRatingByCourse(List<Long> courseIds) {
 //        validate.validateCourseExists(courseId);
         return reviewRepository.findByCourseIdIn(courseIds)
@@ -85,6 +93,7 @@ public class ReviewService implements ImplReviewService {
     }
 
     @Override
+    @Transactional
     public ReviewDto writeReview(Long userId, Long courseId, ReviewRequest reviewRequest) {
         validate.validateCourseExists(courseId);
 
@@ -109,6 +118,7 @@ public class ReviewService implements ImplReviewService {
     }
 
     @Override
+    @Transactional
     public ReviewDto updateReview(Long userId, Long courseId, ReviewRequest reviewRequest) {
         validate.validateCourseExists(courseId);
 
@@ -131,6 +141,7 @@ public class ReviewService implements ImplReviewService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Boolean hasBeenReviewedByUser(Long userId, Long courseId) {
         validate.validateUserExists(userId);
         validate.validateCourseExists(courseId);

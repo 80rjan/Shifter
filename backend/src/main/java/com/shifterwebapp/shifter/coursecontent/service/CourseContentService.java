@@ -12,6 +12,7 @@ import com.shifterwebapp.shifter.courselecture.service.CourseLectureService;
 import com.shifterwebapp.shifter.enums.Language;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class CourseContentService implements ImplCourseContentService {
     private final CourseLectureService courseLectureService;
     private final CourseContentMapper courseContentMapper;
 
+    // No transactional annotation here because this is a builder method
     @Override
     public CourseContent buildCourseContent(CourseContentDtoFull courseContentDtoFull, CourseVersion courseVersion, Language language) {
         CourseContent content = CourseContent.builder()
@@ -46,6 +48,7 @@ public class CourseContentService implements ImplCourseContentService {
         return content;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<CourseContentDtoPreview> getCourseContentByCourseId(
             Long courseId,

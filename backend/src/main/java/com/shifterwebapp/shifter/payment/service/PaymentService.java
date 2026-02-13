@@ -14,6 +14,7 @@ import com.shifterwebapp.shifter.enums.PaymentStatus;
 import com.shifterwebapp.shifter.account.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -30,6 +31,7 @@ public class PaymentService implements ImplPaymentService {
     private final Validate validate;
 
     @Override
+    @Transactional(readOnly = true)
     public List<PaymentDto> getPaymentsByUser(Long userId) {
         validate.validateUserExists(userId);
         List<Payment> payments = paymentRepository.findPaymentByUser(userId);
@@ -37,6 +39,7 @@ public class PaymentService implements ImplPaymentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<PaymentDto> getPaymentsByCourse(Long courseId) {
         validate.validateCourseExists(courseId);
         List<Payment> payments = paymentRepository.findPaymentByCourse(courseId);
@@ -44,24 +47,28 @@ public class PaymentService implements ImplPaymentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Double getTotalRevenueByCourse(Long courseId) {
         validate.validateCourseExists(courseId);
         return paymentRepository.findTotalRevenueByCourse(courseId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Double getTotalMonthlyRevenueByCourse(Long courseId, Integer month, Integer year) {
         validate.validateCourseExists(courseId);
         return paymentRepository.findTotalMonthlyRevenueByCourse(courseId, month, year);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Double getTotalYearlyRevenueByCourse(Long courseId, Integer year) {
         validate.validateCourseExists(courseId);
         return paymentRepository.findTotalYearlyRevenueByCourse(courseId, year);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Boolean hasUserPaidForCourse(Long userId, Long courseId) {
         validate.validateCourseExists(courseId);
         validate.validateUserExists(userId);
@@ -69,6 +76,7 @@ public class PaymentService implements ImplPaymentService {
     }
 
     @Override
+    @Transactional
     public Payment initiatePayment(Long userId, Long courseId, PaymentMethod paymentMethod) {
         Course course = courseRepository.findById(courseId).orElseThrow();
         Enrollment enrollment = enrollmentRepository.findByUserIdAndCourseId(userId, courseId);
@@ -87,6 +95,7 @@ public class PaymentService implements ImplPaymentService {
     }
 
     @Override
+    @Transactional
     public PaymentDto completePayment(Long paymentId) {
         validate.validatePaymentExists(paymentId);
         Payment payment = paymentRepository.findById(paymentId).orElseThrow();
@@ -97,6 +106,7 @@ public class PaymentService implements ImplPaymentService {
     }
 
     @Override
+    @Transactional
     public PaymentDto failPayment(Long paymentId) {
         validate.validatePaymentExists(paymentId);
         Payment payment = paymentRepository.findById(paymentId).orElseThrow();

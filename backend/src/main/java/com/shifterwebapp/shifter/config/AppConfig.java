@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.http11.AbstractHttp11Protocol;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
@@ -29,13 +30,21 @@ public class AppConfig {
 
     private final UserRepository userRepository;
 
+    @Value("${upload.max-file-size}")
+    private int maxFileSizeMB;
+
+    @Value("${upload.max-request-size}")
+    private int maxRequestSizeMB;
+
+    @Value("${upload.max-swallow-size}")
+    private int maxSwallowSizeMB;
+
     @Bean
     public MultipartConfigElement multipartConfigElement() {
         MultipartConfigFactory factory = new MultipartConfigFactory();
 
-        factory.setMaxFileSize(DataSize.ofMegabytes(50));
-
-        factory.setMaxRequestSize(DataSize.ofMegabytes(500));
+        factory.setMaxFileSize(DataSize.ofMegabytes(maxFileSizeMB));
+        factory.setMaxRequestSize(DataSize.ofMegabytes(maxRequestSizeMB));
 
         return factory.createMultipartConfig();
     }
@@ -49,7 +58,7 @@ public class AppConfig {
 
                 if (protocolHandler instanceof AbstractHttp11Protocol<?> abstractProtocol) {
 
-                    abstractProtocol.setMaxSwallowSize((int) DataSize.ofMegabytes(200).toBytes());
+                    abstractProtocol.setMaxSwallowSize((int) DataSize.ofMegabytes(maxSwallowSizeMB).toBytes());
 
 //                     abstractProtocol.setMaxParts(50);
                 }

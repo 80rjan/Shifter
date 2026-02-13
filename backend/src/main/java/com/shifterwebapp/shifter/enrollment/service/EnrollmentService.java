@@ -22,7 +22,9 @@ import com.shifterwebapp.shifter.account.user.service.UserService;
 import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgress;
 import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgressRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -42,7 +44,11 @@ public class EnrollmentService implements ImplEnrollmentService {
     private final Validate validate;
     private final CourseVersionRepository courseVersionRepository;
 
+    @Value("${frontend.url}")
+    private String frontendUrl;
+
     @Override
+    @Transactional(readOnly = true)
     public EnrollmentDto getEnrollmentById(Long enrollmentId) {
         validate.validateEnrollmentExists(enrollmentId);
         Enrollment enrollment = enrollmentRepository.findById(enrollmentId).orElseThrow();
@@ -50,6 +56,7 @@ public class EnrollmentService implements ImplEnrollmentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<EnrollmentDto> getEnrollmentsByUser(Long userId) {
         validate.validateUserExists(userId);
         List<Enrollment> enrollments = enrollmentRepository.findByUserId(userId);
@@ -57,18 +64,21 @@ public class EnrollmentService implements ImplEnrollmentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Enrollment> getEnrollmentsEntityByUser(Long userId) {
         validate.validateUserExists(userId);
         return enrollmentRepository.findByUserId(userId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Long> getCourseIdsByUserEnrollments(Long userId) {
         validate.validateUserExists(userId);
         return enrollmentRepository.findEnrolledCourseIdsByUserId(userId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<EnrollmentDto> getEnrollmentsByCourse(Long courseId) {
         validate.validateCourseExists(courseId);
         List<Enrollment> enrollments = enrollmentRepository.findByCourseId(courseId);
@@ -76,6 +86,7 @@ public class EnrollmentService implements ImplEnrollmentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Enrollment getEnrollmentByUserAndCourse(Long userId, Long courseId) {
         validate.validateUserExists(userId);
         validate.validateCourseExists(courseId);
@@ -85,6 +96,7 @@ public class EnrollmentService implements ImplEnrollmentService {
 
 
     @Override
+    @Transactional
     public EnrollmentDto enrollUser(Long courseId, Long userId) {
         validate.validateCourseExists(courseId);
         validate.validateUserExists(userId);
@@ -143,7 +155,7 @@ public class EnrollmentService implements ImplEnrollmentService {
                 enrollment.getUser().getEmail(),
                 courseTranslate.getTitle(),
                 courseTranslate.getDescription(),
-                "http://localhost:5173/learn/" + course.getId() + "/" + courseTitleFormatted,
+                frontendUrl + "/learn/" + course.getId() + "/" + courseTitleFormatted,
                 enrollment.getUser().getName()
         );
 
@@ -151,6 +163,7 @@ public class EnrollmentService implements ImplEnrollmentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Boolean isUserEnrolledInCourse(Long userId, Long courseId) {
         validate.validateUserExists(userId);
         validate.validateCourseExists(courseId);
@@ -159,6 +172,7 @@ public class EnrollmentService implements ImplEnrollmentService {
     }
 
     @Override
+    @Transactional
     public EnrollmentDto updateEnrollmentStatusToActive(Enrollment enrollment) {
         validate.validateEnrollmentExists(enrollment.getId());
 
@@ -172,6 +186,7 @@ public class EnrollmentService implements ImplEnrollmentService {
     }
 
     @Override
+    @Transactional
     public EnrollmentDto updateEnrollmentStatusToCompleted(Long enrollmentId) {
         validate.validateEnrollmentExists(enrollmentId);
 
@@ -205,6 +220,7 @@ public class EnrollmentService implements ImplEnrollmentService {
     }
 
     @Override
+    @Transactional
     public Enrollment saveEnrollment(Enrollment enrollment) {
         return enrollmentRepository.save(enrollment);
     }

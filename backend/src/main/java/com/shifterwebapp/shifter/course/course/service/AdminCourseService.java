@@ -24,9 +24,9 @@ import com.shifterwebapp.shifter.enums.TagType;
 import com.shifterwebapp.shifter.enums.Language;
 import com.shifterwebapp.shifter.external.upload.MetaInfo;
 import com.shifterwebapp.shifter.external.upload.S3UploadResponse;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +43,7 @@ public class AdminCourseService implements ImplAdminCourseService{
     private final CourseLectureService courseLectureService;
     private final CourseMapper courseMapper;
 
+    @Transactional(readOnly = true)
     @Override
     public CourseDtoFull getFullCourse(Long courseId, Language language) {
         validate.validateCourseExists(courseId);
@@ -133,8 +134,7 @@ public class AdminCourseService implements ImplAdminCourseService{
     @Override
     public Course translateCourse(CourseTranslateReq courseTranslateReq) {
         validate.validateCourseExists(courseTranslateReq.getId());
-        // TODO: remove the comment bellow for checking weather a course already has a translation in a language
-//        validate.validateCourseTranslation(courseTranslateReq.getId(), courseTranslateReq.getLanguage());
+        validate.validateCourseTranslation(courseTranslateReq.getId(), courseTranslateReq.getLanguage());
 
         CourseVersion courseVersion = courseVersionRepository.findByActiveTrueAndCourse_Id(courseTranslateReq.getId());
         Course course = courseRepository.findById(courseTranslateReq.getId()).orElseThrow();
@@ -212,11 +212,13 @@ public class AdminCourseService implements ImplAdminCourseService{
     }
 
 
+    @Transactional
     @Override
     public void deleteCourseById(Long courseId) {
         courseRepository.deleteById(courseId);
     }
 
+    @Transactional
     @Override
     public Course updateCourseWithImagesAndFiles(Long courseId, List<S3UploadResponse> s3UploadResponses, Language language) {
         validate.validateCourseExists(courseId);
@@ -260,6 +262,7 @@ public class AdminCourseService implements ImplAdminCourseService{
         return courseRepository.save(course);
     }
 
+    @Transactional
     @Override
     public Boolean lectureFileExistsInCourse(Long courseId, String fileName) {
         return courseRepository.lectureFileExistsInCourse(courseId, fileName);

@@ -16,6 +16,7 @@ import com.shifterwebapp.shifter.scheduledemail.MeetingEmailReminderService;
 import com.shifterwebapp.shifter.account.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -70,6 +71,7 @@ public class MeetingService implements ImplMeetingService {
     }
 
     @Override
+    @Transactional
     public void scheduleMeeting(String userDate, String userTime, String userTimeZone, UserMeetingInfoRequest userMeetingInfoRequest) {
         String userEmail = userMeetingInfoRequest.getEmail();
 

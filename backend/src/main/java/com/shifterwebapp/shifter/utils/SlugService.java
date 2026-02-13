@@ -3,6 +3,7 @@
 import com.shifterwebapp.shifter.course.course.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
  @Service
 @RequiredArgsConstructor
@@ -10,6 +11,7 @@ public class SlugService {
 
     private final CourseRepository courseRepository; // Inject the repository to fetch the title
 
+    @Transactional(readOnly = true)
     public String getEnCourseTitle(Long courseId) {
         return courseRepository.getEnCourseTitle(courseId);
     }

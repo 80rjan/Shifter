@@ -6,9 +6,9 @@ import com.shifterwebapp.shifter.account.user.User;
 import com.shifterwebapp.shifter.account.user.repository.UserRepository;
 import com.shifterwebapp.shifter.verificationtoken.VerificationToken;
 import com.shifterwebapp.shifter.verificationtoken.VerificationTokenRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -52,6 +52,7 @@ public class VerificationTokenService implements ImplVerificationTokenService {
     }
 
     @Override
+    @Transactional
     public String verify(String token) {
         UUID uuid = UUID.fromString(token);
         VerificationToken verificationToken = verificationTokenRepository.findById(uuid)

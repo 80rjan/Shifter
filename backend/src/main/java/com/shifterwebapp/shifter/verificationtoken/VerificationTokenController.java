@@ -6,6 +6,7 @@ import com.shifterwebapp.shifter.account.user.User;
 import com.shifterwebapp.shifter.account.user.service.UserService;
 import com.shifterwebapp.shifter.verificationtoken.service.VerificationTokenService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,9 @@ public class VerificationTokenController {
     private final UserService userService;
     private final VerificationTokenService verificationTokenService;
     private final EmailService emailService;
+
+    @Value("${frontend.url}")
+    private String frontendUrl;
 
     @GetMapping("/{token}/verify")
     public ResponseEntity<String> verify(@PathVariable("token") String token) {
@@ -45,8 +49,7 @@ public class VerificationTokenController {
 
         UUID token = verificationTokenService.generateNewToken(user);
 
-        // TODO: CHANGE THE URL TO BE SHIFT-ER.COM NOT LOCALHOST
-        String verificationUrl = "http://localhost:5173/welcome?token=" + token;
+        String verificationUrl = frontendUrl + "/welcome?token=" + token;
         emailService.sendVerificationToken(user.getEmail(), verificationUrl);
 
         return ResponseEntity.ok("Successfully sent verification email to user.");

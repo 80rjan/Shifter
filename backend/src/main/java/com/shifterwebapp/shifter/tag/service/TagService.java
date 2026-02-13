@@ -12,6 +12,7 @@ import com.shifterwebapp.shifter.enums.Language;
 import com.shifterwebapp.shifter.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -25,6 +26,7 @@ public class TagService implements ImplTagService {
     private final Validate validate;
 
     @Override
+    @Transactional
     public List<Tag> processRawTags(List<String> rawTags, TagType type, Language language) {
         return rawTags.stream()
                 .distinct()
@@ -56,6 +58,7 @@ public class TagService implements ImplTagService {
     }
 
     @Override
+    @Transactional
     public List<Tag> processExistingTags(List<TagReqShort> shortTags, TagType type, Language language) {
         List<Tag> tags = new ArrayList<>();
 
@@ -82,47 +85,56 @@ public class TagService implements ImplTagService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Tag getById(Long id) {
         validate.validateTagExists(id);
         return tagRepository.findById(id).orElseThrow();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Tag> getTagsByIds(List<Long> ids) {
         return tagRepository.findAllById(ids);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Tag> getTagsByIdsAndType(List<Long> ids, TagType tagType) {
         return tagRepository.findByIdInAndType(ids, tagType);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Tag> getTagsByCourseIdAndType(Long courseId, TagType tagType) {
         return tagRepository.findByCourseIdAndType(courseId, tagType);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<String> getSkillsByCourseIdAndLanguage(Long courseId, Language language) {
         return tagRepository.findTagValueByCourseIdAndTypeAndLanguage(courseId, TagType.SKILL, language);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<String> getTopicsByCourseIdAndLanguage(Long courseId, Language language) {
         return tagRepository.findTagValueByCourseIdAndTypeAndLanguage(courseId, TagType.TOPIC, language);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<String> getSkillsByUserId(Long userId, Language language) {
         return tagRepository.findTagValueByUserIdAndTypeAndLanguage(userId, TagType.SKILL, language);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<String> getTopicsByUserId(Long userId, Language language) {
         return tagRepository.findTagValueByUserIdAndTypeAndLanguage(userId, TagType.TOPIC, language);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Map<Long, List<String>> getSkillsByCourseIdsAndLanguage(List<Long> courseIds, Language language) {
         return tagRepository.findByCourseIdInAndTypeAndLanguage(courseIds, TagType.SKILL, language)
                 .stream()
@@ -136,6 +148,7 @@ public class TagService implements ImplTagService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Map<Long, List<String>> getTopicsByCourseIdsAndLanguage(List<Long> courseIds, Language language) {
         return tagRepository.findByCourseIdInAndTypeAndLanguage(courseIds, TagType.TOPIC, language)
                 .stream()
@@ -149,6 +162,7 @@ public class TagService implements ImplTagService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Map<Long, CourseSkillsAndInterestsView> getTagsByCourseIdsAndLanguage(
             List<Long> courseIds,
             Language language
