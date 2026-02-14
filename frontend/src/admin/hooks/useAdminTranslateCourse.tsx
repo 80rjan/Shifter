@@ -64,7 +64,6 @@ export function useAdminTranslateCourse() {
        setIsFetchingCourse(true);
         fetchCourseFullApi(+courseId, accessToken || "")
             .then(courseRes => {
-                console.log(courseRes);
                 setCourseFull(courseRes);
                 setCourseTranslate({
                     ...courseTranslate,
@@ -146,7 +145,6 @@ export function useAdminTranslateCourse() {
         setError(null);
 
         try {
-            console.log("Translating", courseTranslate)
             const courseId = await translateCourseApi(courseTranslate, accessToken || "");
             if (!courseId) {
                 throw new Error("Failed to translate course.");

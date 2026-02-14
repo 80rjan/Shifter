@@ -9,8 +9,8 @@ export default defineConfig({
         react(),
         tailwindcss(),
     ],
-    build: {
-        outDir: '../docs'
-    },
+    // build: {
+    //     outDir: '../docs'
+    // },
     // base: '/Shifter/'
 })

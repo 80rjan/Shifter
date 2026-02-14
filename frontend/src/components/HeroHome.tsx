@@ -53,8 +53,8 @@ function HeroHome() {
                             to={user?.usedFreeConsultation ? "/contact" : "/free-consultation"}
                             className="hover:shadow-white/60 transition-all duration-300 ease-in-out cursor-pointer
                             rounded-lg text-black/90 bg-white border-2 border-black/20
-                            w-fit shadow-md shadow-white/40 px-6 py-1.5 font-semibold text-xs
-                            sm:text-sm sm:px-8
+                            w-fit shadow-md shadow-white/40 px-6 py-1.5 font-bold text-xs
+                            sm:text-sm sm:px-8 sm:font-semibold
                             md:text-base md:px-12 md:py-2
                             lg:text-lg
                             xl:text-xl xl:px-18

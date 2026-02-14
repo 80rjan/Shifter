@@ -1,5 +1,5 @@
 import {useTranslation} from "react-i18next";
-import CEOImage from "../../public/Aco Gjorgjievski.png";
+import CEOImage from "../../public/Aco Gjorgjievski.jpg";
 
 export default function AcoSection() {
     const {t} = useTranslation("about");

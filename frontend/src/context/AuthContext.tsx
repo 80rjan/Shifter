@@ -39,7 +39,7 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
     const register = async (email: string, password: string) => {
         return registerApi(email, password)
             .then(() => {
-                console.log("Successfully registered and sent email to user");
+                // console.log("Successfully registered and sent email to user");
             })
             .catch(error => {
                 console.error("Registration failed:", error);
@@ -50,7 +50,7 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
     const verify = async (verificationToken: string) => {
         return verifyApi(verificationToken)
             .then(userEmail => {
-                console.log("Successfully verified user email");
+                // console.log("Successfully verified user email");
                 return userEmail;
             })
             .catch(error => {
@@ -101,7 +101,6 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
 
         return refreshAccessTokenApi()
             .then(async data => {
-                console.log("ACCESS TOKEN", data.accessToken)
                 setAccessToken(data.accessToken);
             })
             .catch(error => {

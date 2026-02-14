@@ -34,7 +34,7 @@ export function useAdminAddCourse() {
 
     const courseCard = (
         <CourseCard card={{
-            id: 0, // temporary since new javaObjects has no ID yet
+            id: 0, // temporary since new course has no ID yet
             imageUrl: courseImage ? URL.createObjectURL(courseImage) : "",
             color: course.color,
             titleShort: course.titleShort,

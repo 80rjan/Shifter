@@ -43,7 +43,7 @@ function CourseCard({card}: { card: CoursePreview }) {
         if (user) {
             toggleFavoriteCourseApi(card.id, accessToken || "")
                 .then(() => {
-                    console.log("Course favorite status toggled successfully");
+                    // console.log("Course favorite status toggled successfully");
                 })
                 .catch((error) => {
                     setUser(prevUser => {

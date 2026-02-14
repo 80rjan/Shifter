@@ -98,9 +98,7 @@ function Learn() {
                             allCourses.filter(course => user?.favoriteCourseIds.includes(course.id)).length > 0 ?
                                 allCourses?.filter(course => user?.favoriteCourseIds.includes(course.id)).map((course, index) => (
                                     <CourseCardLearnDashboard course={course} key={index}
-                                                              markCourseAsRated={(rating) => {
-                                                                  console.log(rating)
-                                                              }}/>
+                                                              markCourseAsRated={() => {}}/>
                                 )) : (
                                     <h2 className="text-2xl font-semibold text-black/60 text-left whitespace-nowrap">{noCoursesMessage.favorites}</h2>
                                 )

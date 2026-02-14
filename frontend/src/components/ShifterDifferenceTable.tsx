@@ -38,9 +38,12 @@ export default function ShifterDifferenceTable() {
                                 shadow-lg bg-white">
 
                                 {/* Challenge Header */}
-                                <div className="bg-gradient-to-r from-cta/10 to-cta/5 px-6 py-5
-                                    sm:px-7 sm:py-6 md:px-8 md:py-7 border-b border-cta/20">
-                                    <h3 className="text-xl font-bold text-black-text sm:text-2xl md:text-3xl">
+                                <div className="bg-gradient-to-r from-cta/10 to-cta/5 border-b border-cta/20 px-6 py-2
+                                    sm:px-7 sm:py-3
+                                    md:px-8 md:py-4 ">
+                                    <h3 className="text-xl font-semibold text-black-text
+                                        sm:text-2xl
+                                        md:text-3xl">
                                         {row.challenge}
                                     </h3>
                                 </div>
@@ -49,8 +52,10 @@ export default function ShifterDifferenceTable() {
                                 <div className="flex flex-col sm:flex-row">
 
                                     {/* Shifter Approach - Left/Top */}
-                                    <div className="flex-1 p-6 sm:p-7 md:p-8 bg-cta/5 sm:border-r sm:border-cta/10">
-                                        <div className="flex items-center gap-2 mb-4 sm:mb-5">
+                                    <div className="flex-1 p-4 bg-cta/5 sm:border-r sm:border-cta/10
+                                         sm:p-6
+                                         md:p-6">
+                                        <div className="flex items-center gap-2 mb-2 md:mb-5">
                                             <div className="w-6 h-6 rounded-full bg-cta/20 flex items-center justify-center
                                                 sm:w-7 sm:h-7 flex-shrink-0">
                                                 <Check color="var(--color-cta)" className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={3}/>
@@ -68,8 +73,10 @@ export default function ShifterDifferenceTable() {
                                     </div>
 
                                     {/* Traditional Approach - Right/Bottom */}
-                                    <div className="flex-1 p-6 sm:p-7 md:p-8 bg-black/[0.02]">
-                                        <div className="flex items-center gap-2 mb-4 sm:mb-5">
+                                    <div className="flex-1 p-4 bg-black/[0.02]
+                                         sm:p-6
+                                         md:p-6">
+                                        <div className="flex items-center gap-2 mb-2 md:mb-5">
                                             <div className="w-6 h-6 rounded-full bg-black/10 flex items-center justify-center
                                                 sm:w-7 sm:h-7 flex-shrink-0">
                                                 <X color="var(--color-black)" className="w-3.5 h-3.5 opacity-40 sm:w-4 sm:h-4" strokeWidth={3}/>

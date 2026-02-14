@@ -31,9 +31,8 @@ export function useEnrollUserInCourse(courseId: number, urlSlug: string) {
             setRecommendedCourses(recommendedCourses);
 
             navigate(`/learn/${courseId}/${urlSlug}`);
-            console.log("User enrolled in javaObjects successfully");
         } catch (error) {
-            console.error("Error enrolling user in javaObjects:", error);
+            console.error("Error enrolling user in course:", error);
             throw error;
         }
     }
