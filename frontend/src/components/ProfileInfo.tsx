@@ -26,9 +26,9 @@ function ProfileInfo() {
                 <p className="text-xl font-semibold
                     sm:text-2xl
                     md:text-3xl">{user?.name}</p>
-                <p className="text-base font-light
-                    sm:text-lg
-                    md:text-xl">{user?.email}</p>
+                <p className="text-sm font-light
+                    sm:text-base
+                    md:text-lg">{user?.email}</p>
             </div>
 
         </section>

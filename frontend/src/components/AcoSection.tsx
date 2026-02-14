@@ -1,4 +1,5 @@
 import {useTranslation} from "react-i18next";
+import CEOImage from "../../public/Aco Gjorgjievski.png";
 
 export default function AcoSection() {
     const {t} = useTranslation("about");
@@ -68,12 +69,16 @@ export default function AcoSection() {
                 </div>
 
                 {/* Image/Placeholder */}
-                <div className="h-64 bg-black/20 rounded-2xl
-                    sm:h-80
-                    md:h-96
-                    lg:col-span-1 lg:h-full lg:min-h-[400px]
-                    xl:min-h-[500px]
-                    2xl:min-h-[600px]"/>
+                <div className="h-80 bg-black/20 rounded-2xl overflow-hidden
+                    sm:h-96
+                    md:h-120
+                    lg:col-span-1 lg:h-full
+                    2xl:min-h-[600px] 2xl:max-h-[500px]">
+                    <img src={CEOImage} alt="CEO image"
+                         className="w-full h-full object-cover object-[center_20%]
+                         sm:object-[center_10%]
+                         lg:object-center"/>
+                </div>
             </div>
         </section>
     )

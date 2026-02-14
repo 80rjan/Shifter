@@ -201,7 +201,7 @@ function FreeConsultation() {
                                     sm:text-md">{error}</p>}
                             </div>
 
-                            {!meetingScheduled ? (
+                            {meetingScheduled ? (
                                 <div className="text-center w-full mt-4">
                                     <h2 className="text-lg font-bold text-shifter mb-3
                                         sm:text-xl
