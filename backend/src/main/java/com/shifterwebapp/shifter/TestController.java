@@ -59,4 +59,9 @@ public class TestController {
 
         return status;
     }
+
+    @GetMapping
+    public String testEndpoint() {
+        return "Test endpoint is working!";
+    }
 }
