@@ -9,8 +9,11 @@ import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.shifterwebapp.shifter.exception.GoogleCalendarException;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
+import java.util.Base64;
 import java.io.InputStream;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
@@ -22,8 +25,9 @@ public class GoogleCalendarService {
     private static final String APPLICATION_NAME = "Shifter App";
     private static final GsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
 
+    @Value("${google.expert.calendar-id}")
     @Getter
-    private final String expertCalendarId = System.getProperty("GOOGLE_EXPERT_CALENDAR_ID");
+    private String expertCalendarId;        // this is the calendar that i have connected for meetings
 
     private final Calendar calendarService;
 
@@ -36,9 +40,19 @@ public class GoogleCalendarService {
      */
     private Calendar initService() {
         try {
-            InputStream serviceAccountStream = getClass().getResourceAsStream("/service-account.json");
-            if (serviceAccountStream == null) {
-                throw new GoogleCalendarException("Service account JSON not found in classpath", null, false);
+            InputStream serviceAccountStream;
+
+            // Try to load from environment variable first (for production)
+            String base64Json = System.getenv("GOOGLE_CALENDAR_SERVICE_ACCOUNT_JSON_BASE64");
+            if (base64Json != null && !base64Json.isEmpty()) {
+                byte[] decodedJson = Base64.getDecoder().decode(base64Json);
+                serviceAccountStream = new ByteArrayInputStream(decodedJson);
+            } else {
+                // Fallback to local file (for development)
+                serviceAccountStream = getClass().getResourceAsStream("/service-account.json");
+                if (serviceAccountStream == null) {
+                    throw new GoogleCalendarException("Service account JSON not found in classpath or environment", null, false);
+                }
             }
 
             GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccountStream)

@@ -5,6 +5,7 @@ import com.shifterwebapp.shifter.scheduledemail.MeetingEmailReminderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -16,6 +17,7 @@ public class EmailScheduler {
     private final EmailService emailService;
     private final MeetingEmailReminderService meetingEmailReminderService;
 
+    @Transactional
     @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 1) // every minute
     public void sendScheduledEmails() {
         List<MeetingEmailReminder> pendingEmails = meetingEmailReminderService.getPendingEmails();

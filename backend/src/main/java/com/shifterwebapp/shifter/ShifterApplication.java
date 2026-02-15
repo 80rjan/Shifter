@@ -51,13 +51,7 @@ public class ShifterApplication {
 
 		// Google Calendar
 		setPropertyIfPresent(dotenv, "GOOGLE_EXPERT_CALENDAR_ID");
-		setPropertyIfPresent(dotenv, "GOOGLE_SERVICE_ACCOUNT_EMAIL");
-
-		// Handle private key with newline replacement
-		String privateKey = dotenv.get("GOOGLE_CALENDAR_PRIVATE_KEY");
-		if (privateKey != null && System.getProperty("GOOGLE_CALENDAR_PRIVATE_KEY") == null) {
-			System.setProperty("GOOGLE_CALENDAR_PRIVATE_KEY", privateKey.replace("\\n", "\n"));
-		}
+		setPropertyIfPresent(dotenv, "GOOGLE_CALENDAR_SERVICE_ACCOUNT_JSON_BASE64");
 
 		// Email
 		setPropertyIfPresent(dotenv, "EMAIL_HOST");
