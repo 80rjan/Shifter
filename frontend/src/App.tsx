@@ -22,7 +22,6 @@ import FreeConsultation from "./pages/FreeConsultation.tsx";
 import LanguageToggle from "./layout/LanguageToggle.tsx";
 import LoadingScreen from "./layout/LoadingScreen.tsx";
 import {createNewVerificationTokenApi} from "./api/verificationTokenApi.ts";
-import AppLoader from "./AppLoader.tsx";
 import {useUserContext} from "./context/UserContext.tsx";
 import i18n from "i18next";
 import {getLangFromPath} from "./utils/langUrl.ts";
@@ -249,7 +248,7 @@ export default function App() {
 
     return (
         <>
-            <AppLoader/>
+            {/*<AppLoader/>*/}
             <ScrollToTop/>
             <ToastContainer
                 position="top-right"
