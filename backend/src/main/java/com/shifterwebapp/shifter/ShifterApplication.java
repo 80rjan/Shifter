@@ -30,11 +30,16 @@ public class ShifterApplication {
 		setPropertyIfPresent(dotenv, "SPRING_DATASOURCE_PASSWORD");
 		setPropertyIfPresent(dotenv, "DB_POOL_SIZE");
 		setPropertyIfPresent(dotenv, "DB_POOL_MIN_IDLE");
+		setPropertyIfPresent(dotenv, "DB_POOL_CON_TIMEOUT");
+		setPropertyIfPresent(dotenv, "DB_POOL_IDLE_TIMEOUT");
+		setPropertyIfPresent(dotenv, "DB_POOL_MAX_LIFETIME");
 		setPropertyIfPresent(dotenv, "DDL_AUTO");
 		setPropertyIfPresent(dotenv, "SHOW_SQL");
 
 		// JWT
 		setPropertyIfPresent(dotenv, "JWT_CONFIG_SECRET");
+		setPropertyIfPresent(dotenv, "COOKIE_SECURE");
+		setPropertyIfPresent(dotenv, "COOKIE_SAME_SITE");
 		setPropertyIfPresent(dotenv, "JWT_EXPIRATION");
 		setPropertyIfPresent(dotenv, "JWT_REFRESH_EXPIRATION");
 
@@ -47,17 +52,13 @@ public class ShifterApplication {
 		// Google OAuth2
 		setPropertyIfPresent(dotenv, "GOOGLE_CLIENT_ID");
 		setPropertyIfPresent(dotenv, "GOOGLE_CLIENT_SECRET");
-		setPropertyIfPresent(dotenv, "GOOGLE_REFRESH_TOKEN");
 
 		// Google Calendar
 		setPropertyIfPresent(dotenv, "GOOGLE_EXPERT_CALENDAR_ID");
 		setPropertyIfPresent(dotenv, "GOOGLE_CALENDAR_SERVICE_ACCOUNT_JSON_BASE64");
 
 		// Email
-		setPropertyIfPresent(dotenv, "EMAIL_HOST");
-		setPropertyIfPresent(dotenv, "EMAIL_PORT");
-		setPropertyIfPresent(dotenv, "EMAIL_USERNAME");
-		setPropertyIfPresent(dotenv, "EMAIL_PASSWORD");
+		setPropertyIfPresent(dotenv, "ZEPTOMAIL_API_KEY");
 
 		// Zoom
 		setPropertyIfPresent(dotenv, "ZOOM_ACCOUNT_ID");

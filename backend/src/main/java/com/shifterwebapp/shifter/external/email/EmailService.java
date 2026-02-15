@@ -1,13 +1,16 @@
 package com.shifterwebapp.shifter.external.email;
 
 import com.shifterwebapp.shifter.external.meeting.UserMeetingInfoRequest;
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,157 +20,161 @@ import java.time.LocalDate;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
-import org.springframework.mail.javamail.MimeMessageHelper;
-import jakarta.mail.internet.MimeMessage;
-import org.springframework.util.FileCopyUtils;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class EmailService {
 
-    private final JavaMailSender mailSender;
+    private final RestTemplate restTemplate = new RestTemplate();
 
-    @Value("${spring.mail.username}")
-    private String emailUsername;
+    @Value("${zeptomail.api.url}")
+    private String zeptomailApiUrl;
 
-    private final String shifterEmail = "contact@mail.shift-er.com";
+    @Value("${zeptomail.api.key}")
+    private String zeptomailApiKey;
+
+    private final String contactEmail = "contact@mail.shift-er.com";
     private final String noreplyEmail = "noreply@shift-er.com";
     private final String expertEmail = "aco@shift-er.com";
 
-    public void contactExpert(String userEmail, ContactReq contactReq) {
-        SimpleMailMessage message = new SimpleMailMessage();
+    /**
+     * Helper method to send email via ZeptoMail HTTP API
+     */
+    private void sendEmail(String fromAddress, String to, String subject, String htmlContent, String replyTo) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Zoho-enczapikey " + zeptomailApiKey);
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
-        message.setFrom(noreplyEmail);
-        message.setTo(expertEmail);
-        message.setReplyTo(userEmail);
-        message.setSubject("New Contact Message: " + contactReq.getSubject());
-        String body = "From: " + userEmail + "\n\n" + contactReq.getText();
-        message.setText(body);
+        // Build ZeptoMail API request body
+        Map<String, Object> from = Map.of("address", fromAddress);
+        Map<String, Object> toAddress = Map.of("email_address", Map.of("address", to));
+
+        Map<String, Object> emailBody;
+        if (replyTo != null && !replyTo.isEmpty()) {
+            emailBody = Map.of(
+                    "from", from,
+                    "to", List.of(toAddress),
+                    "subject", subject,
+                    "htmlbody", htmlContent,
+                    "reply_to", List.of(Map.of("address", replyTo))
+            );
+        } else {
+            emailBody = Map.of(
+                    "from", from,
+                    "to", List.of(toAddress),
+                    "subject", subject,
+                    "htmlbody", htmlContent
+            );
+        }
+
+        HttpEntity<Map<String, Object>> request = new HttpEntity<>(emailBody, headers);
+
+        // Send with retries
         int maxRetries = 3;
         int attempt = 0;
+
         while (true) {
             try {
-                mailSender.send(message);
-                return;
+                ResponseEntity<String> response = restTemplate.postForEntity(
+                        zeptomailApiUrl,
+                        request,
+                        String.class
+                );
+
+                if (response.getStatusCode().is2xxSuccessful()) {
+                    return; // Success
+                }
+
+                throw new RuntimeException("ZeptoMail API returned status: " + response.getStatusCode());
+
             } catch (Exception e) {
                 attempt++;
                 if (attempt >= maxRetries) {
-                    System.out.println(e.getMessage());
-                    throw new RuntimeException("Failed to send email to expert after " + attempt + " attempts", e);
+                    throw new RuntimeException("Failed to send email to " + to + " after " + attempt + " attempts", e);
                 }
-            }
-        }
-    }
 
-    public void sendCoursePurchaseConfirmation(String to, String courseName, String courseDescription, String accessUrl, String userName) {
-
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
-
-        try {
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-
-            helper.setTo(to);
-            helper.setSubject("Welcome to " + courseName + "! Start Learning Now");
-            helper.setFrom(noreplyEmail);
-            helper.setReplyTo(shifterEmail);
-
-            int currentYear = Year.now().getValue();
-
-            String htmlTemplate;
-            try {
-                ClassPathResource resource = new ClassPathResource("email-templates/course_purchase_confirmation.html");
-                htmlTemplate = FileCopyUtils.copyToString(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
-            } catch (IOException e) {
-                // Throw a runtime exception if the template file can't be loaded
-                throw new UncheckedIOException("Failed to load email template: course_purchase_confirmation.html", e);
-            }
-
-            String htmlContent = htmlTemplate
-                    .replace("${courseName}", courseName)
-                    .replace("${courseDescription}", courseDescription)
-                    .replace("${accessUrl}", accessUrl)
-                    .replace("${currentYear}", String.valueOf(currentYear));
-
-            helper.setText(htmlContent, true);
-
-            int maxRetries = 3;
-            int attempt = 0;
-            while (true) {
+                // Wait a bit before retry
                 try {
-                    mailSender.send(mimeMessage);
-                    return;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    attempt++;
-                    if (attempt >= maxRetries) {
-                        throw new RuntimeException("Failed to send HTML email to " + to + " after " + attempt + " attempts", e);
-                    }
+                    Thread.sleep(1000 * attempt); // Exponential backoff
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException("Interrupted during email retry", ie);
                 }
             }
-
-        } catch (MessagingException e) {
-            throw new RuntimeException("Error preparing email message for " + to, e);
         }
     }
 
-    public void sendFreeConsultationConfirmation(String to, String date, String time, String zoomLink) {
-
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
-
+    /**
+     * Helper method to load HTML email template
+     */
+    private String loadTemplate(String templateName) {
         try {
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-
-            String subject = "Your Free Consultation Session is Scheduled - " + date + " at " + time;
-
-            helper.setTo(to);
-            helper.setSubject(subject);
-            helper.setFrom(noreplyEmail);
-            helper.setReplyTo(shifterEmail);
-
-            String currentYear = String.valueOf(java.time.Year.now().getValue());
-
-            String htmlTemplate;
-            try {
-                ClassPathResource resource = new ClassPathResource("email-templates/free_consultation_confirmation.html");
-                htmlTemplate = FileCopyUtils.copyToString(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
-            } catch (IOException e) {
-                throw new UncheckedIOException("Failed to load email template: free_consultation_confirmation.html", e);
-            }
-
-            String htmlContent = htmlTemplate
-                    .replace("${date}", date)
-                    .replace("${time}", time)
-                    .replace("${zoomLink}", zoomLink)
-                    .replace("${currentYear}", currentYear);
-
-            helper.setText(htmlContent, true);
-
-            int maxRetries = 3;
-            int attempt = 0;
-            while (true) {
-                try {
-                    mailSender.send(mimeMessage);
-                    return;
-                } catch (Exception e) {
-                    attempt++;
-                    if (attempt >= maxRetries) {
-                        throw new RuntimeException("Failed to send HTML email to " + to + " after " + attempt + " attempts", e);
-                    }
-                }
-            }
-
-        } catch (MessagingException e) {
-            throw new RuntimeException("Error preparing email message for " + to, e);
+            ClassPathResource resource = new ClassPathResource("email-templates/" + templateName);
+            return FileCopyUtils.copyToString(
+                    new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)
+            );
+        } catch (IOException e) {
+            throw new UncheckedIOException("Failed to load email template: " + templateName, e);
         }
     }
 
-    public void sendFreeConsultationReminder(String to, String meetingDate, String meetingTime, String zoomLink) {
+    public void contactExpert(String userEmail, ContactReq contactReq) {
+        String subject = "New Contact Message: " + contactReq.getSubject();
+        String textBody = "From: " + userEmail + "\n\n" + contactReq.getText();
 
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        // Convert text to simple HTML
+        String htmlContent = "<html><body><pre>" + textBody + "</pre></body></html>";
 
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE; // e.g., "2025-10-01"
+        sendEmail(noreplyEmail, expertEmail, subject, htmlContent, userEmail);
+    }
 
+    public void sendCoursePurchaseConfirmation(
+            String to,
+            String courseName,
+            String courseDescription,
+            String accessUrl,
+            String userName) {
+
+        String subject = "Welcome to " + courseName + "! Start Learning Now";
+        int currentYear = Year.now().getValue();
+
+        String htmlTemplate = loadTemplate("course_purchase_confirmation.html");
+        String htmlContent = htmlTemplate
+                .replace("${courseName}", courseName)
+                .replace("${courseDescription}", courseDescription)
+                .replace("${accessUrl}", accessUrl)
+                .replace("${currentYear}", String.valueOf(currentYear));
+
+        sendEmail(noreplyEmail, to, subject, htmlContent, contactEmail);
+    }
+
+    public void sendFreeConsultationConfirmation(
+            String to,
+            String date,
+            String time,
+            String zoomLink) {
+
+        String subject = "Your Free Consultation Session is Scheduled - " + date + " at " + time;
+        String currentYear = String.valueOf(Year.now().getValue());
+
+        String htmlTemplate = loadTemplate("free_consultation_confirmation.html");
+        String htmlContent = htmlTemplate
+                .replace("${date}", date)
+                .replace("${time}", time)
+                .replace("${zoomLink}", zoomLink)
+                .replace("${currentYear}", currentYear);
+
+        sendEmail(noreplyEmail, to, subject, htmlContent, contactEmail);
+    }
+
+    public void sendFreeConsultationReminder(
+            String to,
+            String meetingDate,
+            String meetingTime,
+            String zoomLink) {
+
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
         LocalDate today = LocalDate.now();
         LocalDate meetingLocalDate = LocalDate.parse(meetingDate, dateFormatter);
 
@@ -179,170 +186,73 @@ public class EmailService {
             subject = "Reminder: Tomorrow is your Free Consultation Session at " + meetingTime;
             reminderHeading = "Your Session is Tomorrow!";
             reminderText = "This is a friendly reminder that your free consultation session is scheduled for tomorrow. We look forward to meeting with you and helping you plan your next steps!";
-        }
-        else if (meetingLocalDate.isEqual(today)) {
+        } else if (meetingLocalDate.isEqual(today)) {
             subject = "Reminder: Free Consultation Session in 2 hours";
             reminderHeading = "Your Session is in 2 Hours!";
             reminderText = "This is a crucial final reminder. Your free consultation session is starting soon. Please use the link below to join promptly!";
-        }
-        else {
+        } else {
             System.out.println("Scheduler error: Reminder function called outside of expected time window for meeting on: " + meetingDate);
             return;
         }
 
-        try {
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+        String currentYear = String.valueOf(Year.now().getValue());
+        String htmlTemplate = loadTemplate("consultation_reminder.html");
+        String htmlContent = htmlTemplate
+                .replace("${subject}", subject)
+                .replace("${meetingDate}", meetingDate)
+                .replace("${meetingTime}", meetingTime)
+                .replace("${zoomLink}", zoomLink)
+                .replace("${reminderHeading}", reminderHeading)
+                .replace("${reminderText}", reminderText)
+                .replace("${currentYear}", currentYear);
 
-            helper.setTo(to);
-            helper.setSubject(subject);
-            helper.setFrom(noreplyEmail);
-            helper.setReplyTo(shifterEmail);
-
-            String currentYear = String.valueOf(Year.now().getValue());
-
-            String htmlTemplate;
-            try {
-                ClassPathResource resource = new ClassPathResource("email-templates/consultation_reminder.html");
-                htmlTemplate = FileCopyUtils.copyToString(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
-            } catch (IOException e) {
-                throw new UncheckedIOException("Failed to load email template: consultation_reminder.html", e);
-            }
-
-            String htmlContent = htmlTemplate
-                    .replace("${subject}", subject)
-                    .replace("${meetingDate}", meetingDate)
-                    .replace("${meetingTime}", meetingTime)
-                    .replace("${zoomLink}", zoomLink)
-                    .replace("${reminderHeading}", reminderHeading)
-                    .replace("${reminderText}", reminderText)
-                    .replace("${currentYear}", currentYear);
-
-            helper.setText(htmlContent, true);
-
-            int maxRetries = 3;
-            int attempt = 0;
-            while (true) {
-                try {
-                    mailSender.send(mimeMessage);
-                    return;
-                } catch (Exception e) {
-                    attempt++;
-                    if (attempt >= maxRetries) {
-                        throw new RuntimeException("Failed to send HTML reminder email to " + to + " after " + attempt + " attempts", e);
-                    }
-                }
-            }
-
-        } catch (MessagingException e) {
-            throw new RuntimeException("Error preparing email message for " + to, e);
-        }
+        sendEmail(noreplyEmail, to, subject, htmlContent, contactEmail);
     }
 
-    public void sendExpertMeetingInformation(UserMeetingInfoRequest userMeetingInfoRequest, String time, String date, String userTimeZone, String zoomLink) {
-
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
+    public void sendExpertMeetingInformation(
+            UserMeetingInfoRequest userMeetingInfoRequest,
+            String time,
+            String date,
+            String userTimeZone,
+            String zoomLink) {
 
         String subject = "You Have an Upcoming Free Consultation Session - " + date + " at " + time;
+        String currentYear = String.valueOf(Year.now().getValue());
 
-        try {
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+        String htmlTemplate = loadTemplate("expert_meeting_info.html");
+        String htmlContent = htmlTemplate
+                .replace("${subject}", subject)
+                .replace("${date}", date)
+                .replace("${time}", time)
+                .replace("${zoomLink}", zoomLink)
+                .replace("${name}", userMeetingInfoRequest.getName())
+                .replace("${email}", userMeetingInfoRequest.getEmail())
+                .replace("${companyType}", userMeetingInfoRequest.getCompanySize() != null ?
+                        userMeetingInfoRequest.getCompanySize().toString() : "N/A")
+                .replace("${workPosition}", userMeetingInfoRequest.getWorkPosition())
+                .replace("${userTimeZone}", userTimeZone)
+                .replace("${basicInfo}", userMeetingInfoRequest.getBasicInfo() != null ?
+                        userMeetingInfoRequest.getBasicInfo() : "N/A")
+                .replace("${aboutCompany}", userMeetingInfoRequest.getAboutCompany() != null ?
+                        userMeetingInfoRequest.getAboutCompany() : "N/A")
+                .replace("${challenges}", userMeetingInfoRequest.getChallenges() != null ?
+                        userMeetingInfoRequest.getChallenges() : "N/A")
+                .replace("${otherInfo}", userMeetingInfoRequest.getOtherInfo() != null ?
+                        userMeetingInfoRequest.getOtherInfo() : "N/A")
+                .replace("${currentYear}", currentYear);
 
-            helper.setTo(expertEmail); // Send to the expert's email
-            helper.setSubject(subject);
-            helper.setFrom(noreplyEmail);
-
-            String currentYear = String.valueOf(Year.now().getValue());
-
-            String htmlTemplate;
-            try {
-                ClassPathResource resource = new ClassPathResource("email-templates/expert_meeting_info.html");
-                htmlTemplate = FileCopyUtils.copyToString(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
-            } catch (IOException e) {
-                throw new UncheckedIOException("Failed to load email template: expert_meeting_info.html", e);
-            }
-
-            String htmlContent = htmlTemplate
-                    .replace("${subject}", subject)
-                    .replace("${date}", date)
-                    .replace("${time}", time)
-                    .replace("${zoomLink}", zoomLink)
-                    .replace("${name}", userMeetingInfoRequest.getName())
-                    .replace("${email}", userMeetingInfoRequest.getEmail())
-                    .replace("${companyType}", userMeetingInfoRequest.getCompanySize() != null ? userMeetingInfoRequest.getCompanySize().toString() : "N/A")
-                    .replace("${workPosition}", userMeetingInfoRequest.getWorkPosition())
-                    .replace("${userTimeZone}", userTimeZone)
-                    // Using ternary operators directly for "N/A" fallback
-                    .replace("${basicInfo}", userMeetingInfoRequest.getBasicInfo() != null ? userMeetingInfoRequest.getBasicInfo() : "N/A")
-                    .replace("${aboutCompany}", userMeetingInfoRequest.getAboutCompany() != null ? userMeetingInfoRequest.getAboutCompany() : "N/A")
-                    .replace("${challenges}", userMeetingInfoRequest.getChallenges() != null ? userMeetingInfoRequest.getChallenges() : "N/A")
-                    .replace("${otherInfo}", userMeetingInfoRequest.getOtherInfo() != null ? userMeetingInfoRequest.getOtherInfo() : "N/A")
-                    .replace("${currentYear}", currentYear);
-
-
-            helper.setText(htmlContent, true);
-
-            int maxRetries = 3;
-            int attempt = 0;
-            while (true) {
-                try {
-                    mailSender.send(mimeMessage);
-                    return;
-                } catch (Exception e) {
-                    attempt++;
-                    if (attempt >= maxRetries) {
-                        throw new RuntimeException("Failed to send expert email with meeting info after " + attempt + " attempts", e);
-                    }
-                }
-            }
-
-        } catch (MessagingException e) {
-            throw new RuntimeException("Error preparing email message for expert", e);
-        }
+        sendEmail(noreplyEmail, expertEmail, subject, htmlContent, null);
     }
 
     public void sendVerificationToken(String to, String verificationUrl) {
+        String subject = "Your Shifter Account";
+        String currentYear = String.valueOf(Year.now().getValue());
 
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        String htmlTemplate = loadTemplate("verify_account.html");
+        String htmlContent = htmlTemplate
+                .replace("${verificationUrl}", verificationUrl)
+                .replace("${currentYear}", currentYear);
 
-        try {
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-
-            helper.setTo(to);
-            helper.setSubject("Your Shifter Account");
-            helper.setFrom(noreplyEmail);
-            helper.setReplyTo(shifterEmail);
-
-            String htmlTemplate;
-            try {
-                ClassPathResource resource = new ClassPathResource("email-templates/verify_account.html");
-                htmlTemplate = FileCopyUtils.copyToString(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
-            } catch (IOException e) {
-                // Throw a runtime exception if the template file can't be loaded
-                throw new UncheckedIOException("Failed to load email template: verify_account.html", e);
-            }
-
-            String htmlContent = htmlTemplate
-                    .replace("${verificationUrl}", verificationUrl)
-                    .replace("${currentYear}", String.valueOf(Year.now().getValue()));
-
-            helper.setText(htmlContent, true);
-
-            int maxRetries = 3;
-            int attempt = 0;
-            while (true) {
-                try {
-                    mailSender.send(mimeMessage);
-                    return;
-                } catch (Exception e) {
-                    attempt++;
-                    if (attempt >= maxRetries) {
-                        throw new RuntimeException("Failed to send HTML email to " + to + " after " + attempt + " attempts", e);
-                    }
-                }
-            }
-
-        } catch (MessagingException e) {
-            throw new RuntimeException("Error preparing email message for " + to, e);
-        }
+        sendEmail(noreplyEmail, to, subject, htmlContent, contactEmail);
     }
 }
