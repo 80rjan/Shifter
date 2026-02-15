@@ -165,10 +165,10 @@ public class AuthService {
     public void logout(HttpServletResponse response) {
         ResponseCookie cookie = ResponseCookie.from("refreshToken", "")
                 .httpOnly(true)
-                .secure(true)
+                .secure(cookieSecure)
                 .path("/")
                 .maxAge(0)
-                .sameSite("Strict")
+                .sameSite(cookieSameSite)
                 .build();
 
         response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
