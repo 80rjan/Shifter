@@ -28,15 +28,17 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
 
-    @Value("${EMAIL_USERNAME}")
-    private String shifterEmail;
-    // TODO: change to expert email
+    @Value("${spring.mail.username}")
+    private String emailUsername;
+
+    private final String shifterEmail = "contact@mail.shift-er.com";
+    private final String noreplyEmail = "noreply@shift-er.com";
     private final String expertEmail = "aco@shift-er.com";
 
     public void contactExpert(String userEmail, ContactReq contactReq) {
         SimpleMailMessage message = new SimpleMailMessage();
 
-        message.setFrom(shifterEmail);
+        message.setFrom(noreplyEmail);
         message.setTo(expertEmail);
         message.setReplyTo(userEmail);
         message.setSubject("New Contact Message: " + contactReq.getSubject());
@@ -67,7 +69,8 @@ public class EmailService {
 
             helper.setTo(to);
             helper.setSubject("Welcome to " + courseName + "! Start Learning Now");
-            helper.setFrom(shifterEmail);
+            helper.setFrom(noreplyEmail);
+            helper.setReplyTo(shifterEmail);
 
             int currentYear = Year.now().getValue();
 
@@ -119,7 +122,8 @@ public class EmailService {
 
             helper.setTo(to);
             helper.setSubject(subject);
-            helper.setFrom(shifterEmail);
+            helper.setFrom(noreplyEmail);
+            helper.setReplyTo(shifterEmail);
 
             String currentYear = String.valueOf(java.time.Year.now().getValue());
 
@@ -191,7 +195,8 @@ public class EmailService {
 
             helper.setTo(to);
             helper.setSubject(subject);
-            helper.setFrom(shifterEmail);
+            helper.setFrom(noreplyEmail);
+            helper.setReplyTo(shifterEmail);
 
             String currentYear = String.valueOf(Year.now().getValue());
 
@@ -237,16 +242,14 @@ public class EmailService {
 
         MimeMessage mimeMessage = mailSender.createMimeMessage();
 
-        String shifterEmail = System.getProperty("EMAIL_USERNAME");
-
         String subject = "You Have an Upcoming Free Consultation Session - " + date + " at " + time;
 
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
-            helper.setTo(shifterEmail); // Send to the expert's email
+            helper.setTo(expertEmail); // Send to the expert's email
             helper.setSubject(subject);
-            helper.setFrom(shifterEmail);
+            helper.setFrom(noreplyEmail);
 
             String currentYear = String.valueOf(Year.now().getValue());
 
@@ -306,7 +309,8 @@ public class EmailService {
 
             helper.setTo(to);
             helper.setSubject("Your Shifter Account");
-            helper.setFrom(shifterEmail);
+            helper.setFrom(noreplyEmail);
+            helper.setReplyTo(shifterEmail);
 
             String htmlTemplate;
             try {
