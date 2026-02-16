@@ -47,7 +47,7 @@ const About = () => {
             <section className="relative py-vertical pt-nav-top px-horizontal">
                 <div className="max-w-screen-2xl mx-auto flex flex-col items-center justify-center">
                     <Suspense fallback={null}>
-                        <LazyLightBeams tilt={-50} beamCount={120} initialHeight={120 + Math.random() * 40} spikeMoveDown={8} />
+                        <LazyLightBeams tilt={-50} beamCount={120} initialHeight={120 + Math.random() * 60} spikeMoveDown={8} />
                     </Suspense>
 
                     <div className="flex flex-col items-center gap-10 z-10
