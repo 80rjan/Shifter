@@ -3,12 +3,12 @@ import {
     IconRotate360,
     IconRoute, IconChessKnight, IconArrowBigUp
 } from '@tabler/icons-react';
-import {LightBeams} from "../assets/animations/SpikeAnimation.tsx"
 import CountUp from "react-countup";
-import MagicBento from "../assets/animations/MagicBento.tsx";
 import {useTranslation} from "react-i18next";
 import OurValues from "../components/OurValues.tsx";
 import AcoSection from "../components/AcoSection.tsx";
+import {Suspense} from "react";
+import {LazyLightBeams, LazyMagicBento} from "../assets/animations/LazyComponents.tsx";
 
 const About = () => {
     const {t} = useTranslation("about");
@@ -46,7 +46,9 @@ const About = () => {
             {/*Hero Section*/}
             <section className="relative py-vertical pt-nav-top px-horizontal">
                 <div className="max-w-screen-2xl mx-auto flex flex-col items-center justify-center">
-                    <LightBeams tilt={-50} beamCount={240} initialHeight={120 + Math.random() * 80} spikeMoveDown={40}/>
+                    <Suspense fallback={null}>
+                        <LazyLightBeams tilt={-50} beamCount={120} initialHeight={120 + Math.random() * 40} spikeMoveDown={8} />
+                    </Suspense>
 
                     <div className="flex flex-col items-center gap-10 z-10
                         sm:gap-12
@@ -131,7 +133,7 @@ const About = () => {
                     <div
                         className="absolute bottom-0 w-full h-[30%]"
                         style={{
-                            background: "linear-gradient(to bottom, rgba(248,248,248,0) 0%, rgba(248,248,248,1) 100%)",
+                            background: "linear-gradient(to bottom, rgba(250,251,252,0) 0%, rgba(250,251,252,1) 100%)",
                             pointerEvents: "none"
                         }}
                     />
@@ -202,16 +204,29 @@ const About = () => {
                 <div className="max-w-screen-2xl mx-auto flex flex-col gap-8
                     sm:gap-10
                     md:gap-12">
-                    <MagicBento
-                        textAutoHide={true}
-                        enableStars={false}
-                        enableSpotlight={true}
-                        enableBorderGlow={true}
-                        enableTilt={true}
-                        enableMagnetism={true}
-                        clickEffect={false}
-                        spotlightRadius={300}
-                    />
+                    <Suspense fallback={
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                            {[1, 2, 3].map((i) => (
+                                <div
+                                    key={i}
+                                    className="h-64 bg-gray-200/50 rounded-lg animate-pulse flex items-center justify-center"
+                                >
+                                    <div className="h-12 loader" />
+                                </div>
+                            ))}
+                        </div>
+                    }>
+                        <LazyMagicBento
+                            textAutoHide={true}
+                            enableStars={false}
+                            enableSpotlight={true}
+                            enableBorderGlow={true}
+                            enableTilt={true}
+                            enableMagnetism={true}
+                            clickEffect={false}
+                            spotlightRadius={300}
+                        />
+                    </Suspense>
                 </div>
             </section>
 

@@ -492,7 +492,12 @@ const MagicBento: React.FC<BentoProps> = ({
                                           }) => {
     const gridRef = useRef<HTMLDivElement>(null);
     const isMobile = useMobileDetection();
+
     const shouldDisableAnimations = disableAnimations || isMobile;
+    const shouldEnableStars = enableStars && !isMobile;
+    const shouldEnableSpotlight = enableSpotlight && !isMobile;
+    const shouldEnableTilt = enableTilt && !isMobile;
+    const shouldEnableMagnetism = enableMagnetism && !isMobile;
 
     const baseBackgroundColor = "var(--color-main)"; // White color for the cards
     const textColor = "#060010"; // Dark color for the text
@@ -632,11 +637,11 @@ const MagicBento: React.FC<BentoProps> = ({
         `}
             </style>
 
-            {enableSpotlight && (
+            {shouldEnableSpotlight && (
                 <GlobalSpotlight
                     gridRef={gridRef}
                     disableAnimations={shouldDisableAnimations}
-                    enabled={enableSpotlight}
+                    enabled={shouldEnableSpotlight}
                     spotlightRadius={spotlightRadius}
                     glowColor={glowColor}
                 />
@@ -673,7 +678,7 @@ const MagicBento: React.FC<BentoProps> = ({
                             </>
                         );
 
-                        if (enableStars) {
+                        if (shouldEnableStars) {
                             return (
                                 <ParticleCard
                                     key={index}
@@ -682,9 +687,9 @@ const MagicBento: React.FC<BentoProps> = ({
                                     disableAnimations={shouldDisableAnimations}
                                     particleCount={particleCount}
                                     glowColor={glowColor}
-                                    enableTilt={enableTilt}
+                                    enableTilt={shouldEnableTilt}
                                     clickEffect={clickEffect}
-                                    enableMagnetism={enableMagnetism}
+                                    enableMagnetism={shouldEnableMagnetism}
                                 >
                                     {content}
                                 </ParticleCard>
@@ -708,7 +713,7 @@ const MagicBento: React.FC<BentoProps> = ({
                                         const centerX = rect.width / 2;
                                         const centerY = rect.height / 2;
 
-                                        if (enableTilt) {
+                                        if (shouldEnableTilt) {
                                             const rotateX = ((y - centerY) / centerY) * -3;
                                             const rotateY = ((x - centerX) / centerX) * 3;
 
@@ -721,7 +726,7 @@ const MagicBento: React.FC<BentoProps> = ({
                                             });
                                         }
 
-                                        if (enableMagnetism) {
+                                        if (shouldEnableMagnetism) {
                                             const magnetX = (x - centerX) * 0.05;
                                             const magnetY = (y - centerY) * 0.05;
 
@@ -737,7 +742,7 @@ const MagicBento: React.FC<BentoProps> = ({
                                     const handleMouseLeave = () => {
                                         if (shouldDisableAnimations) return;
 
-                                        if (enableTilt) {
+                                        if (shouldEnableTilt) {
                                             gsap.to(el, {
                                                 rotateX: 0,
                                                 rotateY: 0,
@@ -746,7 +751,7 @@ const MagicBento: React.FC<BentoProps> = ({
                                             });
                                         }
 
-                                        if (enableMagnetism) {
+                                        if (shouldEnableMagnetism) {
                                             gsap.to(el, {
                                                 x: 0,
                                                 y: 0,

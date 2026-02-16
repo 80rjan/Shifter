@@ -91,21 +91,31 @@ function Navbar() {
                 </div>
 
                 {/* Mobile menu dropdown */}
-                <div className={`${isOpen ? 'block' : 'hidden'} border-t border-white/20`}>
-                    <div className="flex flex-col items-start py-4 px-6 gap-3">
+                <div className={`${isOpen ? 'block' : 'hidden'} border-t border-white/20 flex flex-col py-4 px-6 gap-3 md:gap-4`}>
+                    <div className="flex flex-col items-start gap-5 md:gap-6">
+                        {/* Regular navigation links */}
                         <LocalizedLink className="text-sm md:text-lg" to="/courses" onClick={() => setIsOpen(false)}>{t("courses")}</LocalizedLink>
                         <LocalizedLink className="text-sm md:text-lg" to="/mentoring" onClick={() => setIsOpen(false)}>{t("mentoring")}</LocalizedLink>
                         <LocalizedLink className="text-sm md:text-lg" to="/consulting" onClick={() => setIsOpen(false)}>{t("consulting")}</LocalizedLink>
                         <LocalizedLink className="text-sm md:text-lg" to="/academies" onClick={() => setIsOpen(false)}>{t("academies")}</LocalizedLink>
                         <LocalizedLink className="text-sm md:text-lg" to="/about" onClick={() => setIsOpen(false)}>{t("about")}</LocalizedLink>
+                    </div>
 
-                        {!user && (
-                            <LocalizedLink className="text-sm md:text-lg" to="/login" onClick={() => setIsOpen(false)}>{t("login")}</LocalizedLink>
-                        )}
+                        {/* Divider before auth/profile section */}
+                        <div className="w-full border-t border-white/20 my-2"></div>
 
-                        {/* Profile button for mobile */}
-                        {user && (
-                            <LocalizedLink className="text-sm md:text-lg"
+                        {/* Login & Profile button - stands out */}
+                        {!user ? (
+                            <LocalizedLink
+                                className="w-full text-sm md:text-lg py-2.5 px-4 bg-white/10 hover:bg-white/20 rounded-lg font-semibold text-center border border-white/30 transition-colors"
+                                to="/login"
+                                onClick={() => setIsOpen(false)}
+                            >
+                                {t("login")}
+                            </LocalizedLink>
+                        ) : (
+                            <LocalizedLink
+                                className="w-full text-sm md:text-lg py-2.5 px-4 bg-white/10 hover:bg-white/20 rounded-lg font-semibold text-center border border-white/30 transition-colors flex items-center justify-center gap-2"
                                 to="/profile"
                                 onClick={() => setIsOpen(false)}
                             >
@@ -117,11 +127,10 @@ function Navbar() {
                         <LocalizedLink
                             to={`${user?.usedFreeConsultation ? "/contact" : "/free-consultation"}`}
                             onClick={() => setIsOpen(false)}
-                            className="text-sm md:text-lg block w-full text-center py-2 bg-cta rounded-lg font-bold shadow-md shadow-shifter/30 mt-4"
+                            className="w-full text-sm md:text-lg py-2.5 px-4 bg-cta hover:bg-cta/90 rounded-lg font-bold shadow-md shadow-shifter/30 text-center transition-colors"
                         >
                             {user?.usedFreeConsultation ? t("contact") : t("freeConsultation")}
                         </LocalizedLink>
-                    </div>
                 </div>
             </nav>
         </>
