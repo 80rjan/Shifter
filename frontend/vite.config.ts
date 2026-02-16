@@ -9,6 +9,9 @@ export default defineConfig({
         react(),
         tailwindcss(),
     ],
+    server: {
+        allowedHosts: ["cira-odontoblastic-pseudoimpartially.ngrok-free.dev"]
+    }
     // build: {
     //     outDir: '../docs'
     // },
