@@ -26,6 +26,8 @@ import {useUserContext} from "./context/UserContext.tsx";
 import i18n from "i18next";
 import {getLangFromPath} from "./utils/langUrl.ts";
 import ComingSoon from "./pages/ComingSoon.tsx";
+import ExpertNavbar from "./layout/expert/ExpertNavbar.tsx";
+import Admin from "./Admin.tsx";
 
 function LayoutWrapper() {
     const {accessToken} = useAuthContext();
@@ -121,6 +123,7 @@ function LayoutWrapper() {
                 }/>
 
                 <Route path="/courses" element={<ComingSoon/>}/>
+                {/*<Route path="/courses" element={<Courses/>}/>*/}
                 {/*<Route path="/courses/:courseId/:courseTitle" element={<CourseDetails/>}/>*/}
 
                 <Route path="/contact" element={
@@ -201,7 +204,7 @@ export function UserRoutesWithLang() {
 }
 
 export default function App() {
-    const {authChecked, accessToken} = useAuthContext();
+    const {authChecked, role} = useAuthContext();
     const {user} = useUserContext()
     const location = useLocation();
     const navigate = useNavigate();
@@ -211,39 +214,42 @@ export default function App() {
 
     // Redirect to URL with language prefix if missing
     useEffect(() => {
-        if (!urlLang && location.pathname !== "/oauth2/redirect" && !location.pathname.startsWith("/admin")) {
+        if (!urlLang && location.pathname !== "/oauth2/redirect" && !location.pathname.startsWith("/expert")) {
             const langToRedirect = currentI18nLang || 'en';
             const newPath = `/${langToRedirect}${location.pathname === '/' ? '' : location.pathname}${location.search}`;
             navigate(newPath, {replace: true});
         }
     }, [urlLang, currentI18nLang, location.pathname, navigate, location.search]);
 
-    // // Redirect admin users to /admin
-    // useEffect(() => {
-    //     if (user?.isAdmin && !location.pathname.startsWith("/admin")) {
-    //         navigate("/admin", {replace: true});
-    //     }
-    // }, [user, location.pathname, navigate]);
+    // // Redirect expert users to /expert
+    useEffect(() => {
+        if (role === "EXPERT" && !location.pathname.startsWith("/expert")) {
+            navigate("/expert", {replace: true});
+        }
+    }, [user, location.pathname, navigate]);
 
 
     // Show loading screen while auth status is being checked
-    if (!authChecked || (accessToken && !user)) {
+    // TODO: check this
+    if (!authChecked
+        // || (accessToken && !user)
+    ) {
         return <LoadingScreen/>;
     }
 
-    // if (user?.isAdmin) {
-    //     return (
-    //         <>
-    //             <AdminNavbar/>
-    //             <Routes>
-    //                 <Route path="/admin" element={<Admin/>}/>
-    //                 <Route path="/admin/courses" element={<AdminCourses />}/>
-    //                 <Route path="/admin/courses/add" element={<AdminAddCourse />}/>
-    //                 <Route path="/admin/courses/:courseId/translate" element={<AdminTranslateCourse />}/>
-    //             </Routes>
-    //         </>
-    //     );
-    // }
+    if (role === "EXPERT") {
+        return (
+            <>
+                <ExpertNavbar/>
+                <Routes>
+                    <Route path="/expert" element={<Admin/>}/>
+                    {/*<Route path="/expert/courses" element={<ExpertCourses />}/>*/}
+                    {/*<Route path="/expert/courses/add" element={<ExpertAddCourse />}/>*/}
+                    {/*<Route path="/expert/courses/:courseId/translate" element={<AdminTranslateCourse />}/>*/}
+                </Routes>
+            </>
+        );
+    }
 
 
     return (

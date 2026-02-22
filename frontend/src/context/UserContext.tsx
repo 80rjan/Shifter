@@ -12,6 +12,7 @@ import type {User} from "../models/javaObjects/User.tsx";
 import {getUserApi} from "../api/userApi.ts";
 import type {Language} from "../models/types/Language.tsx";
 import {useAuthContext} from "./AuthContext.tsx";
+import {getUserRole} from "../utils/auth.ts";
 
 interface UserContextType {
     user: User | null;
@@ -60,12 +61,17 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }, [i18n.language]);
 
     useEffect(() => {
-        if (authChecked) {
-            if (accessToken) {
+        if (authChecked && accessToken) {
+            const role = getUserRole(accessToken);
+
+            // Only load user profile if role is USER
+            if (role === 'USER') {
                 loadUserProfile(accessToken);
             } else {
                 removeUser();
             }
+        } else {
+            removeUser();
         }
     }, [i18n.language, accessToken, authChecked, loadUserProfile]);
 

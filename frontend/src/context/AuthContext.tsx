@@ -11,10 +11,12 @@ import {loginApi, logoutApi, personalizeApi, refreshAccessTokenApi, registerApi}
 import {useNavigate} from "react-router-dom";
 import type {UserPersonalization} from "../models/javaObjects/UserPersonalization.tsx";
 import {verifyApi} from "../api/verificationTokenApi.ts";
+import {getUserRole} from "../utils/auth.ts";
 
 interface AuthContextType {
     accessToken: string | null;
     setAccessToken: Dispatch<SetStateAction<string | null>>;
+    role: 'EXPERT' | 'USER' | null;
     authChecked: boolean;
     setAuthChecked: Dispatch<SetStateAction<boolean>>;
     register: (email: string, password: string) => Promise<void>;
@@ -32,6 +34,7 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 
 export const AuthProvider = ({children}: { children: ReactNode }) => {
     const [accessToken, setAccessToken] = useState<string | null>(null);
+    const [role, setRole] = useState<'EXPERT' | 'USER' | null>(null);
     const [authChecked, setAuthChecked] = useState<boolean>(false);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
@@ -87,6 +90,7 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
         return logoutApi()
             .then(() => {
                 setAccessToken(null);
+                setRole(null);
                 navigate("/");
             })
             .catch(err => {
@@ -105,6 +109,7 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
             })
             .catch(error => {
                 setAccessToken(null);
+                setRole(null);
                 console.error("Refresh token failed: ", error);
             })
             .finally(() => {
@@ -118,11 +123,21 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
         refreshAccessToken();
     }, []);
 
+    useEffect(() => {
+        if (accessToken) {
+            const userRole = getUserRole(accessToken);
+            setRole(userRole);
+        } else {
+            setRole(null);
+        }
+    }, [accessToken]);
+
     return (
         <AuthContext.Provider
             value={{
                 accessToken,
                 setAccessToken,
+                role,
                 authChecked,
                 setAuthChecked,
                 register,

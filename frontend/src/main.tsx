@@ -1,5 +1,5 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import {StrictMode} from 'react'
+import {createRoot} from 'react-dom/client'
 
 import './global.css';
 
@@ -9,15 +9,18 @@ import {AuthProvider} from "./context/AuthContext.tsx";
 import {BrowserRouter} from "react-router-dom";
 import "./i18n.ts";
 import {UserProvider} from "./context/UserContext.tsx";
+import {ExpertProvider} from "./context/ExpertContext.tsx";
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-      <BrowserRouter >
-          <AuthProvider>
-              <UserProvider >
-                  <App />
-              </UserProvider>
-          </AuthProvider>
-      </BrowserRouter>
-  </StrictMode>,
+    <StrictMode>
+        <BrowserRouter>
+            <AuthProvider>
+                <UserProvider>
+                    <ExpertProvider>
+                        <App/>
+                    </ExpertProvider>
+                </UserProvider>
+            </AuthProvider>
+        </BrowserRouter>
+    </StrictMode>,
 )

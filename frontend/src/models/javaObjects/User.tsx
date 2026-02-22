@@ -10,6 +10,5 @@ export interface User {
     skillsGained: string[];
     points: number;
     favoriteCourseIds: number[];
-    isAdmin: boolean;
     profileComplete: boolean;
 }

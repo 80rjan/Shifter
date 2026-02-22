@@ -3,7 +3,6 @@ import { fetchCourseDetailsApi } from "../api/courseApi.ts";
 import {useEffect, useState} from "react";
 import HeroCourseDetails from "../components/HeroCourseDetails.tsx";
 import CourseDetailsInfo from "../components/CourseDetailsInfo.tsx";
-import CoursesCarouselCourseDetails from "../components/CoursesCarouselCourseDetails.tsx";
 import type {CourseDetail} from "../models/javaObjects/course/CourseDetail.tsx";
 import HeroCourseDetailsSkeleton from "../components/skeletons/HeroCourseDetailsSkeleton.tsx";
 import CourseDetailsInfoSkeleton from "../components/skeletons/CourseDetailsInfoSkeleton.tsx";
@@ -56,6 +55,8 @@ function CourseDetails() {
 
     }, [i18n.language, courseId])
 
+    console.log(course)
+
     return (
         <main className="bg-main text-black-text">
             {
@@ -68,7 +69,7 @@ function CourseDetails() {
                     <>
                         <HeroCourseDetails course={course} enrollUser={enroll}/>
                         <CourseDetailsInfo course={course}/>
-                        <CoursesCarouselCourseDetails courseId={course.id}/>
+                        {/*<CoursesCarouselCourseDetails courseId={course.id}/>*/}
                     </>
             }
         </main>
