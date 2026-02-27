@@ -38,9 +38,16 @@ export default {
                 'up-2xl': '0 -25px 50px -12px rgba(0, 0, 0, 0.25)',
             },
             fontFamily: {
-                sans: ['"Source Sans 3"', 'sans-serif'],
                 montserrat: ['Montserrat', 'sans-serif'],
             },
+            fontWeight: {
+                light: '300',
+                regular: '400',
+                normal: '400',
+                medium: '500',
+                semibold: '600',
+                bold: '700',
+            }
         },
     },
     plugins: []
