@@ -1,6 +1,9 @@
 package com.shifterwebapp.shifter.config;
 
+import com.shifterwebapp.shifter.account.expert.Expert;
+import com.shifterwebapp.shifter.account.user.User;
 import com.shifterwebapp.shifter.account.user.repository.UserRepository;
+import com.shifterwebapp.shifter.account.expert.repository.ExpertRepository; // ADD THIS
 import jakarta.servlet.MultipartConfigElement;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +19,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,6 +33,7 @@ import org.springframework.util.unit.DataSize;
 public class AppConfig {
 
     private final UserRepository userRepository;
+    private final ExpertRepository expertRepository;
 
     @Value("${upload.max-file-size}")
     private int maxFileSizeMB;
@@ -68,8 +73,21 @@ public class AppConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username + "!"));
+        return username -> {
+            // Check Expert
+            var expertOpt = expertRepository.findByEmail(username);
+            if (expertOpt.isPresent()) {
+                return expertOpt.get();
+            }
+
+            // Check User
+            var userOpt = userRepository.findByEmail(username);
+            if (userOpt.isPresent()) {
+                return userOpt.get();
+            }
+
+            throw new UsernameNotFoundException("User not found with email: " + username + "!");
+        };
     }
 
     @Bean

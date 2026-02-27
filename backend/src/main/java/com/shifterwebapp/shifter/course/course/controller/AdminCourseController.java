@@ -35,7 +35,7 @@ public class AdminCourseController {
             Authentication authentication,
             @RequestParam(defaultValue = "EN") Language language
     ) {
-        validate.validateUserIsAdmin(authentication);
+        validate.validateExpert(authentication);
 
         CourseDtoFull dto = adminCourseService.getFullCourse(courseId, language);
         return ResponseEntity.ok(dto);
@@ -43,9 +43,9 @@ public class AdminCourseController {
 
     @PostMapping("/create")
     public ResponseEntity<Long> createCourse(@RequestBody CourseDtoFull courseDtoFull, Authentication authentication) throws IOException {
-        validate.validateUserIsAdmin(authentication);
+        Long expertId = validate.extractExpertId(authentication);
 
-        CourseVersion courseVersion = adminCourseService.createCourse(courseDtoFull);
+        CourseVersion courseVersion = adminCourseService.createCourse(courseDtoFull, expertId);
         Long courseId = courseVersion.getCourse().getId();
 
         return ResponseEntity.ok(courseId);
@@ -54,7 +54,7 @@ public class AdminCourseController {
 
     @PostMapping("/translate")
     public ResponseEntity<Long> translateCourse(@RequestBody CourseTranslateReq courseTranslateReq, Authentication authentication) {
-        validate.validateUserIsAdmin(authentication);
+        validate.validateExpert(authentication);
 
         Course course = adminCourseService.translateCourse(courseTranslateReq);
         Long courseId = course.getId();
@@ -65,21 +65,30 @@ public class AdminCourseController {
     @PostMapping("/{id}/upload")
     public ResponseEntity<?> uploadCourseFiles(
             @PathVariable("id") Long courseId,
-            @RequestParam(value = "courseImage", required = false) MultipartFile courseImage,
-            @RequestParam("files") List<MultipartFile> files,
-            @RequestParam("types") List<String> types,
-            @RequestParam("meta") List<String> meta,
+            @RequestPart(value = "courseImage", required = false) MultipartFile courseImage,
+            @RequestPart(value = "files", required = false) List<MultipartFile> files,
+            @RequestPart(value = "types", required = false) List<String> types,
+            @RequestPart(value = "meta", required = false) List<String> meta,
             @RequestParam(defaultValue = "EN") Language language,
             Authentication authentication
     )  {
-        validate.validateUserIsAdmin(authentication);
+        validate.validateExpert(authentication);
 
         try {
+            if (files == null) {
+                files = List.of(); // Empty list
+            }
+            if (types == null) {
+                types = List.of();
+            }
+            if (meta == null) {
+                meta = List.of();
+            }
+
             List<S3UploadResponse> s3UploadResponse =
                     s3Service.uploadCourseImageAndFiles(courseId, courseImage, files, types, meta);
 
             Course finalCourse = adminCourseService.updateCourseWithImagesAndFiles(courseId, s3UploadResponse, language);
-            System.out.println("Final course: " + finalCourse);
 
             return ResponseEntity.ok(null);
         } catch (Exception e) {

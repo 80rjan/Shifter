@@ -33,7 +33,7 @@ public class UserService implements ImplUserService {
 
     @Transactional(readOnly = true)
     @Override
-    public UserDto getUserById(Long userId, Language language) {
+    public UserDto getById(Long userId, Language language) {
         validate.validateUserExists(userId);
         User user = userRepository.findById(userId).orElseThrow();
         return userMapper.toDto(user, language);
@@ -41,7 +41,7 @@ public class UserService implements ImplUserService {
 
     @Transactional(readOnly = true)
     @Override
-    public User getUserEntityById(Long userId) {
+    public User getEntityById(Long userId) {
         validate.validateUserExists(userId);
         return userRepository.findById(userId).orElseThrow();
     }
@@ -181,7 +181,7 @@ public class UserService implements ImplUserService {
     @Transactional
     @Override
     public UserDto toggleFavoriteCourse(Long userId, Language language, Integer newFavoriteCourseId) {
-        User user = getUserEntityById(userId);
+        User user = getEntityById(userId);
 
         if (user.getFavoriteCourseIds().contains(newFavoriteCourseId)) {
             user.getFavoriteCourseIds().remove(newFavoriteCourseId);

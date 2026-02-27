@@ -41,7 +41,7 @@ public class MeetingController {
             Authentication authentication
     ) {
         Long userId = validate.extractUserId(authentication);
-        User user = userService.getUserEntityById(userId);
+        User user = userService.getEntityById(userId);
         userMeetingInfoRequest.setEmail(user.getEmail());
         userMeetingInfoRequest.setName(user.getName());
         userMeetingInfoRequest.setCompanySize(user.getCompanySize());

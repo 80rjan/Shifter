@@ -24,7 +24,7 @@ public class UserController {
     public ResponseEntity<?> getUser(Authentication authentication, @RequestParam(defaultValue = "EN") Language language) {
         Long userId = validate.extractUserId(authentication);
 
-        return ResponseEntity.ok(userService.getUserById(userId, language));
+        return ResponseEntity.ok(userService.getById(userId, language));
     }
 
     @PutMapping("/favorite-course/{courseId}")

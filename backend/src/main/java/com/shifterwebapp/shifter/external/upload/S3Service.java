@@ -117,24 +117,26 @@ public class S3Service {
         }
 
         // Upload private course content files
-        for (int i = 0; i < files.size(); i++) {
-            MultipartFile file = files.get(i);
-            String type = types.get(i);
-            String metaJson = metaList.get(i);
+        if (files != null && !files.isEmpty()) {
+            for (int i = 0; i < files.size(); i++) {
+                MultipartFile file = files.get(i);
+                String type = types.get(i);
+                String metaJson = metaList.get(i);
 
-            String key = "private/courseContent/" + type.toLowerCase() + "/course_" + courseId + "/" + file.getOriginalFilename();
+                String key = "private/courseContent/" + type.toLowerCase() + "/course_" + courseId + "/" + file.getOriginalFilename();
 
-            s3Client.putObject(
-                    PutObjectRequest.builder()
-                            .bucket(bucketName)
-                            .key(key)
-                            .build(),
-                    RequestBody.fromBytes(file.getBytes())
-            );
+                s3Client.putObject(
+                        PutObjectRequest.builder()
+                                .bucket(bucketName)
+                                .key(key)
+                                .build(),
+                        RequestBody.fromBytes(file.getBytes())
+                );
 
 
-            MetaInfo meta = new ObjectMapper().readValue(metaJson, MetaInfo.class);
-            responses.add(new S3UploadResponse("COURSE_LECTURE", file.getOriginalFilename(), meta));
+                MetaInfo meta = new ObjectMapper().readValue(metaJson, MetaInfo.class);
+                responses.add(new S3UploadResponse("COURSE_LECTURE", file.getOriginalFilename(), meta));
+            }
         }
 
         return responses;

@@ -8,6 +8,8 @@ import com.shifterwebapp.shifter.account.user.User;
 import com.shifterwebapp.shifter.account.user.mapper.UserMapper;
 import com.shifterwebapp.shifter.account.user.repository.UserRepository;
 import com.shifterwebapp.shifter.account.user.service.UserService;
+import com.shifterwebapp.shifter.account.expert.Expert; // ADD THIS
+import com.shifterwebapp.shifter.account.expert.repository.ExpertRepository; // ADD THIS
 import com.shifterwebapp.shifter.verificationtoken.VerificationTokenRepository;
 import com.shifterwebapp.shifter.verificationtoken.service.VerificationTokenService;
 import jakarta.servlet.http.Cookie;
@@ -21,6 +23,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +44,7 @@ public class AuthService {
     private final EmailService emailService;
     private final VerificationTokenRepository verificationTokenRepository;
     private final UserRepository userRepository;
+    private final ExpertRepository expertRepository;
 
     @Value("${frontend.url}")
     private String frontendUrl;
@@ -51,9 +55,10 @@ public class AuthService {
     @Value("${cookie.same-site}")
     private String cookieSameSite;
 
-    private void sendTokens(HttpServletResponse response, User user) throws IOException {
-        String accessToken = jwtService.generateToken(user);
-        String refreshToken = jwtService.generateRefreshToken(user);
+
+    private void sendTokens(HttpServletResponse response, UserDetails userDetails) throws IOException {
+        String accessToken = jwtService.generateToken(userDetails);
+        String refreshToken = jwtService.generateRefreshToken(userDetails);
 
         ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
@@ -66,7 +71,6 @@ public class AuthService {
 
         AuthResponse authResponse = AuthResponse.builder()
                 .accessToken(accessToken)
-                .user(userMapper.toDtoAuth(user))
                 .build();
 
         ObjectMapper mapper = new ObjectMapper();
@@ -94,19 +98,12 @@ public class AuthService {
 
     @Transactional(readOnly = true)
     public void authenticate(LoginDto request, HttpServletResponse response) throws IOException {
+        // Check both User and Expert tables
         Optional<User> userOptional = userRepository.findByEmail(request.getEmail());
+        Optional<Expert> expertOptional = expertRepository.findByEmail(request.getEmail());
 
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
 
-            if (user.getLoginProvider() != LoginProvider.LOCAL) {
-                throw new BadCredentialsException(
-                        "This account was registered with " + user.getLoginProvider() +
-                                ". Please use the corresponding login method."
-                );
-            }
-        }
-
+        // Authenticate
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -118,15 +115,35 @@ public class AuthService {
             throw new BadCredentialsException("Invalid email or password.");
         }
 
-        User user = userService.getUserEntityByEmail(request.getEmail());
+        // Determine which entity to use
+        if (expertOptional.isPresent()) {
+            Expert expert = expertOptional.get();
+            // Assuming experts don't need verification check, adjust if needed
+            sendTokens(response, expert);
+        } else if (userOptional.isPresent()) {
+            User user = userOptional.get();
 
-        if (user.isVerified())
-            sendTokens(response, user);
+            // Validate login provider for Users (Experts might not have this check)
+            if (user.getLoginProvider() != LoginProvider.LOCAL) {
+                throw new BadCredentialsException(
+                        "This account was registered with " + user.getLoginProvider() +
+                                ". Please use the corresponding login method."
+                );
+            }
+
+            if (user.isVerified()) {
+                sendTokens(response, user);
+            } else {
+                throw new BadCredentialsException("Please verify your email before logging in.");
+            }
+        } else {
+            throw new BadCredentialsException("Invalid email or password.");
+        }
     }
 
     @Transactional(readOnly = true)
     public void finalizeOAuthLogin(Long userId, HttpServletResponse response) throws IOException {
-        User user = userService.getUserEntityById(userId);
+        User user = userService.getEntityById(userId);
 
         if (user.isVerified())
             sendTokens(response, user);
@@ -148,17 +165,28 @@ public class AuthService {
         }
 
         String userEmail = jwtService.extractUsername(refreshToken);
-        User user = userService.getUserEntityByEmail(userEmail);
 
-        if (!jwtService.isTokenValid(refreshToken, user)) {
+        // Check both User and Expert tables
+        Optional<User> userOptional = userRepository.findByEmail(userEmail);
+        Optional<Expert> expertOptional = expertRepository.findByEmail(userEmail);
+
+        UserDetails userDetails;
+        if (expertOptional.isPresent()) {
+            userDetails = expertOptional.get();
+        } else if (userOptional.isPresent()) {
+            userDetails = userOptional.get();
+        } else {
+            throw new RuntimeException("User not found");
+        }
+
+        if (!jwtService.isTokenValid(refreshToken, userDetails)) {
             throw new RuntimeException("Invalid refresh token");
         }
 
-        String newAccessToken = jwtService.generateToken(user);
+        String newAccessToken = jwtService.generateToken(userDetails);
 
         return AuthResponse.builder()
                 .accessToken(newAccessToken)
-                .user(userMapper.toDtoAuth(user))
                 .build();
     }
 
@@ -176,7 +204,7 @@ public class AuthService {
 
     @Transactional(readOnly = true)
     public boolean checkEmail(String email) {
-        return userService.existsUserByEmail(email);
+        // Check both tables
+        return userService.existsUserByEmail(email) || expertRepository.existsByEmail(email);
     }
-
 }

@@ -1,6 +1,7 @@
 package com.shifterwebapp.shifter.enrollment.service;
 
 import com.shifterwebapp.shifter.Validate;
+import com.shifterwebapp.shifter.account.user.User;
 import com.shifterwebapp.shifter.tag.Tag;
 import com.shifterwebapp.shifter.course.course.Course;
 import com.shifterwebapp.shifter.course.course.repository.CourseRepository;
@@ -106,19 +107,23 @@ public class EnrollmentService implements ImplEnrollmentService {
             throw new AlreadyEnrolledException("User with ID " + userId + " is already enrolled in course with ID " + courseId + "!");
         }
 
-        Payment payment = paymentService.initiatePayment(userId, courseId, PaymentMethod.CASYS);
+        User user = userService.getEntityById(userId);
 
-        if (payment.getPaymentStatus() != PaymentStatus.COMPLETED) {
-            throw new PaymentNotCompleteException("Payment with ID " + payment.getId() + " is not completed successfully!");
-        }
+        // TODO: Implement payment logic and integrate with payment service
+//        Payment payment = paymentService.initiatePayment(userId, courseId, PaymentMethod.CASYS);
+//
+//        if (payment.getPaymentStatus() != PaymentStatus.COMPLETED) {
+//            throw new PaymentNotCompleteException("Payment with ID " + payment.getId() + " is not completed successfully!");
+//        }
 
         Course course = courseRepository.findById(courseId).orElseThrow();
         CourseVersion courseVersion = courseVersionRepository.findByActiveTrueAndCourse_Id(courseId);
 
         Enrollment enrollment = Enrollment.builder()
                 .enrollmentStatus(EnrollmentStatus.PENDING)
-                .payment(payment)
+//                .payment(payment)
                 .review(null)
+                .user(user)
                 .courseVersion(courseVersion)
                 .build();
 

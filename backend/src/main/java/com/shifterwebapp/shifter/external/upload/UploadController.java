@@ -29,7 +29,7 @@ public class UploadController {
             @RequestParam("meta") List<String> meta,
             Authentication authentication
     ) throws IOException {
-        validate.validateUserIsAdmin(authentication);
+        validate.validateExpert(authentication);
 
 //        s3Service.uploadFilesWithMeta(files, types, meta);
         return ResponseEntity.ok().build();

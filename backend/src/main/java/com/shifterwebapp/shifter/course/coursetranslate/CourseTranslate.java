@@ -46,7 +46,7 @@ public class CourseTranslate {
     @Column(columnDefinition = "text", nullable = false)
     private String descriptionLong;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)     // TODO: change to LAZY and test if it works
     @Column(columnDefinition = "text")
     private List<String> whatWillBeLearned;
 

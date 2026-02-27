@@ -77,7 +77,7 @@ public class User extends Account {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // Example: give ROLE_ADMIN if user.isAdmin() else ROLE_USER
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority("USER"));
     }
 
     @Override

@@ -15,8 +15,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("select r from Review r where r.enrollment.courseVersion.course.id = :courseId")
     List<Review> findByCourseId(@Param("courseId") Long courseId);
 
-    @Query("select r from Review r where r.enrollment.courseVersion.course.id in :courseIds")
-    List<Review> findByCourseIdIn(@Param("courseId") List<Long> courseIds);
+    @Query("select r from Review r where r.enrollment.courseVersion.course.id in (:courseIds)")
+    List<Review> findByCourseIdIn(@Param("courseIds") List<Long> courseIds);
 
     @Query("select r from Review r where r.enrollment.user.id = :userId")
     List<Review> findByUserId(@Param("userId") Long userId);

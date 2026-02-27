@@ -13,7 +13,7 @@ import java.util.List;
 public interface ImplAdminCourseService {
     CourseDtoFull getFullCourse(Long courseId, Language language);
 
-    CourseVersion createCourse(CourseDtoFull courseDtoFull) throws JsonProcessingException;
+    CourseVersion createCourse(CourseDtoFull courseDtoFull, Long exertId) throws JsonProcessingException;
     Course translateCourse(CourseTranslateReq courseTranslateReq);
     void deleteCourseById(Long courseId);
 

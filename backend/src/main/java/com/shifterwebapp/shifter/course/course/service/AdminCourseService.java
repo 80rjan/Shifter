@@ -1,6 +1,8 @@
 package com.shifterwebapp.shifter.course.course.service;
 
 import com.shifterwebapp.shifter.Validate;
+import com.shifterwebapp.shifter.account.expert.Expert;
+import com.shifterwebapp.shifter.account.expert.repository.ExpertRepository;
 import com.shifterwebapp.shifter.course.course.mapper.CourseMapper;
 import com.shifterwebapp.shifter.course.coursetranslate.dto.CourseTranslateReq;
 import com.shifterwebapp.shifter.tag.Tag;
@@ -42,6 +44,7 @@ public class AdminCourseService implements ImplAdminCourseService{
     private final TagService tagService;
     private final CourseLectureService courseLectureService;
     private final CourseMapper courseMapper;
+    private final ExpertRepository expertRepository;
 
     @Transactional(readOnly = true)
     @Override
@@ -56,10 +59,14 @@ public class AdminCourseService implements ImplAdminCourseService{
 
     @Transactional
     @Override
-    public CourseVersion createCourse(CourseDtoFull courseDtoFull) {
+    public CourseVersion createCourse(CourseDtoFull courseDtoFull, Long expertId) {
         Language language = courseDtoFull.getLanguage();
 
-        Course course = buildCourse(courseDtoFull, language);
+        Expert expert = expertRepository.findById(expertId)
+                .orElseThrow(() -> new RuntimeException("Expert not found"));
+
+        Course course = buildCourse(List.of(expert), courseDtoFull, language);
+        course = courseRepository.save(course);
 
         CourseVersion oldCourseVersion = courseVersionRepository
                 .findByActiveTrueAndCourse_Id(course.getId());
@@ -99,7 +106,7 @@ public class AdminCourseService implements ImplAdminCourseService{
         return courseVersionRepository.save(courseVersion);
     }
 
-    private Course buildCourse(CourseDtoFull courseDtoFull, Language language) {
+    private Course buildCourse(List<Expert> experts, CourseDtoFull courseDtoFull, Language language) {
 
         int durationMinutes = courseDtoFull.getCourseContents().stream()
                 .flatMap(content -> content.getCourseLectures().stream())
@@ -112,6 +119,7 @@ public class AdminCourseService implements ImplAdminCourseService{
                 .difficulty(courseDtoFull.getDifficulty())
                 .durationMinutes(durationMinutes)
                 .price(courseDtoFull.getPrice())
+                .experts(experts)
                 .build();
 
         CourseTranslate courseTranslate = CourseTranslate.builder()

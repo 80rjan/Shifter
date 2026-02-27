@@ -98,4 +98,6 @@ public interface CourseRepository extends JpaRepository<Course, Long>, JpaSpecif
         and ct.language = com.shifterwebapp.shifter.enums.Language.EN
     """)
     String getEnCourseTitle(@Param("courseId") Long courseId);
+
+
 }

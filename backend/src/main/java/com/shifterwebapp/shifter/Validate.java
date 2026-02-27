@@ -59,19 +59,29 @@ public class Validate {
     }
 
 
-    // TODO: make this method work properly
-    public void validateUserIsAdmin(Authentication authentication) {
+    public void validateExpert(Authentication authentication) {
         validateUserIsAuthenticated(authentication);
+
         Object detailsObj = authentication.getDetails();
         if (detailsObj instanceof CustomAuthDetails details) {
-            Long userId = details.getUserId();
-            boolean isAdmin = false;
-            if (!isAdmin) {
-                throw new UnauthorizedException("User is not an admin");
+            String role = details.getRole();
+
+            if (!role.equals("EXPERT")) {
+                throw new UnauthorizedException("User is not an expert");
             }
         } else {
-            throw new UnauthorizedException("User is not an admin");
+            throw new UnauthorizedException("User is not an expert");
         }
+    }
+
+    public Long extractExpertId(Authentication authentication) {
+        validateExpert(authentication);
+
+        Object detailsObj = authentication.getDetails();
+        if (!(detailsObj instanceof CustomAuthDetails details)) {
+            throw new BadRequestException("Invalid authentication details");
+        }
+        return details.getUserId();
     }
 
     public void validateUserProfileNotComplete(User user) {

@@ -77,7 +77,7 @@ public class CourseService implements ImplCourseService {
             throw new AccessDeniedException("User with ID " + userId + " is not enrolled in course with ID " + courseId + " and is therefore not authorized to access the course certificate!");
 
         String courseTitle = getCourseById(courseId, Language.EN).getTitleShort();
-        String userName = userService.getUserEntityById(userId).getName();
+        String userName = userService.getEntityById(userId).getName();
         LocalDate completedDate = enrollmentService.getEnrollmentByUserAndCourse(userId, courseId).getCompletionDate();
 
         // TODO: uncomment this and check if logic for date is okay
@@ -108,10 +108,18 @@ public class CourseService implements ImplCourseService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<CourseDtoPreview> getAllCourses(List<Long> courseIds, Language language) {
-        List<Course> courses = courseIds != null && !courseIds.isEmpty() ?
-                courseRepository.findCoursesByIdNotInAndLanguage(courseIds, language) :
-                courseRepository.findCoursesByLanguage(language);
+    public List<CourseDtoPreview> getAllCourses(List<Long> enrolledCourseIds, Language language) {
+        List<Course> courses = enrolledCourseIds == null || enrolledCourseIds.isEmpty() ?
+                courseRepository.findCoursesByLanguage(language) :
+                courseRepository.findCoursesByIdNotInAndLanguage(enrolledCourseIds, language);
+
+        if (courses.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        List<Long> courseIds = courses.stream()
+                .map(Course::getId)
+                .toList();
 
         return courseMapper.toDtoPreview(
                 courses,
@@ -133,7 +141,7 @@ public class CourseService implements ImplCourseService {
     @Transactional(readOnly = true)
     @Override
     public List<CourseDtoPreview> getRecommendedCourses(Long userId, Language language) {
-        User user = userService.getUserEntityById(userId);
+        User user = userService.getEntityById(userId);
 
         // get user enrollments
         List<Long> enrolledCourseIds = enrollmentService.getCourseIdsByUserEnrollments(userId);
@@ -265,7 +273,10 @@ public class CourseService implements ImplCourseService {
     public CourseDtoDetail getCourseById(Long courseId, Language language) {
         validate.validateCourseExists(courseId);
         Course course = courseRepository.findById(courseId).orElseThrow();
-        return courseMapper.toDtoDetail(course, language);
+        return courseMapper.toDtoDetail(course, language,
+                reviewService.getAverageRatingByCourse(List.of(courseId)),
+                courseVersionService.getActiveByCourseIds(List.of(courseId)),
+                tagService.getTagsByCourseIdsAndLanguage(List.of(courseId), language));
     }
 
     @Transactional(readOnly = true)

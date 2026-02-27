@@ -2,11 +2,13 @@ package com.shifterwebapp.shifter.config;
 
 import com.shifterwebapp.shifter.account.user.User;
 import com.shifterwebapp.shifter.account.user.repository.UserRepository;
+import com.shifterwebapp.shifter.account.expert.repository.ExpertRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -23,6 +26,7 @@ public class JwtService {
 
     private final String SECRET_KEY;
     private final UserRepository userRepository;
+    private final ExpertRepository expertRepository;
 
     @Value("${jwt.expiration}")
     private long jwtExpiration;
@@ -30,9 +34,12 @@ public class JwtService {
     @Value("${jwt.refresh-expiration}")
     private long refreshExpiration;
 
-    public JwtService(@Value("${jwt.secret}") String secretKey, UserRepository userRepository) {
+    public JwtService(@Value("${jwt.secret}") String secretKey,
+                      UserRepository userRepository,
+                      ExpertRepository expertRepository) {
         this.SECRET_KEY = secretKey;
         this.userRepository = userRepository;
+        this.expertRepository = expertRepository;
     }
 
     // Helper to get SecretKey instance
@@ -42,13 +49,37 @@ public class JwtService {
 
     // Generate Access Token
     public String generateToken(UserDetails userDetails) {
-        User user = userRepository.findByEmail(userDetails.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
+        String email = userDetails.getUsername();
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", user.getId());
 
-        return createToken(claims, userDetails.getUsername());
+        // Extract role from UserDetails authorities
+        String role = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .findFirst()
+                .orElse("USER"); // Default to USER if no authority found
+
+        claims.put("role", role); // Will be "EXPERT" or "USER"
+
+        // Get userId - check both tables
+        if (role.equals("EXPERT")) {
+            var expertOpt = expertRepository.findByEmail(email);
+            if (expertOpt.isPresent()) {
+                claims.put("userId", expertOpt.get().getId());
+            } else {
+                throw new UsernameNotFoundException("Expert not found");
+            }
+        } else if (role.equals("USER")) {
+             var userOpt = userRepository.findByEmail(email);
+            if (userOpt.isPresent()) {
+                claims.put("userId", userOpt.get().getId());
+            } else {
+                throw new UsernameNotFoundException("User not found");
+            }
+        } else {
+            throw new IllegalStateException("Unknown role for jwt: " + role);
+        }
+
+        return createToken(claims, email);
     }
 
     // Generate Refresh Token (30 days)
@@ -96,6 +127,17 @@ public class JwtService {
     public Long extractUserId(String token) {
         Claims claims = extractAllClaims(token);
         return claims.get("userId", Long.class);
+    }
+
+    // Extract role from token
+    public String extractRole(String token) {
+        Claims claims = extractAllClaims(token);
+        return claims.get("role", String.class);
+    }
+
+    // Helper method to check if user is expert from token
+    public boolean isExpert(String token) {
+        return "EXPERT".equals(extractRole(token));
     }
 
     // Extract single claim

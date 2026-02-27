@@ -36,7 +36,7 @@ public class VerificationTokenController {
     @PostMapping()
     public ResponseEntity<UUID> createNewToken(Authentication authentication) {
         Long userId = validate.extractUserId(authentication);
-        User user = userService.getUserEntityById(userId);
+        User user = userService.getEntityById(userId);
 
         UUID uuid = verificationTokenService.generateNewToken(user);
         return ResponseEntity.ok(uuid);
@@ -45,7 +45,7 @@ public class VerificationTokenController {
     @PostMapping("/email")
     public ResponseEntity<?> verifyEmail(Authentication authentication) {
         Long userId = validate.extractUserId(authentication);
-        User user = userService.getUserEntityById(userId);
+        User user = userService.getEntityById(userId);
 
         UUID token = verificationTokenService.generateNewToken(user);
 

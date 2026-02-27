@@ -10,8 +10,8 @@ import com.shifterwebapp.shifter.account.user.dto.UserDto;
 import java.util.List;
 
 public interface ImplUserService {
-    UserDto getUserById(Long id, Language language);
-    User getUserEntityById(Long userId);
+    UserDto getById(Long id, Language language);
+    User getEntityById(Long userId);
     User getUserEntityByEmail(String email);
     String getUserEmailById(Long userId);
     Boolean getUserHasUsedFreeConsultation(String userEmail);

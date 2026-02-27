@@ -30,7 +30,7 @@ public class Expert extends Account {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // Example: give ROLE_ADMIN if user.isAdmin() else ROLE_USER
-        return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        return List.of(new SimpleGrantedAuthority("EXPERT"));
     }
 
     @Override

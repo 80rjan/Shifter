@@ -10,7 +10,10 @@ import com.shifterwebapp.shifter.coursecontent.mapper.CourseContentMapper;
 import com.shifterwebapp.shifter.enrollment.Enrollment;
 import com.shifterwebapp.shifter.enums.EnrollmentStatus;
 import com.shifterwebapp.shifter.enums.Language;
+import com.shifterwebapp.shifter.enums.TagType;
 import com.shifterwebapp.shifter.review.Review;
+import com.shifterwebapp.shifter.tag.Tag;
+import com.shifterwebapp.shifter.tag.TagTranslate;
 import com.shifterwebapp.shifter.usercourseprogress.UserCourseProgress;
 import com.shifterwebapp.shifter.utils.SlugService;
 import org.mapstruct.*;
@@ -29,6 +32,12 @@ public abstract class CourseMapper {
     @Autowired
     protected CourseTranslateService courseTranslateService;
 
+    @Autowired
+    protected CourseVersionService courseVersionService;
+
+    @Autowired
+    protected CourseContentMapper courseContentMapper;
+
     public abstract CourseDtoPreview toDtoPreview(Course course, @Context Language language,
                                                   @Context Map<Long, Double> avgRatingsMap,
                                                   @Context Map<Long, CourseVersion> courseVersionMap,
@@ -39,9 +48,10 @@ public abstract class CourseMapper {
                                                         @Context Map<Long, CourseVersion> courseVersionMap,
                                                         @Context Map<Long, CourseSkillsAndInterestsView> courseSkillsAndInterestsViewMap);
 
-    public abstract CourseDtoDetail toDtoDetail(Course course, @Context Language language);
-
-    public abstract List<CourseDtoDetail> toDtoDetail(List<Course> courses, @Context Language language);
+    public abstract CourseDtoDetail toDtoDetail(Course course, @Context Language language,
+                                                @Context Map<Long, Double> avgRatingsMap,
+                                                @Context Map<Long, CourseVersion> courseVersionMap,
+                                                @Context Map<Long, CourseSkillsAndInterestsView> courseSkillsAndInterestsViewMap);
 
     public abstract CourseDtoPreviewEnrolled toDtoPreviewEnrolled(Course course, @Context Language language,
                                                                   @Context Map<Long, Enrollment> enrollmentMap,
@@ -90,6 +100,10 @@ public abstract class CourseMapper {
             dto.setDescriptionLong(t.getDescriptionLong());
             dto.setWhatWillBeLearned(t.getWhatWillBeLearned());
         });
+
+        dto.setCourseContents(courseVersionService.getActiveByCourseId(course.getId()).getCourseContents().stream()
+                .map(cc -> courseContentMapper.toDtoPreview(cc, language))
+                .toList());
     }
 
     @AfterMapping
@@ -136,6 +150,63 @@ public abstract class CourseMapper {
 
         dto.setRating(reviewRating);
         dto.setIsFinished(enrollment.getEnrollmentStatus() == EnrollmentStatus.COMPLETED);
+
+        dto.setCourseContents(courseVersionService.getActiveByCourseId(course.getId()).getCourseContents().stream()
+                .map(cc -> courseContentMapper.toDtoLearn(cc, language, enrollment.getUser().getId()))
+                .toList());
+    }
+
+    @AfterMapping
+    protected void enrichFull(@MappingTarget CourseDtoFull dto,
+                              Course course,
+                              @Context Language language) {
+
+        Optional<CourseTranslate> translationOpt = getTranslation(course, language);
+        translationOpt.ifPresent(t -> {
+            dto.setLanguage(language);
+            dto.setTitleShort(t.getTitleShort());
+            dto.setTitle(t.getTitle());
+            dto.setDescriptionShort(t.getDescriptionShort());
+            dto.setDescription(t.getDescription());
+            dto.setDescriptionLong(t.getDescriptionLong());
+            dto.setWhatWillBeLearned(t.getWhatWillBeLearned());
+        });
+
+        // Get ALL tags for this course at once (both skills and topics)
+        List<Tag> allTags = course.getTags();
+
+        // Encode skills
+        List<String> encodedSkills = allTags.stream()
+                .filter(tag -> tag.getType() == TagType.SKILL)
+                .map(tag -> {
+                    String value = tag.getTranslations().stream()
+                            .filter(t -> t.getLanguage() == language)
+                            .findFirst()
+                            .map(TagTranslate::getValue)
+                            .orElse("");
+                    return tag.getId() + "_" + value;
+                })
+                .toList();
+
+        // Encode topics
+        List<String> encodedTopics = allTags.stream()
+                .filter(tag -> tag.getType() == TagType.TOPIC)
+                .map(tag -> {
+                    String value = tag.getTranslations().stream()
+                            .filter(t -> t.getLanguage() == language)
+                            .findFirst()
+                            .map(TagTranslate::getValue)
+                            .orElse("");
+                    return tag.getId() + "_" + value;
+                })
+                .toList();
+
+        dto.setSkillsGained(encodedSkills);
+        dto.setTopicsCovered(encodedTopics);
+
+        dto.setCourseContents(courseVersionService.getActiveByCourseId(course.getId()).getCourseContents().stream()
+                .map(cc -> courseContentMapper.toDtoFull(cc, language))
+                .toList());
     }
 
     private Optional<CourseTranslate> getTranslation(Course course, Language language) {

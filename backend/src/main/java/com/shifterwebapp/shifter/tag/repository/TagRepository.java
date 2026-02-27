@@ -63,7 +63,7 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
         from Course c
         join c.tags t
         join t.translations tt
-        where c.id in :courseIds and t.type = :type and tt.language = :language
+        where c.id in (:courseIds) and t.type = :type and tt.language = :language
     """)
     List<CourseTagProjection> findByCourseIdInAndTypeAndLanguage(@Param("courseIds") List<Long> courseIds, @Param("type") TagType type, @Param("language") Language language);
 
@@ -72,7 +72,7 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
         from Course c
         join c.tags t
         join t.translations tt
-        where c.id in :courseIds and tt.language = :language
+        where c.id in (:courseIds) and tt.language = :language
     """)
     List<CourseTagProjection> findByCourseIdInAndLanguage(@Param("courseIds") List<Long> courseIds, @Param("language") Language language);
 }
