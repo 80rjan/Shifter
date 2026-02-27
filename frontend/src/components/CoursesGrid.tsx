@@ -1,7 +1,5 @@
 import type {CoursePreview} from "../models/javaObjects/course/CoursePreview.tsx";
 import CourseCard from "./CourseCard.tsx";
-import {InputAdornment, TextField} from '@mui/material';
-import {Search} from 'lucide-react';
 import type {FilterParams} from "../models/FilterParams.tsx";
 import React from "react";
 import {X} from 'lucide-react';
@@ -111,35 +109,36 @@ function CoursesGrid({courses, setFilters, filters}: {
                 <form
                     onSubmit={handleSearchFilter}
                     className="flex justify-between w-fit">
-                    <TextField
-                        size="small"
-                        type="search"
-                        placeholder={t("searchPlaceholder")}
-                        variant="outlined"
-                        value={searchText}
-                        onChange={e => setSearchText(e.target.value)}
-                        fullWidth
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <Search size={20}/>
-                                </InputAdornment>
-                            )
-                        }}
-                        sx={{
-                            "& .MuiOutlinedInput-root": {
-                                "& fieldset": {
-                                    borderColor: "gray",
-                                },
-                                "&:hover fieldset": {
-                                    borderColor: "black",
-                                },
-                                "&.Mui-focused fieldset": {
-                                    borderColor: "var(--color-shifter)",
-                                },
-                            },
-                        }}
-                    />
+                    {/*<TextField*/}
+                    {/*    size="small"*/}
+                    {/*    type="search"*/}
+                    {/*    placeholder={t("searchPlaceholder")}*/}
+                    {/*    variant="outlined"*/}
+                    {/*    value={searchText}*/}
+                    {/*    onChange={e => setSearchText(e.target.value)}*/}
+                    {/*    fullWidth*/}
+                    {/*    InputProps={{*/}
+                    {/*        startAdornment: (*/}
+                    {/*            <InputAdornment position="start">*/}
+                    {/*                <Search size={20}/>*/}
+                    {/*            </InputAdornment>*/}
+                    {/*        )*/}
+                    {/*    }}*/}
+                    {/*    sx={{*/}
+                    {/*        "& .MuiOutlinedInput-root": {*/}
+                    {/*            "& fieldset": {*/}
+                    {/*                borderColor: "gray",*/}
+                    {/*            },*/}
+                    {/*            "&:hover fieldset": {*/}
+                    {/*                borderColor: "black",*/}
+                    {/*            },*/}
+                    {/*            "&.Mui-focused fieldset": {*/}
+                    {/*                borderColor: "var(--color-shifter)",*/}
+                    {/*            },*/}
+                    {/*        },*/}
+                    {/*    }}*/}
+                    {/*/>*/}
+                    {/*TODO: MAKE THIS WORK WITHOUT MUI*/}
                     <button
                         type={"submit"}
                         className="hover:shadow-sm hover:shadow-shifter transition-all duration-200 ease-in-out

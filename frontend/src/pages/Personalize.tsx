@@ -3,8 +3,6 @@ import ShifterArrow from "../../public/Shifter-Arrow-White.png";
 
 import ShifterLogo from "../../public/Shifter-S2W-Transparent.png";
 import { usePersonalizeHook } from "../hooks/usePersonalizeHook.tsx";
-import { Box, Step, StepLabel, Stepper } from "@mui/material";
-import { CustomStepperConnector, CustomStepperStepIcon } from "../components/registerSteps/CustomStepper.tsx";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import LoadingScreen from "../layout/LoadingScreen.tsx";
@@ -132,24 +130,11 @@ function Personalize() {
                         </div>
                     </div>
                 ) : (
-                    <Box className="w-full flex flex-col max-w-md
+                    <div className="w-full flex flex-col max-w-md
                         md:max-w-lg
                         lg:max-w-md
                         xl:max-w-lg">
-                        {
-                            stepsContent.length > 1 && (
-                                <Stepper activeStep={activeStep} alternativeLabel connector={<CustomStepperConnector/>}>
-                                    {stepsContent.map((_, index) => (
-                                        <Step key={index}>
-                                            <StepLabel StepIconComponent={CustomStepperStepIcon} className="text-shifter font-semibold"/>
-                                        </Step>
-                                    ))}
-                                </Stepper>
-                            )
-                        }
-
-
-                        <Box className="flex flex-col overflow-hidden gap-2">
+                        <div className="flex flex-col overflow-hidden gap-2">
                             <AnimatePresence mode="wait" initial={false} custom={direction}>
                                 <motion.div
                                     key={activeStep}
@@ -174,7 +159,7 @@ function Personalize() {
                                 </p>
                             )}
 
-                            <Box className="flex flex-col justify-center items-center gap-2">
+                            <div className="flex flex-col justify-center items-center gap-2">
                                 <div className="flex flex-col gap-3 justify-center w-full
                                     sm:flex-row sm:gap-4">
                                     <button
@@ -207,9 +192,9 @@ function Personalize() {
 
                                     {isLoading && <div className="h-full loader"></div>}
                                 </div>
-                            </Box>
-                        </Box>
-                    </Box>
+                            </div>
+                        </div>
+                    </div>
                 )}
             </section>
         </main>

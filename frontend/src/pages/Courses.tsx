@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import CoursesFilters from "../components/CoursesFilters.tsx";
 import CoursesGrid from "../components/CoursesGrid.tsx";
 
 import ShifterRocket from "../../public/Rocket-Blue-Fire.png";
@@ -15,8 +14,6 @@ function Courses() {
         loading,
         filters,
         setFilters,
-        topics,
-        skills,
         courses
     } = useCourses();
 
@@ -43,12 +40,12 @@ function Courses() {
                 </section>
             ) : (
                 <section className="grid grid-cols-6 gap-0 w-full">
-                    <CoursesFilters
-                        filters={filters}
-                        setFilters={setFilters}
-                        topics={topics}
-                        skills={skills}
-                    />
+                    {/*<CoursesFilters*/}
+                    {/*    filters={filters}*/}
+                    {/*    setFilters={setFilters}*/}
+                    {/*    topics={topics}*/}
+                    {/*    skills={skills}*/}
+                    {/*/>*/}
                     <CoursesGrid
                         setFilters={setFilters}
                         filters={filters}
