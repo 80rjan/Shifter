@@ -1,8 +1,9 @@
-import Silk from "../assets/animations/Silk.tsx";
 import CountUp from "react-countup";
 import {useTranslation} from "react-i18next";
 import {useUserContext} from "../context/UserContext.tsx";
 import {LocalizedLink} from "./links/LocalizedLink.tsx";
+import {LazySilk} from "../assets/animations/LazyComponents.tsx";
+import {Suspense} from "react";
 
 function HeroHome() {
     const {user} = useUserContext()
@@ -15,13 +16,22 @@ function HeroHome() {
                 <div className="relative flex flex-col items-center rounded-xl shadow-lg shadow-black/20
                     overflow-clip py-nav-top
                     xl:rounded-4xl ">
-                    <Silk
-                        className="absolute inset-0 opacity-90"
-                        speed={8}
-                        scale={1}
-                        noiseIntensity={4}
-                        rotation={0}
-                    />
+                    <Suspense fallback={
+                        <div
+                            className="absolute inset-0 opacity-90"
+                            style={{
+                                background: 'linear-gradient(135deg, #B3BAC6 0%, #2C5F7C 50%, #8a9ba8 100%)',
+                            }}
+                        />
+                    }>
+                        <LazySilk
+                            className="absolute inset-0 opacity-90"
+                            speed={8}
+                            scale={1}
+                            noiseIntensity={4}
+                            rotation={0}
+                        />
+                    </Suspense>
 
                     <div className="flex flex-col gap-10 justify-center items-center z-1 max-w-screen-2xl mx-auto
                          lg:gap-14
