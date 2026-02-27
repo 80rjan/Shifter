@@ -1,5 +1,5 @@
 import {Check, X} from "lucide-react";
-import logo from "../../public/Shifter-Transparent.png"
+import logo from "../assets/images/Shifter-Transparent.png"
 import {useTranslation} from "react-i18next";
 
 type DifferenceRow = {

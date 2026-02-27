@@ -5,7 +5,7 @@ import type {UserMeetingInfoRequest} from "../models/UserMeetingInfoRequest.tsx"
 import { useTranslation } from "react-i18next";
 import {useUserContext} from "../context/UserContext.tsx";
 
-import Arrow from "../../public/Shifter-Arrow-White.png";
+import Arrow from "../assets/images/Shifter-Arrow-White.png";
 import {TextInputContactForm} from "../components/inputs/TextInputContactForm.tsx";
 
 function FreeConsultation() {

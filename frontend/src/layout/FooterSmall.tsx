@@ -1,5 +1,5 @@
 
-import ShifterLogo from "../../public/Shifter-S2W-Transparent.png";
+import ShifterLogo from "../assets/images/Shifter-S2W-Transparent.png";
 import NavbarLink from "../components/links/NavbarLink.tsx";
 import {Linkedin} from "lucide-react";
 import {useTranslation} from "react-i18next";

@@ -1,5 +1,5 @@
-import ShifterArrow from "../../public/Shifter-Arrow-White.png";
-import ShifterLogo from "../../public/Shifter-S2W-Transparent.png";
+import ShifterArrow from "../assets/images/Shifter-Arrow-White.png";
+import ShifterLogo from "../assets/images/Shifter-S2W-Transparent.png";
 import React from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useRegisterHook } from "../hooks/useRegisterHook.tsx";

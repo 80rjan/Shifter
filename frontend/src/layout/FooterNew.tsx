@@ -1,5 +1,5 @@
 
-import ShifterLogo from "../../public/Shifter-S2W-Transparent.png";
+import ShifterLogo from "../assets/images/Shifter-S2W-Transparent.png";
 import {useAuthContext} from "../context/AuthContext.tsx";
 import LinkedIn from "../assets/icons/LinkedIn.tsx";
 import Instagram from "../assets/icons/Instagram.tsx";

@@ -1,5 +1,5 @@
 
-import logo from "../../public/Shifter-S2W-White-Transparent.png";
+import logo from "../assets/images/Shifter-S2W-White-Transparent.png";
 import {useLocation} from "react-router-dom";
 import {fromUrlFormat} from "../utils/toUrlFormat.ts";
 import NavbarLink from "../components/links/NavbarLink.tsx";

@@ -3,7 +3,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "../context/AuthContext.tsx";
 
-import Arrow from "../../public/Shifter-Arrow-White.png";
+import Arrow from "../assets/images/Shifter-Arrow-White.png";
 import { sendEmailApi } from "../api/contactApi.ts";
 import {useUserContext} from "../context/UserContext.tsx";
 

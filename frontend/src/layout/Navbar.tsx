@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import logo from "../../public/Shifter-S2W-White-Transparent.png"
+import logo from "../assets/images/Shifter-S2W-White-Transparent.png"
 import NavbarLink from "../components/links/NavbarLink.tsx";
 import {useTranslation} from "react-i18next";
 import {useUserContext} from "../context/UserContext.tsx";

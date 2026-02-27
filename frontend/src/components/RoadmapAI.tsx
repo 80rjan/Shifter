@@ -1,5 +1,5 @@
 import RoadmapInput from "./RoadmapInput.tsx";
-import ShifterArrow from "../../public/Shifter-Arrow.png";
+import ShifterArrow from "../assets/images/Shifter-Arrow.png";
 
 function RoadmapAI() {
     const roadmapData = [

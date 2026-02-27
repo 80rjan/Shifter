@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom";
 
-import logo from "../../../public/Shifter-S2W-Transparent.png"
+import logo from "../../assets/images/Shifter-S2W-Transparent.png"
 import {useAuthContext} from "../../context/AuthContext.tsx";
 import AdminNavbarLink from "../components/AdminNavbarLink.tsx";
 

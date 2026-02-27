@@ -1,7 +1,7 @@
 
-import ShifterArrow from "../../public/Shifter-Arrow-White.png";
+import ShifterArrow from "../assets/images/Shifter-Arrow-White.png";
 
-import ShifterLogo from "../../public/Shifter-S2W-Transparent.png";
+import ShifterLogo from "../assets/images/Shifter-S2W-Transparent.png";
 import { usePersonalizeHook } from "../hooks/usePersonalizeHook.tsx";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranslation } from "react-i18next";

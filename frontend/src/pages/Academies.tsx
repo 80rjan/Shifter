@@ -2,7 +2,7 @@ import {Mail, MapPin} from "lucide-react"
 import React from "react";
 import {useAuthContext} from "../context/AuthContext.tsx";
 
-import Arrow from "../../public/Shifter-Arrow-White.png"
+import Arrow from "../assets/images/Shifter-Arrow-White.png"
 import {sendEmailApi} from "../api/contactApi.ts";
 import { useTranslation } from "react-i18next";
 import {useUserContext} from "../context/UserContext.tsx";

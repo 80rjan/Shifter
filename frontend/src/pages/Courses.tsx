@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import CoursesGrid from "../components/CoursesGrid.tsx";
 
-import ShifterRocket from "../../public/Rocket-Blue-Fire.png";
+import ShifterRocket from "../assets/images/Rocket-Blue-Fire.png";
 import CoursesFiltersSkeleton from "../components/skeletons/CoursesFiltersSkeleton.tsx";
 import CoursesGridSkeleton from "../components/skeletons/CoursesGridSkeleton.tsx";
 import {useCourses} from "../hooks/useCourses.tsx";

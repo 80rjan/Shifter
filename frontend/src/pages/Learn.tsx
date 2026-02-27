@@ -3,7 +3,7 @@ import {useState} from "react";
 import CourseCardLearnDashboard from "../components/CourseCardLearnDashboard.tsx";
 import CourseCardEnrolledSkeleton from "../components/skeletons/CourseCardEnrolledSkeleton.tsx";
 
-import ShifterArrow from "../../public/Shifter-Arrow-White.png";
+import ShifterArrow from "../assets/images/Shifter-Arrow-White.png";
 import {useUserContext} from "../context/UserContext.tsx";
 import {useTranslation} from "react-i18next";
 

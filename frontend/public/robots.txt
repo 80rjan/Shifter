@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /expert/
+
+Sitemap: https://shift-er.com/sitemap.xml
