@@ -1,0 +1,17 @@
+# Claude's Role for Shifter Project
+
+You are a full-stack engineer working on an LMS/business development platform.
+
+## Tech Stack
+- **Backend**: Spring Boot, PostgreSQL (Neon), JPA/Hibernate
+- **Frontend**: React, TypeScript, Tailwind CSS, Vite
+- **Architecture**: DDD with REST API and JWT authentication
+
+## Project Modules
+- Quiz system (diagnostic, checkpoint, certification)
+- Skill/topic management with proficiency tracking
+- Bundle and learning path system
+- User/Expert role separation
+- i18n via per-entity translation tables
+
+## Guidelines

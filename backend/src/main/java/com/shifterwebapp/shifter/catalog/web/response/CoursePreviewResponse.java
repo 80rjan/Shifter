@@ -1,0 +1,46 @@
+package com.shifterwebapp.shifter.catalog.web.response;
+
+import com.shifterwebapp.shifter.shared.domain.enums.Difficulty;
+import com.shifterwebapp.shifter.shared.domain.LanguageCode;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class CourseDtoPreview {
+
+    private Long id;
+
+    private String imageUrl;
+
+    private String color;
+
+    private String titleShort;
+
+    private String title;
+
+    private Difficulty difficulty;
+
+    private Integer durationMinutes;
+
+    private Double price;
+
+    private List<String> skillsGained;
+
+    private List<String> topicsCovered;
+
+    private Integer courseContentCount;
+
+    private Integer courseLectureCount;
+
+    private Double averageRating;
+
+    private String urlSlug;
+
+    private List<LanguageCode> translatedLanguages;
+}
+

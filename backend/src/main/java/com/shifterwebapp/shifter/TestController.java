@@ -1,7 +1,7 @@
 package com.shifterwebapp.shifter;
 
-import com.shifterwebapp.shifter.account.expert.Expert;
-import com.shifterwebapp.shifter.account.expert.repository.ExpertRepository;
+import com.shifterwebapp.shifter.identity.domain.Expert;
+import com.shifterwebapp.shifter.identity.infrastructure.ExpertRepository;
 import javax.sql.DataSource;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;

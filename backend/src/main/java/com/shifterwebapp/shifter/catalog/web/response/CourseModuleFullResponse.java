@@ -1,0 +1,21 @@
+package com.shifterwebapp.shifter.catalog.web.response;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class CourseModuleDtoFull {
+
+    private Long id;
+
+    private String title;
+
+    private Integer position;
+
+    private List<CourseLectureDtoFull> courseLectures;
+}
