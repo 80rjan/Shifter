@@ -3,7 +3,6 @@ package com.shifterwebapp.shifter.consultation.infrastructure;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shifterwebapp.shifter.shared.exception.ZoomMeetingException;
-import com.shifterwebapp.shifter.consultation.web.request.ZoomMeetingRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -13,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 @Service
-public class ZoomService {
+public class ZoomGateway {
 
     public JsonNode createMeeting(ZoomMeetingRequest meetingRequest) {
         String accessToken = getZoomAccessToken();

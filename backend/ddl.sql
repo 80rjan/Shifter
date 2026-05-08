@@ -1,1099 +1,882 @@
-
-    create sequence _order_seq start with 1 increment by 50;
-
-    create sequence _user_seq start with 1 increment by 50;
-
-    create sequence admin_seq start with 1 increment by 50;
-
-    create sequence bundle_seq start with 1 increment by 50;
-
-    create sequence bundle_translate_seq start with 1 increment by 50;
-
-    create sequence certificate_seq start with 1 increment by 50;
-
-    create sequence course_activity_event_seq start with 1 increment by 50;
-
-    create sequence course_lecture_seq start with 1 increment by 50;
-
-    create sequence course_lecture_translate_seq start with 1 increment by 50;
-
-    create sequence course_module_seq start with 1 increment by 50;
-
-    create sequence course_module_translate_seq start with 1 increment by 50;
-
-    create sequence course_price_seq start with 1 increment by 50;
-
-    create sequence course_seq start with 1 increment by 50;
-
-    create sequence course_translate_seq start with 1 increment by 50;
-
-    create sequence course_version_seq start with 1 increment by 50;
-
-    create sequence curated_bundle_seq start with 1 increment by 50;
-
-    create sequence curated_learning_path_seq start with 1 increment by 50;
-
-    create sequence enrollment_seq start with 1 increment by 50;
-
-    create sequence expert_seq start with 1 increment by 50;
-
-    create sequence language_seq start with 1 increment by 50;
-
-    create sequence learning_path_course_seq start with 1 increment by 50;
-
-    create sequence learning_path_seq start with 1 increment by 50;
-
-    create sequence learning_path_translate_seq start with 1 increment by 50;
-
-    create sequence lecture_progress_seq start with 1 increment by 50;
-
-    create sequence meeting_email_reminder_seq start with 1 increment by 50;
-
-    create sequence order_details_seq start with 1 increment by 50;
-
-    create sequence payment_seq start with 1 increment by 50;
-
-    create sequence personalized_bundle_seq start with 1 increment by 50;
-
-    create sequence personalized_learning_path_seq start with 1 increment by 50;
-
-    create sequence quiz_answer_option_seq start with 1 increment by 50;
-
-    create sequence quiz_answer_option_translate_seq start with 1 increment by 50;
-
-    create sequence quiz_attempt_answer_seq start with 1 increment by 50;
-
-    create sequence quiz_attempt_seq start with 1 increment by 50;
-
-    create sequence quiz_question_seq start with 1 increment by 50;
-
-    create sequence quiz_question_skill_seq start with 1 increment by 50;
-
-    create sequence quiz_question_translate_seq start with 1 increment by 50;
-
-    create sequence quiz_seq start with 1 increment by 50;
-
-    create sequence quiz_translate_seq start with 1 increment by 50;
-
-    create sequence related_course_seq start with 1 increment by 50;
-
-    create sequence review_seq start with 1 increment by 50;
-
-    create sequence skill_seq start with 1 increment by 50;
-
-    create sequence skill_translate_seq start with 1 increment by 50;
-
-    create sequence topic_seq start with 1 increment by 50;
-
-    create sequence topic_translate_seq start with 1 increment by 50;
-
-    create sequence user_bundle_seq start with 1 increment by 50;
-
-    create sequence user_learning_path_seq start with 1 increment by 50;
-
-    create sequence user_skill_seq start with 1 increment by 50;
-
-    create sequence user_skill_snapshot_seq start with 1 increment by 50;
-
-    create table _order (
-        created_at timestamp(6) not null,
-        id bigint not null,
-        status varchar(255) not null check (status in ('PENDING','IN_PROGRESS','COMPLETED','CANCELLED')),
-        primary key (id)
-    );
-
-    create table _user (
-        deleted boolean not null,
-        points integer,
-        profile_complete boolean not null,
-        used_free_consultation boolean not null,
-        verified boolean not null,
-        created_at timestamp(6) not null,
-        id bigint not null,
-        updated_at timestamp(6) not null,
-        company_size varchar(255) check (company_size in ('FREELANCE','MICRO','SMALL','MEDIUM','MID_MARKET','ENTERPRISE','OTHER')),
-        email varchar(255) not null,
-        login_provider varchar(255) not null check (login_provider in ('LOCAL','GOOGLE')),
-        name varchar(255),
-        password_hash varchar(255) not null,
-        work_position varchar(255),
-        primary key (id)
-    );
-
-    create table admin (
-        id bigint not null,
-        email varchar(255) not null,
-        login_provider varchar(255) not null check (login_provider in ('LOCAL','GOOGLE')),
-        name varchar(255),
-        password_hash varchar(255) not null,
-        primary key (id)
-    );
-
-    create table bundle (
-        active boolean not null,
-        base_price numeric(38,2) not null,
-        discount_amount numeric(38,2) not null,
-        discount_percentage numeric(38,2) not null,
-        created_at timestamp(6) not null,
-        deactivated_at timestamp(6),
-        id bigint not null,
-        updated_at timestamp(6) not null,
-        image_url varchar(255) not null,
-        slug varchar(255) not null,
-        type varchar(255) not null check (type in ('SYSTEM_GENERATED','CURATED','PERSONALIZED')),
-        primary key (id)
-    );
-
-    create table bundle_translate (
-        bundle_id bigint not null,
-        created_at timestamp(6) not null,
-        id bigint not null,
-        language_id bigint not null,
-        description varchar(255) not null,
-        title varchar(255) not null,
-        primary key (id)
-    );
-
-    create table certificate (
-        issue_date date not null,
-        enrollment_id bigint not null unique,
-        id bigint not null,
-        user_id bigint not null,
-        certificate_number varchar(255) not null,
-        certificate_url varchar(255) not null,
-        primary key (id)
-    );
-
-    create table course (
-        duration_minutes integer not null,
-        id bigint not null,
-        color varchar(255),
-        difficulty varchar(255) not null check (difficulty in ('BEGINNER','INTERMEDIATE','ADVANCED','EXPERT')),
-        image_url text not null,
-        primary key (id)
-    );
-
-    create table course_skill (
-        course_id bigint not null,
-        skill_id bigint not null
-    );
-
-    create table course_topic (
-        course_id bigint not null,
-        topic_id bigint not null
-    );
-
-    create table course_activity_event (
-        course_id bigint not null,
-        id bigint not null,
-        timestamp timestamp(6) not null,
-        user_id bigint not null,
-        event_type varchar(255) not null check (event_type in ('COURSE_VIEWED','COURSE_ENROLLED','COURSE_STARTED','COURSE_COMPLETED','COURSE_ABANDONED','LESSON_STARTED','LESSON_COMPLETED','MODULE_COMPLETED','QUIZ_ATTEMPTED','QUIZ_PASSED','QUIZ_FAILED','VIDEO_WATCHED','RESOURCE_DOWNLOADED','EXERCISE_SUBMITTED','DISCUSSION_PARTICIPATED','COURSE_WISHLISTED','COURSE_SHARED','CERTIFICATE_DOWNLOADED','COURSE_REVIEWED','COURSE_UNENROLLED','LESSON_SKIPPED')),
-        primary key (id)
-    );
-
-    create table course_lecture (
-        duration_minutes integer not null,
-        position integer not null,
-        course_module_id bigint not null,
-        id bigint not null,
-        content_type varchar(255) not null check (content_type in ('VIDEO','TEXT','FILE','QUIZ','TOOL')),
-        primary key (id)
-    );
-
-    create table course_lecture_translate (
-        course_lecture_id bigint not null,
-        created_at timestamp(6) not null,
-        id bigint not null,
-        language_id bigint not null,
-        content_file_name text,
-        content_text text,
-        description text not null,
-        title varchar(255) not null,
-        primary key (id)
-    );
-
-    create table course_module (
-        position integer not null,
-        course_version_id bigint not null,
-        id bigint not null,
-        primary key (id)
-    );
-
-    create table course_module_translate (
-        course_module_id bigint not null,
-        created_at timestamp(6) not null,
-        id bigint not null,
-        language_id bigint not null,
-        title varchar(255),
-        primary key (id)
-    );
-
-    create table course_price (
-        active boolean not null,
-        amount numeric(38,2) not null,
-        discount_amount numeric(38,2) not null,
-        discount_percentage numeric(38,2) not null,
-        discounted boolean not null,
-        course_id bigint not null,
-        created_at timestamp(6) not null,
-        id bigint not null,
-        primary key (id)
-    );
-
-    create table course_translate (
-        course_id bigint not null,
-        created_at timestamp(6) not null,
-        id bigint not null,
-        language_id bigint not null,
-        description text not null,
-        description_long text not null,
-        description_short varchar(255) not null,
-        title varchar(255) not null,
-        title_short varchar(255) not null,
-        primary key (id)
-    );
-
-    create table course_translate_what_will_be_learned (
-        course_translate_id bigint not null,
-        what_will_be_learned text
-    );
-
-    create table course_version (
-        active boolean not null,
-        creation_date date not null,
-        version_number integer not null,
-        course_id bigint not null,
-        id bigint not null,
-        primary key (id)
-    );
-
-    create table curated_bundle (
-        bundle_id bigint not null unique,
-        id bigint not null,
-        primary key (id)
-    );
-
-    create table curated_learning_path (
-        id bigint not null,
-        learning_path_id bigint not null unique,
-        primary key (id)
-    );
-
-    create table enrollment (
-        activation_date date,
-        completion_date date,
-        enrollment_date date not null,
-        on_trial boolean not null,
-        purchase_date date,
-        course_version_id bigint not null,
-        id bigint not null,
-        updated_at timestamp(6) not null,
-        user_id bigint not null,
-        enrollment_status varchar(255) not null check (enrollment_status in ('PENDING','ACTIVE','COMPLETED')),
-        enrollment_type varchar(255) not null check (enrollment_type in ('INDIVIDUAL','BUNDLE','LEARNING_PATH')),
-        primary key (id)
-    );
-
-    create table expert (
-        id bigint not null,
-        email varchar(255) not null,
-        login_provider varchar(255) not null check (login_provider in ('LOCAL','GOOGLE')),
-        name varchar(255),
-        password_hash varchar(255) not null,
-        primary key (id)
-    );
-
-    create table expert_course (
-        course_id bigint not null,
-        expert_id bigint not null
-    );
-
-    create table expert_curated_bundle (
-        curated_bundle_id bigint not null,
-        expert_id bigint not null
-    );
-
-    create table expert_curated_learning_path (
-        curated_learning_path_id bigint not null,
-        expert_id bigint not null
-    );
-
-    create table language (
-        language_code smallint not null check (language_code between 0 and 1),
-        id bigint not null,
-        name varchar(255) not null,
-        native_name varchar(255) not null,
-        primary key (id)
-    );
-
-    create table learning_path (
-        active boolean not null,
-        base_price numeric(38,2) not null,
-        discount_amount numeric(38,2) not null,
-        discount_percentage numeric(38,2) not null,
-        discounted boolean not null,
-        estimated_duration_hours integer not null,
-        created_at timestamp(6) not null,
-        deactivated_at timestamp(6),
-        id bigint not null,
-        difficulty varchar(255) not null check (difficulty in ('BEGINNER','INTERMEDIATE','ADVANCED','EXPERT')),
-        image_url varchar(255) not null,
-        slug varchar(255) not null,
-        type varchar(255) not null check (type in ('SYSTEM_GENERATED','CURATED','PERSONALIZED')),
-        primary key (id)
-    );
-
-    create table learning_path_course (
-        sequence_order integer not null,
-        course_id bigint not null,
-        id bigint not null,
-        learning_path_id bigint not null,
-        primary key (id)
-    );
-
-    create table learning_path_translate (
-        created_at timestamp(6) not null,
-        id bigint not null,
-        language_id bigint not null,
-        learning_path_id bigint not null,
-        description varchar(255) not null,
-        title varchar(255) not null,
-        primary key (id)
-    );
-
-    create table learning_path_translate_learning_outcomes (
-        learning_path_translate_id bigint not null,
-        learning_outcomes text
-    );
-
-    create table lecture_progress (
-        completed boolean not null,
-        completed_at timestamp(6) not null,
-        course_lecture_id bigint not null,
-        enrollment_id bigint not null,
-        id bigint not null,
-        primary key (id)
-    );
-
-    create table meeting_email_reminder (
-        sent boolean not null,
-        created_at timestamp(6) not null,
-        id bigint not null,
-        meeting_at timestamp(6) not null,
-        scheduled_at timestamp(6) not null,
-        updated_at timestamp(6) not null,
-        user_id bigint not null,
-        meeting_link TEXT not null,
-        status varchar(255) not null check (status in ('PENDING','SENT','FAILED')),
-        primary key (id)
-    );
-
-    create table order_details (
-        discount_amount numeric(38,2) not null,
-        discount_percentage numeric(38,2) not null,
-        price numeric(38,2) not null,
-        course_id bigint not null,
-        created_at timestamp(6) not null,
-        enrollment_id bigint not null unique,
-        id bigint not null,
-        order_id bigint not null,
-        primary key (id)
-    );
-
-    create table payment (
-        amount float(53) not null,
-        date date not null,
-        id bigint not null,
-        order_id bigint not null unique,
-        method varchar(255) not null check (method in ('CARD','PAYPAL','CASYS')),
-        status varchar(255) not null check (status in ('PENDING','COMPLETED','FAILED','REFUNDED')),
-        primary key (id)
-    );
-
-    create table personalized_bundle (
-        active boolean not null,
-        added_discount_amount numeric(38,2) not null,
-        added_discount_percent numeric(38,2) not null,
-        discounted boolean not null,
-        bundle_id bigint not null,
-        created_at timestamp(6) not null,
-        expires_at timestamp(6) not null,
-        id bigint not null,
-        source_bundle_id bigint,
-        user_id bigint not null,
-        generated_reason varchar(255) not null check (generated_reason in ('SKILL_GAP_DETECTED','CAREER_ADVANCEMENT','ROLE_RELEVANT_SKILL','COURSE_ALREADY_ENROLLED')),
-        type varchar(255) not null check (type in ('SYSTEM_RECOMMENDATION','ADJUSTED_BUNDLE')),
-        primary key (id)
-    );
-
-    create table personalized_learning_path (
-        active boolean not null,
-        added_discount_amount numeric(38,2) not null,
-        added_discount_percent numeric(38,2) not null,
-        discounted boolean not null,
-        created_at timestamp(6) not null,
-        expires_at timestamp(6) not null,
-        id bigint not null,
-        learning_path_id bigint not null,
-        source_learning_path_id bigint,
-        user_id bigint not null,
-        generated_reason varchar(255) not null check (generated_reason in ('SKILL_GAP_DETECTED','CAREER_ADVANCEMENT','ROLE_RELEVANT_SKILL','COURSE_ALREADY_ENROLLED')),
-        type varchar(255) not null check (type in ('SYSTEM_RECOMMENDATION','ADJUSTED_LEARNING_PATH')),
-        primary key (id)
-    );
-
-    create table quiz (
-        active boolean not null,
-        passing_score integer not null,
-        randomized boolean not null,
-        course_module_id bigint unique,
-        course_version_id bigint unique,
-        created_at timestamp(6) not null,
-        id bigint not null,
-        type varchar(255) not null check (type in ('PRE_DIAGNOSTIC','CHECKPOINT','FINAL')),
-        primary key (id)
-    );
-
-    create table quiz_attempt_answer_selected_options (
-        quiz_answer_option_id bigint not null,
-        quiz_attempt_answer_id bigint not null
-    );
-
-    create table quiz_answer_option (
-        correct boolean not null,
-        id bigint not null,
-        quiz_question_id bigint not null,
-        primary key (id)
-    );
-
-    create table quiz_answer_option_translate (
-        created_at timestamp(6) not null,
-        id bigint not null,
-        language_id bigint not null,
-        quiz_answer_option_id bigint not null,
-        answer_text TEXT not null,
-        explanation varchar(255) not null,
-        primary key (id)
-    );
-
-    create table quiz_attempt (
-        attempt_number integer not null,
-        earned_points integer not null,
-        passed boolean not null,
-        score integer not null,
-        total_points integer not null,
-        completed_at timestamp(6) not null,
-        enrollment_id bigint not null,
-        id bigint not null,
-        quiz_id bigint not null,
-        started_at timestamp(6) not null,
-        status varchar(255) not null check (status in ('IN_PROGRESS','PASSED','FAILED','ABANDONED')),
-        primary key (id)
-    );
-
-    create table quiz_attempt_answer (
-        correct boolean not null,
-        id bigint not null,
-        quiz_attempt_id bigint not null,
-        quiz_question_id bigint not null,
-        primary key (id)
-    );
-
-    create table quiz_question (
-        points integer not null,
-        position integer not null,
-        type smallint not null check (type between 0 and 2),
-        id bigint not null,
-        quiz_id bigint not null,
-        primary key (id)
-    );
-
-    create table quiz_question_skill (
-        proficiency smallint check (proficiency between 0 and 3),
-        weight integer,
-        id bigint not null,
-        quiz_question_id bigint not null,
-        skill_id bigint not null,
-        primary key (id)
-    );
-
-    create table quiz_question_translate (
-        created_at timestamp(6) not null,
-        id bigint not null,
-        language_id bigint not null,
-        quiz_question_id bigint not null,
-        question_text TEXT not null,
-        scenario TEXT,
-        primary key (id)
-    );
-
-    create table quiz_translate (
-        created_at timestamp(6),
-        id bigint not null,
-        language_id bigint not null,
-        quiz_id bigint not null,
-        description TEXT not null,
-        title varchar(255) not null,
-        primary key (id)
-    );
-
-    create table related_course (
-        similarity_score numeric(38,2),
-        calculated_at timestamp(6),
-        course_id bigint not null,
-        id bigint not null,
-        related_course_id bigint not null,
-        primary key (id)
-    );
-
-    create table review (
-        date date not null,
-        rating integer not null,
-        enrollment_id bigint unique,
-        id bigint not null,
-        comment varchar(255),
-        primary key (id)
-    );
-
-    create table skill (
-        show_in_radar boolean not null,
-        id bigint not null,
-        slug varchar(255) not null unique,
-        primary key (id)
-    );
-
-    create table skill_translate (
-        created_at timestamp(6) not null,
-        id bigint not null,
-        language_id bigint not null,
-        skill_id bigint not null,
-        description varchar(255) not null,
-        name varchar(255) not null,
-        primary key (id)
-    );
-
-    create table topic (
-        id bigint not null,
-        slug varchar(255) not null unique,
-        primary key (id)
-    );
-
-    create table topic_translate (
-        created_at timestamp(6) not null,
-        id bigint not null,
-        language_id bigint not null,
-        topic_id bigint not null,
-        description varchar(255) not null,
-        name varchar(255) not null,
-        primary key (id)
-    );
-
-    create table user_favorite_course (
-        course_id bigint not null,
-        user_id bigint not null
-    );
-
-    create table user_topic (
-        topic_id bigint not null,
-        user_id bigint not null
-    );
-
-    create table user_bundle (
-        acquired_date date not null,
-        bundle_id bigint not null,
-        id bigint not null,
-        user_id bigint not null,
-        primary key (id)
-    );
-
-    create table user_learning_path (
-        acquired_date date not null,
-        completed_date date,
-        progress_percentage integer not null,
-        id bigint not null,
-        learning_path_id bigint not null,
-        updated_at timestamp(6) not null,
-        user_id bigint not null,
-        status varchar(255) not null check (status in ('NOT_STARTED','IN_PROGRESS','COMPLETED')),
-        primary key (id)
-    );
-
-    create table user_skill (
-        proficiency_score integer not null,
-        verified boolean not null,
-        created_at timestamp(6) not null,
-        enrollment_id bigint not null,
-        id bigint not null,
-        skill_id bigint not null,
-        updated_at timestamp(6) not null,
-        user_id bigint not null,
-        proficiency varchar(255) not null check (proficiency in ('BEGINNER','INTERMEDIATE','ADVANCED','EXPERT')),
-        primary key (id)
-    );
-
-    create table user_skill_snapshot (
-        new_proficiency_score integer not null,
-        proficiency_score_at_time integer not null,
-        created_at timestamp(6) not null,
-        enrollment_id bigint not null,
-        id bigint not null,
-        quiz_attempt_id bigint not null,
-        user_skill_id bigint not null,
-        new_proficiency varchar(255) not null check (new_proficiency in ('BEGINNER','INTERMEDIATE','ADVANCED','EXPERT')),
-        proficiency_at_time varchar(255) not null check (proficiency_at_time in ('BEGINNER','INTERMEDIATE','ADVANCED','EXPERT')),
-        primary key (id)
-    );
-
-    create table verification_token (
-        created_at timestamp(6) with time zone not null,
-        expires_at timestamp(6) with time zone not null,
-        user_id bigint not null unique,
-        token uuid not null,
-        primary key (token)
-    );
-
-    alter table if exists bundle_translate 
-       add constraint FKhaxeigblumyn7d6yihc2kaw7a 
-       foreign key (bundle_id) 
-       references bundle;
-
-    alter table if exists bundle_translate 
-       add constraint FKk6khtf9q2h4y54mp6gdbamg2g 
-       foreign key (language_id) 
-       references language;
-
-    alter table if exists certificate 
-       add constraint FK6ahwata2qxlvb8e3fe0qtseq1 
-       foreign key (enrollment_id) 
-       references enrollment;
-
-    alter table if exists certificate 
-       add constraint FKk01mc5gvmwis2leepuntymwek 
-       foreign key (user_id) 
-       references _user;
-
-    alter table if exists course_skill 
-       add constraint FKdq4boqb20geguit45rgr1r33v 
-       foreign key (skill_id) 
-       references skill;
-
-    alter table if exists course_skill 
-       add constraint FKn17ep7229hbi0li6eobs1mi6q 
-       foreign key (course_id) 
-       references course;
-
-    alter table if exists course_topic 
-       add constraint FKpmlbmev283ud50kxgvmyjcbhj 
-       foreign key (topic_id) 
-       references topic;
-
-    alter table if exists course_topic 
-       add constraint FK6esfb41t5ja5jp8p49uv72x9d 
-       foreign key (course_id) 
-       references course;
-
-    alter table if exists course_activity_event 
-       add constraint FKl0jx91qej21fg8kddkbxyceca 
-       foreign key (course_id) 
-       references course;
-
-    alter table if exists course_activity_event 
-       add constraint FKsti6o99mr9vn1epoinlpn3v1b 
-       foreign key (user_id) 
-       references _user;
-
-    alter table if exists course_lecture 
-       add constraint FK4jkngg76jhg924w4ecest5qhh 
-       foreign key (course_module_id) 
-       references course_module;
-
-    alter table if exists course_lecture_translate 
-       add constraint FKgo0vlymbsq4k182sijw4weqkn 
-       foreign key (course_lecture_id) 
-       references course_lecture;
-
-    alter table if exists course_lecture_translate 
-       add constraint FKkqtgoxeoh0rpp4ycvk6yhgpo2 
-       foreign key (language_id) 
-       references language;
-
-    alter table if exists course_module 
-       add constraint FKaqw6q4ekvbyb71xbxf9qo06id 
-       foreign key (course_version_id) 
-       references course_version;
-
-    alter table if exists course_module_translate 
-       add constraint FKo0ggy3yi0rj37lg4j6q5x4ucg 
-       foreign key (course_module_id) 
-       references course_module;
-
-    alter table if exists course_module_translate 
-       add constraint FK83247nn89bkc3puds96d3c0nq 
-       foreign key (language_id) 
-       references language;
-
-    alter table if exists course_price 
-       add constraint FK9qy75q9hyu79mfx4i80rbd57 
-       foreign key (course_id) 
-       references course;
-
-    alter table if exists course_translate 
-       add constraint FK7ve3o6tucv149g1qac8cyi2a9 
-       foreign key (course_id) 
-       references course;
-
-    alter table if exists course_translate 
-       add constraint FK4bmogcl4eaavn8hdyphdsfqf8 
-       foreign key (language_id) 
-       references language;
-
-    alter table if exists course_translate_what_will_be_learned 
-       add constraint FKmntkd3o4lhrfoqlx445nffvg2 
-       foreign key (course_translate_id) 
-       references course_translate;
-
-    alter table if exists course_version 
-       add constraint FK6yglm1887hjjbrm60ll1eg2fv 
-       foreign key (course_id) 
-       references course;
-
-    alter table if exists curated_bundle 
-       add constraint FK4atyfqgbdqjub5p6a5ems4blf 
-       foreign key (bundle_id) 
-       references bundle;
-
-    alter table if exists curated_learning_path 
-       add constraint FK1rkmrhutbilapn9tksgrf0p4q 
-       foreign key (learning_path_id) 
-       references learning_path;
-
-    alter table if exists enrollment 
-       add constraint FKqch2vm3goe0xq8i4b2p0s6n5c 
-       foreign key (course_version_id) 
-       references course_version;
-
-    alter table if exists enrollment 
-       add constraint FKk2q6td98gy1kh54uxtompibte 
-       foreign key (user_id) 
-       references _user;
-
-    alter table if exists expert_course 
-       add constraint FKdi9swk9y35h363h9arfi8cv7i 
-       foreign key (course_id) 
-       references course;
-
-    alter table if exists expert_course 
-       add constraint FKl8f98fsvl2rsrcfyehpytorjm 
-       foreign key (expert_id) 
-       references expert;
-
-    alter table if exists expert_curated_bundle 
-       add constraint FKcl731nyfiesam1hhblgu52lkx 
-       foreign key (curated_bundle_id) 
-       references curated_bundle;
-
-    alter table if exists expert_curated_bundle 
-       add constraint FKktqhmeu183njbob7sjban6e9h 
-       foreign key (expert_id) 
-       references expert;
-
-    alter table if exists expert_curated_learning_path 
-       add constraint FK2jc4fkqvn2o8kc7idkbi656bu 
-       foreign key (curated_learning_path_id) 
-       references curated_learning_path;
-
-    alter table if exists expert_curated_learning_path 
-       add constraint FK8awl7vwwnp8k4en34o5sb0dip 
-       foreign key (expert_id) 
-       references expert;
-
-    alter table if exists learning_path_course 
-       add constraint FKishnjvramgwwa7thrjou3kddp 
-       foreign key (course_id) 
-       references course;
-
-    alter table if exists learning_path_course 
-       add constraint FKgklotfyjlrc0ydbfnu2ff78d4 
-       foreign key (learning_path_id) 
-       references learning_path;
-
-    alter table if exists learning_path_translate 
-       add constraint FKpyjcef4m15jobe2kra6wtmmd8 
-       foreign key (language_id) 
-       references language;
-
-    alter table if exists learning_path_translate 
-       add constraint FKfi70ucc5wtb0urc5g90on0muo 
-       foreign key (learning_path_id) 
-       references learning_path;
-
-    alter table if exists learning_path_translate_learning_outcomes 
-       add constraint FK7769fcw4b0utsf48r0mxivdl0 
-       foreign key (learning_path_translate_id) 
-       references learning_path_translate;
-
-    alter table if exists lecture_progress 
-       add constraint FKonh9tp6oswh0r969va5k29qcp 
-       foreign key (course_lecture_id) 
-       references course_lecture;
-
-    alter table if exists lecture_progress 
-       add constraint FKg66j5hw5xj3xpb2aei7n9u8h4 
-       foreign key (enrollment_id) 
-       references enrollment;
-
-    alter table if exists meeting_email_reminder 
-       add constraint FKy8jy72yp609y7oynv2jt34wc 
-       foreign key (user_id) 
-       references _user;
-
-    alter table if exists order_details 
-       add constraint FKkb349a35bgtcmvcchhsjil24g 
-       foreign key (course_id) 
-       references course;
-
-    alter table if exists order_details 
-       add constraint FKirqg49mevvtyher2f1vrmog63 
-       foreign key (enrollment_id) 
-       references enrollment;
-
-    alter table if exists order_details 
-       add constraint FK7xtsljbo390gc608yxxdrwi5r 
-       foreign key (order_id) 
-       references _order;
-
-    alter table if exists payment 
-       add constraint FKp12cpy6idihw3gyo3sv7pfcw2 
-       foreign key (order_id) 
-       references _order;
-
-    alter table if exists personalized_bundle 
-       add constraint FKg1kly5ojlcp9cc2l40rxpw4up 
-       foreign key (bundle_id) 
-       references bundle;
-
-    alter table if exists personalized_bundle 
-       add constraint FKpu1xid370ofgyo71a8rgi087v 
-       foreign key (source_bundle_id) 
-       references curated_bundle;
-
-    alter table if exists personalized_bundle 
-       add constraint FK6t67fgumndnw2aswgm8iy3ql 
-       foreign key (user_id) 
-       references _user;
-
-    alter table if exists personalized_learning_path 
-       add constraint FK26yby03yywv3qj3mlffx60swg 
-       foreign key (learning_path_id) 
-       references learning_path;
-
-    alter table if exists personalized_learning_path 
-       add constraint FKoj7jamgtd310vffare41id3jl 
-       foreign key (source_learning_path_id) 
-       references curated_learning_path;
-
-    alter table if exists personalized_learning_path 
-       add constraint FKn3ej0qye221430t7odddlhjir 
-       foreign key (user_id) 
-       references _user;
-
-    alter table if exists quiz 
-       add constraint FKh1oxnsy9mlbm9327assy73554 
-       foreign key (course_module_id) 
-       references course_module;
-
-    alter table if exists quiz 
-       add constraint FK7ipimjgupvu0n9069efe8j3n9 
-       foreign key (course_version_id) 
-       references course_version;
-
-    alter table if exists quiz_attempt_answer_selected_options 
-       add constraint FK6qebj52a5eo2k279tek54ffia 
-       foreign key (quiz_answer_option_id) 
-       references quiz_answer_option;
-
-    alter table if exists quiz_attempt_answer_selected_options 
-       add constraint FK4qgqoa7r29lx1f7wc2conwtrk 
-       foreign key (quiz_attempt_answer_id) 
-       references quiz_attempt_answer;
-
-    alter table if exists quiz_answer_option 
-       add constraint FKn4qkhxiy5vbgk2bw4lmnyly0i 
-       foreign key (quiz_question_id) 
-       references quiz_question;
-
-    alter table if exists quiz_answer_option_translate 
-       add constraint FKe8sq2bkcnabhigi6pod0kc6hu 
-       foreign key (quiz_answer_option_id) 
-       references quiz_answer_option;
-
-    alter table if exists quiz_answer_option_translate 
-       add constraint FKijfcf9vq82ctcsr2bd6920o10 
-       foreign key (language_id) 
-       references language;
-
-    alter table if exists quiz_attempt 
-       add constraint FK1mfvh50tb8kir4uvilp6btaaw 
-       foreign key (enrollment_id) 
-       references enrollment;
-
-    alter table if exists quiz_attempt 
-       add constraint FK8l6wmgul0rgeha0lp6abrp5fa 
-       foreign key (quiz_id) 
-       references quiz;
-
-    alter table if exists quiz_attempt_answer 
-       add constraint FKkjt1vbkna2o7m6kkph3mdly51 
-       foreign key (quiz_question_id) 
-       references quiz_question;
-
-    alter table if exists quiz_attempt_answer 
-       add constraint FK3drqtufjr375d34nehuidp1xy 
-       foreign key (quiz_attempt_id) 
-       references quiz_attempt;
-
-    alter table if exists quiz_question 
-       add constraint FKdtynvfjgh6e7fd8l0wk37nrpc 
-       foreign key (quiz_id) 
-       references quiz;
-
-    alter table if exists quiz_question_skill 
-       add constraint FK3yl3t40y5wpse8pnjifj86mt6 
-       foreign key (quiz_question_id) 
-       references quiz_question;
-
-    alter table if exists quiz_question_skill 
-       add constraint FKtf69jtugu6navrve98lfkcmy7 
-       foreign key (skill_id) 
-       references skill;
-
-    alter table if exists quiz_question_translate 
-       add constraint FK15luw8cuosj4j3s0eibgawnjx 
-       foreign key (language_id) 
-       references language;
-
-    alter table if exists quiz_question_translate 
-       add constraint FKs8ptlir5wbsb11e40ld4ewpqe 
-       foreign key (quiz_question_id) 
-       references quiz_question;
-
-    alter table if exists quiz_translate 
-       add constraint FKn32jbf2h5ma6xexku4c2vm8t8 
-       foreign key (language_id) 
-       references language;
-
-    alter table if exists quiz_translate 
-       add constraint FKjubqallbaweegpby2jei7nrmk 
-       foreign key (quiz_id) 
-       references quiz;
-
-    alter table if exists related_course 
-       add constraint FKavg12dqv92iedvowrefqve7qf 
-       foreign key (course_id) 
-       references course;
-
-    alter table if exists related_course 
-       add constraint FK9ndljtid903b318m3y368a8q0 
-       foreign key (related_course_id) 
-       references course;
-
-    alter table if exists review 
-       add constraint FKtbcjdinaby874shrxwa2by95k 
-       foreign key (enrollment_id) 
-       references enrollment;
-
-    alter table if exists skill_translate 
-       add constraint FKqnt1g1wr2q9tvn5mgpyscnm0f 
-       foreign key (language_id) 
-       references language;
-
-    alter table if exists skill_translate 
-       add constraint FKd5s22k58rxsydkm9t77bne4sv 
-       foreign key (skill_id) 
-       references skill;
-
-    alter table if exists topic_translate 
-       add constraint FKdx19l12il8thorhnplc6k95on 
-       foreign key (language_id) 
-       references language;
-
-    alter table if exists topic_translate 
-       add constraint FKbxd3m0gg2h9h6l5t1o5bmxnge 
-       foreign key (topic_id) 
-       references topic;
-
-    alter table if exists user_favorite_course 
-       add constraint FKpd7kuwmi2fts1x0rnsm46ven5 
-       foreign key (course_id) 
-       references course;
-
-    alter table if exists user_favorite_course 
-       add constraint FKkx7btq6vl0t7c92wk101oce7b 
-       foreign key (user_id) 
-       references _user;
-
-    alter table if exists user_topic 
-       add constraint FKrbbt9w8w48w4pl7dv0lh3om0v 
-       foreign key (topic_id) 
-       references topic;
-
-    alter table if exists user_topic 
-       add constraint FKrigmw1ul2tladbkykn6p7nq9y 
-       foreign key (user_id) 
-       references _user;
-
-    alter table if exists user_bundle 
-       add constraint FKkgujilv0ofi6carmk8mynjc82 
-       foreign key (bundle_id) 
-       references bundle;
-
-    alter table if exists user_bundle 
-       add constraint FKp71mnd97q842p2muw98c496d 
-       foreign key (user_id) 
-       references _user;
-
-    alter table if exists user_learning_path 
-       add constraint FK1gg9vx9pf19d7bal3x6xb50uc 
-       foreign key (learning_path_id) 
-       references learning_path;
-
-    alter table if exists user_learning_path 
-       add constraint FKj1whqeu8rm7dddql70uh3qq93 
-       foreign key (user_id) 
-       references _user;
-
-    alter table if exists user_skill 
-       add constraint FKo92ghoo9sk6kemgvb6d9lpq8k 
-       foreign key (enrollment_id) 
-       references enrollment;
-
-    alter table if exists user_skill 
-       add constraint FKj53flyds4vknyh8llw5d7jdop 
-       foreign key (skill_id) 
-       references skill;
-
-    alter table if exists user_skill 
-       add constraint FKqsxejk0f9hr4jpdoygwoyn6qg 
-       foreign key (user_id) 
-       references _user;
-
-    alter table if exists user_skill_snapshot 
-       add constraint FKqasc7n3cyymgb3x6l7btskbab 
-       foreign key (enrollment_id) 
-       references enrollment;
-
-    alter table if exists user_skill_snapshot 
-       add constraint FKrkpjyrpl6c4m2r0rw43e24u5s 
-       foreign key (quiz_attempt_id) 
-       references quiz_attempt;
-
-    alter table if exists user_skill_snapshot 
-       add constraint FKr22wle0esupohke0m179l39tv 
-       foreign key (user_skill_id) 
-       references user_skill;
-
-    alter table if exists verification_token 
-       add constraint FK311qhdx7kfhq2m0utkvjs7ay8 
-       foreign key (user_id) 
-       references _user;
+-- =============================================================
+-- ddl.sql  –  Shifter database schema
+-- PostgreSQL. All enum columns are VARCHAR (EnumType.STRING).
+-- Sequences use increment 50 to match Hibernate 6 default.
+-- Usage:
+--   1. psql -U <user> -d <db> -f drop.sql
+--   2. psql -U <user> -d <db> -f ddl.sql
+-- =============================================================
+
+BEGIN;
+
+-- =============================================================
+-- SEQUENCES  (increment 50 = Hibernate 6 default allocationSize)
+-- =============================================================
+CREATE SEQUENCE language_seq                       INCREMENT 50 START 1;
+CREATE SEQUENCE admin_seq                          INCREMENT 50 START 1;
+CREATE SEQUENCE expert_seq                         INCREMENT 50 START 1;
+CREATE SEQUENCE user_seq                           INCREMENT 50 START 1;
+CREATE SEQUENCE topic_seq                          INCREMENT 50 START 1;
+CREATE SEQUENCE topic_translation_seq              INCREMENT 50 START 1;
+CREATE SEQUENCE skill_seq                          INCREMENT 50 START 1;
+CREATE SEQUENCE skill_translation_seq              INCREMENT 50 START 1;
+CREATE SEQUENCE course_seq                         INCREMENT 50 START 1;
+CREATE SEQUENCE course_version_seq                 INCREMENT 50 START 1;
+CREATE SEQUENCE course_module_seq                  INCREMENT 50 START 1;
+CREATE SEQUENCE course_lecture_seq                 INCREMENT 50 START 1;
+CREATE SEQUENCE course_price_seq                   INCREMENT 50 START 1;
+CREATE SEQUENCE course_translation_seq             INCREMENT 50 START 1;
+CREATE SEQUENCE course_module_translation_seq      INCREMENT 50 START 1;
+CREATE SEQUENCE course_lecture_translation_seq     INCREMENT 50 START 1;
+CREATE SEQUENCE related_course_seq                 INCREMENT 50 START 1;
+CREATE SEQUENCE course_activity_event_seq          INCREMENT 50 START 1;
+CREATE SEQUENCE quiz_seq                           INCREMENT 50 START 1;
+CREATE SEQUENCE quiz_translation_seq               INCREMENT 50 START 1;
+CREATE SEQUENCE quiz_question_seq                  INCREMENT 50 START 1;
+CREATE SEQUENCE quiz_question_translation_seq      INCREMENT 50 START 1;
+CREATE SEQUENCE quiz_answer_option_seq             INCREMENT 50 START 1;
+CREATE SEQUENCE quiz_answer_option_translation_seq INCREMENT 50 START 1;
+CREATE SEQUENCE quiz_question_skill_seq            INCREMENT 50 START 1;
+CREATE SEQUENCE quiz_attempt_seq                   INCREMENT 50 START 1;
+CREATE SEQUENCE quiz_attempt_answer_seq            INCREMENT 50 START 1;
+CREATE SEQUENCE enrollment_seq                     INCREMENT 50 START 1;
+CREATE SEQUENCE lecture_progress_seq               INCREMENT 50 START 1;
+CREATE SEQUENCE user_skill_seq                     INCREMENT 50 START 1;
+CREATE SEQUENCE user_skill_snapshot_seq            INCREMENT 50 START 1;
+CREATE SEQUENCE certificate_seq                    INCREMENT 50 START 1;
+CREATE SEQUENCE review_seq                         INCREMENT 50 START 1;
+CREATE SEQUENCE learning_path_seq                  INCREMENT 50 START 1;
+CREATE SEQUENCE learning_path_translation_seq      INCREMENT 50 START 1;
+CREATE SEQUENCE curated_learning_path_seq          INCREMENT 50 START 1;
+CREATE SEQUENCE personalized_learning_path_seq     INCREMENT 50 START 1;
+CREATE SEQUENCE user_learning_path_seq             INCREMENT 50 START 1;
+CREATE SEQUENCE learning_path_course_seq           INCREMENT 50 START 1;
+CREATE SEQUENCE bundle_seq                         INCREMENT 50 START 1;
+CREATE SEQUENCE bundle_translation_seq             INCREMENT 50 START 1;
+CREATE SEQUENCE curated_bundle_seq                 INCREMENT 50 START 1;
+CREATE SEQUENCE personalized_bundle_seq            INCREMENT 50 START 1;
+CREATE SEQUENCE user_bundle_seq                    INCREMENT 50 START 1;
+CREATE SEQUENCE order_seq                          INCREMENT 50 START 1;
+CREATE SEQUENCE order_details_seq                  INCREMENT 50 START 1;
+CREATE SEQUENCE payment_seq                        INCREMENT 50 START 1;
+CREATE SEQUENCE meeting_email_reminder_seq         INCREMENT 50 START 1;
+
+-- =============================================================
+-- SHARED
+-- =============================================================
+
+CREATE TABLE language (
+    id            BIGINT       NOT NULL DEFAULT nextval('language_seq'),
+    language_code VARCHAR(255) NOT NULL,
+    name          VARCHAR(255) NOT NULL,
+    native_name   VARCHAR(255) NOT NULL,
+    CONSTRAINT pk_language PRIMARY KEY (id)
+);
+
+-- =============================================================
+-- IDENTITY  (Account is a MappedSuperclass — no own table)
+-- admin, expert, _user each carry the base Account columns
+-- =============================================================
+
+CREATE TABLE admin (
+    id             BIGINT       NOT NULL DEFAULT nextval('admin_seq'),
+    name           VARCHAR(255),
+    email          VARCHAR(255) NOT NULL,
+    login_provider VARCHAR(255) NOT NULL,
+    password_hash  VARCHAR(255) NOT NULL,
+    CONSTRAINT pk_admin PRIMARY KEY (id)
+);
+CREATE UNIQUE INDEX uq_admin_email ON admin (email);
+
+CREATE TABLE expert (
+    id             BIGINT       NOT NULL DEFAULT nextval('expert_seq'),
+    name           VARCHAR(255),
+    email          VARCHAR(255) NOT NULL,
+    login_provider VARCHAR(255) NOT NULL,
+    password_hash  VARCHAR(255) NOT NULL,
+    CONSTRAINT pk_expert PRIMARY KEY (id)
+);
+CREATE UNIQUE INDEX uq_expert_email ON expert (email);
+
+CREATE TABLE _user (
+    id                     BIGINT       NOT NULL DEFAULT nextval('user_seq'),
+    name                   VARCHAR(255),
+    email                  VARCHAR(255) NOT NULL,
+    login_provider         VARCHAR(255) NOT NULL,
+    password_hash          VARCHAR(255) NOT NULL,
+    verified               BOOLEAN      NOT NULL DEFAULT false,
+    profile_complete       BOOLEAN      NOT NULL DEFAULT false,
+    deleted                BOOLEAN      NOT NULL DEFAULT false,
+    used_free_consultation BOOLEAN      NOT NULL DEFAULT false,
+    company_size           VARCHAR(255),
+    work_position          VARCHAR(255),
+    points                 INTEGER      NOT NULL DEFAULT 0,
+    created_at             TIMESTAMP    NOT NULL,
+    updated_at             TIMESTAMP    NOT NULL,
+    CONSTRAINT pk_user PRIMARY KEY (id)
+);
+CREATE UNIQUE INDEX uq_user_email  ON _user (email);
+CREATE INDEX idx_user_deleted      ON _user (deleted);
+CREATE INDEX idx_user_verified     ON _user (verified);
+
+-- =============================================================
+-- AUTH
+-- =============================================================
+
+CREATE TABLE verification_token (
+    token      UUID      NOT NULL DEFAULT gen_random_uuid(),
+    user_id    BIGINT    NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
+    CONSTRAINT pk_verification_token   PRIMARY KEY (token),
+    CONSTRAINT uq_verification_user_id UNIQUE      (user_id),
+    CONSTRAINT fk_verification_user    FOREIGN KEY (user_id) REFERENCES _user (id)
+);
+
+-- =============================================================
+-- CATALOG: topic & skill
+-- =============================================================
+
+CREATE TABLE topic (
+    id   BIGINT       NOT NULL DEFAULT nextval('topic_seq'),
+    slug VARCHAR(255) NOT NULL,
+    CONSTRAINT pk_topic      PRIMARY KEY (id),
+    CONSTRAINT uq_topic_slug UNIQUE      (slug)
+);
+
+CREATE TABLE topic_translation (
+    id          BIGINT       NOT NULL DEFAULT nextval('topic_translation_seq'),
+    name        VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    created_at  TIMESTAMP    NOT NULL,
+    topic_id    BIGINT       NOT NULL,
+    language_id BIGINT       NOT NULL,
+    CONSTRAINT pk_topic_translation PRIMARY KEY (id),
+    CONSTRAINT fk_tt_topic          FOREIGN KEY (topic_id)    REFERENCES topic    (id),
+    CONSTRAINT fk_tt_language       FOREIGN KEY (language_id) REFERENCES language (id)
+);
+CREATE INDEX idx_topic_translation_topic    ON topic_translation (topic_id);
+CREATE INDEX idx_topic_translation_language ON topic_translation (language_id);
+
+CREATE TABLE skill (
+    id            BIGINT       NOT NULL DEFAULT nextval('skill_seq'),
+    slug          VARCHAR(255) NOT NULL,
+    show_in_radar BOOLEAN      NOT NULL,
+    CONSTRAINT pk_skill      PRIMARY KEY (id),
+    CONSTRAINT uq_skill_slug UNIQUE      (slug)
+);
+
+CREATE TABLE skill_translation (
+    id          BIGINT       NOT NULL DEFAULT nextval('skill_translation_seq'),
+    name        VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    created_at  TIMESTAMP    NOT NULL,
+    skill_id    BIGINT       NOT NULL,
+    language_id BIGINT       NOT NULL,
+    CONSTRAINT pk_skill_translation PRIMARY KEY (id),
+    CONSTRAINT fk_st_skill          FOREIGN KEY (skill_id)    REFERENCES skill    (id),
+    CONSTRAINT fk_st_language       FOREIGN KEY (language_id) REFERENCES language (id)
+);
+CREATE INDEX idx_skill_translation_skill    ON skill_translation (skill_id);
+CREATE INDEX idx_skill_translation_language ON skill_translation (language_id);
+
+-- =============================================================
+-- CATALOG: course hierarchy
+-- =============================================================
+
+CREATE TABLE course (
+    id               BIGINT       NOT NULL DEFAULT nextval('course_seq'),
+    image_url        TEXT         NOT NULL,
+    color            VARCHAR(255),
+    difficulty       VARCHAR(255) NOT NULL,
+    duration_minutes INTEGER      NOT NULL,
+    CONSTRAINT pk_course PRIMARY KEY (id)
+);
+CREATE INDEX idx_course_difficulty ON course (difficulty);
+
+CREATE TABLE course_version (
+    id             BIGINT  NOT NULL DEFAULT nextval('course_version_seq'),
+    version_number INTEGER NOT NULL,
+    creation_date  DATE    NOT NULL,
+    active         BOOLEAN NOT NULL,
+    course_id      BIGINT  NOT NULL,
+    CONSTRAINT pk_course_version PRIMARY KEY (id),
+    CONSTRAINT fk_cv_course      FOREIGN KEY (course_id) REFERENCES course (id)
+);
+CREATE INDEX idx_course_version_course ON course_version (course_id);
+CREATE INDEX idx_course_version_active ON course_version (active);
+
+CREATE TABLE course_module (
+    id                BIGINT  NOT NULL DEFAULT nextval('course_module_seq'),
+    position          INTEGER NOT NULL,
+    course_version_id BIGINT  NOT NULL,
+    CONSTRAINT pk_course_module     PRIMARY KEY (id),
+    CONSTRAINT fk_cm_course_version FOREIGN KEY (course_version_id) REFERENCES course_version (id)
+);
+CREATE INDEX idx_course_module_version ON course_module (course_version_id);
+
+CREATE TABLE course_lecture (
+    id               BIGINT       NOT NULL DEFAULT nextval('course_lecture_seq'),
+    duration_minutes INTEGER      NOT NULL,
+    position         INTEGER      NOT NULL,
+    content_type     VARCHAR(255) NOT NULL,
+    course_module_id BIGINT       NOT NULL,
+    CONSTRAINT pk_course_lecture   PRIMARY KEY (id),
+    CONSTRAINT fk_cl_course_module FOREIGN KEY (course_module_id) REFERENCES course_module (id)
+);
+CREATE INDEX idx_course_lecture_module ON course_lecture (course_module_id);
+
+CREATE TABLE course_price (
+    id                  BIGINT    NOT NULL DEFAULT nextval('course_price_seq'),
+    amount              DECIMAL   NOT NULL,
+    active              BOOLEAN   NOT NULL,
+    discounted          BOOLEAN   NOT NULL,
+    discount_amount     DECIMAL   NOT NULL,
+    discount_percentage DECIMAL   NOT NULL,
+    created_at          TIMESTAMP NOT NULL,
+    course_id           BIGINT    NOT NULL,
+    CONSTRAINT pk_course_price PRIMARY KEY (id),
+    CONSTRAINT fk_cp_course    FOREIGN KEY (course_id) REFERENCES course (id)
+);
+CREATE INDEX idx_course_price_course ON course_price (course_id);
+
+CREATE TABLE course_translation (
+    id                BIGINT       NOT NULL DEFAULT nextval('course_translation_seq'),
+    title_short       VARCHAR(255) NOT NULL,
+    title             VARCHAR(255) NOT NULL,
+    description_short VARCHAR(255) NOT NULL,
+    description       TEXT         NOT NULL,
+    description_long  TEXT         NOT NULL,
+    created_at        TIMESTAMP    NOT NULL,
+    language_id       BIGINT       NOT NULL,
+    course_id         BIGINT       NOT NULL,
+    CONSTRAINT pk_course_translation PRIMARY KEY (id),
+    CONSTRAINT fk_ct_language        FOREIGN KEY (language_id) REFERENCES language (id),
+    CONSTRAINT fk_ct_course          FOREIGN KEY (course_id)   REFERENCES course   (id)
+);
+CREATE INDEX idx_course_translation_course   ON course_translation (course_id);
+CREATE INDEX idx_course_translation_language ON course_translation (language_id);
+
+-- @ElementCollection: CourseTranslation.whatWillBeLearned
+CREATE TABLE course_translation_what_will_be_learned (
+    course_translation_id BIGINT       NOT NULL,
+    what_will_be_learned  VARCHAR(255),
+    CONSTRAINT fk_ctwwbl_translation FOREIGN KEY (course_translation_id)
+        REFERENCES course_translation (id)
+);
+CREATE INDEX idx_ctwwbl_translation ON course_translation_what_will_be_learned (course_translation_id);
+
+CREATE TABLE course_module_translation (
+    id               BIGINT       NOT NULL DEFAULT nextval('course_module_translation_seq'),
+    title            VARCHAR(255),
+    created_at       TIMESTAMP    NOT NULL,
+    language_id      BIGINT       NOT NULL,
+    course_module_id BIGINT       NOT NULL,
+    CONSTRAINT pk_course_module_translation PRIMARY KEY (id),
+    CONSTRAINT fk_cmt_language              FOREIGN KEY (language_id)      REFERENCES language      (id),
+    CONSTRAINT fk_cmt_module                FOREIGN KEY (course_module_id) REFERENCES course_module (id)
+);
+CREATE INDEX idx_cmt_module   ON course_module_translation (course_module_id);
+CREATE INDEX idx_cmt_language ON course_module_translation (language_id);
+
+CREATE TABLE course_lecture_translation (
+    id                BIGINT       NOT NULL DEFAULT nextval('course_lecture_translation_seq'),
+    content_file_name TEXT,
+    title             VARCHAR(255) NOT NULL,
+    description       TEXT         NOT NULL,
+    content_text      TEXT,
+    created_at        TIMESTAMP    NOT NULL,
+    language_id       BIGINT       NOT NULL,
+    course_lecture_id BIGINT       NOT NULL,
+    CONSTRAINT pk_course_lecture_translation PRIMARY KEY (id),
+    CONSTRAINT fk_clt_language               FOREIGN KEY (language_id)       REFERENCES language       (id),
+    CONSTRAINT fk_clt_lecture                FOREIGN KEY (course_lecture_id) REFERENCES course_lecture (id)
+);
+CREATE INDEX idx_clt_lecture  ON course_lecture_translation (course_lecture_id);
+CREATE INDEX idx_clt_language ON course_lecture_translation (language_id);
+
+CREATE TABLE related_course (
+    id                BIGINT    NOT NULL DEFAULT nextval('related_course_seq'),
+    similarity_score  DECIMAL,
+    calculated_at     TIMESTAMP,
+    course_id         BIGINT    NOT NULL,
+    related_course_id BIGINT    NOT NULL,
+    CONSTRAINT pk_related_course        PRIMARY KEY (id),
+    CONSTRAINT fk_rc_course             FOREIGN KEY (course_id)         REFERENCES course (id),
+    CONSTRAINT fk_rc_related_course     FOREIGN KEY (related_course_id) REFERENCES course (id)
+);
+CREATE INDEX idx_related_course_course  ON related_course (course_id);
+CREATE INDEX idx_related_course_related ON related_course (related_course_id);
+
+CREATE TABLE course_activity_event (
+    id         BIGINT       NOT NULL DEFAULT nextval('course_activity_event_seq'),
+    event_type VARCHAR(255) NOT NULL,
+    timestamp  TIMESTAMP    NOT NULL,
+    course_id  BIGINT       NOT NULL,
+    user_id    BIGINT       NOT NULL,
+    CONSTRAINT pk_course_activity_event PRIMARY KEY (id),
+    CONSTRAINT fk_cae_course            FOREIGN KEY (course_id) REFERENCES course (id),
+    CONSTRAINT fk_cae_user              FOREIGN KEY (user_id)   REFERENCES _user  (id)
+);
+CREATE INDEX idx_cae_course      ON course_activity_event (course_id);
+CREATE INDEX idx_cae_user        ON course_activity_event (user_id);
+CREATE INDEX idx_cae_event_type  ON course_activity_event (event_type);
+CREATE INDEX idx_cae_timestamp   ON course_activity_event (timestamp);
+
+-- =============================================================
+-- CATALOG: join tables
+-- =============================================================
+
+CREATE TABLE course_topic (
+    course_id BIGINT NOT NULL,
+    topic_id  BIGINT NOT NULL,
+    CONSTRAINT pk_course_topic PRIMARY KEY (course_id, topic_id),
+    CONSTRAINT fk_ct2_course   FOREIGN KEY (course_id) REFERENCES course (id),
+    CONSTRAINT fk_ct2_topic    FOREIGN KEY (topic_id)  REFERENCES topic  (id)
+);
+CREATE INDEX idx_course_topic_topic ON course_topic (topic_id);
+
+CREATE TABLE course_skill (
+    course_id BIGINT NOT NULL,
+    skill_id  BIGINT NOT NULL,
+    CONSTRAINT pk_course_skill PRIMARY KEY (course_id, skill_id),
+    CONSTRAINT fk_cs_course    FOREIGN KEY (course_id) REFERENCES course (id),
+    CONSTRAINT fk_cs_skill     FOREIGN KEY (skill_id)  REFERENCES skill  (id)
+);
+CREATE INDEX idx_course_skill_skill ON course_skill (skill_id);
+
+CREATE TABLE expert_course (
+    expert_id BIGINT NOT NULL,
+    course_id BIGINT NOT NULL,
+    CONSTRAINT pk_expert_course PRIMARY KEY (expert_id, course_id),
+    CONSTRAINT fk_ec_expert     FOREIGN KEY (expert_id) REFERENCES expert (id),
+    CONSTRAINT fk_ec_course     FOREIGN KEY (course_id) REFERENCES course (id)
+);
+CREATE INDEX idx_expert_course_course ON expert_course (course_id);
+
+CREATE TABLE user_favorite_course (
+    user_id   BIGINT NOT NULL,
+    course_id BIGINT NOT NULL,
+    CONSTRAINT pk_user_favorite_course PRIMARY KEY (user_id, course_id),
+    CONSTRAINT fk_ufc_user             FOREIGN KEY (user_id)   REFERENCES _user  (id),
+    CONSTRAINT fk_ufc_course           FOREIGN KEY (course_id) REFERENCES course (id)
+);
+CREATE INDEX idx_ufc_course ON user_favorite_course (course_id);
+
+CREATE TABLE user_topic (
+    user_id  BIGINT NOT NULL,
+    topic_id BIGINT NOT NULL,
+    CONSTRAINT pk_user_topic PRIMARY KEY (user_id, topic_id),
+    CONSTRAINT fk_ut_user    FOREIGN KEY (user_id)  REFERENCES _user (id),
+    CONSTRAINT fk_ut_topic   FOREIGN KEY (topic_id) REFERENCES topic (id)
+);
+CREATE INDEX idx_user_topic_topic ON user_topic (topic_id);
+
+-- =============================================================
+-- ASSESSMENT
+-- =============================================================
+
+CREATE TABLE quiz (
+    id                BIGINT       NOT NULL DEFAULT nextval('quiz_seq'),
+    type              VARCHAR(255) NOT NULL,
+    passing_score     INTEGER      NOT NULL,
+    randomized        BOOLEAN      NOT NULL DEFAULT false,
+    active            BOOLEAN      NOT NULL DEFAULT true,
+    created_at        TIMESTAMP    NOT NULL,
+    course_module_id  BIGINT,
+    course_version_id BIGINT,
+    CONSTRAINT pk_quiz                PRIMARY KEY (id),
+    CONSTRAINT uq_quiz_course_module  UNIQUE      (course_module_id),
+    CONSTRAINT uq_quiz_course_version UNIQUE      (course_version_id),
+    CONSTRAINT fk_quiz_course_module  FOREIGN KEY (course_module_id)  REFERENCES course_module  (id),
+    CONSTRAINT fk_quiz_course_version FOREIGN KEY (course_version_id) REFERENCES course_version (id)
+);
+
+CREATE TABLE quiz_translation (
+    id          BIGINT       NOT NULL DEFAULT nextval('quiz_translation_seq'),
+    title       VARCHAR(255) NOT NULL,
+    description TEXT         NOT NULL,
+    created_at  TIMESTAMP,
+    language_id BIGINT       NOT NULL,
+    quiz_id     BIGINT       NOT NULL,
+    CONSTRAINT pk_quiz_translation PRIMARY KEY (id),
+    CONSTRAINT fk_qtr_language     FOREIGN KEY (language_id) REFERENCES language (id),
+    CONSTRAINT fk_qtr_quiz         FOREIGN KEY (quiz_id)     REFERENCES quiz     (id)
+);
+CREATE INDEX idx_quiz_translation_quiz     ON quiz_translation (quiz_id);
+CREATE INDEX idx_quiz_translation_language ON quiz_translation (language_id);
+
+CREATE TABLE quiz_question (
+    id       BIGINT       NOT NULL DEFAULT nextval('quiz_question_seq'),
+    position INTEGER      NOT NULL,
+    points   INTEGER      NOT NULL,
+    type     VARCHAR(255) NOT NULL,
+    quiz_id  BIGINT       NOT NULL,
+    CONSTRAINT pk_quiz_question PRIMARY KEY (id),
+    CONSTRAINT fk_qq_quiz       FOREIGN KEY (quiz_id) REFERENCES quiz (id)
+);
+CREATE INDEX idx_quiz_question_quiz ON quiz_question (quiz_id);
+
+CREATE TABLE quiz_question_translation (
+    id               BIGINT    NOT NULL DEFAULT nextval('quiz_question_translation_seq'),
+    question_text    TEXT      NOT NULL,
+    scenario         TEXT,
+    created_at       TIMESTAMP NOT NULL,
+    language_id      BIGINT    NOT NULL,
+    quiz_question_id BIGINT    NOT NULL,
+    CONSTRAINT pk_quiz_question_translation PRIMARY KEY (id),
+    CONSTRAINT fk_qqt_language              FOREIGN KEY (language_id)      REFERENCES language      (id),
+    CONSTRAINT fk_qqt_question              FOREIGN KEY (quiz_question_id) REFERENCES quiz_question (id)
+);
+CREATE INDEX idx_qqt_question ON quiz_question_translation (quiz_question_id);
+CREATE INDEX idx_qqt_language ON quiz_question_translation (language_id);
+
+CREATE TABLE quiz_answer_option (
+    id               BIGINT  NOT NULL DEFAULT nextval('quiz_answer_option_seq'),
+    correct          BOOLEAN NOT NULL,
+    quiz_question_id BIGINT  NOT NULL,
+    CONSTRAINT pk_quiz_answer_option PRIMARY KEY (id),
+    CONSTRAINT fk_qao_question       FOREIGN KEY (quiz_question_id) REFERENCES quiz_question (id)
+);
+CREATE INDEX idx_quiz_answer_option_question ON quiz_answer_option (quiz_question_id);
+
+CREATE TABLE quiz_answer_option_translation (
+    id                    BIGINT       NOT NULL DEFAULT nextval('quiz_answer_option_translation_seq'),
+    answer_text           TEXT         NOT NULL,
+    explanation           VARCHAR(255) NOT NULL,
+    created_at            TIMESTAMP    NOT NULL,
+    language_id           BIGINT       NOT NULL,
+    quiz_answer_option_id BIGINT       NOT NULL,
+    CONSTRAINT pk_quiz_answer_option_translation PRIMARY KEY (id),
+    CONSTRAINT fk_qaot_language                  FOREIGN KEY (language_id)           REFERENCES language           (id),
+    CONSTRAINT fk_qaot_option                    FOREIGN KEY (quiz_answer_option_id) REFERENCES quiz_answer_option (id)
+);
+CREATE INDEX idx_qaot_option   ON quiz_answer_option_translation (quiz_answer_option_id);
+CREATE INDEX idx_qaot_language ON quiz_answer_option_translation (language_id);
+
+CREATE TABLE quiz_question_skill (
+    id               BIGINT       NOT NULL DEFAULT nextval('quiz_question_skill_seq'),
+    proficiency      VARCHAR(255),
+    weight           INTEGER,
+    quiz_question_id BIGINT       NOT NULL,
+    skill_id         BIGINT       NOT NULL,
+    CONSTRAINT pk_quiz_question_skill PRIMARY KEY (id),
+    CONSTRAINT fk_qqs_question        FOREIGN KEY (quiz_question_id) REFERENCES quiz_question (id),
+    CONSTRAINT fk_qqs_skill           FOREIGN KEY (skill_id)         REFERENCES skill         (id)
+);
+CREATE INDEX idx_qqs_question ON quiz_question_skill (quiz_question_id);
+CREATE INDEX idx_qqs_skill    ON quiz_question_skill (skill_id);
+
+-- =============================================================
+-- LEARNING
+-- =============================================================
+
+CREATE TABLE enrollment (
+    id                BIGINT       NOT NULL DEFAULT nextval('enrollment_seq'),
+    enrollment_status VARCHAR(255) NOT NULL,
+    enrollment_type   VARCHAR(255) NOT NULL,
+    on_trial          BOOLEAN      NOT NULL,
+    enrollment_date   DATE         NOT NULL,
+    purchase_date     DATE,
+    activation_date   DATE,
+    completion_date   DATE,
+    updated_at        TIMESTAMP    NOT NULL,
+    course_version_id BIGINT       NOT NULL,
+    user_id           BIGINT       NOT NULL,
+    CONSTRAINT pk_enrollment         PRIMARY KEY (id),
+    CONSTRAINT fk_enr_course_version FOREIGN KEY (course_version_id) REFERENCES course_version (id),
+    CONSTRAINT fk_enr_user           FOREIGN KEY (user_id)           REFERENCES _user          (id)
+);
+CREATE INDEX idx_enrollment_user           ON enrollment (user_id);
+CREATE INDEX idx_enrollment_course_version ON enrollment (course_version_id);
+CREATE INDEX idx_enrollment_status         ON enrollment (enrollment_status);
+
+CREATE TABLE lecture_progress (
+    id                BIGINT    NOT NULL DEFAULT nextval('lecture_progress_seq'),
+    completed         BOOLEAN   NOT NULL,
+    completed_at      TIMESTAMP NOT NULL,
+    enrollment_id     BIGINT    NOT NULL,
+    course_lecture_id BIGINT    NOT NULL,
+    CONSTRAINT pk_lecture_progress PRIMARY KEY (id),
+    CONSTRAINT fk_lp_enrollment    FOREIGN KEY (enrollment_id)     REFERENCES enrollment    (id),
+    CONSTRAINT fk_lp_lecture       FOREIGN KEY (course_lecture_id) REFERENCES course_lecture (id)
+);
+CREATE INDEX idx_lecture_progress_enrollment ON lecture_progress (enrollment_id);
+CREATE INDEX idx_lecture_progress_lecture    ON lecture_progress (course_lecture_id);
+
+CREATE TABLE quiz_attempt (
+    id             BIGINT       NOT NULL DEFAULT nextval('quiz_attempt_seq'),
+    attempt_number INTEGER      NOT NULL,
+    started_at     TIMESTAMP    NOT NULL,
+    completed_at   TIMESTAMP    NOT NULL,
+    status         VARCHAR(255) NOT NULL,
+    score          INTEGER      NOT NULL,
+    total_points   INTEGER      NOT NULL,
+    earned_points  INTEGER      NOT NULL,
+    passed         BOOLEAN      NOT NULL,
+    quiz_id        BIGINT       NOT NULL,
+    enrollment_id  BIGINT       NOT NULL,
+    CONSTRAINT pk_quiz_attempt  PRIMARY KEY (id),
+    CONSTRAINT fk_qa_quiz       FOREIGN KEY (quiz_id)       REFERENCES quiz       (id),
+    CONSTRAINT fk_qa_enrollment FOREIGN KEY (enrollment_id) REFERENCES enrollment (id)
+);
+CREATE INDEX idx_quiz_attempt_quiz       ON quiz_attempt (quiz_id);
+CREATE INDEX idx_quiz_attempt_enrollment ON quiz_attempt (enrollment_id);
+CREATE INDEX idx_quiz_attempt_status     ON quiz_attempt (status);
+
+CREATE TABLE quiz_attempt_answer (
+    id               BIGINT  NOT NULL DEFAULT nextval('quiz_attempt_answer_seq'),
+    correct          BOOLEAN NOT NULL,
+    quiz_question_id BIGINT  NOT NULL,
+    quiz_attempt_id  BIGINT  NOT NULL,
+    CONSTRAINT pk_quiz_attempt_answer PRIMARY KEY (id),
+    CONSTRAINT fk_qaa_question        FOREIGN KEY (quiz_question_id) REFERENCES quiz_question (id),
+    CONSTRAINT fk_qaa_attempt         FOREIGN KEY (quiz_attempt_id)  REFERENCES quiz_attempt  (id)
+);
+CREATE INDEX idx_qaa_attempt  ON quiz_attempt_answer (quiz_attempt_id);
+CREATE INDEX idx_qaa_question ON quiz_attempt_answer (quiz_question_id);
+
+CREATE TABLE quiz_attempt_answer_selected_options (
+    quiz_attempt_answer_id BIGINT NOT NULL,
+    quiz_answer_option_id  BIGINT NOT NULL,
+    CONSTRAINT fk_qaaso_answer FOREIGN KEY (quiz_attempt_answer_id) REFERENCES quiz_attempt_answer (id),
+    CONSTRAINT fk_qaaso_option FOREIGN KEY (quiz_answer_option_id)  REFERENCES quiz_answer_option  (id)
+);
+CREATE INDEX idx_qaaso_answer ON quiz_attempt_answer_selected_options (quiz_attempt_answer_id);
+CREATE INDEX idx_qaaso_option ON quiz_attempt_answer_selected_options (quiz_answer_option_id);
+
+CREATE TABLE user_skill (
+    id                BIGINT       NOT NULL DEFAULT nextval('user_skill_seq'),
+    verified          BOOLEAN      NOT NULL,
+    proficiency       VARCHAR(255) NOT NULL,
+    proficiency_score INTEGER      NOT NULL DEFAULT 0,
+    created_at        TIMESTAMP    NOT NULL,
+    updated_at        TIMESTAMP    NOT NULL,
+    enrollment_id     BIGINT       NOT NULL,
+    skill_id          BIGINT       NOT NULL,
+    user_id           BIGINT       NOT NULL,
+    CONSTRAINT pk_user_skill    PRIMARY KEY (id),
+    CONSTRAINT fk_us_enrollment FOREIGN KEY (enrollment_id) REFERENCES enrollment (id),
+    CONSTRAINT fk_us_skill      FOREIGN KEY (skill_id)      REFERENCES skill      (id),
+    CONSTRAINT fk_us_user       FOREIGN KEY (user_id)       REFERENCES _user      (id)
+);
+CREATE INDEX idx_user_skill_user       ON user_skill (user_id);
+CREATE INDEX idx_user_skill_skill      ON user_skill (skill_id);
+CREATE INDEX idx_user_skill_enrollment ON user_skill (enrollment_id);
+
+CREATE TABLE user_skill_snapshot (
+    id                        BIGINT       NOT NULL DEFAULT nextval('user_skill_snapshot_seq'),
+    proficiency_at_time       VARCHAR(255) NOT NULL,
+    proficiency_score_at_time INTEGER      NOT NULL DEFAULT 0,
+    new_proficiency           VARCHAR(255) NOT NULL,
+    new_proficiency_score     INTEGER      NOT NULL DEFAULT 0,
+    created_at                TIMESTAMP    NOT NULL,
+    quiz_attempt_id           BIGINT       NOT NULL,
+    enrollment_id             BIGINT       NOT NULL,
+    user_skill_id             BIGINT       NOT NULL,
+    CONSTRAINT pk_user_skill_snapshot PRIMARY KEY (id),
+    CONSTRAINT fk_uss_quiz_attempt    FOREIGN KEY (quiz_attempt_id) REFERENCES quiz_attempt (id),
+    CONSTRAINT fk_uss_enrollment      FOREIGN KEY (enrollment_id)   REFERENCES enrollment   (id),
+    CONSTRAINT fk_uss_user_skill      FOREIGN KEY (user_skill_id)   REFERENCES user_skill   (id)
+);
+CREATE INDEX idx_uss_user_skill   ON user_skill_snapshot (user_skill_id);
+CREATE INDEX idx_uss_enrollment   ON user_skill_snapshot (enrollment_id);
+CREATE INDEX idx_uss_quiz_attempt ON user_skill_snapshot (quiz_attempt_id);
+
+CREATE TABLE certificate (
+    id                 BIGINT       NOT NULL DEFAULT nextval('certificate_seq'),
+    issue_date         DATE         NOT NULL,
+    certificate_url    VARCHAR(255) NOT NULL,
+    certificate_number VARCHAR(255) NOT NULL,
+    user_id            BIGINT       NOT NULL,
+    enrollment_id      BIGINT       NOT NULL,
+    CONSTRAINT pk_certificate            PRIMARY KEY (id),
+    CONSTRAINT uq_certificate_enrollment UNIQUE      (enrollment_id),
+    CONSTRAINT uq_certificate_number     UNIQUE      (certificate_number),
+    CONSTRAINT fk_cert_user              FOREIGN KEY (user_id)       REFERENCES _user      (id),
+    CONSTRAINT fk_cert_enrollment        FOREIGN KEY (enrollment_id) REFERENCES enrollment (id)
+);
+CREATE INDEX idx_certificate_user ON certificate (user_id);
+
+CREATE TABLE review (
+    id            BIGINT       NOT NULL DEFAULT nextval('review_seq'),
+    rating        INTEGER      NOT NULL,
+    comment       VARCHAR(255),
+    date          DATE         NOT NULL,
+    enrollment_id BIGINT,
+    CONSTRAINT pk_review            PRIMARY KEY (id),
+    CONSTRAINT uq_review_enrollment UNIQUE      (enrollment_id),
+    CONSTRAINT fk_review_enrollment FOREIGN KEY (enrollment_id) REFERENCES enrollment (id)
+);
+
+-- =============================================================
+-- COLLECTION: learning path
+-- =============================================================
+
+CREATE TABLE learning_path (
+    id                       BIGINT       NOT NULL DEFAULT nextval('learning_path_seq'),
+    type                     VARCHAR(255) NOT NULL,
+    slug                     VARCHAR(255) NOT NULL,
+    image_url                VARCHAR(255) NOT NULL,
+    base_price               DECIMAL      NOT NULL,
+    discounted               BOOLEAN      NOT NULL,
+    discount_amount          DECIMAL      NOT NULL,
+    discount_percentage      DECIMAL      NOT NULL,
+    estimated_duration_hours INTEGER      NOT NULL,
+    difficulty               VARCHAR(255) NOT NULL,
+    active                   BOOLEAN      NOT NULL DEFAULT true,
+    created_at               TIMESTAMP    NOT NULL,
+    deactivated_at           TIMESTAMP,
+    CONSTRAINT pk_learning_path PRIMARY KEY (id)
+);
+CREATE INDEX idx_learning_path_active ON learning_path (active);
+CREATE INDEX idx_learning_path_type   ON learning_path (type);
+
+CREATE TABLE learning_path_translation (
+    id               BIGINT       NOT NULL DEFAULT nextval('learning_path_translation_seq'),
+    title            VARCHAR(255) NOT NULL,
+    description      VARCHAR(255) NOT NULL,
+    created_at       TIMESTAMP    NOT NULL,
+    language_id      BIGINT       NOT NULL,
+    learning_path_id BIGINT       NOT NULL,
+    CONSTRAINT pk_learning_path_translation PRIMARY KEY (id),
+    CONSTRAINT fk_lpt_language              FOREIGN KEY (language_id)      REFERENCES language      (id),
+    CONSTRAINT fk_lpt_learning_path         FOREIGN KEY (learning_path_id) REFERENCES learning_path (id)
+);
+CREATE INDEX idx_lpt_learning_path ON learning_path_translation (learning_path_id);
+CREATE INDEX idx_lpt_language      ON learning_path_translation (language_id);
+
+-- @ElementCollection: LearningPathTranslation.learningOutcomes
+CREATE TABLE learning_path_translation_learning_outcomes (
+    learning_path_translation_id BIGINT       NOT NULL,
+    learning_outcomes            VARCHAR(255),
+    CONSTRAINT fk_lptlo_translation FOREIGN KEY (learning_path_translation_id)
+        REFERENCES learning_path_translation (id)
+);
+CREATE INDEX idx_lptlo_translation ON learning_path_translation_learning_outcomes (learning_path_translation_id);
+
+CREATE TABLE curated_learning_path (
+    id               BIGINT NOT NULL DEFAULT nextval('curated_learning_path_seq'),
+    learning_path_id BIGINT NOT NULL,
+    CONSTRAINT pk_curated_learning_path PRIMARY KEY (id),
+    CONSTRAINT uq_clp_learning_path     UNIQUE      (learning_path_id),
+    CONSTRAINT fk_clp_learning_path     FOREIGN KEY (learning_path_id) REFERENCES learning_path (id)
+);
+
+CREATE TABLE personalized_learning_path (
+    id                      BIGINT       NOT NULL DEFAULT nextval('personalized_learning_path_seq'),
+    type                    VARCHAR(255) NOT NULL,
+    generated_reason        VARCHAR(255) NOT NULL,
+    discounted              BOOLEAN      NOT NULL,
+    added_discount_percent  DECIMAL      NOT NULL DEFAULT 0,
+    added_discount_amount   DECIMAL      NOT NULL DEFAULT 0,
+    active                  BOOLEAN      NOT NULL DEFAULT true,
+    created_at              TIMESTAMP    NOT NULL,
+    expires_at              TIMESTAMP    NOT NULL,
+    learning_path_id        BIGINT       NOT NULL,
+    source_learning_path_id BIGINT,
+    user_id                 BIGINT       NOT NULL,
+    CONSTRAINT pk_personalized_learning_path PRIMARY KEY (id),
+    CONSTRAINT fk_plp_learning_path          FOREIGN KEY (learning_path_id)        REFERENCES learning_path         (id),
+    CONSTRAINT fk_plp_source                 FOREIGN KEY (source_learning_path_id) REFERENCES curated_learning_path (id),
+    CONSTRAINT fk_plp_user                   FOREIGN KEY (user_id)                 REFERENCES _user                 (id)
+);
+CREATE INDEX idx_plp_user          ON personalized_learning_path (user_id);
+CREATE INDEX idx_plp_learning_path ON personalized_learning_path (learning_path_id);
+
+CREATE TABLE user_learning_path (
+    id                  BIGINT       NOT NULL DEFAULT nextval('user_learning_path_seq'),
+    acquired_date       DATE         NOT NULL,
+    completed_date      DATE,
+    status              VARCHAR(255) NOT NULL DEFAULT 'NOT_STARTED',
+    progress_percentage INTEGER      NOT NULL DEFAULT 0,
+    updated_at          TIMESTAMP    NOT NULL,
+    learning_path_id    BIGINT       NOT NULL,
+    user_id             BIGINT       NOT NULL,
+    CONSTRAINT pk_user_learning_path PRIMARY KEY (id),
+    CONSTRAINT fk_ulp_learning_path  FOREIGN KEY (learning_path_id) REFERENCES learning_path (id),
+    CONSTRAINT fk_ulp_user           FOREIGN KEY (user_id)          REFERENCES _user         (id)
+);
+CREATE INDEX idx_ulp_user          ON user_learning_path (user_id);
+CREATE INDEX idx_ulp_learning_path ON user_learning_path (learning_path_id);
+
+CREATE TABLE learning_path_course (
+    id               BIGINT  NOT NULL DEFAULT nextval('learning_path_course_seq'),
+    sequence_order   INTEGER NOT NULL,
+    learning_path_id BIGINT  NOT NULL,
+    course_id        BIGINT  NOT NULL,
+    CONSTRAINT pk_learning_path_course PRIMARY KEY (id),
+    CONSTRAINT fk_lpc_learning_path    FOREIGN KEY (learning_path_id) REFERENCES learning_path (id),
+    CONSTRAINT fk_lpc_course           FOREIGN KEY (course_id)        REFERENCES course        (id)
+);
+CREATE INDEX idx_lpc_learning_path ON learning_path_course (learning_path_id);
+CREATE INDEX idx_lpc_course        ON learning_path_course (course_id);
+
+CREATE TABLE expert_curated_learning_path (
+    expert_id                BIGINT NOT NULL,
+    curated_learning_path_id BIGINT NOT NULL,
+    CONSTRAINT pk_expert_curated_lp PRIMARY KEY (expert_id, curated_learning_path_id),
+    CONSTRAINT fk_eclp_expert        FOREIGN KEY (expert_id)                REFERENCES expert                (id),
+    CONSTRAINT fk_eclp_clp           FOREIGN KEY (curated_learning_path_id) REFERENCES curated_learning_path (id)
+);
+CREATE INDEX idx_eclp_clp ON expert_curated_learning_path (curated_learning_path_id);
+
+-- =============================================================
+-- COLLECTION: bundle
+-- =============================================================
+
+CREATE TABLE bundle (
+    id                  BIGINT       NOT NULL DEFAULT nextval('bundle_seq'),
+    type                VARCHAR(255) NOT NULL,
+    slug                VARCHAR(255) NOT NULL,
+    image_url           VARCHAR(255) NOT NULL,
+    base_price          DECIMAL      NOT NULL,
+    discount_amount     DECIMAL      NOT NULL,
+    discount_percentage DECIMAL      NOT NULL,
+    active              BOOLEAN      NOT NULL DEFAULT true,
+    created_at          TIMESTAMP    NOT NULL,
+    updated_at          TIMESTAMP    NOT NULL,
+    deactivated_at      TIMESTAMP,
+    CONSTRAINT pk_bundle PRIMARY KEY (id)
+);
+CREATE INDEX idx_bundle_active ON bundle (active);
+CREATE INDEX idx_bundle_type   ON bundle (type);
+
+CREATE TABLE bundle_translation (
+    id          BIGINT       NOT NULL DEFAULT nextval('bundle_translation_seq'),
+    title       VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    created_at  TIMESTAMP    NOT NULL,
+    language_id BIGINT       NOT NULL,
+    bundle_id   BIGINT       NOT NULL,
+    CONSTRAINT pk_bundle_translation PRIMARY KEY (id),
+    CONSTRAINT fk_bt_language        FOREIGN KEY (language_id) REFERENCES language (id),
+    CONSTRAINT fk_bt_bundle          FOREIGN KEY (bundle_id)   REFERENCES bundle   (id)
+);
+CREATE INDEX idx_bundle_translation_bundle   ON bundle_translation (bundle_id);
+CREATE INDEX idx_bundle_translation_language ON bundle_translation (language_id);
+
+CREATE TABLE curated_bundle (
+    id        BIGINT NOT NULL DEFAULT nextval('curated_bundle_seq'),
+    bundle_id BIGINT NOT NULL,
+    CONSTRAINT pk_curated_bundle    PRIMARY KEY (id),
+    CONSTRAINT uq_curated_bundle_id UNIQUE      (bundle_id),
+    CONSTRAINT fk_cb_bundle         FOREIGN KEY (bundle_id) REFERENCES bundle (id)
+);
+
+CREATE TABLE personalized_bundle (
+    id                     BIGINT       NOT NULL DEFAULT nextval('personalized_bundle_seq'),
+    type                   VARCHAR(255) NOT NULL,
+    generated_reason       VARCHAR(255) NOT NULL,
+    discounted             BOOLEAN      NOT NULL,
+    added_discount_percent DECIMAL      NOT NULL DEFAULT 0,
+    added_discount_amount  DECIMAL      NOT NULL DEFAULT 0,
+    active                 BOOLEAN      NOT NULL DEFAULT true,
+    created_at             TIMESTAMP    NOT NULL,
+    expires_at             TIMESTAMP    NOT NULL,
+    bundle_id              BIGINT       NOT NULL,
+    source_bundle_id       BIGINT,
+    user_id                BIGINT       NOT NULL,
+    CONSTRAINT pk_personalized_bundle PRIMARY KEY (id),
+    CONSTRAINT fk_pb_bundle           FOREIGN KEY (bundle_id)        REFERENCES bundle         (id),
+    CONSTRAINT fk_pb_source           FOREIGN KEY (source_bundle_id) REFERENCES curated_bundle (id),
+    CONSTRAINT fk_pb_user             FOREIGN KEY (user_id)          REFERENCES _user          (id)
+);
+CREATE INDEX idx_pb_user   ON personalized_bundle (user_id);
+CREATE INDEX idx_pb_bundle ON personalized_bundle (bundle_id);
+
+CREATE TABLE user_bundle (
+    id            BIGINT NOT NULL DEFAULT nextval('user_bundle_seq'),
+    acquired_date DATE   NOT NULL,
+    bundle_id     BIGINT NOT NULL,
+    user_id       BIGINT NOT NULL,
+    CONSTRAINT pk_user_bundle PRIMARY KEY (id),
+    CONSTRAINT fk_ub_bundle   FOREIGN KEY (bundle_id) REFERENCES bundle (id),
+    CONSTRAINT fk_ub_user     FOREIGN KEY (user_id)   REFERENCES _user  (id)
+);
+CREATE INDEX idx_user_bundle_user   ON user_bundle (user_id);
+CREATE INDEX idx_user_bundle_bundle ON user_bundle (bundle_id);
+
+CREATE TABLE bundle_course (
+    bundle_id BIGINT NOT NULL,
+    course_id BIGINT NOT NULL,
+    CONSTRAINT pk_bundle_course PRIMARY KEY (bundle_id, course_id),
+    CONSTRAINT fk_bc_bundle     FOREIGN KEY (bundle_id) REFERENCES bundle (id),
+    CONSTRAINT fk_bc_course     FOREIGN KEY (course_id) REFERENCES course (id)
+);
+CREATE INDEX idx_bundle_course_course ON bundle_course (course_id);
+
+CREATE TABLE expert_curated_bundle (
+    expert_id         BIGINT NOT NULL,
+    curated_bundle_id BIGINT NOT NULL,
+    CONSTRAINT pk_expert_curated_bundle  PRIMARY KEY (expert_id, curated_bundle_id),
+    CONSTRAINT fk_ecb_expert             FOREIGN KEY (expert_id)         REFERENCES expert         (id),
+    CONSTRAINT fk_ecb_curated_bundle     FOREIGN KEY (curated_bundle_id) REFERENCES curated_bundle (id)
+);
+CREATE INDEX idx_ecb_curated_bundle ON expert_curated_bundle (curated_bundle_id);
+
+-- =============================================================
+-- COMMERCE
+-- =============================================================
+
+CREATE TABLE _order (
+    id         BIGINT       NOT NULL DEFAULT nextval('order_seq'),
+    status     VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP    NOT NULL,
+    CONSTRAINT pk_order PRIMARY KEY (id)
+);
+CREATE INDEX idx_order_status ON _order (status);
+
+CREATE TABLE payment (
+    id       BIGINT           NOT NULL DEFAULT nextval('payment_seq'),
+    amount   DOUBLE PRECISION NOT NULL,
+    date     DATE             NOT NULL,
+    method   VARCHAR(255)     NOT NULL,
+    status   VARCHAR(255)     NOT NULL,
+    order_id BIGINT           NOT NULL,
+    CONSTRAINT pk_payment       PRIMARY KEY (id),
+    CONSTRAINT uq_payment_order UNIQUE      (order_id),
+    CONSTRAINT fk_pay_order     FOREIGN KEY (order_id) REFERENCES _order (id)
+);
+CREATE INDEX idx_payment_status ON payment (status);
+
+CREATE TABLE order_details (
+    id                  BIGINT    NOT NULL DEFAULT nextval('order_details_seq'),
+    price               DECIMAL   NOT NULL,
+    discount_amount     DECIMAL   NOT NULL,
+    discount_percentage DECIMAL   NOT NULL,
+    created_at          TIMESTAMP NOT NULL,
+    order_id            BIGINT    NOT NULL,
+    enrollment_id       BIGINT    NOT NULL,
+    course_id           BIGINT    NOT NULL,
+    CONSTRAINT pk_order_details        PRIMARY KEY (id),
+    CONSTRAINT uq_order_details_enroll UNIQUE      (enrollment_id),
+    CONSTRAINT fk_od_order             FOREIGN KEY (order_id)      REFERENCES _order     (id),
+    CONSTRAINT fk_od_enrollment        FOREIGN KEY (enrollment_id) REFERENCES enrollment (id),
+    CONSTRAINT fk_od_course            FOREIGN KEY (course_id)     REFERENCES course     (id)
+);
+CREATE INDEX idx_order_details_order  ON order_details (order_id);
+CREATE INDEX idx_order_details_course ON order_details (course_id);
+
+-- =============================================================
+-- CONSULTATION
+-- =============================================================
+
+CREATE TABLE meeting_email_reminder (
+    id           BIGINT       NOT NULL DEFAULT nextval('meeting_email_reminder_seq'),
+    created_at   TIMESTAMP    NOT NULL,
+    updated_at   TIMESTAMP    NOT NULL,
+    meeting_at   TIMESTAMP    NOT NULL,
+    scheduled_at TIMESTAMP    NOT NULL,
+    sent         BOOLEAN      NOT NULL,
+    status       VARCHAR(255) NOT NULL DEFAULT 'PENDING',
+    meeting_link TEXT         NOT NULL,
+    user_id      BIGINT       NOT NULL,
+    CONSTRAINT pk_meeting_email_reminder PRIMARY KEY (id),
+    CONSTRAINT fk_mer_user               FOREIGN KEY (user_id) REFERENCES _user (id)
+);
+CREATE INDEX idx_mer_user   ON meeting_email_reminder (user_id);
+CREATE INDEX idx_mer_status ON meeting_email_reminder (status);
+CREATE INDEX idx_mer_sent   ON meeting_email_reminder (sent);
+
+COMMIT;

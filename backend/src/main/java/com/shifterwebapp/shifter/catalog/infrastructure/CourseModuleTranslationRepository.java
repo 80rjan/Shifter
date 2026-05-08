@@ -1,8 +1,8 @@
 package com.shifterwebapp.shifter.catalog.infrastructure;
 
-import com.shifterwebapp.shifter.catalog.domain.CourseModuleTranslate;
+import com.shifterwebapp.shifter.catalog.domain.CourseModuleTranslation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CourseModuleTranslateRepository extends JpaRepository<CourseModuleTranslate, Long> {
+public interface CourseModuleTranslationRepository extends JpaRepository<CourseModuleTranslation, Long> {
 
 }

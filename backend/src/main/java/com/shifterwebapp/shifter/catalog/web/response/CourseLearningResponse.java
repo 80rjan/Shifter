@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CourseDtoLearn {
+public class CourseLearningResponse {
 
     private Long id;
 
@@ -21,5 +21,5 @@ public class CourseDtoLearn {
 
     private Boolean isFinished;
 
-    private List<CourseModuleDtoLearn> courseContents;
+    private List<CourseModuleLearningResponse> courseContents;
 }

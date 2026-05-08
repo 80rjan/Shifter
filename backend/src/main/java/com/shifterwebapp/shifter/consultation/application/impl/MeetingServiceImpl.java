@@ -6,7 +6,7 @@
 //import com.shifterwebapp.shifter.shared.exception.AccessDeniedException;
 //import com.shifterwebapp.shifter.shared.exception.TimeSlotUnavailableException;
 //import com.shifterwebapp.shifter.notification.EmailService;
-//import com.shifterwebapp.shifter.consultation.infrastructure.ZoomService;
+//import com.shifterwebapp.shifter.consultation.infrastructure.ZoomGateway;
 //import com.shifterwebapp.shifter.auth.infrastructure.GoogleCalendarService;
 //import com.shifterwebapp.shifter.consultation.web.request.MeetingUtils;
 //import com.shifterwebapp.shifter.consultation.web.request.UserMeetingInfoRequest;
@@ -30,7 +30,7 @@
 //    private final GoogleCalendarService googleCalendarService;
 //    private final MeetingEmailReminderService meetingEmailReminderService;
 //    private final UserService userService;
-//    private final ZoomService zoomService;
+//    private final ZoomGateway zoomService;
 //    private final EmailService emailService;
 //    private final MeetingUtils meetingUtils;
 //

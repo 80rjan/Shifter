@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseLectureDtoPreview {
+public class CourseLecturePreviewResponse {
 
     private String title;
 

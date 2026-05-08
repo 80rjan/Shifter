@@ -17,6 +17,7 @@ public class QuizQuestionSkill {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private SkillProficiency proficiency;
 
     private Integer weight;

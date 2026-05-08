@@ -7,7 +7,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class CourseSkillsAndInterestsView {
+public class CourseSkillsAndTopicsResponse {
     Long courseId;
     List<String> skills;
     List<String> interests;

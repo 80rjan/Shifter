@@ -1,6 +1,6 @@
 //package com.shifterwebapp.shifter.commerce.domain.controller;
 //
-//import com.shifterwebapp.shifter.commerce.web.response.PaymentDto;
+//import com.shifterwebapp.shifter.commerce.web.response.PaymentResponse;
 //import com.shifterwebapp.shifter.commerce.application.PaymentService;
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@
 //
 //    @GetMapping
 //    public ResponseEntity<?> getPaymentsByUser(@RequestParam("userId") Long userId) {
-//        List<PaymentDto> paymentDtos = paymentService.getPaymentsByUser(userId);
+//        List<PaymentResponse> paymentDtos = paymentService.getPaymentsByUser(userId);
 //        return ResponseEntity.ok(paymentDtos);
 //    }
 //}

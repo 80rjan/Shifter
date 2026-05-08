@@ -1,6 +1,6 @@
 package com.shifterwebapp.shifter.auth.web.response;
 
-import com.shifterwebapp.shifter.identity.web.response.UserDtoAuth;
+import com.shifterwebapp.shifter.identity.web.response.AuthenticatedUserResponse;
 import lombok.*;
 
 @NoArgsConstructor
@@ -10,6 +10,6 @@ import lombok.*;
 @Builder
 public class AuthResponse {
     private String accessToken;
-    private UserDtoAuth user;
+    private AuthenticatedUserResponse user;
 
 }

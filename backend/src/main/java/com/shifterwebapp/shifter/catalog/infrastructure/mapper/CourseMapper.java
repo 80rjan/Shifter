@@ -33,12 +33,12 @@
 //    @Autowired
 //    protected CourseModuleMapper courseModuleMapper;
 //
-//    public abstract CourseDtoPreview toDtoPreview(Course course, @Context LanguageCode language,
+//    public abstract CoursePreviewResponse toDtoPreview(Course course, @Context LanguageCode language,
 //                                                  @Context Map<Long, Double> avgRatingsMap,
 //                                                  @Context Map<Long, CourseVersion> courseVersionMap,
 //                                                  @Context Map<Long, CourseSkillsAndInterestsView> courseSkillsAndInterestsViewMap);
 //
-//    public abstract List<CourseDtoPreview> toDtoPreview(List<Course> courses, @Context LanguageCode language,
+//    public abstract List<CoursePreviewResponse> toDtoPreview(List<Course> courses, @Context LanguageCode language,
 //                                                        @Context Map<Long, Double> avgRatingsMap,
 //                                                        @Context Map<Long, CourseVersion> courseVersionMap,
 //                                                        @Context Map<Long, CourseSkillsAndInterestsView> courseSkillsAndInterestsViewMap);
@@ -62,16 +62,16 @@
 //                                                                        @Context Map<Long, CourseVersion> courseVersionMap,
 //                                                                        @Context Map<Long, CourseSkillsAndInterestsView> courseSkillsAndInterestsViewMap);
 //
-//    public abstract CourseDtoLearn toDtoLearn(Course course, @Context LanguageCode language, @Context Enrollment enrollment);
+//    public abstract CourseLearningResponse toDtoLearn(Course course, @Context LanguageCode language, @Context Enrollment enrollment);
 //
-//    public abstract List<CourseDtoLearn> toDtoLearn(List<Course> courses, @Context LanguageCode language, @Context Enrollment enrollment);
+//    public abstract List<CourseLearningResponse> toDtoLearn(List<Course> courses, @Context LanguageCode language, @Context Enrollment enrollment);
 //
 //    public abstract CourseDtoFull toDtoFull(Course course, @Context LanguageCode language);
 //
 //    public abstract List<CourseDtoFull> toDtoFull(List<Course> courses, @Context LanguageCode language);
 //
 //    @AfterMapping
-//    protected void enrichPreview(@MappingTarget CourseDtoPreview dto,
+//    protected void enrichPreview(@MappingTarget CoursePreviewResponse dto,
 //                                 Course course,
 //                                 @Context LanguageCode language,
 //                                 @Context Map<Long, Double> avgRatingsMap,
@@ -130,7 +130,7 @@
 //    }
 //
 //    @AfterMapping
-//    protected void enrichLearn(@MappingTarget CourseDtoLearn dto,
+//    protected void enrichLearn(@MappingTarget CourseLearningResponse dto,
 //                               Course course,
 //                               @Context LanguageCode language,
 //                               @Context Enrollment enrollment) {
@@ -211,7 +211,7 @@
 //    }
 //
 //
-//    protected <T extends CourseDtoPreview> void enrichCourseDtoPreview(
+//    protected <T extends CoursePreviewResponse> void enrichCourseDtoPreview(
 //            T dto,
 //            Course course,
 //            LanguageCode language,

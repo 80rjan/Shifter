@@ -7,7 +7,7 @@ create sequence admin_seq start with 1 increment by 50;
 
 create sequence bundle_seq start with 1 increment by 50;
 
-create sequence bundle_translate_seq start with 1 increment by 50;
+create sequence bundle_translation_seq start with 1 increment by 50;
 
 create sequence certificate_seq start with 1 increment by 50;
 
@@ -15,17 +15,17 @@ create sequence course_activity_event_seq start with 1 increment by 50;
 
 create sequence course_lecture_seq start with 1 increment by 50;
 
-create sequence course_lecture_translate_seq start with 1 increment by 50;
+create sequence course_lecture_translation_seq start with 1 increment by 50;
 
 create sequence course_module_seq start with 1 increment by 50;
 
-create sequence course_module_translate_seq start with 1 increment by 50;
+create sequence course_module_translation_seq start with 1 increment by 50;
 
 create sequence course_price_seq start with 1 increment by 50;
 
 create sequence course_seq start with 1 increment by 50;
 
-create sequence course_translate_seq start with 1 increment by 50;
+create sequence course_translation_seq start with 1 increment by 50;
 
 create sequence course_version_seq start with 1 increment by 50;
 
@@ -43,7 +43,7 @@ create sequence learning_path_course_seq start with 1 increment by 50;
 
 create sequence learning_path_seq start with 1 increment by 50;
 
-create sequence learning_path_translate_seq start with 1 increment by 50;
+create sequence learning_path_translation_seq start with 1 increment by 50;
 
 create sequence lecture_progress_seq start with 1 increment by 50;
 
@@ -59,7 +59,7 @@ create sequence personalized_learning_path_seq start with 1 increment by 50;
 
 create sequence quiz_answer_option_seq start with 1 increment by 50;
 
-create sequence quiz_answer_option_translate_seq start with 1 increment by 50;
+create sequence quiz_answer_option_translation_seq start with 1 increment by 50;
 
 create sequence quiz_attempt_answer_seq start with 1 increment by 50;
 
@@ -69,11 +69,11 @@ create sequence quiz_question_seq start with 1 increment by 50;
 
 create sequence quiz_question_skill_seq start with 1 increment by 50;
 
-create sequence quiz_question_translate_seq start with 1 increment by 50;
+create sequence quiz_question_translation_seq start with 1 increment by 50;
 
 create sequence quiz_seq start with 1 increment by 50;
 
-create sequence quiz_translate_seq start with 1 increment by 50;
+create sequence quiz_translation_seq start with 1 increment by 50;
 
 create sequence related_course_seq start with 1 increment by 50;
 
@@ -81,11 +81,11 @@ create sequence review_seq start with 1 increment by 50;
 
 create sequence skill_seq start with 1 increment by 50;
 
-create sequence skill_translate_seq start with 1 increment by 50;
+create sequence skill_translation_seq start with 1 increment by 50;
 
 create sequence topic_seq start with 1 increment by 50;
 
-create sequence topic_translate_seq start with 1 increment by 50;
+create sequence topic_translation_seq start with 1 increment by 50;
 
 create sequence user_bundle_seq start with 1 increment by 50;
 
@@ -144,14 +144,19 @@ create table bundle (
                         primary key (id)
 );
 
-create table bundle_translate (
-                                  bundle_id bigint not null,
-                                  created_at timestamp(6) not null,
-                                  id bigint not null,
-                                  language_id bigint not null,
-                                  description varchar(255) not null,
-                                  title varchar(255) not null,
-                                  primary key (id)
+create table bundle_course (
+                               bundle_id bigint not null,
+                               course_id bigint not null
+);
+
+create table bundle_translation (
+                                    bundle_id bigint not null,
+                                    created_at timestamp(6) not null,
+                                    id bigint not null,
+                                    language_id bigint not null,
+                                    description varchar(255) not null,
+                                    title varchar(255) not null,
+                                    primary key (id)
 );
 
 create table certificate (
@@ -201,16 +206,16 @@ create table course_lecture (
                                 primary key (id)
 );
 
-create table course_lecture_translate (
-                                          course_lecture_id bigint not null,
-                                          created_at timestamp(6) not null,
-                                          id bigint not null,
-                                          language_id bigint not null,
-                                          content_file_name text,
-                                          content_text text,
-                                          description text not null,
-                                          title varchar(255) not null,
-                                          primary key (id)
+create table course_lecture_translation (
+                                            course_lecture_id bigint not null,
+                                            created_at timestamp(6) not null,
+                                            id bigint not null,
+                                            language_id bigint not null,
+                                            content_file_name text,
+                                            content_text text,
+                                            description text not null,
+                                            title varchar(255) not null,
+                                            primary key (id)
 );
 
 create table course_module (
@@ -220,13 +225,13 @@ create table course_module (
                                primary key (id)
 );
 
-create table course_module_translate (
-                                         course_module_id bigint not null,
-                                         created_at timestamp(6) not null,
-                                         id bigint not null,
-                                         language_id bigint not null,
-                                         title varchar(255),
-                                         primary key (id)
+create table course_module_translation (
+                                           course_module_id bigint not null,
+                                           created_at timestamp(6) not null,
+                                           id bigint not null,
+                                           language_id bigint not null,
+                                           title varchar(255),
+                                           primary key (id)
 );
 
 create table course_price (
@@ -241,22 +246,22 @@ create table course_price (
                               primary key (id)
 );
 
-create table course_translate (
-                                  course_id bigint not null,
-                                  created_at timestamp(6) not null,
-                                  id bigint not null,
-                                  language_id bigint not null,
-                                  description text not null,
-                                  description_long text not null,
-                                  description_short varchar(255) not null,
-                                  title varchar(255) not null,
-                                  title_short varchar(255) not null,
-                                  primary key (id)
+create table course_translation (
+                                    course_id bigint not null,
+                                    created_at timestamp(6) not null,
+                                    id bigint not null,
+                                    language_id bigint not null,
+                                    description text not null,
+                                    description_long text not null,
+                                    description_short varchar(255) not null,
+                                    title varchar(255) not null,
+                                    title_short varchar(255) not null,
+                                    primary key (id)
 );
 
-create table course_translate_what_will_be_learned (
-                                                       course_translate_id bigint not null,
-                                                       what_will_be_learned text
+create table course_translation_what_will_be_learned (
+                                                         course_translation_id bigint not null,
+                                                         what_will_be_learned text
 );
 
 create table course_version (
@@ -352,19 +357,19 @@ create table learning_path_course (
                                       primary key (id)
 );
 
-create table learning_path_translate (
-                                         created_at timestamp(6) not null,
-                                         id bigint not null,
-                                         language_id bigint not null,
-                                         learning_path_id bigint not null,
-                                         description varchar(255) not null,
-                                         title varchar(255) not null,
-                                         primary key (id)
+create table learning_path_translation (
+                                           created_at timestamp(6) not null,
+                                           id bigint not null,
+                                           language_id bigint not null,
+                                           learning_path_id bigint not null,
+                                           description varchar(255) not null,
+                                           title varchar(255) not null,
+                                           primary key (id)
 );
 
-create table learning_path_translate_learning_outcomes (
-                                                           learning_path_translate_id bigint not null,
-                                                           learning_outcomes text
+create table learning_path_translation_learning_outcomes (
+                                                             learning_path_translation_id bigint not null,
+                                                             learning_outcomes text
 );
 
 create table lecture_progress (
@@ -467,14 +472,14 @@ create table quiz_answer_option (
                                     primary key (id)
 );
 
-create table quiz_answer_option_translate (
-                                              created_at timestamp(6) not null,
-                                              id bigint not null,
-                                              language_id bigint not null,
-                                              quiz_answer_option_id bigint not null,
-                                              answer_text TEXT not null,
-                                              explanation varchar(255) not null,
-                                              primary key (id)
+create table quiz_answer_option_translation (
+                                                created_at timestamp(6) not null,
+                                                id bigint not null,
+                                                language_id bigint not null,
+                                                quiz_answer_option_id bigint not null,
+                                                answer_text TEXT not null,
+                                                explanation varchar(255) not null,
+                                                primary key (id)
 );
 
 create table quiz_attempt (
@@ -518,24 +523,24 @@ create table quiz_question_skill (
                                      primary key (id)
 );
 
-create table quiz_question_translate (
-                                         created_at timestamp(6) not null,
-                                         id bigint not null,
-                                         language_id bigint not null,
-                                         quiz_question_id bigint not null,
-                                         question_text TEXT not null,
-                                         scenario TEXT,
-                                         primary key (id)
+create table quiz_question_translation (
+                                           created_at timestamp(6) not null,
+                                           id bigint not null,
+                                           language_id bigint not null,
+                                           quiz_question_id bigint not null,
+                                           question_text TEXT not null,
+                                           scenario TEXT,
+                                           primary key (id)
 );
 
-create table quiz_translate (
-                                created_at timestamp(6),
-                                id bigint not null,
-                                language_id bigint not null,
-                                quiz_id bigint not null,
-                                description TEXT not null,
-                                title varchar(255) not null,
-                                primary key (id)
+create table quiz_translation (
+                                  created_at timestamp(6),
+                                  id bigint not null,
+                                  language_id bigint not null,
+                                  quiz_id bigint not null,
+                                  description TEXT not null,
+                                  title varchar(255) not null,
+                                  primary key (id)
 );
 
 create table related_course (
@@ -563,14 +568,14 @@ create table skill (
                        primary key (id)
 );
 
-create table skill_translate (
-                                 created_at timestamp(6) not null,
-                                 id bigint not null,
-                                 language_id bigint not null,
-                                 skill_id bigint not null,
-                                 description varchar(255) not null,
-                                 name varchar(255) not null,
-                                 primary key (id)
+create table skill_translation (
+                                   created_at timestamp(6) not null,
+                                   id bigint not null,
+                                   language_id bigint not null,
+                                   skill_id bigint not null,
+                                   description varchar(255) not null,
+                                   name varchar(255) not null,
+                                   primary key (id)
 );
 
 create table topic (
@@ -579,14 +584,14 @@ create table topic (
                        primary key (id)
 );
 
-create table topic_translate (
-                                 created_at timestamp(6) not null,
-                                 id bigint not null,
-                                 language_id bigint not null,
-                                 topic_id bigint not null,
-                                 description varchar(255) not null,
-                                 name varchar(255) not null,
-                                 primary key (id)
+create table topic_translation (
+                                   created_at timestamp(6) not null,
+                                   id bigint not null,
+                                   language_id bigint not null,
+                                   topic_id bigint not null,
+                                   description varchar(255) not null,
+                                   name varchar(255) not null,
+                                   primary key (id)
 );
 
 create table user_favorite_course (
@@ -653,13 +658,23 @@ create table verification_token (
                                     primary key (token)
 );
 
-alter table if exists bundle_translate
-    add constraint FKhaxeigblumyn7d6yihc2kaw7a
+alter table if exists bundle_course
+    add constraint FKdo0xhpiebtit8dcqcxp91wc78
+        foreign key (course_id)
+            references course;
+
+alter table if exists bundle_course
+    add constraint FK7gfrx8wdbn1kl5opvv0lprnsg
         foreign key (bundle_id)
             references bundle;
 
-alter table if exists bundle_translate
-    add constraint FKk6khtf9q2h4y54mp6gdbamg2g
+alter table if exists bundle_translation
+    add constraint FKsgh1lwfc5xk5f6hnqacb610gh
+        foreign key (bundle_id)
+            references bundle;
+
+alter table if exists bundle_translation
+    add constraint FKmghxjh3mk0f6toe37g1mbxpvw
         foreign key (language_id)
             references language;
 
@@ -708,13 +723,13 @@ alter table if exists course_lecture
         foreign key (course_module_id)
             references course_module;
 
-alter table if exists course_lecture_translate
-    add constraint FKgo0vlymbsq4k182sijw4weqkn
+alter table if exists course_lecture_translation
+    add constraint FKlo1l7xrk68w58ko5ht81aqoq5
         foreign key (course_lecture_id)
             references course_lecture;
 
-alter table if exists course_lecture_translate
-    add constraint FKkqtgoxeoh0rpp4ycvk6yhgpo2
+alter table if exists course_lecture_translation
+    add constraint FKj047131hx9cktrm1s0k1np84x
         foreign key (language_id)
             references language;
 
@@ -723,13 +738,13 @@ alter table if exists course_module
         foreign key (course_version_id)
             references course_version;
 
-alter table if exists course_module_translate
-    add constraint FKo0ggy3yi0rj37lg4j6q5x4ucg
+alter table if exists course_module_translation
+    add constraint FKtfwkv3tsnes007s30d2b1ufqb
         foreign key (course_module_id)
             references course_module;
 
-alter table if exists course_module_translate
-    add constraint FK83247nn89bkc3puds96d3c0nq
+alter table if exists course_module_translation
+    add constraint FKgwr1ag27g98rpl9eawhtbl3vd
         foreign key (language_id)
             references language;
 
@@ -738,20 +753,20 @@ alter table if exists course_price
         foreign key (course_id)
             references course;
 
-alter table if exists course_translate
-    add constraint FK7ve3o6tucv149g1qac8cyi2a9
+alter table if exists course_translation
+    add constraint FKo07pv1i5tntp4ovua364ifif9
         foreign key (course_id)
             references course;
 
-alter table if exists course_translate
-    add constraint FK4bmogcl4eaavn8hdyphdsfqf8
+alter table if exists course_translation
+    add constraint FK6s42mrhvqbelvfbqao9ak8qr9
         foreign key (language_id)
             references language;
 
-alter table if exists course_translate_what_will_be_learned
-    add constraint FKmntkd3o4lhrfoqlx445nffvg2
-        foreign key (course_translate_id)
-            references course_translate;
+alter table if exists course_translation_what_will_be_learned
+    add constraint FKs4hlvl9eopb5gcu3saftrodgx
+        foreign key (course_translation_id)
+            references course_translation;
 
 alter table if exists course_version
     add constraint FK6yglm1887hjjbrm60ll1eg2fv
@@ -818,20 +833,20 @@ alter table if exists learning_path_course
         foreign key (learning_path_id)
             references learning_path;
 
-alter table if exists learning_path_translate
-    add constraint FKpyjcef4m15jobe2kra6wtmmd8
+alter table if exists learning_path_translation
+    add constraint FKt1da5n6j3kxyjd9585w598r18
         foreign key (language_id)
             references language;
 
-alter table if exists learning_path_translate
-    add constraint FKfi70ucc5wtb0urc5g90on0muo
+alter table if exists learning_path_translation
+    add constraint FKf9q56u6d1qm4clatp9vcp5g1u
         foreign key (learning_path_id)
             references learning_path;
 
-alter table if exists learning_path_translate_learning_outcomes
-    add constraint FK7769fcw4b0utsf48r0mxivdl0
-        foreign key (learning_path_translate_id)
-            references learning_path_translate;
+alter table if exists learning_path_translation_learning_outcomes
+    add constraint FK5ysnfvqfk8bv24scoftdai4ed
+        foreign key (learning_path_translation_id)
+            references learning_path_translation;
 
 alter table if exists lecture_progress
     add constraint FKonh9tp6oswh0r969va5k29qcp
@@ -923,13 +938,13 @@ alter table if exists quiz_answer_option
         foreign key (quiz_question_id)
             references quiz_question;
 
-alter table if exists quiz_answer_option_translate
-    add constraint FKe8sq2bkcnabhigi6pod0kc6hu
+alter table if exists quiz_answer_option_translation
+    add constraint FK8b2rqcn8td0s6jyuiiv4jnann
         foreign key (quiz_answer_option_id)
             references quiz_answer_option;
 
-alter table if exists quiz_answer_option_translate
-    add constraint FKijfcf9vq82ctcsr2bd6920o10
+alter table if exists quiz_answer_option_translation
+    add constraint FKo92tkgn8taqn8mltxx26oyg3x
         foreign key (language_id)
             references language;
 
@@ -968,23 +983,23 @@ alter table if exists quiz_question_skill
         foreign key (skill_id)
             references skill;
 
-alter table if exists quiz_question_translate
-    add constraint FK15luw8cuosj4j3s0eibgawnjx
+alter table if exists quiz_question_translation
+    add constraint FKtou73sdkxkcq0hvld1t8qv5me
         foreign key (language_id)
             references language;
 
-alter table if exists quiz_question_translate
-    add constraint FKs8ptlir5wbsb11e40ld4ewpqe
+alter table if exists quiz_question_translation
+    add constraint FKnw56gk9jtbc8q80ccnk29te8v
         foreign key (quiz_question_id)
             references quiz_question;
 
-alter table if exists quiz_translate
-    add constraint FKn32jbf2h5ma6xexku4c2vm8t8
+alter table if exists quiz_translation
+    add constraint FKg9xfiijbskc3a4s6h9u7wkctg
         foreign key (language_id)
             references language;
 
-alter table if exists quiz_translate
-    add constraint FKjubqallbaweegpby2jei7nrmk
+alter table if exists quiz_translation
+    add constraint FK9yadrfalpr28602fjp6exrir7
         foreign key (quiz_id)
             references quiz;
 
@@ -1003,23 +1018,23 @@ alter table if exists review
         foreign key (enrollment_id)
             references enrollment;
 
-alter table if exists skill_translate
-    add constraint FKqnt1g1wr2q9tvn5mgpyscnm0f
+alter table if exists skill_translation
+    add constraint FK1or8evd3rtbsiqdcvafj2pj85
         foreign key (language_id)
             references language;
 
-alter table if exists skill_translate
-    add constraint FKd5s22k58rxsydkm9t77bne4sv
+alter table if exists skill_translation
+    add constraint FK487nr9gqeb3reepdasuccwetv
         foreign key (skill_id)
             references skill;
 
-alter table if exists topic_translate
-    add constraint FKdx19l12il8thorhnplc6k95on
+alter table if exists topic_translation
+    add constraint FKa44hr73wwpc0ihy1e23xa7vnq
         foreign key (language_id)
             references language;
 
-alter table if exists topic_translate
-    add constraint FKbxd3m0gg2h9h6l5t1o5bmxnge
+alter table if exists topic_translation
+    add constraint FKnxnvsuhfxhb93jlq9352dghmm
         foreign key (topic_id)
             references topic;
 

@@ -8,12 +8,12 @@
 //@Mapper(componentModel = "spring")
 //public interface ReviewMapper {
 //
-//    ReviewDto toDto(Review review);
-//    List<ReviewDto> toDto(List<Review> review);
+//    ReviewResponse toDto(Review review);
+//    List<ReviewResponse> toDto(List<Review> review);
 //
 //    @InheritInverseConfiguration
-//    Review toEntity(ReviewDto reviewDto);
+//    Review toEntity(ReviewResponse reviewDto);
 //    @InheritInverseConfiguration
-//    List<Review> toEntity(List<ReviewDto> reviewDtos);
+//    List<Review> toEntity(List<ReviewResponse> reviewDtos);
 //}
 //

@@ -1,6 +1,5 @@
 package com.shifterwebapp.shifter.assessment.domain;
 
-import com.shifterwebapp.shifter.assessment.domain.QuizAnswerOptionTranslate;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,7 +21,7 @@ public class QuizAnswerOption {
     private boolean correct;
 
     @OneToMany(mappedBy = "answerOption", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = false, fetch = FetchType.LAZY)
-    private List<QuizAnswerOptionTranslate> translations = new ArrayList<>();
+    private List<QuizAnswerOptionTranslation> translations = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "quiz_question_id", nullable = false)

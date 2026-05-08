@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EnrollmentDto {
+public class EnrollmentResponse {
 
     private EnrollmentStatus enrollmentStatus;
 

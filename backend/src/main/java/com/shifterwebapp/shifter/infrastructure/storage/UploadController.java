@@ -16,7 +16,7 @@
 //@RequiredArgsConstructor
 //public class UploadController {
 //
-//    private final S3Service s3Service;
+//    private final S3Gateway s3Service;
 //    private final Validate validate;
 //
 //    @PostMapping(

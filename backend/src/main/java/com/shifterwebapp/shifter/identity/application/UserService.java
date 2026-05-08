@@ -2,11 +2,11 @@
 //
 //import com.shifterwebapp.shifter.Validate;
 //import com.shifterwebapp.shifter.catalog.application.TagService;
-//import com.shifterwebapp.shifter.identity.web.response.UserPersonalizationDto;
+//import com.shifterwebapp.shifter.identity.web.response.PersonlizeUserRequest;
 //import com.shifterwebapp.shifter.identity.domain.enums.LoginProvider;
 //import com.shifterwebapp.shifter.identity.domain.User;
 //import com.shifterwebapp.shifter.identity.web.response.UserDto;
-//import com.shifterwebapp.shifter.identity.web.response.PersonalizeUserReq;
+//import com.shifterwebapp.shifter.identity.web.response.UpdateProfileRequest;
 //import com.shifterwebapp.shifter.identity.web.mapper.UserMapper;
 //import com.shifterwebapp.shifter.identity.infrastructure.UserRepository;
 //import lombok.RequiredArgsConstructor;
@@ -90,7 +90,7 @@
 //
 //    @Transactional
 //    @Override
-//    public User personalizeUser(UserPersonalizationDto userPersonalizationDto) {
+//    public User personalizeUser(PersonlizeUserRequest userPersonalizationDto) {
 //        validate.validateUserExists(userPersonalizationDto.getEmail());
 //        User user = userRepository.findByEmail(userPersonalizationDto.getEmail()).orElseThrow();
 //
@@ -120,7 +120,7 @@
 //
 //    @Transactional
 //    @Override
-//    public UserDto updateUser(Long id, Language language, PersonalizeUserReq personalizeUserReq) {
+//    public UserDto updateUser(Long id, Language language, UpdateProfileRequest personalizeUserReq) {
 //        validate.validateUserExists(id);
 //        User user = userRepository.findById(id).orElseThrow();
 //

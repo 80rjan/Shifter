@@ -1,6 +1,7 @@
 package com.shifterwebapp.shifter.identity.infrastructure;
 
 import com.shifterwebapp.shifter.identity.domain.User;
+import com.shifterwebapp.shifter.identity.domain.VerificationToken;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

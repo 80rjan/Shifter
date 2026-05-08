@@ -1,7 +1,6 @@
 package com.shifterwebapp.shifter.collection.domain.learningpath;
 
 import com.shifterwebapp.shifter.shared.domain.Language;
-import com.shifterwebapp.shifter.collection.domain.learningpath.LearningPath;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -16,7 +15,7 @@ import java.util.List;
 @Builder
 @Entity
 // todo: indexes
-public class LearningPathTranslate {
+public class LearningPathTranslation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

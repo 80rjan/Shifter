@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 // TODO: add indexes
-public class TopicTranslate {
+public class TopicTranslation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

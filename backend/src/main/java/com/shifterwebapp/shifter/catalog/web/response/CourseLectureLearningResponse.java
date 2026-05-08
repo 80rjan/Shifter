@@ -1,6 +1,7 @@
 package com.shifterwebapp.shifter.catalog.web.response;
 
 import com.shifterwebapp.shifter.catalog.domain.enums.CourseLectureContentType;
+import com.shifterwebapp.shifter.learning.web.response.LectureProgressResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseLectureDtoLearn {
+public class CourseLectureLearningResponse {
 
     private Long id;
 
@@ -26,5 +27,5 @@ public class CourseLectureDtoLearn {
 
     private CourseLectureContentType courseLectureContentType;
 
-    private LectureProgressDto userCourseProgress;
+    private LectureProgressResponse userCourseProgress;
 }

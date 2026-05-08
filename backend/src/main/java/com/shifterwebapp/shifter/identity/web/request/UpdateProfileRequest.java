@@ -4,7 +4,7 @@ import com.shifterwebapp.shifter.identity.domain.enums.CompanySize;
 import lombok.Data;
 
 @Data
-public class PersonalizeUserReq {
+public class UpdateProfileRequest {
 
     public String name;
     public String workPosition;

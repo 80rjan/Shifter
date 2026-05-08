@@ -1,7 +1,6 @@
 package com.shifterwebapp.shifter.assessment.domain;
 
 import com.shifterwebapp.shifter.shared.domain.Language;
-import com.shifterwebapp.shifter.assessment.domain.QuizAnswerOption;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -15,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 // todo: indexes
-public class QuizAnswerOptionTranslate {
+public class QuizAnswerOptionTranslation {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;

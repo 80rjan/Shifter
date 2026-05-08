@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ContactReq {
+public class ContactRequest {
     public String subject;
     public String text;
 }

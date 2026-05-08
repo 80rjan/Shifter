@@ -3,8 +3,8 @@
 //import com.shifterwebapp.shifter.Validate;
 //import com.shifterwebapp.shifter.catalog.domain.CourseModule;
 //import com.shifterwebapp.shifter.catalog.domain.CourseLecture;
-//import com.shifterwebapp.shifter.catalog.domain.CourseLectureTranslate;
-//import com.shifterwebapp.shifter.catalog.web.response.CourseLectureDtoFull;
+//import com.shifterwebapp.shifter.catalog.domain.CourseLectureTranslation;
+//import com.shifterwebapp.shifter.catalog.web.response.CourseLectureFullResponse;
 //import com.shifterwebapp.shifter.catalog.infrastructure.CourseLectureRepository;
 //import com.shifterwebapp.shifter.catalog.infrastructure.CourseLectureTranslateRepository;
 //import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@
 //    private final CourseLectureTranslateRepository courseLectureTranslateRepository;
 //
 //    // No transactional needed here because this is a builder method
-//    public CourseLecture buildCourseLecture(CourseLectureDtoFull courseLectureDtoFull, CourseModule courseModule, LanguageCode language) {
+//    public CourseLecture buildCourseLecture(CourseLectureFullResponse courseLectureDtoFull, CourseModule courseModule, LanguageCode language) {
 //        CourseLecture lecture = CourseLecture.builder()
 //                .durationMinutes(courseLectureDtoFull.getDurationMinutes())
 //                .position(courseLectureDtoFull.getPosition())
@@ -30,7 +30,7 @@
 //                .courseModule(courseModule)
 //                .build();
 //
-//        CourseLectureTranslate lectureTranslate = CourseLectureTranslate.builder()
+//        CourseLectureTranslation lectureTranslate = CourseLectureTranslation.builder()
 //                .language(language)
 //                .contentFileName(courseLectureDtoFull.getContentFileName())
 //                .title(courseLectureDtoFull.getTitle())
@@ -46,7 +46,7 @@
 //
 //    @Override
 //    @Transactional(readOnly = true)
-//    public CourseLectureTranslate getByCourseLectureIdAndLanguage(Long lectureId, LanguageCode language) {
+//    public CourseLectureTranslation getByCourseLectureIdAndLanguage(Long lectureId, LanguageCode language) {
 //        return courseLectureTranslateRepository.findByIdAndLanguage(lectureId, language);
 //    }
 //}

@@ -28,14 +28,14 @@
 //
 //    @Override
 //    @Transactional(readOnly = true)
-//    public ReviewDto getReviewById(Long id) {
+//    public ReviewResponse getReviewById(Long id) {
 //        Review review = reviewRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Review with id " + id + " not found"));
 //        return reviewMapper.toDto(review);
 //    }
 //
 //    @Override
 //    @Transactional(readOnly = true)
-//    public List<ReviewDto> getReviewsByCourse(Long courseId) {
+//    public List<ReviewResponse> getReviewsByCourse(Long courseId) {
 //        validate.validateCourseExists(courseId);
 //        List<Review> reviews = reviewRepository.findByCourseId(courseId);
 //        return reviewMapper.toDto(reviews);
@@ -43,7 +43,7 @@
 //
 //    @Override
 //    @Transactional(readOnly = true)
-//    public List<ReviewDto> getReviewsByUser(Long userId) {
+//    public List<ReviewResponse> getReviewsByUser(Long userId) {
 //        validate.validateUserExists(userId);
 //        List<Review> reviews = reviewRepository.findByUserId(userId);
 //        return reviewMapper.toDto(reviews);
@@ -51,7 +51,7 @@
 //
 //    @Override
 //    @Transactional(readOnly = true)
-//    public ReviewDto getReviewByUserAndCourse(Long userId, Long courseId) {
+//    public ReviewResponse getReviewByUserAndCourse(Long userId, Long courseId) {
 //        validate.validateCourseExists(courseId);
 //        validate.validateUserExists(userId);
 //        Optional<Review> reviewOpt = reviewRepository.findByUserIdAndCourseId(userId, courseId);
@@ -64,7 +64,7 @@
 //
 //    @Override
 //    @Transactional(readOnly = true)
-//    public ReviewDto getReviewByEnrollment(Long enrollmentId) {
+//    public ReviewResponse getReviewByEnrollment(Long enrollmentId) {
 //        validate.validateEnrollmentExists(enrollmentId);
 //        Review review = reviewRepository.findByEnrollmentId(enrollmentId);
 //        return reviewMapper.toDto(review);
@@ -94,7 +94,7 @@
 //
 //    @Override
 //    @Transactional
-//    public ReviewDto writeReview(Long userId, Long courseId, ReviewRequest reviewRequest) {
+//    public ReviewResponse writeReview(Long userId, Long courseId, ReviewRequest reviewRequest) {
 //        validate.validateCourseExists(courseId);
 //
 //        Enrollment enrollment = enrollmentRepository.findByUserIdAndCourseId(userId, courseId);
@@ -119,7 +119,7 @@
 //
 //    @Override
 //    @Transactional
-//    public ReviewDto updateReview(Long userId, Long courseId, ReviewRequest reviewRequest) {
+//    public ReviewResponse updateReview(Long userId, Long courseId, ReviewRequest reviewRequest) {
 //        validate.validateCourseExists(courseId);
 //
 //        Enrollment enrollment = enrollmentRepository.findByUserIdAndCourseId(userId, courseId);

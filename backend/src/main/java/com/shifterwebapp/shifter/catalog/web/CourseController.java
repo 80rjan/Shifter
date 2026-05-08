@@ -3,8 +3,8 @@
 //import com.shifterwebapp.shifter.Validate;
 //import com.shifterwebapp.shifter.shared.domain.LanguageCode;
 //import com.shifterwebapp.shifter.catalog.web.response.CourseDtoDetail;
-//import com.shifterwebapp.shifter.catalog.web.response.CourseDtoLearn;
-//import com.shifterwebapp.shifter.catalog.web.response.CourseDtoPreview;
+//import com.shifterwebapp.shifter.catalog.web.response.CourseLearningResponse;
+//import com.shifterwebapp.shifter.catalog.web.response.CoursePreviewResponse;
 //import com.shifterwebapp.shifter.catalog.web.response.CourseDtoPreviewEnrolled;
 //import com.shifterwebapp.shifter.catalog.application.CourseService;
 //import com.shifterwebapp.shifter.learning.application.EnrollmentService;
@@ -29,7 +29,7 @@
 //    private final Validate validate;
 //
 //    @GetMapping
-//    public ResponseEntity<List<CourseDtoPreview>> getCourses(
+//    public ResponseEntity<List<CoursePreviewResponse>> getCourses(
 //            Authentication authentication,
 //            @RequestParam(defaultValue = "EN") LanguageCode language
 //            ) {
@@ -40,25 +40,25 @@
 //        }
 //
 //
-//        List<CourseDtoPreview> courseDtos = courseService.getAllCourses(enrolledCourseIds, language);
+//        List<CoursePreviewResponse> courseDtos = courseService.getAllCourses(enrolledCourseIds, language);
 //
 //        return ResponseEntity.ok(courseDtos);
 //    }
 //
 //    @GetMapping("/recommended")
-//    public ResponseEntity<List<CourseDtoPreview>> getRecommendedCourses(
+//    public ResponseEntity<List<CoursePreviewResponse>> getRecommendedCourses(
 //            Authentication authentication,
 //            @RequestParam(defaultValue = "EN") LanguageCode language
 //            ) {
 //        if (authentication == null || !authentication.isAuthenticated()) {
-//            List<CourseDtoPreview> topRatedCourses = courseService.getTopRatedCourses(language);
+//            List<CoursePreviewResponse> topRatedCourses = courseService.getTopRatedCourses(language);
 ////            List<CourseDto> mostPopularCourses = courseService.getMostPopularCourses(language);
 //            return ResponseEntity.ok(topRatedCourses);
 //        }
 //
 //        Long userId = validate.extractUserId(authentication);
 //
-//        List<CourseDtoPreview> recommendedCourses = courseService.getRecommendedCourses(userId, language);
+//        List<CoursePreviewResponse> recommendedCourses = courseService.getRecommendedCourses(userId, language);
 //        return ResponseEntity.ok(recommendedCourses);
 //    }
 //
@@ -74,14 +74,14 @@
 //    }
 //
 //    @GetMapping("/enrolled/{courseId}")
-//    public ResponseEntity<CourseDtoLearn> getEnrolledCourseById(
+//    public ResponseEntity<CourseLearningResponse> getEnrolledCourseById(
 //            @PathVariable("courseId") Long courseId,
 //            Authentication authentication,
 //            @RequestParam(defaultValue = "EN") LanguageCode language
 //    ) {
 //        Long userId = validate.extractUserId(authentication);
 //
-//        CourseDtoLearn courseDtoLearn = courseService.getEnrolledCourseById(courseId, userId, language);
+//        CourseLearningResponse courseDtoLearn = courseService.getEnrolledCourseById(courseId, userId, language);
 //        return ResponseEntity.ok(courseDtoLearn);
 //    }
 //

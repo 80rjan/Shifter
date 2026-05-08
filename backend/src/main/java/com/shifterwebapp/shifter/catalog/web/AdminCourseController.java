@@ -6,7 +6,7 @@
 //import com.shifterwebapp.shifter.catalog.web.response.CourseTranslateReq;
 //import com.shifterwebapp.shifter.catalog.application.AdminCourseService;
 //import com.shifterwebapp.shifter.catalog.domain.CourseVersion;
-//import com.shifterwebapp.shifter.infrastructure.storage.S3Service;
+//import com.shifterwebapp.shifter.infrastructure.storage.S3Gateway;
 //import com.shifterwebapp.shifter.infrastructure.storage.S3UploadResponse;
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.http.ResponseEntity;
@@ -25,7 +25,7 @@
 //
 //    private final AdminCourseService adminCourseService;
 //    private final Validate validate;
-//    private final S3Service s3Service;
+//    private final S3Gateway s3Service;
 //
 //
 //    @GetMapping("/{courseId}")

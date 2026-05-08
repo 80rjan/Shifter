@@ -1,10 +1,10 @@
 //package com.shifterwebapp.shifter.course.mappers;
 //
 //import com.shifterwebapp.shifter.catalog.domain.CourseLecture;
-//import com.shifterwebapp.shifter.catalog.domain.CourseLectureTranslate;
-//import com.shifterwebapp.shifter.catalog.web.response.CourseLectureDtoFull;
-//import com.shifterwebapp.shifter.catalog.web.response.CourseLectureDtoLearn;
-//import com.shifterwebapp.shifter.catalog.web.response.CourseLectureDtoPreview;
+//import com.shifterwebapp.shifter.catalog.domain.CourseLectureTranslation;
+//import com.shifterwebapp.shifter.catalog.web.response.CourseLectureFullResponse;
+//import com.shifterwebapp.shifter.catalog.web.response.CourseLectureLearningResponse;
+//import com.shifterwebapp.shifter.catalog.web.response.CourseLecturePreviewResponse;
 //import com.shifterwebapp.shifter.catalog.domain.LectureProgress;
 //import org.mapstruct.*;
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -18,23 +18,23 @@
 //    @Autowired
 //    protected LectureProgressMapper lectureProgressMapper;
 //
-//    public abstract CourseLectureDtoPreview toDtoPreview(CourseLecture courseLecture, @Context Language lang);
+//    public abstract CourseLecturePreviewResponse toDtoPreview(CourseLecture courseLecture, @Context Language lang);
 //
-//    public abstract List<CourseLectureDtoPreview> toDtoPreview(List<CourseLecture> courseLectures, @Context Language lang);
-//
-//    @Mapping(target = "lectureProgresses", ignore = true)
-//    public abstract CourseLectureDtoLearn toDtoLearn(CourseLecture courseLecture, @Context Language lang, @Context Long userId);
+//    public abstract List<CourseLecturePreviewResponse> toDtoPreview(List<CourseLecture> courseLectures, @Context Language lang);
 //
 //    @Mapping(target = "lectureProgresses", ignore = true)
-//    public abstract List<CourseLectureDtoLearn> toDtoLearn(List<CourseLecture> courseLectures, @Context Language lang, @Context Long userId);
+//    public abstract CourseLectureLearningResponse toDtoLearn(CourseLecture courseLecture, @Context Language lang, @Context Long userId);
 //
-//    public abstract CourseLectureDtoFull toDtoFull(CourseLecture courseLecture, @Context Language lang);
+//    @Mapping(target = "lectureProgresses", ignore = true)
+//    public abstract List<CourseLectureLearningResponse> toDtoLearn(List<CourseLecture> courseLectures, @Context Language lang, @Context Long userId);
 //
-//    public abstract List<CourseLectureDtoFull> toDtoFull(List<CourseLecture> courseLectures, @Context Language lang);
+//    public abstract CourseLectureFullResponse toDtoFull(CourseLecture courseLecture, @Context Language lang);
+//
+//    public abstract List<CourseLectureFullResponse> toDtoFull(List<CourseLecture> courseLectures, @Context Language lang);
 //
 //    @AfterMapping
 //    protected void enrichPreview(CourseLecture courseLecture,
-//                                 @MappingTarget CourseLectureDtoPreview dto,
+//                                 @MappingTarget CourseLecturePreviewResponse dto,
 //                                 @Context Language lang) {
 //        getTranslation(courseLecture, lang).ifPresent(t -> {
 //            dto.setTitle(t.getTitle());
@@ -44,7 +44,7 @@
 //
 //    @AfterMapping
 //    protected void enrichLearn(CourseLecture courseLecture,
-//                               @MappingTarget CourseLectureDtoLearn dto,
+//                               @MappingTarget CourseLectureLearningResponse dto,
 //                               @Context Language lang,
 //                               @Context Long userId) {
 //        getTranslation(courseLecture, lang).ifPresent(t -> {
@@ -61,7 +61,7 @@
 //
 //    @AfterMapping
 //    protected void enrichFull(CourseLecture courseLecture,
-//                               @MappingTarget CourseLectureDtoFull dto,
+//                               @MappingTarget CourseLectureFullResponse dto,
 //                               @Context Language lang) {
 //        getTranslation(courseLecture, lang).ifPresent(t -> {
 //            dto.setTitle(t.getTitle());
@@ -71,7 +71,7 @@
 //        });
 //    }
 //
-//    protected Optional<CourseLectureTranslate> getTranslation(CourseLecture courseLecture, Language lang) {
+//    protected Optional<CourseLectureTranslation> getTranslation(CourseLecture courseLecture, Language lang) {
 //        return courseLecture.getTranslations().stream()
 //                .filter(t -> t.getLanguage().equals(lang))
 //                .findFirst();

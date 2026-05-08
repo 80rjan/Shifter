@@ -1,7 +1,6 @@
 package com.shifterwebapp.shifter.catalog.domain;
 
 import com.shifterwebapp.shifter.identity.domain.User;
-import com.shifterwebapp.shifter.catalog.domain.Course;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -34,5 +33,5 @@ public class Topic {
     private List<User> users;
 
     @OneToMany(mappedBy = "topic", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = false, fetch = FetchType.LAZY) // TODO: fetch type?
-    private List<TopicTranslate> translations;
+    private List<TopicTranslation> translations;
 }

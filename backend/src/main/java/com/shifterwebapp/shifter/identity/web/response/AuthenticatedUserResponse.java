@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDtoAuth {
+public class AuthenticatedUserResponse {
 
     private Long id;
 

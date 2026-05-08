@@ -21,24 +21,24 @@
 //    private final Validate validate;
 //
 //    @GetMapping("/{reviewId}")
-//    public ResponseEntity<ReviewDto> getReviewById(@PathVariable Long reviewId) {
-//        ReviewDto reviewDto = reviewService.getReviewById(reviewId);
+//    public ResponseEntity<ReviewResponse> getReviewById(@PathVariable Long reviewId) {
+//        ReviewResponse reviewDto = reviewService.getReviewById(reviewId);
 //        return ResponseEntity.ok(reviewDto);
 //    }
 //
 //    @GetMapping("/course/{courseId}")
-//    public ResponseEntity<ReviewDto> getReviewByCourse(
+//    public ResponseEntity<ReviewResponse> getReviewByCourse(
 //            @PathVariable Long courseId,
 //            Authentication authentication
 //    ) {
 //        Long userId = validate.extractUserId(authentication);
-//        ReviewDto reviewDtos = reviewService.getReviewByUserAndCourse(userId, courseId);
+//        ReviewResponse reviewDtos = reviewService.getReviewByUserAndCourse(userId, courseId);
 //        return ResponseEntity.ok(reviewDtos);
 //    }
 //
 //    @GetMapping("/user/{userId}")
-//    public ResponseEntity<List<ReviewDto>> getReviewByUser(@PathVariable Long userId) {
-//        List<ReviewDto> reviewDtos = reviewService.getReviewsByUser(userId);
+//    public ResponseEntity<List<ReviewResponse>> getReviewByUser(@PathVariable Long userId) {
+//        List<ReviewResponse> reviewDtos = reviewService.getReviewsByUser(userId);
 //        return ResponseEntity.ok(reviewDtos);
 //    }
 //

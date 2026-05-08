@@ -1,8 +1,8 @@
 //package com.shifterwebapp.shifter.account.services;
 //
-//import com.shifterwebapp.shifter.identity.web.response.UserPersonalizationDto;
+//import com.shifterwebapp.shifter.identity.web.response.PersonlizeUserRequest;
 //import com.shifterwebapp.shifter.identity.domain.enums.LoginProvider;
-//import com.shifterwebapp.shifter.identity.web.response.PersonalizeUserReq;
+//import com.shifterwebapp.shifter.identity.web.response.UpdateProfileRequest;
 //import com.shifterwebapp.shifter.identity.domain.User;
 //import com.shifterwebapp.shifter.identity.web.response.UserDto;
 //
@@ -18,11 +18,11 @@
 //    Boolean existsUserByEmail(String email);
 //
 //    User createInitialUser(String email, String password, LoginProvider loginProvider);
-//    User personalizeUser(UserPersonalizationDto userPersonalizationDto);
+//    User personalizeUser(PersonlizeUserRequest userPersonalizationDto);
 //    void deleteUser(Long id);
 //
 //    UserDto updateTags(Long id, LanguageCode language, List<Long> tagIds);
-//    UserDto updateUser(Long id, Language language, PersonalizeUserReq personalizeUserReq);
+//    UserDto updateUser(Long id, Language language, UpdateProfileRequest personalizeUserReq);
 //
 //    void addTags(Long userId, Language language, List<Long> tagIds);
 //    UserDto toggleFavoriteCourse(Long userId, Language language, Integer newFavoriteCourseId);

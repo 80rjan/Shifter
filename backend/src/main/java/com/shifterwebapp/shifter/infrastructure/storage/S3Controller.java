@@ -3,7 +3,7 @@
 //import com.shifterwebapp.shifter.Validate;
 //import com.shifterwebapp.shifter.catalog.application.AdminCourseService;
 //import com.shifterwebapp.shifter.catalog.application.CourseService;
-//import com.shifterwebapp.shifter.catalog.domain.CourseLectureTranslate;
+//import com.shifterwebapp.shifter.catalog.domain.CourseLectureTranslation;
 //import com.shifterwebapp.shifter.catalog.infrastructure.CourseLectureTranslateRepository;
 //import com.shifterwebapp.shifter.catalog.application.CourseLectureService;
 //import com.shifterwebapp.shifter.learning.application.EnrollmentService;
@@ -23,7 +23,7 @@
 //@RequiredArgsConstructor
 //public class S3Controller {
 //
-//    private final S3Service s3Service;
+//    private final S3Gateway s3Service;
 //    private final EnrollmentService enrollmentService;
 //    private final CourseService courseService;
 //    private final AdminCourseService adminCourseService;
@@ -46,7 +46,7 @@
 //            throw new AccessDeniedException("You do not have access to this course content.");
 //        }
 //
-//        CourseLectureTranslate lectureTranslate = courseLectureTranslateRepository.findByIdAndLanguage(lectureId, language);
+//        CourseLectureTranslation lectureTranslate = courseLectureTranslateRepository.findByIdAndLanguage(lectureId, language);
 //
 //        if (lectureTranslate == null) {
 //            throw new ResourceNotFoundException("Translation of lecture with it " + lectureId + " not found!");

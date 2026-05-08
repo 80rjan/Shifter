@@ -1,7 +1,6 @@
 package com.shifterwebapp.shifter.collection.domain.bundle;
 
 import com.shifterwebapp.shifter.catalog.domain.Course;
-import com.shifterwebapp.shifter.collection.domain.bundle.BundleTranslate;
 import com.shifterwebapp.shifter.collection.domain.bundle.enums.BundleType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -78,7 +77,7 @@ public class Bundle {
 
     @Builder.Default
     @OneToMany(mappedBy = "bundle", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = false, fetch = FetchType.EAGER)
-    private List<BundleTranslate> translations = new ArrayList<>();
+    private List<BundleTranslation> translations = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "bundle", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = false, fetch = FetchType.LAZY)

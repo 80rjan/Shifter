@@ -10,7 +10,7 @@
 //import com.shifterwebapp.shifter.catalog.infrastructure.CourseVersionRepository;
 //import com.shifterwebapp.shifter.catalog.domain.CourseLecture;
 //import com.shifterwebapp.shifter.learning.domain.Enrollment;
-//import com.shifterwebapp.shifter.learning.web.response.EnrollmentDto;
+//import com.shifterwebapp.shifter.learning.web.response.EnrollmentResponse;
 //import com.shifterwebapp.shifter.learning.infrastructure.mapper.EnrollmentMapper;
 //import com.shifterwebapp.shifter.learning.infrastructure.EnrollmentRepository;
 //import com.shifterwebapp.shifter.enums.*;
@@ -48,7 +48,7 @@
 //
 //    @Override
 //    @Transactional(readOnly = true)
-//    public EnrollmentDto getEnrollmentById(Long enrollmentId) {
+//    public EnrollmentResponse getEnrollmentById(Long enrollmentId) {
 //        validate.validateEnrollmentExists(enrollmentId);
 //        Enrollment enrollment = enrollmentRepository.findById(enrollmentId).orElseThrow();
 //        return enrollmentMapper.toDto(enrollment);
@@ -56,7 +56,7 @@
 //
 //    @Override
 //    @Transactional(readOnly = true)
-//    public List<EnrollmentDto> getEnrollmentsByUser(Long userId) {
+//    public List<EnrollmentResponse> getEnrollmentsByUser(Long userId) {
 //        validate.validateUserExists(userId);
 //        List<Enrollment> enrollments = enrollmentRepository.findByUserId(userId);
 //        return enrollmentMapper.toDto(enrollments);
@@ -78,7 +78,7 @@
 //
 //    @Override
 //    @Transactional(readOnly = true)
-//    public List<EnrollmentDto> getEnrollmentsByCourse(Long courseId) {
+//    public List<EnrollmentResponse> getEnrollmentsByCourse(Long courseId) {
 //        validate.validateCourseExists(courseId);
 //        List<Enrollment> enrollments = enrollmentRepository.findByCourseId(courseId);
 //        return enrollmentMapper.toDto(enrollments);
@@ -96,7 +96,7 @@
 //
 //    @Override
 //    @Transactional
-//    public EnrollmentDto enrollUser(Long courseId, Long userId) {
+//    public EnrollmentResponse enrollUser(Long courseId, Long userId) {
 //        validate.validateCourseExists(courseId);
 //        validate.validateUserExists(userId);
 //
@@ -176,7 +176,7 @@
 //
 //    @Override
 //    @Transactional
-//    public EnrollmentDto updateEnrollmentStatusToActive(Enrollment enrollment) {
+//    public EnrollmentResponse updateEnrollmentStatusToActive(Enrollment enrollment) {
 //        validate.validateEnrollmentExists(enrollment.getId());
 //
 //        if (enrollment.getEnrollmentStatus() == EnrollmentStatus.PENDING) {
@@ -190,7 +190,7 @@
 //
 //    @Override
 //    @Transactional
-//    public EnrollmentDto updateEnrollmentStatusToCompleted(Long enrollmentId) {
+//    public EnrollmentResponse updateEnrollmentStatusToCompleted(Long enrollmentId) {
 //        validate.validateEnrollmentExists(enrollmentId);
 //
 //        List<LectureProgress> lectureProgresses = lectureProgressRepository.findByEnrollmentId(enrollmentId);

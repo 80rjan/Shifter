@@ -1,8 +1,8 @@
 //package com.shifterwebapp.shifter.course.services;
 //
-//import com.shifterwebapp.shifter.catalog.domain.CourseLectureTranslate;
+//import com.shifterwebapp.shifter.catalog.domain.CourseLectureTranslation;
 //
 //public interface ImplCourseLectureService {
 //
-//    CourseLectureTranslate getByCourseLectureIdAndLanguage(Long lectureId, LanguageCode language);
+//    CourseLectureTranslation getByCourseLectureIdAndLanguage(Long lectureId, LanguageCode language);
 //}

@@ -1,7 +1,7 @@
 //package com.shifterwebapp.shifter.security.auth;
 //
 //import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.shifterwebapp.shifter.identity.web.response.UserPersonalizationDto;
+//import com.shifterwebapp.shifter.identity.web.response.PersonlizeUserRequest;
 //import com.shifterwebapp.shifter.auth.infrastructure.JwtService;
 //import com.shifterwebapp.shifter.identity.domain.enums.LoginProvider;
 //import com.shifterwebapp.shifter.notification.EmailService;
@@ -93,7 +93,7 @@
 //    }
 //
 //    @Transactional
-//    public void personalize(UserPersonalizationDto userPersonalizationDto, HttpServletResponse response) throws IOException {
+//    public void personalize(PersonlizeUserRequest userPersonalizationDto, HttpServletResponse response) throws IOException {
 //        User user = userService.personalizeUser(userPersonalizationDto);
 //        sendTokens(response, user);
 //    }

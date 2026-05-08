@@ -2,7 +2,7 @@
 //
 //import com.shifterwebapp.shifter.Validate;
 //import com.shifterwebapp.shifter.identity.web.response.UserDto;
-//import com.shifterwebapp.shifter.identity.web.response.PersonalizeUserReq;
+//import com.shifterwebapp.shifter.identity.web.response.UpdateProfileRequest;
 //import com.shifterwebapp.shifter.identity.application.UserService;
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.http.ResponseEntity;
@@ -35,7 +35,7 @@
 //    }
 //
 //    @PutMapping("/update/info")
-//    public ResponseEntity<?> updateUser(Authentication authentication, @RequestParam(defaultValue = "EN") LanguageCode language, @RequestBody PersonalizeUserReq personalizeUserReq) {
+//    public ResponseEntity<?> updateUser(Authentication authentication, @RequestParam(defaultValue = "EN") LanguageCode language, @RequestBody UpdateProfileRequest personalizeUserReq) {
 //        Long userId = validate.extractUserId(authentication);
 //
 //        UserDto userDto = userService.updateUser(userId, language, personalizeUserReq);

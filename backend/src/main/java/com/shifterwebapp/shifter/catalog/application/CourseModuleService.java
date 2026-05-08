@@ -1,10 +1,10 @@
 //package com.shifterwebapp.shifter.course.services;
 //
-//import com.shifterwebapp.shifter.catalog.web.response.CourseModuleDtoPreview;
+//import com.shifterwebapp.shifter.catalog.web.response.CourseModulePreviewResponse;
 //import com.shifterwebapp.shifter.catalog.domain.CourseModule;
 //import com.shifterwebapp.shifter.catalog.domain.CourseVersion;
-//import com.shifterwebapp.shifter.catalog.domain.CourseModuleTranslate;
-//import com.shifterwebapp.shifter.catalog.web.response.CourseModuleDtoFull;
+//import com.shifterwebapp.shifter.catalog.domain.CourseModuleTranslation;
+//import com.shifterwebapp.shifter.catalog.web.response.CourseModuleFullResponse;
 //import com.shifterwebapp.shifter.catalog.infrastructure.mapper.CourseModuleMapper;
 //import com.shifterwebapp.shifter.catalog.infrastructure.CourseModuleRepository;
 //import com.shifterwebapp.shifter.catalog.domain.CourseLecture;
@@ -24,13 +24,13 @@
 //
 //    // No transactional annotation here because this is a builder method
 //    @Override
-//    public CourseModule buildCourseContent(CourseModuleDtoFull courseModuleDtoFull, CourseVersion courseVersion, LanguageCode language) {
+//    public CourseModule buildCourseContent(CourseModuleFullResponse courseModuleDtoFull, CourseVersion courseVersion, LanguageCode language) {
 //        CourseModule content = CourseModule.builder()
 //                .position(courseModuleDtoFull.getPosition())
 //                .courseVersion(courseVersion)
 //                .build();
 //
-//        CourseModuleTranslate contentTranslate = CourseModuleTranslate.builder()
+//        CourseModuleTranslation contentTranslate = CourseModuleTranslation.builder()
 //                .title(courseModuleDtoFull.getTitle())
 //                .language(language)
 //                .courseModule(content)
@@ -48,7 +48,7 @@
 //
 //    @Transactional(readOnly = true)
 //    @Override
-//    public List<CourseModuleDtoPreview> getCourseContentByCourseId(
+//    public List<CourseModulePreviewResponse> getCourseContentByCourseId(
 //            Long courseId,
 //            LanguageCode language
 //            ) {

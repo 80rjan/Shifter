@@ -1,7 +1,6 @@
 package com.shifterwebapp.shifter.collection.domain.learningpath;
 
 import com.shifterwebapp.shifter.shared.domain.enums.Difficulty;
-import com.shifterwebapp.shifter.collection.domain.learningpath.LearningPathTranslate;
 import com.shifterwebapp.shifter.collection.domain.learningpath.enums.LearningPathType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -83,7 +82,7 @@ public class LearningPath {
 
     @Builder.Default
     @OneToMany(mappedBy = "learningPath", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = false, fetch = FetchType.EAGER)
-    private List<LearningPathTranslate> translations = new ArrayList<>();
+    private List<LearningPathTranslation> translations = new ArrayList<>();
 
     @OneToOne(mappedBy = "learningPath", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = false, fetch = FetchType.EAGER)
     private CuratedLearningPath curatedLearningPath;

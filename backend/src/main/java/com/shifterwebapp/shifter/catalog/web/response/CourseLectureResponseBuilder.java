@@ -15,15 +15,15 @@
 //    private final CourseLectureMapper courseLectureMapper;
 //
 //
-//    public CourseLectureDtoPreview getCourseLectureDtoPreview(CourseLecture courseLecture, LanguageCode language) {
-//        CourseLectureDtoPreview courseLectureDtoPreview = courseLectureMapper.toDtoPreview(courseLecture, language);
+//    public CourseLecturePreviewResponse getCourseLectureDtoPreview(CourseLecture courseLecture, LanguageCode language) {
+//        CourseLecturePreviewResponse courseLectureDtoPreview = courseLectureMapper.toDtoPreview(courseLecture, language);
 //        return courseLectureDtoPreview;
 //    }
 //
-//    public List<CourseLectureDtoPreview> getCourseLectureDtoPreview(List<CourseLecture> courseLectures, LanguageCode language) {
-//        List<CourseLectureDtoPreview> courseLectureDtoPreviewList = new ArrayList<>();
+//    public List<CourseLecturePreviewResponse> getCourseLectureDtoPreview(List<CourseLecture> courseLectures, LanguageCode language) {
+//        List<CourseLecturePreviewResponse> courseLectureDtoPreviewList = new ArrayList<>();
 //        for (CourseLecture courseLecture: courseLectures) {
-//            CourseLectureDtoPreview dto = getCourseLectureDtoPreview(courseLecture, language);
+//            CourseLecturePreviewResponse dto = getCourseLectureDtoPreview(courseLecture, language);
 //
 //            courseLectureDtoPreviewList.add(dto);
 //        }
@@ -31,15 +31,15 @@
 //        return courseLectureDtoPreviewList;
 //    }
 //
-//    public CourseLectureDtoLearn getCourseLectureDtoLearn(CourseLecture courseLecture, LanguageCode language, Long userId) {
-//        CourseLectureDtoLearn courseLectureDtoLearn = courseLectureMapper.toDtoLearn(courseLecture, language, userId);
+//    public CourseLectureLearningResponse getCourseLectureDtoLearn(CourseLecture courseLecture, LanguageCode language, Long userId) {
+//        CourseLectureLearningResponse courseLectureDtoLearn = courseLectureMapper.toDtoLearn(courseLecture, language, userId);
 //        return courseLectureDtoLearn;
 //    }
 //
-//    public List<CourseLectureDtoLearn> getCourseLectureDtoLearn(List<CourseLecture> courseLectures, LanguageCode language, Long userId) {
-//        List<CourseLectureDtoLearn> courseLectureDtoLearnList = new ArrayList<>();
+//    public List<CourseLectureLearningResponse> getCourseLectureDtoLearn(List<CourseLecture> courseLectures, LanguageCode language, Long userId) {
+//        List<CourseLectureLearningResponse> courseLectureDtoLearnList = new ArrayList<>();
 //        for (CourseLecture courseLecture: courseLectures) {
-//            CourseLectureDtoLearn dto = getCourseLectureDtoLearn(courseLecture, language, userId);
+//            CourseLectureLearningResponse dto = getCourseLectureDtoLearn(courseLecture, language, userId);
 //
 //            courseLectureDtoLearnList.add(dto);
 //        }

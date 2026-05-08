@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LectureProgressDto {
+public class LectureProgressResponse {
 
     private Long id;
 

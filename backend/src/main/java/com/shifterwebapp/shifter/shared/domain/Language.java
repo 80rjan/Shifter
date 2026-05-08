@@ -1,15 +1,13 @@
 package com.shifterwebapp.shifter.shared.domain;
 
-import com.shifterwebapp.shifter.collection.domain.bundle.BundleTranslate;
-import com.shifterwebapp.shifter.catalog.domain.CourseLectureTranslate;
-import com.shifterwebapp.shifter.catalog.domain.CourseModuleTranslate;
-import com.shifterwebapp.shifter.catalog.domain.CourseTranslation;
-import com.shifterwebapp.shifter.collection.domain.learningpath.LearningPathTranslate;
-import com.shifterwebapp.shifter.assessment.domain.QuizAnswerOptionTranslate;
-import com.shifterwebapp.shifter.assessment.domain.QuizQuestionTranslate;
+import com.shifterwebapp.shifter.catalog.domain.*;
+import com.shifterwebapp.shifter.collection.domain.bundle.BundleTranslation;
+import com.shifterwebapp.shifter.catalog.domain.CourseModuleTranslation;
+import com.shifterwebapp.shifter.collection.domain.learningpath.LearningPathTranslation;
+import com.shifterwebapp.shifter.assessment.domain.QuizAnswerOptionTranslation;
+import com.shifterwebapp.shifter.assessment.domain.QuizQuestionTranslation;
 import com.shifterwebapp.shifter.assessment.domain.QuizTranslation;
-import com.shifterwebapp.shifter.catalog.domain.SkillTranslate;
-import com.shifterwebapp.shifter.catalog.domain.TopicTranslate;
+import com.shifterwebapp.shifter.shared.domain.enums.LanguageCode;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,6 +27,7 @@ public class Language {
     private Long id;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private LanguageCode languageCode;
 
     @Column(nullable = false)
@@ -39,11 +38,11 @@ public class Language {
 
     @Builder.Default
     @OneToMany(mappedBy = "language", cascade = {}, orphanRemoval = false, fetch = FetchType.LAZY)
-    private List<SkillTranslate> skillTranslations = new ArrayList<>();
+    private List<SkillTranslation> skillTranslations = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "language", cascade = {}, orphanRemoval = false, fetch = FetchType.LAZY)
-    private List<TopicTranslate> topicTranslations = new ArrayList<>();
+    private List<TopicTranslation> topicTranslations = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "language", cascade = {}, orphanRemoval = false, fetch = FetchType.LAZY)
@@ -51,19 +50,19 @@ public class Language {
 
     @Builder.Default
     @OneToMany(mappedBy = "language", cascade = {}, orphanRemoval = false, fetch = FetchType.LAZY)
-    private List<CourseModuleTranslate> courseModuleTranslations = new ArrayList<>();
+    private List<CourseModuleTranslation> courseModuleTranslations = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "language", cascade = {}, orphanRemoval = false, fetch = FetchType.LAZY)
-    private List<CourseLectureTranslate> courseLectureTranslations = new ArrayList<>();
+    private List<CourseLectureTranslation> courseLectureTranslations = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "language", cascade = {}, orphanRemoval = false, fetch = FetchType.LAZY)
-    private List<LearningPathTranslate> learningPathTranslations = new ArrayList<>();
+    private List<LearningPathTranslation> learningPathTranslations = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "language", cascade = {}, orphanRemoval = false, fetch = FetchType.LAZY)
-    private List<BundleTranslate> bundleTranslations = new ArrayList<>();
+    private List<BundleTranslation> bundleTranslations = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "language", cascade = {}, orphanRemoval = false, fetch = FetchType.LAZY)
@@ -71,9 +70,9 @@ public class Language {
 
     @Builder.Default
     @OneToMany(mappedBy = "language", cascade = {}, orphanRemoval = false, fetch = FetchType.LAZY)
-    private List<QuizQuestionTranslate> quizQuestionTranslations = new ArrayList<>();
+    private List<QuizQuestionTranslation> quizQuestionTranslations = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "language", cascade = {}, orphanRemoval = false, fetch = FetchType.LAZY)
-    private List<QuizAnswerOptionTranslate> quizAnswerOptionsTranslations = new ArrayList<>();
+    private List<QuizAnswerOptionTranslation> quizAnswerOptionsTranslations = new ArrayList<>();
 }

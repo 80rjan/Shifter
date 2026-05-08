@@ -24,7 +24,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class EmailService {
+public class EmailGateway {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -119,9 +119,9 @@ public class EmailService {
         }
     }
 
-    public void contactExpert(String userEmail, ContactReq contactReq) {
-        String subject = "New Contact Message: " + contactReq.getSubject();
-        String textBody = "From: " + userEmail + "\n\n" + contactReq.getText();
+    public void contactExpert(String userEmail, ContactRequest contactRequest) {
+        String subject = "New Contact Message: " + contactRequest.getSubject();
+        String textBody = "From: " + userEmail + "\n\n" + contactRequest.getText();
 
         // Convert text to simple HTML
         String htmlContent = "<html><body><pre>" + textBody + "</pre></body></html>";

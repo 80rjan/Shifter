@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 // TODO: add indexes
-public class SkillTranslate {
+public class SkillTranslation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

@@ -31,7 +31,7 @@ public class CourseLecture {
     private CourseLectureContentType contentType;
 
     @OneToMany(mappedBy = "courseLecture", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = false, fetch = FetchType.EAGER)
-    private List<CourseLectureTranslate> translations;
+    private List<CourseLectureTranslation> translations;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_module_id", nullable = false)

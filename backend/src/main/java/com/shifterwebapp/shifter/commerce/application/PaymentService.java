@@ -6,7 +6,7 @@
 //import com.shifterwebapp.shifter.learning.domain.Enrollment;
 //import com.shifterwebapp.shifter.learning.infrastructure.EnrollmentRepository;
 //import com.shifterwebapp.shifter.commerce.domain.Payment;
-//import com.shifterwebapp.shifter.commerce.web.response.PaymentDto;
+//import com.shifterwebapp.shifter.commerce.web.response.PaymentResponse;
 //import com.shifterwebapp.shifter.commerce.infrastructure.mapper.PaymentMapper;
 //import com.shifterwebapp.shifter.commerce.infrastructure.PaymentRepository;
 //import com.shifterwebapp.shifter.commerce.domain.enums.PaymentMethod;
@@ -32,7 +32,7 @@
 //
 //    @Override
 //    @Transactional(readOnly = true)
-//    public List<PaymentDto> getPaymentsByUser(Long userId) {
+//    public List<PaymentResponse> getPaymentsByUser(Long userId) {
 //        validate.validateUserExists(userId);
 //        List<Payment> payments = paymentRepository.findPaymentByUser(userId);
 //        return paymentMapper.toDto(payments);
@@ -40,7 +40,7 @@
 //
 //    @Override
 //    @Transactional(readOnly = true)
-//    public List<PaymentDto> getPaymentsByCourse(Long courseId) {
+//    public List<PaymentResponse> getPaymentsByCourse(Long courseId) {
 //        validate.validateCourseExists(courseId);
 //        List<Payment> payments = paymentRepository.findPaymentByCourse(courseId);
 //        return paymentMapper.toDto(payments);
@@ -96,7 +96,7 @@
 //
 //    @Override
 //    @Transactional
-//    public PaymentDto completePayment(Long paymentId) {
+//    public PaymentResponse completePayment(Long paymentId) {
 //        validate.validatePaymentExists(paymentId);
 //        Payment payment = paymentRepository.findById(paymentId).orElseThrow();
 //        payment.setPaymentStatus(PaymentStatus.COMPLETED);
@@ -107,7 +107,7 @@
 //
 //    @Override
 //    @Transactional
-//    public PaymentDto failPayment(Long paymentId) {
+//    public PaymentResponse failPayment(Long paymentId) {
 //        validate.validatePaymentExists(paymentId);
 //        Payment payment = paymentRepository.findById(paymentId).orElseThrow();
 //        payment.setPaymentStatus(PaymentStatus.FAILED);

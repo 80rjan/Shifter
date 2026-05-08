@@ -20,7 +20,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Service
-public class GoogleCalendarService {
+public class GoogleCalendarGateway {
 
     private static final String APPLICATION_NAME = "Shifter App";
     private static final GsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
@@ -31,7 +31,7 @@ public class GoogleCalendarService {
 
     private final Calendar calendarService;
 
-    public GoogleCalendarService() {
+    public GoogleCalendarGateway() {
         this.calendarService = initService();
     }
 

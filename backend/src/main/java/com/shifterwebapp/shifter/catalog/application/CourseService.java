@@ -3,8 +3,8 @@
 //import com.shifterwebapp.shifter.Validate;
 //import com.shifterwebapp.shifter.catalog.infrastructure.mapper.CourseMapper;
 //import com.shifterwebapp.shifter.catalog.web.response.CourseDtoDetail;
-//import com.shifterwebapp.shifter.catalog.web.response.CourseDtoLearn;
-//import com.shifterwebapp.shifter.catalog.web.response.CourseDtoPreview;
+//import com.shifterwebapp.shifter.catalog.web.response.CourseLearningResponse;
+//import com.shifterwebapp.shifter.catalog.web.response.CoursePreviewResponse;
 //import com.shifterwebapp.shifter.catalog.web.response.CourseDtoPreviewEnrolled;
 //import com.shifterwebapp.shifter.catalog.domain.CourseVersion;
 //import com.shifterwebapp.shifter.learning.application.ReviewService;
@@ -14,7 +14,7 @@
 //import com.shifterwebapp.shifter.learning.application.EnrollmentService;
 //import com.shifterwebapp.shifter.shared.exception.AccessDeniedException;
 //import com.shifterwebapp.shifter.consultation.infrastructure.PdfManipulationService;
-//import com.shifterwebapp.shifter.infrastructure.storage.S3Service;
+//import com.shifterwebapp.shifter.infrastructure.storage.S3Gateway;
 //import com.shifterwebapp.shifter.identity.domain.User;
 //import com.shifterwebapp.shifter.identity.application.UserService;
 //import com.shifterwebapp.shifter.catalog.application.TagService;
@@ -38,7 +38,7 @@
 //public class CourseService implements ImplCourseService {
 //
 //    private final CourseRepository courseRepository;
-//    private final S3Service s3Service;
+//    private final S3Gateway s3Service;
 //    private final PdfManipulationService pdfService;
 //    private final UserService userService;
 //    private final Validate validate;
@@ -53,7 +53,7 @@
 //
 //    @Transactional(readOnly = true)
 //    @Override
-//    public CourseDtoLearn getEnrolledCourseById(Long courseId, Long userId, LanguageCode language) {
+//    public CourseLearningResponse getEnrolledCourseById(Long courseId, Long userId, LanguageCode language) {
 //        validate.validateCourseExists(courseId);
 //
 //        Enrollment enrollment = enrollmentService.getEnrollmentByUserAndCourse(userId, courseId);
@@ -105,7 +105,7 @@
 //
 //    @Transactional(readOnly = true)
 //    @Override
-//    public List<CourseDtoPreview> getAllCourses(List<Long> enrolledCourseIds, LanguageCode language) {
+//    public List<CoursePreviewResponse> getAllCourses(List<Long> enrolledCourseIds, LanguageCode language) {
 //        List<Course> courses = enrolledCourseIds == null || enrolledCourseIds.isEmpty() ?
 //                courseRepository.findCoursesByLanguage(language) :
 //                courseRepository.findCoursesByIdNotInAndLanguage(enrolledCourseIds, language);
@@ -128,7 +128,7 @@
 //    }
 //
 ////    @Override
-////    public List<CourseDtoPreview> getAllCourses(Specification<Course> specification) {
+////    public List<CoursePreviewResponse> getAllCourses(Specification<Course> specification) {
 ////        List<Course> courses = specification == null ?
 ////                courseRepository.findAll() :
 ////                courseRepository.findAll(specification);
@@ -137,7 +137,7 @@
 //
 //    @Transactional(readOnly = true)
 //    @Override
-//    public List<CourseDtoPreview> getRecommendedCourses(Long userId, LanguageCode language) {
+//    public List<CoursePreviewResponse> getRecommendedCourses(Long userId, LanguageCode language) {
 //        User user = userService.getEntityById(userId);
 //
 //        // get user enrollments
@@ -225,7 +225,7 @@
 //
 //    @Transactional(readOnly = true)
 //    @Override
-//    public List<CourseDtoPreview> getTopRatedCourses(Language language) {
+//    public List<CoursePreviewResponse> getTopRatedCourses(Language language) {
 //        List<Course> courses = courseRepository.findCoursesOrderedByRating();
 //
 //        int limit = Math.min(5, courses.size());
@@ -246,7 +246,7 @@
 //
 //    @Transactional(readOnly = true)
 //    @Override
-//    public List<CourseDtoPreview> getMostPopularCourses(Language language) {
+//    public List<CoursePreviewResponse> getMostPopularCourses(Language language) {
 //        List<Course> courses = courseRepository.findCoursesOrderedByPopularity();
 //
 //        int limit = Math.min(5, courses.size());

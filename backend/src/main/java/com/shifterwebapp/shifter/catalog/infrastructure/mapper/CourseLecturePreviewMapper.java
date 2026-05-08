@@ -1,7 +1,7 @@
 //package com.shifterwebapp.shifter.course.mappers;
 //
 //import com.shifterwebapp.shifter.catalog.domain.CourseLecture;
-//import com.shifterwebapp.shifter.catalog.web.response.CourseLectureDtoPreview;
+//import com.shifterwebapp.shifter.catalog.web.response.CourseLecturePreviewResponse;
 //import org.mapstruct.InheritInverseConfiguration;
 //import org.mapstruct.Mapper;
 //
@@ -10,11 +10,11 @@
 //@Mapper(componentModel = "spring")
 //public interface CourseLectureMapperPreview {
 //
-//    CourseLectureDtoPreview toDto(CourseLecture courseContent);
-//    List<CourseLectureDtoPreview> toDto(List<CourseLecture> courseContents);
+//    CourseLecturePreviewResponse toDto(CourseLecture courseContent);
+//    List<CourseLecturePreviewResponse> toDto(List<CourseLecture> courseContents);
 //
 //    @InheritInverseConfiguration
-//    CourseLecture toEntity(CourseLectureDtoPreview courseContentDto);
+//    CourseLecture toEntity(CourseLecturePreviewResponse courseContentDto);
 //    @InheritInverseConfiguration
-//    List<CourseLecture> toEntity(List<CourseLectureDtoPreview> courseContentDtos);
+//    List<CourseLecture> toEntity(List<CourseLecturePreviewResponse> courseContentDtos);
 //}

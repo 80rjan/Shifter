@@ -1,7 +1,7 @@
 package com.shifterwebapp.shifter.catalog.web.response;
 
 import com.shifterwebapp.shifter.shared.domain.enums.Difficulty;
-import com.shifterwebapp.shifter.shared.domain.LanguageCode;
+import com.shifterwebapp.shifter.shared.domain.enums.LanguageCode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CourseDtoPreview {
+public class CoursePreviewResponse {
 
     private Long id;
 

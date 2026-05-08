@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseModuleDtoFull {
+public class CourseModuleFullResponse {
 
     private Long id;
 
@@ -17,5 +17,5 @@ public class CourseModuleDtoFull {
 
     private Integer position;
 
-    private List<CourseLectureDtoFull> courseLectures;
+    private List<CourseLectureFullResponse> courseLectures;
 }

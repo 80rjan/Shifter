@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseLectureDtoFull {
+public class CourseLectureFullResponse {
 
     private Long id;
 

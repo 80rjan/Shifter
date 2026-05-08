@@ -1,15 +1,15 @@
 //package com.shifterwebapp.shifter.course.services;
 //
-//import com.shifterwebapp.shifter.catalog.web.response.CourseModuleDtoFull;
+//import com.shifterwebapp.shifter.catalog.web.response.CourseModuleFullResponse;
 //import com.shifterwebapp.shifter.catalog.domain.CourseVersion;
 //import com.shifterwebapp.shifter.catalog.domain.CourseModule;
-//import com.shifterwebapp.shifter.catalog.web.response.CourseModuleDtoPreview;
+//import com.shifterwebapp.shifter.catalog.web.response.CourseModulePreviewResponse;
 //
 //import java.util.List;
 //
 //public interface ImplCourseModuleService {
 //
-//    CourseModule buildCourseContent(CourseModuleDtoFull courseModuleDtoFull, CourseVersion courseVersion, LanguageCode language);
+//    CourseModule buildCourseContent(CourseModuleFullResponse courseModuleDtoFull, CourseVersion courseVersion, LanguageCode language);
 //
-//    List<CourseModuleDtoPreview> getCourseContentByCourseId(Long courseId, LanguageCode language);
+//    List<CourseModulePreviewResponse> getCourseContentByCourseId(Long courseId, LanguageCode language);
 //}

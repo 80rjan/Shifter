@@ -2,7 +2,7 @@
 //
 //import com.shifterwebapp.shifter.identity.domain.User;
 //import com.shifterwebapp.shifter.identity.web.response.UserDto;
-//import com.shifterwebapp.shifter.identity.web.response.UserDtoAuth;
+//import com.shifterwebapp.shifter.identity.web.response.AuthenticatedUserResponse;
 //import com.shifterwebapp.shifter.catalog.application.TagService;
 //import org.mapstruct.*;
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +19,9 @@
 //
 //    public abstract List<UserDto> toDto(List<User> users, @Context LanguageCode language);
 //
-//    public abstract UserDtoAuth toDtoAuth(User user);
+//    public abstract AuthenticatedUserResponse toDtoAuth(User user);
 //
-//    public abstract List<UserDtoAuth> toDtoAuth(List<User> users);
+//    public abstract List<AuthenticatedUserResponse> toDtoAuth(List<User> users);
 //
 //    @AfterMapping
 //    protected void applySkillsAndInterests(@MappingTarget UserDto dto,

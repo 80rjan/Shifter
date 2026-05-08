@@ -1,7 +1,7 @@
 //package com.shifterwebapp.shifter.course.controllers;
 //
 //import com.shifterwebapp.shifter.shared.domain.Language;
-//import com.shifterwebapp.shifter.catalog.web.response.CourseModuleDtoPreview;
+//import com.shifterwebapp.shifter.catalog.web.response.CourseModulePreviewResponse;
 //import com.shifterwebapp.shifter.catalog.application.CourseModuleService;
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@
 //            @PathVariable Long courseId,
 //            @RequestParam(defaultValue = "EN") LanguageCode language
 //            ) {
-//        List<CourseModuleDtoPreview> courseContents = courseModuleService.getCourseContentByCourseId(courseId, language);
+//        List<CourseModulePreviewResponse> courseContents = courseModuleService.getCourseContentByCourseId(courseId, language);
 //        return ResponseEntity.ok(courseContents);
 //    }
 //}

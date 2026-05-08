@@ -1,7 +1,7 @@
 //package com.shifterwebapp.shifter.learning.domain.mapper;
 //
 //import com.shifterwebapp.shifter.learning.domain.Enrollment;
-//import com.shifterwebapp.shifter.learning.web.response.EnrollmentDto;
+//import com.shifterwebapp.shifter.learning.web.response.EnrollmentResponse;
 //import com.shifterwebapp.shifter.catalog.domain.LectureProgress;
 //import com.shifterwebapp.shifter.catalog.infrastructure.mapper.LectureProgressMapper;
 //import org.mapstruct.*;
@@ -12,16 +12,16 @@
 //public abstract class EnrollmentMapper {
 //
 //    @Mapping(source = "courseVersion.id", target = "courseVersionId")
-//    public abstract EnrollmentDto toDto(Enrollment enrollment);
-//    public abstract List<EnrollmentDto> toDto(List<Enrollment> enrollment);
+//    public abstract EnrollmentResponse toDto(Enrollment enrollment);
+//    public abstract List<EnrollmentResponse> toDto(List<Enrollment> enrollment);
 //
 //    @InheritInverseConfiguration
-//    public abstract Enrollment toEntity(EnrollmentDto enrollmentDto);
+//    public abstract Enrollment toEntity(EnrollmentResponse enrollmentDto);
 //     @InheritInverseConfiguration
-//    public abstract List<Enrollment> toEntity(List<EnrollmentDto> enrollmentDtos);
+//    public abstract List<Enrollment> toEntity(List<EnrollmentResponse> enrollmentDtos);
 //
 //     @AfterMapping
-//    protected void afterMapping(Enrollment enrollment, @MappingTarget EnrollmentDto enrollmentDto) {
+//    protected void afterMapping(Enrollment enrollment, @MappingTarget EnrollmentResponse enrollmentDto) {
 //        if (enrollment.getLectureProgresses() != null && !enrollment.getLectureProgresses().isEmpty()) {
 //            int completedCount = (int) enrollment.getLectureProgresses().stream()
 //                    .filter(LectureProgress::isCompleted)

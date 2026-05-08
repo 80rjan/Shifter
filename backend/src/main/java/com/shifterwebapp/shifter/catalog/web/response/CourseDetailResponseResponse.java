@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CourseDtoDetail extends CourseDtoPreview  {
+public class CourseDetailResponseResponse extends CoursePreviewResponse {
 
     private String descriptionShort;
 
@@ -21,6 +21,6 @@ public class CourseDtoDetail extends CourseDtoPreview  {
 
     private List<String> whatWillBeLearned;
 
-    private List<CourseModuleDtoPreview> courseContents;
+    private List<CourseModulePreviewResponse> courseContents;
 }
 

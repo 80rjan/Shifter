@@ -20,7 +20,7 @@
 //    private final Validate validate;
 //
 //    @PostMapping("/contact-us")
-//    public ResponseEntity<?> sendEmailToExpert(@RequestBody ContactReq contactReq, Authentication authentication) {
+//    public ResponseEntity<?> sendEmailToExpert(@RequestBody ContactRequest contactReq, Authentication authentication) {
 //        Long userId = validate.extractUserId(authentication);
 //        String userEmail = userService.getUserEmailById(userId);
 //

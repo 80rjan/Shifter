@@ -13,12 +13,12 @@
 //import com.shifterwebapp.shifter.catalog.domain.CourseVersion;
 //import com.shifterwebapp.shifter.catalog.infrastructure.CourseVersionRepository;
 //import com.shifterwebapp.shifter.catalog.domain.CourseModule;
-//import com.shifterwebapp.shifter.catalog.domain.CourseModuleTranslate;
+//import com.shifterwebapp.shifter.catalog.domain.CourseModuleTranslation;
 //import com.shifterwebapp.shifter.catalog.web.response.CourseModuleTranslateReq;
 //import com.shifterwebapp.shifter.catalog.domain.CourseLecture;
-//import com.shifterwebapp.shifter.catalog.domain.CourseLectureTranslate;
-//import com.shifterwebapp.shifter.catalog.web.response.CourseLectureDtoFull;
-//import com.shifterwebapp.shifter.catalog.web.response.CourseLectureTranslateReq;
+//import com.shifterwebapp.shifter.catalog.domain.CourseLectureTranslation;
+//import com.shifterwebapp.shifter.catalog.web.response.CourseLectureFullResponse;
+//import com.shifterwebapp.shifter.catalog.web.response.CourseLectureTranslationRequest;
 //import com.shifterwebapp.shifter.infrastructure.storage.MetaInfo;
 //import com.shifterwebapp.shifter.infrastructure.storage.S3UploadResponse;
 //import lombok.RequiredArgsConstructor;
@@ -105,7 +105,7 @@
 //
 //        int durationMinutes = courseDtoFull.getCourseContents().stream()
 //                .flatMap(content -> content.getCourseLectures().stream())
-//                .mapToInt(CourseLectureDtoFull::getDurationMinutes)
+//                .mapToInt(CourseLectureFullResponse::getDurationMinutes)
 //                .sum();
 //
 //        Course course = Course.builder()
@@ -183,7 +183,7 @@
 //    }
 //
 //    private void addContentTranslation(CourseModule content, CourseModuleTranslateReq contentDto, LanguageCode language) {
-//        CourseModuleTranslate contentTranslate = CourseModuleTranslate.builder()
+//        CourseModuleTranslation contentTranslate = CourseModuleTranslation.builder()
 //                .title(contentDto.getTitle())
 //                .language(language)
 //                .courseModule(content)
@@ -193,16 +193,16 @@
 //        translateLectures(content, contentDto.getCourseLectures(), language);
 //    }
 //
-//    private void translateLectures(CourseModule content, List<CourseLectureTranslateReq> lectureDtos, LanguageCode language) {
+//    private void translateLectures(CourseModule content, List<CourseLectureTranslationRequest> lectureDtos, LanguageCode language) {
 //        for (CourseLecture lecture : content.getCourseLectures()) {
-//            CourseLectureTranslateReq lectureDto = lectureDtos.stream()
+//            CourseLectureTranslationRequest lectureDto = lectureDtos.stream()
 //                    .filter(ld -> ld.getId().equals(lecture.getId()))
 //                    .findFirst()
 //                    .orElseThrow(() -> new RuntimeException(
 //                            "Missing translation DTO for CourseLecture id=" + lecture.getId()
 //                    ));
 //
-//            CourseLectureTranslate lectureTranslate = CourseLectureTranslate.builder()
+//            CourseLectureTranslation lectureTranslate = CourseLectureTranslation.builder()
 //                    .language(language)
 //                    .title(lectureDto.getTitle())
 //                    .description(lectureDto.getDescription())
@@ -247,7 +247,7 @@
 //                    var courseContent = courseVersion.getCourseModules().get(contentIndex);
 //                    if (lectureIndex >= 0 && lectureIndex < courseContent.getCourseLectures().size()) {
 //                        CourseLecture courseLecture = courseContent.getCourseLectures().get(lectureIndex);
-//                        CourseLectureTranslate lectureTranslate = courseLectureService.getByCourseLectureIdAndLanguage(
+//                        CourseLectureTranslation lectureTranslate = courseLectureService.getByCourseLectureIdAndLanguage(
 //                                courseLecture.getId(),
 //                                language
 //                        );

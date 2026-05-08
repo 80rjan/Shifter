@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseLectureTranslateReq {
+public class CourseLectureTranslationRequest {
 
     private Long id;
 

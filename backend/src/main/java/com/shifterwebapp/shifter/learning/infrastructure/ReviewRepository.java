@@ -1,5 +1,6 @@
 package com.shifterwebapp.shifter.learning.infrastructure;
 
+import com.shifterwebapp.shifter.learning.domain.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

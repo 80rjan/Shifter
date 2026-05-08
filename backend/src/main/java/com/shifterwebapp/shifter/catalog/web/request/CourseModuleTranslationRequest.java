@@ -9,12 +9,12 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CourseModuleTranslateReq {
+public class CourseModuleTranslationRequest {
 
     private Long id;
 
     private String title;
 
-    private List<CourseLectureTranslateReq> courseLectures;
+    private List<CourseLectureTranslationRequest> courseLectures;
 
 }

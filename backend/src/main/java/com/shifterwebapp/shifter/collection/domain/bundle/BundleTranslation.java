@@ -1,6 +1,5 @@
 package com.shifterwebapp.shifter.collection.domain.bundle;
 
-import com.shifterwebapp.shifter.collection.domain.bundle.Bundle;
 import com.shifterwebapp.shifter.shared.domain.Language;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -15,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 // todo: indexes
-public class BundleTranslate {
+public class BundleTranslation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

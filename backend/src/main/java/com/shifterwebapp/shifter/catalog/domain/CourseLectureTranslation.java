@@ -1,7 +1,6 @@
 package com.shifterwebapp.shifter.catalog.domain;
 
 import com.shifterwebapp.shifter.shared.domain.Language;
-import com.shifterwebapp.shifter.catalog.domain.CourseLecture;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseLectureTranslate {
+public class CourseLectureTranslation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

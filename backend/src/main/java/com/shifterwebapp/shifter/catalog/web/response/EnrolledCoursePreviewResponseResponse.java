@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CourseDtoPreviewEnrolled extends CourseDtoPreview {
+public class EnrolledCoursePreviewResponseResponse extends CoursePreviewResponse {
 
     private Integer lecturesFinishedCount;
 

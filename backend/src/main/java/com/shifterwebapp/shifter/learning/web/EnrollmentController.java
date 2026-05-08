@@ -1,7 +1,7 @@
 //package com.shifterwebapp.shifter.learning.domain.controller;
 //
 //import com.shifterwebapp.shifter.Validate;
-//import com.shifterwebapp.shifter.learning.web.response.EnrollmentDto;
+//import com.shifterwebapp.shifter.learning.web.response.EnrollmentResponse;
 //import com.shifterwebapp.shifter.learning.application.EnrollmentService;
 //import com.shifterwebapp.shifter.shared.exception.ErrorResponse;
 //import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@
 //    public ResponseEntity<?> enrollUserInCourse(@PathVariable Long courseId, Authentication authentication) {
 //        Long userId = validate.extractUserId(authentication);
 //
-//        EnrollmentDto enrollmentDto = enrollmentService.enrollUser(courseId, userId);
+//        EnrollmentResponse enrollmentDto = enrollmentService.enrollUser(courseId, userId);
 //        if (enrollmentDto == null) {
 //            return ResponseEntity.badRequest().body(new ErrorResponse("Enrollment failed"));
 //        }
@@ -34,13 +34,13 @@
 //    public ResponseEntity<?> getEnrollmentsByUser(Authentication authentication) {
 //        Long userId = validate.extractUserId(authentication);
 //
-//        List<EnrollmentDto> enrollmentDtos = enrollmentService.getEnrollmentsByUser(userId);
+//        List<EnrollmentResponse> enrollmentDtos = enrollmentService.getEnrollmentsByUser(userId);
 //        return ResponseEntity.ok(enrollmentDtos);
 //    }
 //
 //    @GetMapping("/{enrollmentId}")
 //    public ResponseEntity<?> getEnrollmentById(@PathVariable Long enrollmentId) {
-//        EnrollmentDto enrollmentDto = enrollmentService.getEnrollmentById(enrollmentId);
+//        EnrollmentResponse enrollmentDto = enrollmentService.getEnrollmentById(enrollmentId);
 //        return ResponseEntity.ok(enrollmentDto);
 //    }
 //}

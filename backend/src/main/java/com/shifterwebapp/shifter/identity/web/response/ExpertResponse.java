@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExpertDto {
+public class ExpertResponse {
 
     private Long id;
 

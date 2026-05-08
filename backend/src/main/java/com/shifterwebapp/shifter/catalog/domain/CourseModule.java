@@ -1,6 +1,5 @@
 package com.shifterwebapp.shifter.catalog.domain;
 
-import com.shifterwebapp.shifter.catalog.domain.CourseModuleTranslate;
 import com.shifterwebapp.shifter.assessment.domain.Quiz;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -30,7 +29,7 @@ public class CourseModule {
     private List<CourseLecture> courseLectures;
 
     @OneToMany(mappedBy = "courseModule", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = false, fetch = FetchType.EAGER)
-    private List<CourseModuleTranslate> translations;
+    private List<CourseModuleTranslation> translations;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_version_id", nullable = false)

@@ -1,5 +1,6 @@
 package com.shifterwebapp.shifter.catalog.application;
 
+import com.shifterwebapp.shifter.catalog.application.impl.CourseVersionServiceImpl;
 import com.shifterwebapp.shifter.catalog.domain.CourseVersion;
 import com.shifterwebapp.shifter.catalog.infrastructure.CourseVersionRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class CourseVersionService implements ImplCourseVersionService {
+public class CourseVersionService implements CourseVersionServiceImpl {
 
     private final CourseVersionRepository courseVersionRepository;
 

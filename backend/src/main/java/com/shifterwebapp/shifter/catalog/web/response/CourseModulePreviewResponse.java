@@ -9,12 +9,12 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseModuleDtoPreview {
+public class CourseModulePreviewResponse {
 
     private String title;
 
     private Integer position;
 
-    private List<CourseLectureDtoPreview> courseLectures;
+    private List<CourseLecturePreviewResponse> courseLectures;
 }
 

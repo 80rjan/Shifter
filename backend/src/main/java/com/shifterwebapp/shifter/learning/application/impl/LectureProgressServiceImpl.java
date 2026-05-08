@@ -1,10 +1,11 @@
 package com.shifterwebapp.shifter.learning.application.impl;
 
-import com.shifterwebapp.shifter.catalog.domain.LectureProgress;
+
+import com.shifterwebapp.shifter.learning.domain.LectureProgress;
 
 import java.util.List;
 
-public interface ImplLectureProgressService {
+public interface LectureProgressServiceImpl {
 
     List<LectureProgress> saveAllUserCourseProgress(List<LectureProgress> lectureProgresses);
 

@@ -1,7 +1,6 @@
 package com.shifterwebapp.shifter.assessment.domain;
 
 import com.shifterwebapp.shifter.shared.domain.Language;
-import com.shifterwebapp.shifter.assessment.domain.QuizQuestion;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 // todo: indexes
-public class QuizQuestionTranslate {
+public class QuizQuestionTranslation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

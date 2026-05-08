@@ -1,24 +1,24 @@
 package com.shifterwebapp.shifter.learning.application.impl;
 
 import com.shifterwebapp.shifter.learning.domain.Enrollment;
-import com.shifterwebapp.shifter.learning.web.response.EnrollmentDto;
+import com.shifterwebapp.shifter.learning.web.response.EnrollmentResponse;
 
 import java.util.List;
 
-public interface ImplEnrollmentService {
-    EnrollmentDto getEnrollmentById(Long enrollmentId);
-    List<EnrollmentDto> getEnrollmentsByUser(Long userId);
+public interface EnrollmentServiceImpl {
+    EnrollmentResponse getEnrollmentById(Long enrollmentId);
+    List<EnrollmentResponse> getEnrollmentsByUser(Long userId);
     List<Enrollment> getEnrollmentsEntityByUser(Long userId);
     List<Long> getCourseIdsByUserEnrollments(Long userId);
-    List<EnrollmentDto> getEnrollmentsByCourse(Long courseId);
+    List<EnrollmentResponse> getEnrollmentsByCourse(Long courseId);
     Enrollment getEnrollmentByUserAndCourse(Long userId, Long courseId);
 
-    EnrollmentDto enrollUser(Long courseId, Long userId);
+    EnrollmentResponse enrollUser(Long courseId, Long userId);
 
     Boolean isUserEnrolledInCourse(Long userId, Long courseId);
 
-    EnrollmentDto updateEnrollmentStatusToActive(Enrollment enrollment);
-    EnrollmentDto updateEnrollmentStatusToCompleted(Long enrollmentId);
+    EnrollmentResponse updateEnrollmentStatusToActive(Enrollment enrollment);
+    EnrollmentResponse updateEnrollmentStatusToCompleted(Long enrollmentId);
 
     Enrollment saveEnrollment(Enrollment enrollment);
 }

@@ -2,7 +2,7 @@
 //
 //import com.shifterwebapp.shifter.Validate;
 //import com.shifterwebapp.shifter.identity.application.UserService;
-//import com.shifterwebapp.shifter.identity.web.response.UserPersonalizationDto;
+//import com.shifterwebapp.shifter.identity.web.response.PersonlizeUserRequest;
 //import com.shifterwebapp.shifter.auth.web.request.LoginDto;
 //import jakarta.servlet.http.HttpServletRequest;
 //import jakarta.servlet.http.HttpServletResponse;
@@ -32,7 +32,7 @@
 //
 //    @PostMapping("/personalize")
 //    public void personalize(
-//            @RequestBody UserPersonalizationDto userPersonalizationDto,
+//            @RequestBody PersonlizeUserRequest userPersonalizationDto,
 //            HttpServletResponse response
 //    ) throws IOException {
 //        authService.personalize(userPersonalizationDto, response);

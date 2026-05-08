@@ -1,6 +1,5 @@
 package com.shifterwebapp.shifter.assessment.domain;
 
-import com.shifterwebapp.shifter.assessment.domain.QuizQuestionTranslate;
 import com.shifterwebapp.shifter.assessment.domain.enums.QuizQuestionType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -30,12 +29,13 @@ public class QuizQuestion {
     private Integer points;
 
     @NotNull(message = "Type cannot be null")
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private QuizQuestionType type;
 
     @Builder.Default
     @OneToMany(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = false, fetch = FetchType.LAZY)
-    private List<QuizQuestionTranslate> translations = new ArrayList<>();
+    private List<QuizQuestionTranslation> translations = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "quiz_id", nullable = false)

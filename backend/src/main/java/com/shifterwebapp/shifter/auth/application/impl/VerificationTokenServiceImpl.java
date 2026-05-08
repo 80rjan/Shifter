@@ -4,7 +4,7 @@ import com.shifterwebapp.shifter.identity.domain.User;
 
 import java.util.UUID;
 
-public interface ImplVerificationTokenService {
+public interface VerificationTokenServiceImpl {
     public UUID generateNewToken(User user);
     public String verify(String token);
 }

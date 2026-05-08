@@ -1,14 +1,14 @@
 package com.shifterwebapp.shifter.identity.web.request;
 
 import com.shifterwebapp.shifter.identity.domain.enums.CompanySize;
-import com.shifterwebapp.shifter.shared.domain.LanguageCode;
+import com.shifterwebapp.shifter.shared.domain.enums.LanguageCode;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class UserPersonalizationDto {
+public class PersonalizeUserRequest {
 
     @NotBlank
     private String name;

@@ -1,6 +1,5 @@
 package com.shifterwebapp.shifter.catalog.domain;
 
-import com.shifterwebapp.shifter.catalog.domain.Course;
 import com.shifterwebapp.shifter.assessment.domain.QuizQuestionSkill;
 import com.shifterwebapp.shifter.learning.domain.UserSkill;
 import jakarta.persistence.*;
@@ -45,5 +44,5 @@ public class Skill {
 
     @Builder.Default
     @OneToMany(mappedBy = "skill", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = false, fetch = FetchType.LAZY)     // TODO: fetch type?
-    private List<SkillTranslate> translations = new ArrayList<>();
+    private List<SkillTranslation> translations = new ArrayList<>();
 }
